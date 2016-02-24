@@ -63,6 +63,10 @@ module BuildrPlus
           end
         end
 
+        task 'ci:no_test_setup' => %w(ci:setup) do
+          ENV['TEST'] = 'no'
+        end
+
         if dbt_present && (ci_config_exist || ci_import_config_exist)
           desc 'Test the import process'
           task 'ci:import' => %W(ci#{ci_import_config_exist ? ':import' : ''}:setup clean dbt:create_by_import dbt:verify_constraints dbt:drop)
@@ -75,7 +79,14 @@ module BuildrPlus
         task 'ci:upload' => %w(ci:setup upload_published)
 
         commit_actions = %w(ci:setup clean)
-        commit_actions << 'domgen:all' if Object.const_defined?('Domgen')
+        package_actions = %w(ci:setup clean)
+        package_no_test_actions = %w(ci:no_test_setup clean)
+
+        if Object.const_defined?('Domgen')
+          commit_actions << 'domgen:all'
+          package_actions << 'domgen:all'
+          package_no_test_actions << 'domgen:all'
+        end
 
         database_drops = []
 
@@ -86,6 +97,7 @@ module BuildrPlus
             prefix = Dbt::Config.default_database?(database_key) ? '' : ":#{database_key}"
 
             commit_actions << "dbt#{prefix}:create"
+            package_actions << "dbt#{prefix}:create"
             database_drops << "dbt#{prefix}:drop"
           end
         end
@@ -94,10 +106,26 @@ module BuildrPlus
 
         commit_actions << 'ci:source_code_analysis'
 
+        package_actions << 'test'
+        package_no_test_actions << 'test'
+
+        package_actions << 'package'
+        package_no_test_actions << 'package'
+
         commit_actions.concat(database_drops)
+        package_actions.concat(database_drops)
+
+        package_actions << 'ci:upload'
+        package_no_test_actions << 'ci:upload'
 
         desc 'Perform pre-commit checks and source code analysis'
         task 'ci:commit' => commit_actions
+
+        desc 'Build the package(s) and run tests'
+        task 'ci:package' => package_actions
+
+        desc 'Build the package(s) but do not run tests'
+        task 'ci:package_no_tests' => package_no_test_actions
       end
 
       after_define do |project|
