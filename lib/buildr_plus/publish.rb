@@ -35,6 +35,13 @@ module Buildr
             a.upload
           end
         end if project.publish?
+
+        desc 'Upload artifacts marked as published to repository'
+        task 'upload_published' do
+          project.packages.each do |pkg|
+            pkg.upload
+          end
+        end if project.publish?
       end
     end
   end
@@ -48,5 +55,12 @@ desc 'Publish all specified artifacts '
 task 'publish' do
   Buildr.projects.each do |project|
     project.task('publish').invoke if project.publish?
+  end
+end
+
+desc 'Upload all specified artifacts '
+task 'upload_published' do
+  Buildr.projects.each do |project|
+    project.task('upload_published').invoke if project.publish?
   end
 end
