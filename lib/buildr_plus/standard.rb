@@ -32,6 +32,7 @@ require 'buildr_plus/features/libs'
 require 'buildr_plus/features/testng'
 require 'buildr_plus/features/source_code_analysis'
 require 'buildr_plus/features/ci'
+require 'buildr_plus/features/guiceyloops'
 
 # Enable features if the corresponding libraries are loaded
 require 'buildr_plus/features/dbt'
