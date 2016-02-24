@@ -109,6 +109,8 @@ module BuildrPlus
           end
         end
 
+        commit_actions << 'rptman:ssrs:upload' if Object.const_defined?('SSRS')
+
         task 'ci:source_code_analysis'
 
         commit_actions << 'ci:source_code_analysis'
@@ -118,6 +120,8 @@ module BuildrPlus
 
         package_actions << 'package'
         package_no_test_actions << 'package'
+
+        commit_actions << 'rptman:ssrs:delete' if Object.const_defined?('SSRS')
 
         commit_actions.concat(database_drops)
         package_actions.concat(database_drops)
