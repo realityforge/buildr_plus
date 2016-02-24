@@ -28,6 +28,7 @@ require 'buildr/top_level_generate_dir'
 require 'buildr_plus/features/compile_options'
 require 'buildr_plus/features/product_version'
 require 'buildr_plus/features/codestyle'
+require 'buildr_plus/features/libs'
 
 # Enable features if the corresponding libraries are loaded
 require 'buildr_plus/features/dbt'
