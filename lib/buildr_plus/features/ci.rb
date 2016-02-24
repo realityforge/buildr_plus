@@ -130,7 +130,7 @@ module BuildrPlus
         task 'ci:package' => package_actions
 
         desc 'Build the package(s) but do not run tests'
-        task 'ci:package_no_tests' => package_no_test_actions
+        task 'ci:package_no_test' => package_no_test_actions
       end
 
       after_define do |project|
