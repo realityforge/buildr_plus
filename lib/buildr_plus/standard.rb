@@ -32,6 +32,6 @@ require 'buildr_plus/features/libs'
 
 # Enable features if the corresponding libraries are loaded
 require 'buildr_plus/features/dbt'
-require 'buildr_plus/features/mssql_dialect_mapping'
+require 'buildr_plus/features/dialect_mapping'
 require 'buildr_plus/features/checkstyle'
 
