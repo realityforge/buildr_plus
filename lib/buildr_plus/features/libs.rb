@@ -32,6 +32,90 @@ module BuildrPlus
         %w(org.mockito:mockito-all:jar:1.9.5)
       end
 
+      def jackson_core
+        %w(org.codehaus.jackson:jackson-core-asl:jar:1.9.13)
+      end
+
+      def jackson_mapper
+        %w(org.codehaus.jackson:jackson-mapper-asl:jar:1.9.13)
+      end
+
+      def jackson_gwt_support
+        self.jackson_core + self.jackson_mapper
+      end
+
+      def gwt_user
+        %w(com.google.gwt:gwt-user:jar:2.7.0)
+      end
+
+      def gwt_servlet
+        %w(com.google.gwt:gwt-servlet:jar:2.7.0)
+      end
+
+      def gwt_dev
+        'com.google.gwt:gwt-dev:jar:2.7.0'
+      end
+
+      def gwt_gin
+        %w(com.google.gwt.inject:gin:jar:2.1.2 javax.inject:javax.inject:jar:1) + self.guice + self.gwt_user
+      end
+
+      def replicant
+        %w(org.realityforge.replicant:replicant:jar:0.5.54)
+      end
+
+      def gwt_property_source
+        %w(org.realityforge.gwt.property-source:gwt-property-source:jar:0.2)
+      end
+
+      def gwt_webpoller
+        %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.8)
+      end
+
+      def gwt_datatypes
+        %w(org.realityforge.gwt.datatypes:gwt-datatypes:jar:0.8)
+      end
+
+      def gwt_ga
+        %w(org.realityforge.gwt.ga:gwt-ga:jar:0.5)
+      end
+
+      def gwt_mmvp
+        %w(org.realityforge.gwt.mmvp:gwt-mmvp:jar:0.5)
+      end
+
+      def gwt_lognice
+        %w(org.realityforge.gwt.lognice:gwt-lognice:jar:0.2)
+      end
+
+      def gwt_appcache_client
+        %w(org.realityforge.gwt.appcache:gwt-appcache-client:jar:1.0.8 org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.8)
+      end
+
+      def gwt_appcache_server
+        %w(org.realityforge.gwt.appcache:gwt-appcache-server:jar:1.0.8)
+      end
+
+      def gwt_cache_filter
+        %w(org.realityforge.gwt.cache-filter:gwt-cache-filter:jar:0.6)
+      end
+
+      def simple_session_filter
+        %w(org.realityforge.ssf:simple-session-filter:jar:0.5)
+      end
+
+      def field_filter
+        %w(org.realityforge.rest.field_filter:rest-field-filter:jar:0.4)
+      end
+
+      def replicant_client
+        self.gwt_gin + self.replicant + self.gwt_property_source + self.gwt_datatypes + self.gwt_webpoller
+      end
+
+      def replicant_server
+        self.replicant + self.simple_session_filter + self.gwt_datatypes + self.jackson_gwt_support + self.gwt_servlet + self.field_filter
+      end
+
       def guice
         %w(aopalliance:aopalliance:jar:1.0 com.google.inject:guice:jar:3.0 com.google.inject.extensions:guice-assistedinject:jar:3.0)
       end
@@ -42,6 +126,10 @@ module BuildrPlus
 
       def guiceyloops
         %w(org.realityforge.guiceyloops:guiceyloops:jar:0.65) + self.mockito + self.guice + self.glassfish_embedded + self.testng
+      end
+
+      def guiceyloops_gwt
+        %w(org.realityforge.guiceyloops:guiceyloops:jar:0.65) + self.mockito + self.guice + self.testng
       end
 
       def jtds
