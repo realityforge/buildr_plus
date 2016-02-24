@@ -13,5 +13,3 @@ end
 class Buildr::Project
   include BuildrPlus::ProductVersionExtension::ProjectExtension
 end
-
-

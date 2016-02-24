@@ -34,4 +34,3 @@ require 'buildr_plus/features/libs'
 require 'buildr_plus/features/dbt'
 require 'buildr_plus/features/dialect_mapping'
 require 'buildr_plus/features/checkstyle'
-
