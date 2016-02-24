@@ -4,7 +4,7 @@ rescue LoadError
   # Ignored
 end
 
-if defined?(:Domgen)
+if Object.const_defined?('Domgen')
   module BuildrPlus
     class DomgenConfig
       class << self

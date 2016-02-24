@@ -4,7 +4,7 @@ rescue LoadError
   # Ignored
 end
 
-if defined?(:Dbt)
+if Object.const_defined?('Dbt')
   module BuildrPlus
     module DbtExtension
       module ProjectExtension
