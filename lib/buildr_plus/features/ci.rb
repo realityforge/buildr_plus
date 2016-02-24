@@ -84,8 +84,9 @@ module BuildrPlus
             database = Dbt.database_for_key(database_key)
             next unless database.enable_rake_integration? || database.packaged?
             prefix = Dbt::Config.default_database?(database_key) ? '' : ":#{database_key}"
-            #  commit_actions << "dbt#{prefix}:create"
-            #  database_drops << "dbt#{prefix}:drop"
+
+            commit_actions << "dbt#{prefix}:create"
+            database_drops << "dbt#{prefix}:drop"
           end
         end
 
