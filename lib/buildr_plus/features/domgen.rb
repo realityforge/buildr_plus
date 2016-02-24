@@ -76,6 +76,8 @@ if Object.const_defined?('Domgen')
 
           Domgen::Build.define_load_task if ::File.exist?(candidate_file)
 
+          Domgen::Build.define_generate_xmi_task
+
           Domgen::Build.define_generate_task(BuildrPlus::DomgenConfig.db_generators, :key => :sql, :target_dir => 'database/generated')
         end
       end
