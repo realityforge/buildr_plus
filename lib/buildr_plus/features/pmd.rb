@@ -28,7 +28,7 @@ module BuildrPlus
       end
     end
   end
-  module CheckstyleExtension
+  module PmdExtension
     module ProjectExtension
       include Extension
 
@@ -40,5 +40,5 @@ module BuildrPlus
 end
 
 class Buildr::Project
-  include BuildrPlus::CheckstyleExtension::ProjectExtension
+  include BuildrPlus::PmdExtension::ProjectExtension
 end
