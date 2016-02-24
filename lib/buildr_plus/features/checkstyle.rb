@@ -32,5 +32,3 @@ end
 class Buildr::Project
   include BuildrPlus::CheckstyleExtension::ProjectExtension
 end
-
-

@@ -28,5 +28,3 @@ end
 class Buildr::Project
   include BuildrPlus::CodestyleExtension::ProjectExtension
 end
-
-
