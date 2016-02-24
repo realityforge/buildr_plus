@@ -1,3 +1,9 @@
+begin
+  require 'dbt'
+rescue LoadError
+  # Ignored
+end
+
 if defined?(:Dbt)
   module BuildrPlus
     module DbtExtension
