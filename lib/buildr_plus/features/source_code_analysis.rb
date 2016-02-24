@@ -17,7 +17,7 @@ module BuildrPlus
     module ProjectExtension
       include Extension
 
-      after_define do |project|
+      before_define do |project|
         if project.ipr?
           project.jdepend.enabled = true
           project.findbugs.enabled = true
