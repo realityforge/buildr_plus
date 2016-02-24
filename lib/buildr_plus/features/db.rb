@@ -15,10 +15,6 @@
 module BuildrPlus
   class DbConfig
     class << self
-      def default_codestyle
-        'au.com.stocksoftware.idea.codestyle:idea-codestyle:xml:1.3'
-      end
-
       def pg_defined?
         unless @pg_loaded
           @pg_loaded = true
