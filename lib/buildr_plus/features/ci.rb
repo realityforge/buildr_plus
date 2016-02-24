@@ -22,7 +22,7 @@ module BuildrPlus
           Buildr.repositories.release_to[:url] = ENV['UPLOAD_REPO']
           Buildr.repositories.release_to[:username] = ENV['UPLOAD_USER']
           Buildr.repositories.release_to[:password] = ENV['UPLOAD_PASSWORD']
-          ENV['TEST'] = 'all'
+          ENV['TEST'] = 'all' unless ENV['TEST']
         end
 
         dbt_present = Object.const_defined?('Dbt')
