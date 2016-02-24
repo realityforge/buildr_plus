@@ -21,7 +21,9 @@ end
 require 'buildr_plus/patches/activate_jruby_facet'
 require 'buildr_plus/patches/checkstyle_patch'
 require 'buildr_plus/patches/idea_patch'
-require 'buildr_plus/patches/gwt_patch'
+
+# Only patch gwt if gwt addon already included
+require 'buildr_plus/patches/gwt_patch' if $LOADED_FEATURES.any?{|f| f =~ /\/addon\/buildr\/gwt\.rb$/}
 
 # May not always be required
 require 'buildr_plus/dev'
