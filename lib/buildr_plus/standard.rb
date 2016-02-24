@@ -30,6 +30,7 @@ require 'buildr_plus/features/product_version'
 require 'buildr_plus/features/codestyle'
 require 'buildr_plus/features/libs'
 require 'buildr_plus/features/testng'
+require 'buildr_plus/features/source_code_analysis'
 
 # Enable features if the corresponding libraries are loaded
 require 'buildr_plus/features/dbt'
