@@ -89,9 +89,7 @@ module BuildrPlus
           end
         end
 
-        task 'ci:source_code_analysis' do
-
-        end
+        task 'ci:source_code_analysis'
 
         commit_actions << 'ci:source_code_analysis'
 
