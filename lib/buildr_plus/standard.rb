@@ -25,6 +25,7 @@ require 'buildr/jacoco'
 require 'buildr/top_level_generate_dir'
 
 # Lock down standard compile options
+require 'buildr_plus/features/db'
 require 'buildr_plus/features/compile_options'
 require 'buildr_plus/features/product_version'
 require 'buildr_plus/features/codestyle'
