@@ -16,6 +16,7 @@ module BuildrPlus
   module DialectMappingExtension
     module ProjectExtension
       include Extension
+      BuildrPlus::ExtensionRegistry.register(self)
 
       after_define do |project|
         if project.ipr?
@@ -25,8 +26,4 @@ module BuildrPlus
       end
     end
   end
-end
-
-class Buildr::Project
-  include BuildrPlus::DialectMappingExtension::ProjectExtension
 end

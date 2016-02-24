@@ -16,6 +16,7 @@ module BuildrPlus
   module SourceCodeAnalysisExtension
     module ProjectExtension
       include Extension
+      BuildrPlus::ExtensionRegistry.register(self)
 
       before_define do |project|
         if project.ipr?
@@ -26,8 +27,4 @@ module BuildrPlus
       end
     end
   end
-end
-
-class Buildr::Project
-  include BuildrPlus::SourceCodeAnalysisExtension::ProjectExtension
 end

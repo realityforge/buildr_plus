@@ -31,14 +31,11 @@ module BuildrPlus
   module CodestyleExtension
     module ProjectExtension
       include Extension
+      BuildrPlus::ExtensionRegistry.register(self)
 
       after_define do |project|
         project.ipr.add_component_from_artifact(IdeaCodeStyle.codestyle) if project.ipr?
       end
     end
   end
-end
-
-class Buildr::Project
-  include BuildrPlus::CodestyleExtension::ProjectExtension
 end

@@ -23,6 +23,7 @@ if Object.const_defined?('SSRS')
     module RptmanExtension
       module ProjectExtension
         include Extension
+        BuildrPlus::ExtensionRegistry.register(self)
 
         first_time do
           SSRS::Build.define_basic_tasks
@@ -47,9 +48,5 @@ if Object.const_defined?('SSRS')
         end
       end
     end
-  end
-
-  class Buildr::Project
-    include BuildrPlus::RptmanExtension::ProjectExtension
   end
 end

@@ -23,6 +23,7 @@ if Object.const_defined?('Dbt')
     module DbtExtension
       module ProjectExtension
         include Extension
+        BuildrPlus::ExtensionRegistry.register(self)
 
         first_time do
           Dbt::Config.driver = 'postgres' if BuildrPlus::DbConfig.pgsql?
@@ -34,9 +35,5 @@ if Object.const_defined?('Dbt')
         end
       end
     end
-  end
-
-  class Buildr::Project
-    include BuildrPlus::DbtExtension::ProjectExtension
   end
 end

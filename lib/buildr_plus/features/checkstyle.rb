@@ -31,6 +31,7 @@ module BuildrPlus
   module CheckstyleExtension
     module ProjectExtension
       include Extension
+      BuildrPlus::ExtensionRegistry.register(self)
 
       before_define do |project|
         checkstyle_dir = project._('etc/checkstyle')
@@ -41,8 +42,4 @@ module BuildrPlus
       end
     end
   end
-end
-
-class Buildr::Project
-  include BuildrPlus::CheckstyleExtension::ProjectExtension
 end

@@ -69,6 +69,7 @@ if Object.const_defined?('Domgen')
     module DomgenExtension
       module ProjectExtension
         include Extension
+        BuildrPlus::ExtensionRegistry.register(self)
 
         first_time do
           base_directory = File.dirname(Buildr.application.buildfile.to_s)
@@ -82,9 +83,5 @@ if Object.const_defined?('Domgen')
         end
       end
     end
-  end
-
-  class Buildr::Project
-    include BuildrPlus::DomgenExtension::ProjectExtension
   end
 end

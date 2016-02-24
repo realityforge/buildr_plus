@@ -16,6 +16,7 @@ module BuildrPlus
   module CiExtension
     module ProjectExtension
       include Extension
+      BuildrPlus::ExtensionRegistry.register(self)
 
       first_time do
         task 'ci:common_setup' do
@@ -155,8 +156,4 @@ module BuildrPlus
       end
     end
   end
-end
-
-class Buildr::Project
-  include BuildrPlus::CiExtension::ProjectExtension
 end

@@ -41,3 +41,5 @@ require 'buildr_plus/features/dialect_mapping'
 require 'buildr_plus/features/checkstyle'
 require 'buildr_plus/features/pmd'
 require 'buildr_plus/features/rptman'
+
+BuildrPlus::ExtensionRegistry.auto_activate!

@@ -31,14 +31,11 @@ module BuildrPlus
   module PmdExtension
     module ProjectExtension
       include Extension
+      BuildrPlus::ExtensionRegistry.register(self)
 
       after_define do |project|
         project.pmd.rule_set_artifacts << PmdConfig.pmd_rules if project.pmd.enabled?
       end
     end
   end
-end
-
-class Buildr::Project
-  include BuildrPlus::PmdExtension::ProjectExtension
 end

@@ -17,6 +17,8 @@ if Buildr::VERSION != expected_version
   raise "buildr_plus expected Buidlr version #{expected_version} but Buildrs actual version is #{Buildr::VERSION}"
 end
 
+require 'buildr_plus/extension_registry'
+
 # Patches that should always be applied
 require 'buildr_plus/patches/activate_jruby_facet'
 require 'buildr_plus/patches/checkstyle_patch'

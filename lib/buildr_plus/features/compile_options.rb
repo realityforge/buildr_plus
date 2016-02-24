@@ -16,6 +16,7 @@ module BuildrPlus
   module CompileOptionsExtension
     module ProjectExtension
       include Extension
+      BuildrPlus::ExtensionRegistry.register(self)
 
       before_define do |project|
         project.compile.options.source = '1.7'
@@ -24,8 +25,4 @@ module BuildrPlus
       end
     end
   end
-end
-
-class Buildr::Project
-  include BuildrPlus::CompileOptionsExtension::ProjectExtension
 end
