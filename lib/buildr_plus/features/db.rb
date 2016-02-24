@@ -66,6 +66,10 @@ module BuildrPlus
       def pgsql?
         self.db_type == :pgsql
       end
+
+      def artifact_suffix
+        pgsql? ? '.pg' :''
+      end
     end
   end
 end
