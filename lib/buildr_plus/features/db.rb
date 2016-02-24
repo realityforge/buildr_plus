@@ -39,6 +39,10 @@ module BuildrPlus
         Object.const_defined?('TinyTds')
       end
 
+      def is_multi_database_project?
+        tiny_tds_defined? && pg_defined?
+      end
+
       def valid_db_types
         [:pgsql, :mssql]
       end

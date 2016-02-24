@@ -58,7 +58,12 @@ module BuildrPlus
         desc 'Setup test environment'
         task 'ci:setup' => %w(ci:common_setup) do
           if dbt_present && ci_config_exist
-            Dbt::Config.config_filename = 'config/ci-database.yml'
+            if !BuildrPlus::DbConfig.is_multi_database_project? || BuildrPlus::DbConfig.mssql?
+              Dbt::Config.config_filename = 'config/ci-database.yml'
+            elsif BuildrPlus::DbConfig.is_multi_database_project? || BuildrPlus::DbConfig.pgsql?
+              # Assume that a multi database project defaults to sql server and has second yml for pg
+              Dbt::Config.config_filename = 'config/ci-pg-database.yml'
+            end
             task('ci:test_configure').invoke
           end
         end
