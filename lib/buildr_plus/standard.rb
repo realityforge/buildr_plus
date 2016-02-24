@@ -34,5 +34,6 @@ require 'buildr_plus/features/testng'
 
 # Enable features if the corresponding libraries are loaded
 require 'buildr_plus/features/dbt'
+require 'buildr_plus/features/domgen'
 require 'buildr_plus/features/dialect_mapping'
 require 'buildr_plus/features/checkstyle'
