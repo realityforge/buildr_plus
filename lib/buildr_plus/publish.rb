@@ -26,7 +26,7 @@ module Buildr
       end
 
       after_define do |project|
-        desc 'Publish artifacts of version PUBLISH_VERSION to repository'
+        desc 'Download and then upload publishable artifacts to repository'
         project.task('publish') do
           publish_version = ENV['PUBLISH_VERSION'] || (raise 'Must specify PUBLISH_VERSION environment variable to use publish task')
           project.packages.each do |pkg|
