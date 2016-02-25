@@ -13,6 +13,34 @@
 #
 
 module BuildrPlus
+  class CiConfig
+    class << self
+      def additional_commit_actions
+        @additional_commit_actions || []
+      end
+
+      def additional_commit_actions=(additional_commit_actions)
+        @additional_commit_actions = additional_commit_actions
+      end
+
+      def additional_import_actions
+        @additional_import_actions || []
+      end
+
+      def additional_import_actions=(additional_import_actions)
+        @additional_import_actions = additional_import_actions
+      end
+
+      def additional_import_tasks
+        @additional_import_tasks || []
+      end
+
+      def additional_import_tasks=(additional_import_tasks)
+        @additional_import_tasks = additional_import_tasks
+      end
+    end
+  end
+
   module CiExtension
     module ProjectExtension
       include Extension
@@ -34,12 +62,14 @@ module BuildrPlus
         task 'ci:test_configure' do
           if dbt_present
             Dbt::Config.environment = 'test'
+            SSRS::Config.environment = 'test' if Object.const_defined?('SSRS')
             Dbt.repository.load_configuration_data
 
             Dbt.database_keys.each do |database_key|
               database = Dbt.database_for_key(database_key)
               next unless database.enable_rake_integration? || database.packaged?
               next if BuildrPlus::DbtConfig.manual_testing_only_database?(database_key)
+
               prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
               jdbc_url = Dbt.configuration_for_key(database_key).build_jdbc_url(:credentials_inline => true)
               catalog_name = Dbt.configuration_for_key(database_key).catalog_name
@@ -55,6 +85,7 @@ module BuildrPlus
           desc 'Setup test environment for testing import process'
           task 'ci:import:setup' => %w(ci:common_setup) do
             Dbt::Config.config_filename = 'config/ci-import-database.yml'
+            SSRS::Config.config_filename = 'config/ci-import-database.yml' if Object.const_defined?('SSRS')
             task('ci:test_configure').invoke
           end
         end
@@ -64,9 +95,11 @@ module BuildrPlus
           if dbt_present && ci_config_exist
             if !BuildrPlus::DbConfig.is_multi_database_project? || BuildrPlus::DbConfig.mssql?
               Dbt::Config.config_filename = 'config/ci-database.yml'
+              SSRS::Config.config_filename = 'config/ci-database.yml' if Object.const_defined?('SSRS')
             elsif BuildrPlus::DbConfig.is_multi_database_project? || BuildrPlus::DbConfig.pgsql?
               # Assume that a multi database project defaults to sql server and has second yml for pg
               Dbt::Config.config_filename = 'config/ci-pg-database.yml'
+              SSRS::Config.config_filename = 'config/ci-pg-database.yml' if Object.const_defined?('SSRS')
             end
             task('ci:test_configure').invoke
           end
@@ -78,7 +111,18 @@ module BuildrPlus
 
         if dbt_present && (ci_config_exist || ci_import_config_exist)
           desc 'Test the import process'
-          task 'ci:import' => %W(ci#{ci_import_config_exist ? ':import' : ''}:setup clean dbt:create_by_import dbt:verify_constraints dbt:drop)
+          import_actions = []
+          import_actions << "ci#{ci_import_config_exist ? ':import' : ''}:setup"
+          import_actions.concat(%w(clean dbt:create_by_import dbt:verify_constraints))
+          import_actions.concat(BuildrPlus::CiConfig.additional_import_actions)
+          import_actions << 'dbt:drop'
+
+          task 'ci:import' => import_actions
+
+          BuildrPlus::CiConfig.additional_import_tasks.each do |import_variant|
+          desc "Test the import #{import_variant} process"
+          task "ci:import:#{import_variant} " => %W(ci#{ci_import_config_exist ? ':import' : ''}:setup clean dbt:create_by_import:#{import_variant} dbt:verify_constraints dbt:drop)
+          end
         end
 
         desc 'Publish artifacts to repository'
@@ -90,6 +134,8 @@ module BuildrPlus
         commit_actions = %w(ci:setup clean)
         package_actions = %w(ci:setup clean)
         package_no_test_actions = %w(ci:no_test_setup clean)
+
+        commit_actions << 'rptman:setup' if Object.const_defined?('SSRS')
 
         if Object.const_defined?('Domgen')
           commit_actions << 'domgen:all'
@@ -118,6 +164,7 @@ module BuildrPlus
         task 'ci:source_code_analysis'
 
         commit_actions << 'ci:source_code_analysis'
+        commit_actions.concat(BuildrPlus::CiConfig.additional_commit_actions)
 
         package_actions << 'test'
         package_no_test_actions << 'test'
