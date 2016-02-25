@@ -20,6 +20,22 @@ end
 
 if Object.const_defined?('Dbt')
   module BuildrPlus
+    class DbtConfig
+      class << self
+        def manual_testing_only_databases=(manual_testing_only_databases)
+          @manual_testing_only_databases = manual_testing_only_databases
+        end
+
+        def manual_testing_only_databases
+          @manual_testing_only_databases || []
+        end
+
+        def manual_testing_only_database?(database_key)
+          self.manual_testing_only_databases.any?{|d|d.to_s == database_key.to_s}
+        end
+      end
+    end
+
     module DbtExtension
       module ProjectExtension
         include Extension

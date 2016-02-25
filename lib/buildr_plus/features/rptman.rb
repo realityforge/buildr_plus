@@ -35,6 +35,7 @@ if Object.const_defined?('SSRS')
               Dbt.database_keys.each do |database_key|
                 database = Dbt.database_for_key(database_key)
                 next unless database.enable_rake_integration? || database.packaged?
+                next if BuildrPlus::DbtConfig.manual_testing_only_database?(database_key)
 
                 if Dbt::Config.default_database?(database_key)
                   SSRS::Config.define_datasource(Domgen::Naming.uppercase_constantize(project.name.to_s))
