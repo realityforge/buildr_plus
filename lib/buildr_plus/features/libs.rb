@@ -108,6 +108,10 @@ module BuildrPlus
         %w(org.realityforge.rest.field_filter:rest-field-filter:jar:0.4)
       end
 
+      def rest_criteria
+        %w(org.realityforge.rest.criteria:rest-criteria:jar:0.9.3 org.antlr:antlr4-runtime:jar:4.3 org.antlr:antlr4-annotations:jar:4.3) + self.field_filter
+      end
+
       def replicant_client
         self.gwt_gin + self.replicant + self.gwt_property_source + self.gwt_datatypes + self.gwt_webpoller
       end
