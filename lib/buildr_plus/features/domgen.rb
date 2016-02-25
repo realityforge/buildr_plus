@@ -63,6 +63,14 @@ if Object.const_defined?('Domgen')
         def db_generators
           BuildrPlus::DbConfig.mssql? ? self.mssql_generators : BuildrPlus::DbConfig.pgsql? ? pgsql_generators : []
         end
+
+        def database_target_dir
+          @database_target_dir || 'database/generated'
+        end
+
+        def database_target_dir=(database_target_dir)
+          @database_target_dir = database_target_dir
+        end
       end
     end
 
@@ -79,7 +87,7 @@ if Object.const_defined?('Domgen')
 
           Domgen::Build.define_generate_xmi_task
 
-          Domgen::Build.define_generate_task(BuildrPlus::DomgenConfig.db_generators, :key => :sql, :target_dir => 'database/generated')
+          Domgen::Build.define_generate_task(BuildrPlus::DomgenConfig.db_generators, :key => :sql, :target_dir => BuildrPlus::DomgenConfig.database_target_dir)
         end
       end
     end
