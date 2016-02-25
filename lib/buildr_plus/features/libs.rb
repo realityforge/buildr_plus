@@ -125,7 +125,7 @@ module BuildrPlus
       end
 
       def guiceyloops
-        %w(org.realityforge.guiceyloops:guiceyloops:jar:0.65) + self.mockito + self.guice + self.glassfish_embedded + self.testng
+        self.glassfish_embedded + self.guiceyloops_gwt
       end
 
       def guiceyloops_gwt
