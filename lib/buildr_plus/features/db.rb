@@ -15,6 +15,9 @@
 module BuildrPlus
   class DbConfig
     class << self
+
+      # Return true if the pg gem is present.
+      # Implies this project can run using postgres database
       def pg_defined?
         unless @pg_loaded
           @pg_loaded = true
@@ -27,6 +30,8 @@ module BuildrPlus
         Object.const_defined?('PG')
       end
 
+      # Return true if the tiny_tds gem is present.
+      # Implies this project can run using sql server database
       def tiny_tds_defined?
         unless @tiny_tds_loaded
           @tiny_tds_loaded = true
@@ -39,6 +44,7 @@ module BuildrPlus
         Object.const_defined?('TinyTds')
       end
 
+      # Return true if the project can be either postgres or sql server
       def is_multi_database_project?
         tiny_tds_defined? && pg_defined?
       end
