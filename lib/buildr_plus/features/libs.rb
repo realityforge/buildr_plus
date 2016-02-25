@@ -124,6 +124,10 @@ module BuildrPlus
         %w(org.testng:testng:jar:6.8)
       end
 
+      def jndikit
+        %w(org.realityforge.jndikit:jndikit:jar:1.4)
+      end
+
       def guiceyloops
         self.glassfish_embedded + self.guiceyloops_gwt
       end
