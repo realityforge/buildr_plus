@@ -31,7 +31,6 @@ require 'buildr_plus/features/codestyle'
 require 'buildr_plus/features/libs'
 require 'buildr_plus/features/testng'
 require 'buildr_plus/features/source_code_analysis'
-require 'buildr_plus/features/ci'
 require 'buildr_plus/features/guiceyloops'
 
 # Enable features if the corresponding libraries are loaded
@@ -41,5 +40,8 @@ require 'buildr_plus/features/dialect_mapping'
 require 'buildr_plus/features/checkstyle'
 require 'buildr_plus/features/pmd'
 require 'buildr_plus/features/rptman'
+
+# Ci must be at the end as it relies on other features being loaded
+require 'buildr_plus/features/ci'
 
 BuildrPlus::ExtensionRegistry.auto_activate!
