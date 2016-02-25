@@ -121,7 +121,7 @@ module BuildrPlus
 
           BuildrPlus::CiConfig.additional_import_tasks.each do |import_variant|
           desc "Test the import #{import_variant} process"
-          task "ci:import:#{import_variant} " => %W(ci#{ci_import_config_exist ? ':import' : ''}:setup clean dbt:create_by_import:#{import_variant} dbt:verify_constraints dbt:drop)
+            task "ci:import:#{import_variant}" => %W(ci#{ci_import_config_exist ? ':import' : ''}:setup clean dbt:create_by_import:#{import_variant} dbt:verify_constraints dbt:drop)
           end
         end
 
