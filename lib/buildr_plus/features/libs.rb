@@ -140,6 +140,18 @@ module BuildrPlus
         %w(org.realityforge.guiceyloops:guiceyloops:jar:0.65) + self.mockito + self.guice + self.testng
       end
 
+      def slf4j
+        %w(org.slf4j:slf4j-api:jar:1.6.6 org.slf4j:slf4j-jdk14:jar:1.6.6)
+      end
+
+      def greenmail
+        %w(com.icegreen:greenmail:jar:1.4.1) + self.slf4j
+      end
+
+      def greenmail_server
+        'com.icegreen:greenmail-webapp:war:1.4.1'
+      end
+
       def jtds
         %w(net.sourceforge.jtds:jtds:jar:1.3.1)
       end
