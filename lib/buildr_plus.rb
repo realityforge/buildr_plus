@@ -18,6 +18,7 @@ if Buildr::VERSION != expected_version
 end
 
 require 'buildr_plus/extension_registry'
+require 'buildr_plus/util'
 
 # Patches that should always be applied
 require 'buildr_plus/patches/activate_jruby_facet'
@@ -25,7 +26,7 @@ require 'buildr_plus/patches/checkstyle_patch'
 require 'buildr_plus/patches/idea_patch'
 
 # Only patch gwt if gwt addon already included
-require 'buildr_plus/patches/gwt_patch' if $LOADED_FEATURES.any?{|f| f =~ /\/addon\/buildr\/gwt\.rb$/}
+require 'buildr_plus/patches/gwt_patch' if BuildrPlus::Util.is_addon_loaded?('gwt')
 
 # May not always be required
 require 'buildr_plus/dev'
