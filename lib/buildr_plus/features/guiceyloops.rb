@@ -15,6 +15,10 @@
 module BuildrPlus
   class Guiceyloops
     class << self
+      def integration_test_java_args
+        %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M -XX:PermSize=500M -XX:MaxPermSize=500M)
+      end
+
       def glassfish_spec_list
         artifacts_to_spec_list(BuildrPlus::Libs.glassfish_embedded + BuildrPlus::Libs.db_drivers)
       end
