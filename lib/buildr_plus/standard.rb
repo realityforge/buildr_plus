@@ -41,6 +41,7 @@ require 'buildr_plus/features/dialect_mapping'
 require 'buildr_plus/features/checkstyle'
 require 'buildr_plus/features/pmd'
 require 'buildr_plus/features/rptman'
+require 'buildr_plus/features/gwt'
 
 # Ci must be at the end as it relies on other features being loaded
 require 'buildr_plus/features/ci'
