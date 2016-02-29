@@ -31,7 +31,7 @@ if Object.const_defined?('Dbt')
         end
 
         def manual_testing_only_database?(database_key)
-          self.manual_testing_only_databases.any?{|d|d.to_s == database_key.to_s}
+          self.manual_testing_only_databases.any? { |d| d.to_s == database_key.to_s }
         end
       end
     end
