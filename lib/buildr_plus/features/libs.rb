@@ -16,6 +16,14 @@ module BuildrPlus
   class Libs
     class << self
 
+      def geolatte_geom
+        %w(org.geolatte:geolatte-geom:jar:0.13)
+      end
+
+      def geolatte_geom_jpa
+        %w(org.realityforge.geolatte.jpa:geolatte-geom-jpa:jar:0.2)
+      end
+
       def findbugs_provided
         %w(com.google.code.findbugs:jsr305:jar:3.0.0 com.google.code.findbugs:annotations:jar:3.0.0)
       end
