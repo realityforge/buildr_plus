@@ -38,6 +38,15 @@ module BuildrPlus
       def additional_import_tasks=(additional_import_tasks)
         @additional_import_tasks = additional_import_tasks
       end
+
+      def perform_publish=(perform_publish)
+        @perform_publish = perform_publish
+      end
+
+      def perform_publish?
+        @perform_publish.nil? ? true : !!@perform_publish
+      end
+
     end
   end
 
@@ -178,8 +187,10 @@ module BuildrPlus
         commit_actions.concat(database_drops)
         package_actions.concat(database_drops)
 
-        package_actions << 'ci:upload'
-        package_no_test_actions << 'ci:upload'
+        if BuildrPlus::CiConfig.perform_publish?
+          package_actions << 'ci:upload'
+          package_no_test_actions << 'ci:upload'
+        end
 
         desc 'Perform pre-commit checks and source code analysis'
         task 'ci:commit' => commit_actions
