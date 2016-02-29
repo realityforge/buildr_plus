@@ -16,6 +16,7 @@ require 'buildr_plus'
 
 # Addons present in all of the "standard" projects
 require 'buildr/pmd'
+require 'buildr_plus/patches/pmd'
 require 'buildr/checkstyle'
 require 'buildr/single_intermediate_layout'
 require 'buildr/findbugs'
