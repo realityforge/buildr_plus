@@ -13,6 +13,28 @@
 #
 
 module BuildrPlus
+  class SourceCodeAnalysisConfig
+    class << self
+      attr_writer :findbugs_enabled
+
+      def findbugs_enabled?
+        @findbugs_enabled.nil? ? true : !!@findbugs_enabled
+      end
+
+      attr_writer :pmd_enabled
+
+      def pmd_enabled?
+        @pmd_enabled.nil? ? true : !!@pmd_enabled
+      end
+
+      attr_writer :jdepend_enabled
+
+      def jdepend_enabled?
+        @jdepend_enabled.nil? ? true : !!@jdepend_enabled
+      end
+    end
+  end
+
   module SourceCodeAnalysisExtension
     module ProjectExtension
       include Extension
@@ -20,9 +42,9 @@ module BuildrPlus
 
       before_define do |project|
         if project.ipr?
-          project.jdepend.enabled = true
-          project.findbugs.enabled = true
-          project.pmd.enabled = true
+          project.jdepend.enabled = true if BuildrPlus::SourceCodeAnalysisConfig.jdepend_enabled?
+          project.findbugs.enabled = true if BuildrPlus::SourceCodeAnalysisConfig.findbugs_enabled?
+          project.pmd.enabled = true if BuildrPlus::SourceCodeAnalysisConfig.pmd_enabled?
         end
       end
     end
