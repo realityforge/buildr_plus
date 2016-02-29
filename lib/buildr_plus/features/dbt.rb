@@ -43,6 +43,10 @@ if Object.const_defined?('Dbt')
 
         first_time do
           Dbt::Config.driver = 'postgres' if BuildrPlus::DbConfig.pgsql?
+          if Dbt.repository.database_for_key?(:default)
+            database = Dbt.repository.database_for_key(:default)
+            database.search_dirs = %w(database)
+          end
         end
 
         after_define do |project|
