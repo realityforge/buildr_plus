@@ -6,6 +6,3 @@
     - IDEA project facets
     - paths to source code analysis
     - publish flags
-* Default configuration of :default dbt database. i.e.
-    - Auto add `database.search_dirs = %w(database/generated database)`  or `database.search_dirs = %w(database)` depending on presences of domgen
-    - Auto add `database.enable_domgen` if domgen present
