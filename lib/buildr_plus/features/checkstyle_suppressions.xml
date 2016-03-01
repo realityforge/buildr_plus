@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE suppressions PUBLIC
+  "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+  "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+
+<suppressions>
+  <!-- Turn off all checks for generated code. -->
+  <suppress checks="." files="(.*[\\/])?generated[\\/].*\.java"/>
+
+  <!-- Some suppressions for tests -->
+  <suppress checks="MethodName" files="(.*[\\/])?test[\\/]java[\\/].*\.java"/>
+  <suppress checks="MagicNumber" files="(.*[\\/])?test[\\/]java[\\/].*\.java"/>
+  <suppress checks="ImportControl" files="(.*[\\/])?test[\\/]java[\\/].*\.java"/>
+  <suppress checks="VisibilityModifier" files=".*[\\/]test[\\/]java[\\/].*\.java"/>
+
+  <!-- Factory for test factories have to import a bunch of test code. Can not be moved to test hierarchy as modifiers are package access  -->
+  <suppress checks="ImportControl" files="(.*[\\/])?gwt-qa-support[\\/]src[\\/]main[\\/]java[\\/].*[\\/]client[\\/]entity[\\/].*Factory\.java"/>
+</suppressions>

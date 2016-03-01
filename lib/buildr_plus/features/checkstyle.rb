@@ -34,10 +34,21 @@ module BuildrPlus
       BuildrPlus::ExtensionRegistry.register(self)
 
       before_define do |project|
-        checkstyle_dir = project._('etc/checkstyle')
-        if ::File.exist?(checkstyle_dir)
-          project.checkstyle.config_directory = checkstyle_dir
-          project.checkstyle.configuration_artifact = CheckstyleConfig.checkstyle_rules
+        project.checkstyle.config_directory = project._('etc/checkstyle')
+        project.checkstyle.configuration_artifact = CheckstyleConfig.checkstyle_rules
+
+        import_control_present = File.exist?(project.checkstyle.import_control_file)
+
+        unless File.exist?(project.checkstyle.suppressions_file)
+          dir = File.expand_path(File.dirname(__FILE__))
+          project.checkstyle.suppressions_file =
+            import_control_present ?
+              "#{dir}/checkstyle_suppressions.xml" :
+              "#{dir}/checkstyle_suppressions_no_import_control.xml"
+        end
+
+        unless import_control_present
+          project.checkstyle.properties['checkstyle.import-control.file'] = ''
         end
       end
     end
