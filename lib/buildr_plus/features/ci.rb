@@ -159,7 +159,7 @@ module BuildrPlus
             database = Dbt.database_for_key(database_key)
             next unless database.enable_rake_integration? || database.packaged?
             next if BuildrPlus::DbtConfig.manual_testing_only_database?(database_key)
-            next unless database.local_repository?
+            next unless database.managed?
 
             prefix = Dbt::Config.default_database?(database_key) ? '' : ":#{database_key}"
 
