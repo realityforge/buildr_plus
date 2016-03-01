@@ -213,7 +213,10 @@ module BuildrPlus
             task("#{project.name}:pmd:rule:html").invoke
             task("#{project.name}:pmd:rule:xml").invoke
           end
-          task("#{project.name}:checkstyle:xml").invoke if project.checkstyle.enabled?
+          if project.checkstyle.enabled?
+            task("#{project.name}:checkstyle:xml").invoke
+            task("#{project.name}:checkstyle:html").invoke
+          end
         end
       end
     end
