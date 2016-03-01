@@ -22,7 +22,6 @@ require 'buildr_plus/util'
 
 # Patches that should always be applied
 require 'buildr_plus/patches/activate_jruby_facet'
-require 'buildr_plus/patches/checkstyle_patch'
 require 'buildr_plus/patches/idea_patch'
 
 # Only patch gwt if gwt addon already included
