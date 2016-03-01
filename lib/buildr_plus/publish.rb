@@ -35,8 +35,8 @@ module Buildr
             a.upload
 
             if BuildrPlus::DbConfig.is_multi_database_project?
-              # Asume this is run with DB_TYPE as mssql or unset
-              group = "#{pkg_hash[:group]}#{BuildrPlus::DbConfig.artifact_suffix}"
+              # Assume this is run with DB_TYPE as mssql or unset
+              group = "#{pkg.to_hash[:group]}#{BuildrPlus::DbConfig.artifact_suffix}"
               a = Buildr.artifact(pkg.to_hash.merge(:version => publish_version, :group => group))
               a.invoke
               a.upload
