@@ -5,5 +5,4 @@
 * Add deps list for jett
 * Add templates for each project that automagically adds relevant aspects. i.e.
     - IDEA project facets
-    - paths to source code analysis
     - publish flags

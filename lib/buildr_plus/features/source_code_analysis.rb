@@ -47,6 +47,17 @@ module BuildrPlus
           project.pmd.enabled = true if BuildrPlus::SourceCodeAnalysisConfig.pmd_enabled?
         end
       end
+
+      after_define do |project|
+        if project.ipr?
+          project_names = Buildr.projects(:scope => project.name).collect { |p| p.name }
+
+          project.jdepend.additional_project_names = project_names if project.jdepend.enabled?
+          project.findbugs.additional_project_names = project_names if project.findbugs.enabled?
+          project.pmd.additional_project_names = project_names if project.pmd.enabled?
+          project.checkstyle.additional_project_names = project_names if project.checkstyle.enabled?
+        end
+      end
     end
   end
 end
