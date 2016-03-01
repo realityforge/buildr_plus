@@ -16,7 +16,7 @@ module BuildrPlus
   class CheckstyleConfig
     class << self
       def default_checkstyle_rules
-        'au.com.stocksoftware.checkstyle:checkstyle:xml:1.7'
+        'au.com.stocksoftware.checkstyle:checkstyle:xml:1.8'
       end
 
       def checkstyle_rules
