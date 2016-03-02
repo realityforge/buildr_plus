@@ -87,10 +87,10 @@ if Object.const_defined?('Domgen')
 
           Domgen::Build.define_generate_xmi_task
 
-          Domgen::Build.define_generate_task(BuildrPlus::DomgenConfig.db_generators, :key => :sql, :target_dir => BuildrPlus::DomgenConfig.database_target_dir)
-
           if Object.const_defined?('Dbt')
             if Dbt.repository.database_for_key?(:default)
+              Domgen::Build.define_generate_task(BuildrPlus::DomgenConfig.db_generators, :key => :sql, :target_dir => BuildrPlus::DomgenConfig.database_target_dir)
+
               database = Dbt.repository.database_for_key(:default)
               database.search_dirs = %W(#{BuildrPlus::DomgenConfig.database_target_dir} database)
               database.enable_domgen
