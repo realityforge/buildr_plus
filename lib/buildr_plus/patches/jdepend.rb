@@ -37,7 +37,7 @@ module Buildr
 
         args = []
         if output_file
-          args << "-file"
+          args << '-file'
           args << output_file
         end
         target_paths.each do |target_path|
