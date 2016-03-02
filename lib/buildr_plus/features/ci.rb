@@ -140,7 +140,7 @@ module BuildrPlus
         desc 'Publish artifacts to repository'
         task 'ci:upload' => %w(ci:setup upload_published)
 
-        commit_actions = %w(ci:setup clean)
+        commit_actions = %w(ci:no_test_setup clean)
         package_actions = %w(ci:setup clean)
         package_no_test_actions = %w(ci:no_test_setup clean)
 
