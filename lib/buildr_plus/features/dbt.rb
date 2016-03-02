@@ -33,6 +33,13 @@ if Object.const_defined?('Dbt')
         def manual_testing_only_database?(database_key)
           self.manual_testing_only_databases.any? { |d| d.to_s == database_key.to_s }
         end
+
+        attr_writer :library
+
+        # Is the db jar created meant to be a library jar?
+        def library?
+          @library.nil? ? false : @library
+        end
       end
     end
 
@@ -52,6 +59,18 @@ if Object.const_defined?('Dbt')
         after_define do |project|
           # Make sure all the data sources in the configuration file are mapped to idea project
           Dbt::Buildr.add_idea_data_sources_from_configuration_file(project) if project.ipr?
+
+          if project.ipr? && Dbt.repository.database_for_key?(:default)
+            unless Buildr.projects(:scope => project.name).any? { |p| p.name == "#{project.name}:db" }
+              project.instance_eval do
+                desc 'DB Archive'
+                define 'db' do
+                  project.no_iml
+                  Dbt.define_database_package(:default, :include_code => !BuildrPlus::DbtConfig.library?)
+                end
+              end
+            end
+          end
         end
       end
     end
