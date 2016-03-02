@@ -21,17 +21,25 @@ module BuildrPlus
         @findbugs_enabled.nil? ? true : !!@findbugs_enabled
       end
 
+      attr_accessor :findbugs_additional_project_names
+
       attr_writer :pmd_enabled
 
       def pmd_enabled?
         @pmd_enabled.nil? ? true : !!@pmd_enabled
       end
 
+      attr_accessor :pmd_additional_project_names
+
       attr_writer :jdepend_enabled
 
       def jdepend_enabled?
         @jdepend_enabled.nil? ? true : !!@jdepend_enabled
       end
+
+      attr_accessor :jdepend_additional_project_names
+
+      attr_accessor :checkstyle_additional_project_names
     end
   end
 
@@ -53,10 +61,22 @@ module BuildrPlus
           project_names = Buildr.projects(:scope => project.name).collect { |p| p.name }
 
           non_soap_projects = project_names.select { |p| !(p =~ /.*\:soap-client$/) }
-          project.jdepend.additional_project_names = project_names if project.jdepend.enabled?
-          project.findbugs.additional_project_names = non_soap_projects if project.findbugs.enabled?
-          project.pmd.additional_project_names = non_soap_projects if project.pmd.enabled?
-          project.checkstyle.additional_project_names = project_names if project.checkstyle.enabled?
+          if project.jdepend.enabled?
+            project.jdepend.additional_project_names =
+              BuildrPlus::SourceCodeAnalysisConfig.jdepend_additional_project_names || project_names
+          end
+          if project.findbugs.enabled?
+            project.findbugs.additional_project_names =
+              BuildrPlus::SourceCodeAnalysisConfig.findbugs_additional_project_names || non_soap_projects
+          end
+          if project.pmd.enabled?
+            project.pmd.additional_project_names =
+              BuildrPlus::SourceCodeAnalysisConfig.pmd_additional_project_names || non_soap_projects
+          end
+          if project.checkstyle.enabled?
+            project.checkstyle.additional_project_names =
+              BuildrPlus::SourceCodeAnalysisConfig.checkstyle_additional_project_names || project_names
+          end
         end
       end
     end
