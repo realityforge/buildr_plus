@@ -91,7 +91,7 @@ module Buildr
       attr_writer :rule_set_files
 
       def rule_set_files
-        @rule_set_files ||= (self.rule_set_artifacts.empty? ? ['rulesets/java/basic.xml', 'rulesets/java/imports.xml', 'rulesets/java/unusedcode.xml', 'rulesets/java/finalizers.xml', 'rulesets/java/braces.xml'] : [])
+        @rule_set_files ||= (self.rule_set_artifacts.empty? ? %w(rulesets/java/basic.xml rulesets/java/imports.xml rulesets/java/unusedcode.xml rulesets/java/finalizers.xml rulesets/java/braces.xml) : [])
       end
 
       # Support specification of rule sets that are distributed as part of a maven repository
