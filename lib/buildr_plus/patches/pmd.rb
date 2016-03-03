@@ -127,6 +127,10 @@ module Buildr
         @source_paths ||= [self.project.compile.sources, self.project.test.compile.sources].flatten.compact
       end
 
+      def exclude_paths
+        @source_paths ||= []
+      end
+
       # An array of additional projects to scan for main and test sources
       attr_writer :additional_project_names
 
@@ -142,7 +146,7 @@ module Buildr
           paths << [p.compile.sources, p.test.compile.sources].flatten.compact
         end
 
-        paths.flatten.compact
+        paths.flatten.select{|p|!self.exclude_paths.include?(p)}.compact
       end
 
       protected
