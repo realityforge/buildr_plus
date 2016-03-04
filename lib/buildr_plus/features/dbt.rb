@@ -56,13 +56,13 @@ if Object.const_defined?('Dbt')
           end
         end
 
-        after_define do |project|
+        after_define do |buildr_project|
           # Make sure all the data sources in the configuration file are mapped to idea project
-          Dbt::Buildr.add_idea_data_sources_from_configuration_file(project) if project.ipr?
+          Dbt::Buildr.add_idea_data_sources_from_configuration_file(buildr_project) if buildr_project.ipr?
 
-          if project.ipr? && Dbt.repository.database_for_key?(:default)
-            unless Buildr.projects(:scope => project.name).any? { |p| p.name == "#{project.name}:db" }
-              project.instance_eval do
+          if buildr_project.ipr? && Dbt.repository.database_for_key?(:default)
+            unless Buildr.projects(:scope => buildr_project.name).any? { |p| p.name == "#{buildr_project.name}:db" }
+              buildr_project.instance_eval do
                 desc 'DB Archive'
                 define 'db' do
                   project.no_iml
