@@ -63,6 +63,8 @@ module BuildrPlus
           ENV['TEST'] = 'all' unless ENV['TEST']
         end
 
+        task 'ci:common_setup' => %w(db:driver:download) if BuildrPlus::RailsConfig.is_rails_app?
+
         dbt_present = Object.const_defined?('Dbt')
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
         ci_config_exist = ::File.exist?(File.expand_path("#{base_directory}/config/ci-database.yml"))
@@ -88,13 +90,16 @@ module BuildrPlus
               end
             end
           end
+          ::RAILS_ENV = ENV['RAILS_ENV'] = 'test' if BuildrPlus::RailsConfig.is_rails_app?
         end
 
         if ci_import_config_exist
           desc 'Setup test environment for testing import process'
           task 'ci:import:setup' => %w(ci:common_setup) do
-            Dbt::Config.config_filename = 'config/ci-import-database.yml'
-            SSRS::Config.config_filename = 'config/ci-import-database.yml' if Object.const_defined?('SSRS')
+            database_config = 'config/ci-import-database.yml'
+            Dbt::Config.config_filename = database_config
+            SSRS::Config.config_filename = database_config if Object.const_defined?('SSRS')
+            ENV['DATABASE_YML'] = database_config if BuildrPlus::RailsConfig.is_rails_app?
             task('ci:test_configure').invoke
           end
         end
@@ -102,14 +107,15 @@ module BuildrPlus
         desc 'Setup test environment'
         task 'ci:setup' => %w(ci:common_setup) do
           if dbt_present && ci_config_exist
-            if !BuildrPlus::DbConfig.is_multi_database_project? || BuildrPlus::DbConfig.mssql?
-              Dbt::Config.config_filename = 'config/ci-database.yml'
-              SSRS::Config.config_filename = 'config/ci-database.yml' if Object.const_defined?('SSRS')
+            database_config = if !BuildrPlus::DbConfig.is_multi_database_project? || BuildrPlus::DbConfig.mssql?
+              'config/ci-database.yml'
             elsif BuildrPlus::DbConfig.is_multi_database_project? || BuildrPlus::DbConfig.pgsql?
               # Assume that a multi database project defaults to sql server and has second yml for pg
-              Dbt::Config.config_filename = 'config/ci-pg-database.yml'
-              SSRS::Config.config_filename = 'config/ci-pg-database.yml' if Object.const_defined?('SSRS')
+              'config/ci-pg-database.yml'
             end
+            Dbt::Config.config_filename = database_config
+            SSRS::Config.config_filename = database_config if Object.const_defined?('SSRS')
+            ENV['DATABASE_YML'] = database_config if BuildrPlus::RailsConfig.is_rails_app?
             task('ci:test_configure').invoke
           end
         end
@@ -204,16 +210,16 @@ module BuildrPlus
 
       after_define do |project|
         project.task(':ci:source_code_analysis') do
-          task("#{project.name}:jdepend:html").invoke if project.jdepend.enabled?
-          if project.findbugs.enabled?
+          task("#{project.name}:jdepend:html").invoke if project.respond_to?(:jdepend) && project.jdepend.enabled?
+          if project.respond_to?(:findbugs) && project.findbugs.enabled?
             task("#{project.name}:findbugs:xml").invoke
             task("#{project.name}:findbugs:html").invoke
           end
-          if project.pmd.enabled?
+          if project.respond_to?(:pmd) && project.pmd.enabled?
             task("#{project.name}:pmd:rule:html").invoke
             task("#{project.name}:pmd:rule:xml").invoke
           end
-          if project.checkstyle.enabled?
+          if project.respond_to?(:checkstyle) && project.checkstyle.enabled?
             task("#{project.name}:checkstyle:xml").invoke
             task("#{project.name}:checkstyle:html").invoke
           end
