@@ -35,7 +35,9 @@ module BuildrPlus
 
       def activate!
         raw_extensions.each do |extension|
-          Buildr::Project.include extension
+          Buildr::Project.class_eval do |p|
+            include extension
+          end
         end
       end
 
