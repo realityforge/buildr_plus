@@ -86,7 +86,7 @@ if BuildrPlus::RailsConfig.is_rails_app?
                 vendor/docs/**/*
             )
           excludes.concat(BuildrPlus::RailsConfig.additional_warble_excludes)
-          excludes.concat(BuildrPlus::SassConfig.sass_paths.collect{|p|[p,"#{p}/**/*"]}.flatten) if Object.const_defined?('Sass')
+          excludes.concat(BuildrPlus::SassConfig.sass_paths.collect { |p| [p, "#{p}/**/*"] }.flatten) if Object.const_defined?('Sass')
 
           warbler_config = Warbler::Config.new do |config|
             config.dirs = code_dirs
