@@ -63,7 +63,7 @@ module BuildrPlus
           ENV['TEST'] = 'all' unless ENV['TEST']
         end
 
-        task 'ci:common_setup' => %w(db:driver:download) if BuildrPlus::RailsConfig.is_rails_app?
+        task 'ci:common_setup' => %w(assets:copy_plugin_assets) if BuildrPlus::RailsConfig.is_rails_app?
 
         dbt_present = Object.const_defined?('Dbt')
         base_directory = File.dirname(Buildr.application.buildfile.to_s)

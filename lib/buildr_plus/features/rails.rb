@@ -54,6 +54,15 @@ if BuildrPlus::RailsConfig.is_rails_app?
             cp a.to_s, destination
           end
 
+          desc 'Copy the plugin assets to public directory'
+          task 'assets:copy_plugin_assets' => %w(db:driver:download) do
+            # Running a script is sufficient to copy all plugin assets across
+            ruby_command = Buildr::Util.win_os? ? 'jruby' : 'ruby'
+            sh "bundle exec #{ruby_command} #{base_directory}/script/runner 'exit'"
+          end
+
+          task 'assets:copy_plugin_assets' => %w(domgen:all) if Object.const_defined?('Domgen')
+
           code_dirs = %w(app config vendor lib)
           code_dirs << 'generated' if Object.const_defined?('Domgen')
 
