@@ -42,6 +42,7 @@ if Object.const_defined?('Sass')
           sass_paths = SassConfig.sass_paths.collect { |p| project._(p) }.select { |p| File.exist?(p) }
           if sass_paths.size > 0
             project.iml.excluded_directories << project._('.sass-cache')
+            project.clean { rm_rf project._('.sass-cache') }
 
             desc "Precompile assets for #{project.name}"
             t = project.task('assets:precompile') do
