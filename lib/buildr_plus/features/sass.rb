@@ -49,7 +49,7 @@ if Object.const_defined?('Sass')
               sass_paths.each do |sass_path|
                 Dir["#{sass_path}/**/*.sass"].each do |sass|
                   File.open(sass.gsub(/sass$/, 'css').gsub(/\/sass/, ''), 'w') do |f|
-                    f.write(Sass::Engine.new(File.read(sass)).render)
+                    f.write(Sass::Engine.new(File.read(sass), :load_paths => [File.dirname(sass)]).render)
                   end
                 end
               end
