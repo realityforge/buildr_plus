@@ -12,15 +12,10 @@
 # limitations under the License.
 #
 
-module BuildrPlus
-  module ProductVersionExtension
-    module ProjectExtension
-      include Extension
-      BuildrPlus::ExtensionRegistry.register(self)
-
-      before_define do |project|
-        project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
-      end
+BuildrPlus::FeatureManager.feature(:product_version) do |f|
+  f.enhance(:ProjectExtension) do
+    before_define do |project|
+      project.version = ENV['PRODUCT_VERSION'] if ENV['PRODUCT_VERSION']
     end
   end
 end

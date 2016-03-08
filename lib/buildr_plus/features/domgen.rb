@@ -12,91 +12,76 @@
 # limitations under the License.
 #
 
-begin
-  require 'domgen'
-rescue LoadError
-  # Ignored
-end
-
-if Object.const_defined?('Domgen')
-  module BuildrPlus
-    class DomgenConfig
-      class << self
-        def default_pgsql_generators
-          [:pgsql]
-        end
-
-        def default_mssql_generators
-          [:mssql]
-        end
-
-        def additional_pgsql_generators
-          @additional_pgsql_generators || []
-        end
-
-        def additional_pgsql_generators=(generators)
-          unless generators.is_a?(Array) && generators.all? { |e| e.is_a?(Symbol) }
-            raise "additional_pgsql_generators parameter '#{generators.inspect}' is not an array of symbols"
-          end
-          @additional_pgsql_generators = generators
-        end
-
-        def additional_mssql_generators
-          @additional_mssql_generators || []
-        end
-
-        def additional_mssql_generators=(generators)
-          unless generators.is_a?(Array) && generators.all? { |e| e.is_a?(Symbol) }
-            raise "additional_mssql_generators parameter '#{generators.inspect}' is not an array of symbols"
-          end
-          @additional_mssql_generators = generators
-        end
-
-        def mssql_generators
-          self.default_mssql_generators + self.additional_mssql_generators
-        end
-
-        def pgsql_generators
-          self.default_pgsql_generators + self.additional_pgsql_generators
-        end
-
-        def db_generators
-          BuildrPlus::DbConfig.mssql? ? self.mssql_generators : BuildrPlus::DbConfig.pgsql? ? pgsql_generators : []
-        end
-
-        def database_target_dir
-          @database_target_dir || 'database/generated'
-        end
-
-        def database_target_dir=(database_target_dir)
-          @database_target_dir = database_target_dir
-        end
-      end
+BuildrPlus::FeatureManager.feature(:domgen) do |f|
+  f.enhance(:Config) do
+    def default_pgsql_generators
+      [:pgsql]
     end
 
-    module DomgenExtension
-      module ProjectExtension
-        include Extension
-        BuildrPlus::ExtensionRegistry.register(self)
+    def default_mssql_generators
+      [:mssql]
+    end
 
-        first_time do
-          base_directory = File.dirname(Buildr.application.buildfile.to_s)
-          candidate_file = File.expand_path("#{base_directory}/architecture.rb")
+    def additional_pgsql_generators
+      @additional_pgsql_generators || []
+    end
 
-          Domgen::Build.define_load_task if ::File.exist?(candidate_file)
+    def additional_pgsql_generators=(generators)
+      unless generators.is_a?(Array) && generators.all? { |e| e.is_a?(Symbol) }
+        raise "additional_pgsql_generators parameter '#{generators.inspect}' is not an array of symbols"
+      end
+      @additional_pgsql_generators = generators
+    end
 
-          Domgen::Build.define_generate_xmi_task
+    def additional_mssql_generators
+      @additional_mssql_generators || []
+    end
 
-          if Object.const_defined?('Dbt')
-            if Dbt.repository.database_for_key?(:default)
-              Domgen::Build.define_generate_task(BuildrPlus::DomgenConfig.db_generators, :key => :sql, :target_dir => BuildrPlus::DomgenConfig.database_target_dir)
+    def additional_mssql_generators=(generators)
+      unless generators.is_a?(Array) && generators.all? { |e| e.is_a?(Symbol) }
+        raise "additional_mssql_generators parameter '#{generators.inspect}' is not an array of symbols"
+      end
+      @additional_mssql_generators = generators
+    end
 
-              database = Dbt.repository.database_for_key(:default)
-              database.search_dirs = %W(#{BuildrPlus::DomgenConfig.database_target_dir} database)
-              database.enable_domgen
-            end
-          end
-        end
+    def mssql_generators
+      self.default_mssql_generators + self.additional_mssql_generators
+    end
+
+    def pgsql_generators
+      self.default_pgsql_generators + self.additional_pgsql_generators
+    end
+
+    def db_generators
+      BuildrPlus::Db.mssql? ? self.mssql_generators : BuildrPlus::Db.pgsql? ? pgsql_generators : []
+    end
+
+    def database_target_dir
+      @database_target_dir || 'database/generated'
+    end
+
+    def database_target_dir=(database_target_dir)
+      @database_target_dir = database_target_dir
+    end
+  end
+
+  f.enhance(:ProjectExtension) do
+    first_time do
+      require 'domgen'
+
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      candidate_file = File.expand_path("#{base_directory}/architecture.rb")
+
+      Domgen::Build.define_load_task if ::File.exist?(candidate_file)
+
+      Domgen::Build.define_generate_xmi_task
+
+      if BuildrPlus::FeatureManager.activated?(:dbt) && Dbt.repository.database_for_key?(:default)
+        Domgen::Build.define_generate_task(BuildrPlus::Domgen.db_generators, :key => :sql, :target_dir => BuildrPlus::Domgen.database_target_dir)
+
+        database = Dbt.repository.database_for_key(:default)
+        database.search_dirs = %W(#{BuildrPlus::Domgen.database_target_dir} database)
+        database.enable_domgen
       end
     end
   end

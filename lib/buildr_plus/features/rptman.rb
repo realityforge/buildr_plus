@@ -12,38 +12,27 @@
 # limitations under the License.
 #
 
-begin
-  require 'rptman'
-rescue LoadError
-  # Ignored
-end
+BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
+  f.enhance(:ProjectExtension) do
+    first_time do
+      require 'rptman'
 
-if Object.const_defined?('SSRS')
-  module BuildrPlus
-    module RptmanExtension
-      module ProjectExtension
-        include Extension
-        BuildrPlus::ExtensionRegistry.register(self)
+      SSRS::Build.define_basic_tasks
+    end
 
-        first_time do
-          SSRS::Build.define_basic_tasks
-        end
+    after_define do |project|
+      if project.ipr?
+        if BuildrPlus::FeatureManager.activated?(:dbt)
+          Dbt.database_keys.each do |database_key|
+            database = Dbt.database_for_key(database_key)
+            next unless database.enable_rake_integration? || database.packaged?
+            next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
-        after_define do |project|
-          if project.ipr?
-            if Object.const_defined?('Dbt')
-              Dbt.database_keys.each do |database_key|
-                database = Dbt.database_for_key(database_key)
-                next unless database.enable_rake_integration? || database.packaged?
-                next if BuildrPlus::DbtConfig.manual_testing_only_database?(database_key)
-
-                if Dbt::Config.default_database?(database_key)
-                  SSRS::Config.define_datasource(Domgen::Naming.uppercase_constantize(project.name.to_s))
-                else
-                  SSRS::Config.define_datasource(Domgen::Naming.uppercase_constantize(database_key.to_s),
-                                                 database_key.to_s)
-                end
-              end
+            if Dbt::Config.default_database?(database_key)
+              SSRS::Config.define_datasource(BuildrPlus::Naming.uppercase_constantize(project.name.to_s))
+            else
+              SSRS.define_datasource(BuildrPlus::Naming.uppercase_constantize(database_key.to_s),
+                                             database_key.to_s)
             end
           end
         end

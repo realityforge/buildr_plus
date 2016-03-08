@@ -12,28 +12,19 @@
 # limitations under the License.
 #
 
-begin
-  require 'itest'
-rescue LoadError
-  # Ignored
-end
+BuildrPlus::FeatureManager.feature(:itest => [:rails]) do |f|
+  f.enhance(:ProjectExtension) do
+    first_time do
+      require 'itest'
+    end
 
-if BuildrPlus::RailsConfig.is_rails_app? && Object.const_defined?('ITest')
-  module BuildrPlus
-    module ITestExtension
-      module ProjectExtension
-        include Extension
-        BuildrPlus::ExtensionRegistry.register(self)
-
-        after_define do |project|
-          if project.ipr?
-            Dir["#{project._('test')}/*"].each do |dir|
-              next unless File.directory?(dir)
-              basename = File.basename(dir)
-              next if basename == 'fixtures'
-              ITest.define_test("test/#{basename}/**/*_test.rb", :key => basename.to_sym)
-            end
-          end
+    after_define do |project|
+      if project.ipr?
+        Dir["#{project._('test')}/*"].each do |dir|
+          next unless File.directory?(dir)
+          basename = File.basename(dir)
+          next if basename == 'fixtures'
+          ITest.define_test("test/#{basename}/**/*_test.rb", :key => basename.to_sym)
         end
       end
     end

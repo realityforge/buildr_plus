@@ -12,14 +12,16 @@
 # limitations under the License.
 #
 
-if BuildrPlus::Util.is_addon_loaded?('gwt')
-  module BuildrPlus
-    class Gwt
-      class << self
-        def gwtc_java_args
-          %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M -XX:PermSize=128M -XX:MaxPermSize=256M)
-        end
-      end
+BuildrPlus::FeatureManager.feature(:gwt) do |f|
+  f.enhance(:Config) do
+    def gwtc_java_args
+      %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M -XX:PermSize=128M -XX:MaxPermSize=256M)
+    end
+  end
+
+  f.enhance(:ProjectExtension) do
+    first_time do
+      require 'buildr_plus/patches/gwt_patch'
     end
   end
 end

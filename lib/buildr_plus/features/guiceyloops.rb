@@ -12,20 +12,18 @@
 # limitations under the License.
 #
 
-module BuildrPlus
-  class Guiceyloops
-    class << self
-      def integration_test_java_args
-        %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M -XX:PermSize=500M -XX:MaxPermSize=500M)
-      end
+BuildrPlus::FeatureManager.feature(:guiceyloops) do |f|
+  f.enhance(:Config) do
+    def integration_test_java_args
+      %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M -XX:PermSize=500M -XX:MaxPermSize=500M)
+    end
 
-      def glassfish_spec_list
-        artifacts_to_spec_list(BuildrPlus::Libs.glassfish_embedded + BuildrPlus::Libs.db_drivers)
-      end
+    def glassfish_spec_list
+      artifacts_to_spec_list(BuildrPlus::Libs.glassfish_embedded + BuildrPlus::Libs.db_drivers)
+    end
 
-      def artifacts_to_spec_list(artifacts)
-        Buildr.artifacts(artifacts).collect { |a| Buildr.artifact(a).to_spec }.join(',')
-      end
+    def artifacts_to_spec_list(artifacts)
+      Buildr.artifacts(artifacts).collect { |a| Buildr.artifact(a).to_spec }.join(',')
     end
   end
 end

@@ -12,16 +12,11 @@
 # limitations under the License.
 #
 
-module BuildrPlus
-  module RepositoriesExtension
-    module ProjectExtension
-      include Extension
-      BuildrPlus::ExtensionRegistry.register(self)
-
-      first_time do
-        Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/public')
-        Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/groups/fisg')
-      end
+BuildrPlus::FeatureManager.feature(:repositories) do |f|
+  f.enhance(:ProjectExtension) do
+    first_time do
+      Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/public')
+      Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/groups/fisg')
     end
   end
 end

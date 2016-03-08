@@ -12,17 +12,12 @@
 # limitations under the License.
 #
 
-module BuildrPlus
-  module DialectMappingExtension
-    module ProjectExtension
-      include Extension
-      BuildrPlus::ExtensionRegistry.register(self)
-
-      after_define do |project|
-        if project.ipr?
-          project.ipr.mssql_dialect_mapping if BuildrPlus::DbConfig.mssql?
-          project.ipr.postgres_dialect_mapping if BuildrPlus::DbConfig.pgsql?
-        end
+BuildrPlus::FeatureManager.feature(:dialect_mapping => [:db]) do |f|
+  f.enhance(:ProjectExtension) do
+    after_define do |project|
+      if project.ipr?
+        project.ipr.mssql_dialect_mapping if BuildrPlus::Db.mssql?
+        project.ipr.postgres_dialect_mapping if BuildrPlus::Db.pgsql?
       end
     end
   end

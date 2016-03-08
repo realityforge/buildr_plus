@@ -12,15 +12,10 @@
 # limitations under the License.
 #
 
-module BuildrPlus
-  module TestNGExtension
-    module ProjectExtension
-      include Extension
-      BuildrPlus::ExtensionRegistry.register(self)
-
-      after_define do |project|
-        project.test.using :testng
-      end
+BuildrPlus::FeatureManager.feature(:testng) do |f|
+  f.enhance(:ProjectExtension) do
+    before_define do |project|
+      project.test.using :testng
     end
   end
 end
