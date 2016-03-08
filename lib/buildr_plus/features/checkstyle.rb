@@ -12,46 +12,51 @@
 # limitations under the License.
 #
 
-module BuildrPlus
-  class CheckstyleConfig
-    class << self
-      def default_checkstyle_rules
-        'au.com.stocksoftware.checkstyle:checkstyle:xml:1.8'
-      end
+BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
+  f.enhance(:Config) do
+    def default_checkstyle_rules
+      'au.com.stocksoftware.checkstyle:checkstyle:xml:1.8'
+    end
 
-      def checkstyle_rules
-        @checkstyle_rules || self.default_checkstyle_rules
-      end
+    def checkstyle_rules
+      @checkstyle_rules || self.default_checkstyle_rules
+    end
 
-      def checkstyle_rules=(checkstyle_rules)
-        @checkstyle_rules = checkstyle_rules
+    attr_writer :checkstyle_rules
+
+    attr_accessor :additional_project_names
+  end
+
+  f.enhance(:ProjectExtension) do
+    first_time do
+      require 'buildr_plus/patches/checkstyle'
+    end
+
+    before_define do |project|
+      if project.ipr?
+        project.checkstyle.config_directory = project._('etc/checkstyle')
+        project.checkstyle.configuration_artifact = BuildrPlus::Checkstyle.checkstyle_rules
+
+        import_control_present = File.exist?(project.checkstyle.import_control_file)
+
+        unless File.exist?(project.checkstyle.suppressions_file)
+          dir = File.expand_path(File.dirname(__FILE__))
+          project.checkstyle.suppressions_file =
+            import_control_present ?
+              "#{dir}/checkstyle_suppressions.xml" :
+              "#{dir}/checkstyle_suppressions_no_import_control.xml"
+        end
+
+        unless import_control_present
+          project.checkstyle.properties['checkstyle.import-control.file'] = ''
+        end
       end
     end
-  end
-  module CheckstyleExtension
-    module ProjectExtension
-      include Extension
-      BuildrPlus::ExtensionRegistry.register(self)
 
-      before_define do |project|
-        if project.ipr?
-          project.checkstyle.config_directory = project._('etc/checkstyle')
-          project.checkstyle.configuration_artifact = CheckstyleConfig.checkstyle_rules
-
-          import_control_present = File.exist?(project.checkstyle.import_control_file)
-
-          unless File.exist?(project.checkstyle.suppressions_file)
-            dir = File.expand_path(File.dirname(__FILE__))
-            project.checkstyle.suppressions_file =
-              import_control_present ?
-                "#{dir}/checkstyle_suppressions.xml" :
-                "#{dir}/checkstyle_suppressions_no_import_control.xml"
-          end
-
-          unless import_control_present
-            project.checkstyle.properties['checkstyle.import-control.file'] = ''
-          end
-        end
+    after_define do |project|
+      if project.ipr?
+        project.checkstyle.additional_project_names =
+          BuildrPlus::Findbugs.additional_project_names || BuildrPlus::Util.subprojects(project)
       end
     end
   end

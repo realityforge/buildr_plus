@@ -12,29 +12,38 @@
 # limitations under the License.
 #
 
-module BuildrPlus
-  class PmdConfig
-    class << self
-      def default_pmd_rules
-        'au.com.stocksoftware.pmd:pmd:xml:1.2'
-      end
-
-      def pmd_rules
-        @pmd_rules || self.default_pmd_rules
-      end
-
-      def pmd_rules=(pmd_rules)
-        @pmd_rules = pmd_rules
-      end
+BuildrPlus::FeatureManager.feature(:pmd) do |f|
+  f.enhance(:Config) do
+    def default_pmd_rules
+      'au.com.stocksoftware.pmd:pmd:xml:1.2'
     end
-  end
-  module PmdExtension
-    module ProjectExtension
-      include Extension
-      BuildrPlus::ExtensionRegistry.register(self)
 
-      after_define do |project|
-        project.pmd.rule_set_artifacts << PmdConfig.pmd_rules if project.pmd.enabled?
+    def pmd_rules
+      @pmd_rules || self.default_pmd_rules
+    end
+
+    attr_writer :pmd_rules
+
+    attr_accessor :additional_project_names
+  end
+
+  f.enhance(:ProjectExtension) do
+    first_time do
+      require 'buildr_plus/patches/pmd'
+    end
+
+    before_define do |project|
+      project.pmd.enabled = true if project.ipr?
+    end
+
+    after_define do |project|
+      if project.ipr?
+        project.pmd.rule_set_artifacts << BuildrPlus::Pmd.pmd_rules
+        # TODO: Use project.pmd.exclude_paths rather than excluding projects
+
+        project.findbugs.additional_project_names =
+          BuildrPlus::Pmd.additional_project_names ||
+            BuildrPlus::Util.subprojects(project).select { |p| !(p =~ /.*\:soap-client$/) }
       end
     end
   end
