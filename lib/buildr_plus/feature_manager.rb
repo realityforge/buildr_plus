@@ -84,6 +84,10 @@ module BuildrPlus #nodoc
         !!feature_map[key.to_s]
       end
 
+      def feature_names
+        feature_map.keys
+      end
+
       def feature_by_name(key)
         feature = feature_map[key.to_s]
         BuildrPlus.error("Unknown feature '#{key}'") unless feature
