@@ -17,6 +17,7 @@ if Buildr::VERSION != expected_version
   raise "buildr_plus expected Buidlr version #{expected_version} but Buildrs actual version is #{Buildr::VERSION}"
 end
 
+require 'buildr_plus/naming'
 require 'buildr_plus/extension_registry'
 require 'buildr_plus/util'
 
