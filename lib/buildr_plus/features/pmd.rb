@@ -41,7 +41,7 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
         project.pmd.rule_set_artifacts << BuildrPlus::Pmd.pmd_rules
         # TODO: Use project.pmd.exclude_paths rather than excluding projects
 
-        project.findbugs.additional_project_names =
+        project.pmd.additional_project_names =
           BuildrPlus::Pmd.additional_project_names ||
             BuildrPlus::Util.subprojects(project).select { |p| !(p =~ /.*\:soap-client$/) }
       end
