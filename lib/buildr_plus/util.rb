@@ -16,7 +16,7 @@ module BuildrPlus
   class Util
     class << self
       def is_addon_loaded?(addon)
-        $LOADED_FEATURES.any?{|f| f =~ /\/addon\/buildr\/#{addon}\.rb$/}
+        $LOADED_FEATURES.any? { |f| f =~ /\/addon\/buildr\/#{addon}\.rb$/ }
       end
     end
   end
