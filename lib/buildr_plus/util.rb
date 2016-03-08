@@ -18,6 +18,10 @@ module BuildrPlus
       def is_addon_loaded?(addon)
         $LOADED_FEATURES.any? { |f| f =~ /\/addon\/buildr\/#{addon}\.rb$/ }
       end
+
+      def subprojects(project)
+        Buildr.projects(:scope => project.name).collect { |p| p.name }
+      end
     end
   end
 end
