@@ -27,6 +27,7 @@ require 'buildr_plus/util'
 require 'buildr_plus/patches/activate_jruby_facet'
 require 'buildr_plus/patches/idea_patch'
 
+require 'buildr_plus/features/calendar_date_select'
 require 'buildr_plus/features/checkstyle'
 require 'buildr_plus/features/ci'
 require 'buildr_plus/features/compile_options'
