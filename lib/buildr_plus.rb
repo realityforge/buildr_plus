@@ -29,6 +29,3 @@ require 'buildr_plus/patches/idea_patch'
 
 # Only patch gwt if gwt addon already included
 require 'buildr_plus/patches/gwt_patch' if BuildrPlus::Util.is_addon_loaded?('gwt')
-
-# May not always be required
-require 'buildr_plus/publish'
