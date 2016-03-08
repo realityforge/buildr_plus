@@ -31,5 +31,4 @@ require 'buildr_plus/patches/idea_patch'
 require 'buildr_plus/patches/gwt_patch' if BuildrPlus::Util.is_addon_loaded?('gwt')
 
 # May not always be required
-require 'buildr_plus/dev'
 require 'buildr_plus/publish'
