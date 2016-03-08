@@ -20,6 +20,7 @@ end
 require 'buildr_plus/core'
 require 'buildr_plus/naming'
 require 'buildr_plus/extension_registry'
+require 'buildr_plus/feature_manager'
 require 'buildr_plus/util'
 
 # Patches that should always be applied
