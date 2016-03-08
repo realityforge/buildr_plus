@@ -86,7 +86,7 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
         mkdir_p File.dirname(warbler_config.jar_name)
       end
 
-      task('warble_package').enhance(%w(warble_package:create_dir))
+      task('warble_package').enhance(%w(warble_package:create_dir assets:copy_plugin_assets))
       task('warble_package').enhance(%w(domgen:all)) if  BuildrPlus::FeatureManager.activated?(:domgen)
       task('warble_package').enhance(%w(assets:precompile)) if BuildrPlus::FeatureManager.activated?(:sass)
 
@@ -95,6 +95,8 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
 
     after_define do |project|
       if project.ipr?
+        project.task('test' => %w(assets:copy_plugin_assets))
+
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
         project.package(:war).tap do |war|
