@@ -26,7 +26,7 @@ module BuildrPlus
           # Ignored
         end
 
-        BuildrPlus::FeatureManager.activate_features([:dbt]) if Object.const_defined?(symbol.to_s)
+        Object.const_defined?(symbol.to_s)
       end
 
       def is_dbt_gem_present?
