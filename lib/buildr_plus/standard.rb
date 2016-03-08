@@ -14,38 +14,11 @@
 
 require 'buildr_plus'
 
-# Addons present in all of the "standard" projects
-require 'buildr/pmd'
-require 'buildr_plus/patches/pmd'
-require 'buildr_plus/patches/checkstyle'
-require 'buildr/single_intermediate_layout'
-require 'buildr_plus/patches/findbugs'
-require 'buildr_plus/patches/jdepend'
-require 'buildr/git_auto_version'
+require 'buildr_plus/common'
 require 'buildr/jacoco'
-require 'buildr/top_level_generate_dir'
 
-require 'buildr_plus/features/rails'
-require 'buildr_plus/features/db'
-require 'buildr_plus/features/compile_options'
-require 'buildr_plus/features/product_version'
-require 'buildr_plus/features/codestyle'
-require 'buildr_plus/features/libs'
-require 'buildr_plus/features/testng'
-require 'buildr_plus/features/source_code_analysis'
-require 'buildr_plus/features/guiceyloops'
-require 'buildr_plus/features/repositories'
+BuildrPlus::FeatureManager.activate_features([:findbugs, :pmd, :jdepend, :checkstyle, :compile_options, :testng, :guiceyloops])
 
-# Enable features if the corresponding libraries are loaded
-require 'buildr_plus/features/dbt'
-require 'buildr_plus/features/domgen'
-require 'buildr_plus/features/dialect_mapping'
-require 'buildr_plus/features/checkstyle'
-require 'buildr_plus/features/pmd'
-require 'buildr_plus/features/rptman'
-require 'buildr_plus/features/gwt'
-
-# Ci must be at the end as it relies on other features being loaded
-require 'buildr_plus/features/ci'
+BuildrPlus::FeatureManager.activate_features([:gwt]) if BuildrPlus::Util.is_addon_loaded?('gwt')
 
 BuildrPlus::ExtensionRegistry.auto_activate!

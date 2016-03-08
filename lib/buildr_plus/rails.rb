@@ -12,30 +12,10 @@
 # limitations under the License.
 #
 
-require 'buildr_plus'
-
 require 'warbler'
 
-# Addons present in all of the "standard" projects
-require 'buildr/single_intermediate_layout'
-require 'buildr/git_auto_version'
-require 'buildr/top_level_generate_dir'
+require 'buildr_plus/common'
 
-require 'buildr_plus/features/db'
-require 'buildr_plus/features/product_version'
-require 'buildr_plus/features/libs'
-require 'buildr_plus/features/repositories'
-require 'buildr_plus/features/rails'
-require 'buildr_plus/features/sass'
-
-# Enable features if the corresponding libraries are loaded
-require 'buildr_plus/features/dbt'
-require 'buildr_plus/features/domgen'
-require 'buildr_plus/features/dialect_mapping'
-require 'buildr_plus/features/rptman'
-require 'buildr_plus/features/itest'
-
-# Ci must be at the end as it relies on other features being loaded
-require 'buildr_plus/features/ci'
+BuildrPlus::FeatureManager.activate_features([:itest, :rails])
 
 BuildrPlus::ExtensionRegistry.auto_activate!
