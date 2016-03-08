@@ -15,8 +15,22 @@
 module BuildrPlus
   class ExtensionRegistry
     class << self
+      def activated?
+        !!@activated
+      end
+
+      def registered?(extension)
+        raw_extensions.include?(extension)
+      end
+
       def register(extension)
+        raise "Can not register extension #{extension.class.name} after registry has been activated" if activated?
         raw_extensions << extension
+      end
+
+      def deregister(extension)
+        raise "Can not deregister extension #{extension.class.name} after registry has been activated" if activated?
+        raw_extensions.delete(extension)
       end
 
       # Set flag determining whether extensions will auto activate
@@ -34,6 +48,7 @@ module BuildrPlus
       end
 
       def activate!
+        @activated = true
         raw_extensions.each do |extension|
           Buildr::Project.class_eval do |p|
             include extension
