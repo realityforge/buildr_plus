@@ -17,7 +17,7 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
     first_time do
       require 'rptman'
 
-      SSRS::Build.define_basic_tasks
+      ::SSRS::Build.define_basic_tasks
     end
 
     after_define do |project|
@@ -29,10 +29,9 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
             next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
             if Dbt::Config.default_database?(database_key)
-              SSRS::Config.define_datasource(BuildrPlus::Naming.uppercase_constantize(project.name.to_s))
+              ::SSRS::Config.define_datasource(BuildrPlus::Naming.uppercase_constantize(project.name.to_s))
             else
-              SSRS.define_datasource(BuildrPlus::Naming.uppercase_constantize(database_key.to_s),
-                                             database_key.to_s)
+              ::SSRS::Config.define_datasource(BuildrPlus::Naming.uppercase_constantize(database_key.to_s), database_key.to_s)
             end
           end
         end
