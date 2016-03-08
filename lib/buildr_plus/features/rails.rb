@@ -72,8 +72,8 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
                 vendor/docs
                 vendor/docs/**/*
             )
-      excludes.concat(BuildrPlus::RailsConfig.additional_warble_excludes)
-      excludes.concat(BuildrPlus::SassConfig.sass_paths.collect { |p| [p, "#{p}/**/*"] }.flatten) if BuildrPlus::FeatureManager.activated?(:sass)
+      excludes.concat(BuildrPlus::Rails.additional_warble_excludes)
+      excludes.concat(BuildrPlus::Sass.sass_paths.collect { |p| [p, "#{p}/**/*"] }.flatten) if BuildrPlus::FeatureManager.activated?(:sass)
 
       warbler_config = Warbler::Config.new do |config|
         config.dirs = code_dirs
@@ -90,7 +90,7 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
       task('warble_package').enhance(%w(domgen:all)) if  BuildrPlus::FeatureManager.activated?(:domgen)
       task('warble_package').enhance(%w(assets:precompile)) if BuildrPlus::FeatureManager.activated?(:sass)
 
-      BuildrPlus::RailsConfig.warble_package = file("#{warbler_config.jar_name}.war" => %w(warble_package))
+      BuildrPlus::Rails.warble_package = file("#{warbler_config.jar_name}.war" => %w(warble_package))
     end
 
     after_define do |project|
@@ -98,7 +98,7 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
         project.package(:war).tap do |war|
-          war.merge BuildrPlus::RailsConfig.warble_package
+          war.merge BuildrPlus::Rails.warble_package
           war.include 'config/prod-database.yml', :as => 'WEB-INF/config/database.yml' if File.exist?("#{base_directory}/config/prod-database.yml")
         end
 
