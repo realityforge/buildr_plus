@@ -30,9 +30,8 @@ module BuildrPlus #nodoc
 
       @component_map[:Config] = module_instance.class
 
-      extension_name = "::BuildrPlus::#{module_name}::ProjectExtension"
-      module_instance.class_eval "module #{extension_name}; include Extension; end"
-      @component_map[:ProjectExtension] = module_instance.const_get(extension_name)
+      module_instance.class_eval "module ProjectExtension; include Extension; end"
+      @component_map[:ProjectExtension] = module_instance.const_get(:ProjectExtension)
 
       FeatureManager.register_feature(self)
 
