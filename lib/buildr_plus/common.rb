@@ -20,7 +20,7 @@ require 'buildr/top_level_generate_dir'
 
 BuildrPlus::FeatureManager.activate_features([:repositories, :idea_codestyle, :product_version, :dialect_mapping, :libs, :publish, :ci])
 
-BuildrPlus::FeatureManager.activate_features([:dbt]) if BuildrPlus::Util.is_dbt_gem_present?
-BuildrPlus::FeatureManager.activate_features([:domgen]) if BuildrPlus::Util.is_domgen_gem_present?
-BuildrPlus::FeatureManager.activate_features([:rptman]) if BuildrPlus::Util.is_rptman_gem_present?
-BuildrPlus::FeatureManager.activate_features([:sass]) if BuildrPlus::Util.is_sass_gem_present?
+BuildrPlus::FeatureManager.activate_feature(:dbt) if BuildrPlus::Util.is_dbt_gem_present?
+BuildrPlus::FeatureManager.activate_feature(:domgen) if BuildrPlus::Util.is_domgen_gem_present?
+BuildrPlus::FeatureManager.activate_feature(:rptman) if BuildrPlus::Util.is_rptman_gem_present?
+BuildrPlus::FeatureManager.activate_feature(:sass) if BuildrPlus::Util.is_sass_gem_present?
