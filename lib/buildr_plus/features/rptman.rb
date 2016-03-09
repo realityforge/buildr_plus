@@ -37,8 +37,8 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
               puts "Patching: #{filename}"
               content = IO.read(filename)
               File.open(filename, 'wb') do |file|
+                while content.gsub!(/(\<[^'\>]+)'/m, '\1"'); end
                 file.write content.
-                             gsub(/(\<[^\>]+)'([^\>]*\>)/m, '\1"\2').
                              gsub("\r\n", "\n").
                              gsub("\n", "\r\n").
                              gsub(/([^ ])[ ]*\/>/, '\1 />')
