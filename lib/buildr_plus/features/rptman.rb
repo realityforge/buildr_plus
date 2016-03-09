@@ -49,6 +49,21 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
             SSRS::Config.config_filename = old_filename
           end
         end
+
+        desc 'Uploads reports to production environment'
+        task 'rptman:upload_to_production_environment' do
+
+          old_environment = SSRS::Config.environment
+          old_filename = SSRS::Config.config_filename
+          begin
+            SSRS::Config.environment = 'production'
+            SSRS::Config.config_filename = 'config/ci-report-database.yml'
+            task('rptman:ssrs:upload_reports').invoke
+          ensure
+            SSRS::Config.environment = old_environment
+            SSRS::Config.config_filename = old_filename
+          end
+        end
       end
     end
 
