@@ -42,7 +42,6 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
                           gsub("\r\n", "\n").
                           gsub("\n", "\r\n").
                           gsub("/>", ' />')
-
               end
             end
           ensure
