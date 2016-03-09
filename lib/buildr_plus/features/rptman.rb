@@ -36,12 +36,12 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
             Dir["#{SSRS::Config.reports_dir}/**/*.rdl"].each do |filename|
               puts "Patching: #{filename}"
               content = IO.read(filename)
-              File.open(filename, 'wb') do |f|
-                f.write content.
-                          gsub("'", '"').
-                          gsub("\r\n", "\n").
-                          gsub("\n", "\r\n").
-                          gsub(/([^ ])[ ]*\/>/, '\1 />')
+              File.open(filename, 'wb') do |file|
+                file.write content.
+                             gsub(/(\<[^\>]+)'([^\>]*\>)/m, '\1"\2').
+                             gsub("\r\n", "\n").
+                             gsub("\n", "\r\n").
+                             gsub(/([^ ])[ ]*\/>/, '\1 />')
               end
             end
           ensure
