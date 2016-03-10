@@ -95,6 +95,13 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << '*/generated'
       end
 
+      if BuildrPlus::FeatureManager.activated?(:calendar_date_select)
+        gitignores << '/public/blank_iframe.html'
+        gitignores << '/public/images/calendar_date_select'
+        gitignores << '/public/javascripts/calendar_date_select'
+        gitignores << '/public/stylesheets/calendar_date_select'
+      end
+
       gitignores
     end
 
