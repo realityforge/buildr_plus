@@ -189,6 +189,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
       end
 
       commit_actions << 'ws:check' if BuildrPlus::FeatureManager.activated?(:whitespace)
+      commit_actions << 'gitignore:check' if BuildrPlus::FeatureManager.activated?(:gitignore)
 
       desc 'Perform pre-commit checks and source code analysis'
       task 'ci:commit' => commit_actions
