@@ -44,12 +44,16 @@ BuildrPlus::FeatureManager.feature(:whitespace) do |f|
       extensions = %w(jsp sass scss xsl sql haml less rake xml html gemspec properties yml yaml css rb java xhtml rdoc txt erb gitattributes gitignore xsd textile md wsdl sh)
       filenames = %w(rakefile Rakefile buildfile Buildfile Gemfile LICENSE)
 
+      files_to_remove_duplicate_newlines = Dir['etc/checkstyle/*.xml'].flatten + Dir['tasks/*.rake'].flatten + Dir['**/*.md'].flatten + Dir['config/*.sh'].flatten + %w(buildfile Gemfile README.md)
+
       files = BuildrPlus::Whitespace.collect_files(extensions, filenames)
 
       files.each do |filename|
         content = File.read(filename)
         original_content = content.dup
         content = clean_whitespace(filename, content)
+        content.gsub!(/\n\n\n/, "\n\n") if files_to_remove_duplicate_newlines.include?(filename)
+
         if content != original_content
           BuildrPlus::Whitespace.whitespace_needs_update = true
           if apply_fix
