@@ -77,8 +77,7 @@ BuildrPlus::FeatureManager.feature(:whitespace) do |f|
     end
 
     def clean_whitespace(filename, content)
-      content = content.encode!('UTF-8', 'binary', :invalid => :replace, :undef  => :replace, :replace  =>  '')
-      content.gsub!(/^\xEF\xBB\xBF/, '')
+      content = patch_encoding(content)
       begin
         content.gsub!(/\r\n/, "\n")
         content.gsub!(/[ \t]+\n/, "\n")
@@ -91,8 +90,7 @@ BuildrPlus::FeatureManager.feature(:whitespace) do |f|
     end
 
     def clean_dos_whitespace(filename, content)
-      content = content.encode!('UTF-8', 'binary', :invalid => :replace, :undef  => :replace, :replace  =>  '')
-      content.gsub!(/^\xEF\xBB\xBF/, '')
+      content = patch_encoding(content)
       begin
         content.gsub!(/\r\n/, "\n")
         content.gsub!(/[ \t]+\n/, "\n")
@@ -102,6 +100,15 @@ BuildrPlus::FeatureManager.feature(:whitespace) do |f|
       rescue
         puts "Skipping dos whitespace cleanup: #{filename}"
       end
+      content
+    end
+
+    def patch_encoding(content)
+      content =
+        content.respond_to?(:encode!) ?
+          content.encode!('UTF-8', 'binary', :invalid => :replace, :undef => :replace, :replace => '') :
+          content
+      content.gsub!(/^\xEF\xBB\xBF/, '')
       content
     end
   end
