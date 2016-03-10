@@ -119,6 +119,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
           content = content.gsub(v, '')
         end
 
+        # Transform known bad patterns to good patterns
         self.normalizing_transforms.each_pair do |pattern, replacement|
           content = content.gsub(pattern, replacement)
         end
