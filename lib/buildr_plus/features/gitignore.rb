@@ -90,7 +90,10 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << '/vendor/jars'
       end
 
-      gitignores << '*/generated' if BuildrPlus::FeatureManager.activated?(:domgen)
+      if BuildrPlus::FeatureManager.activated?(:domgen)
+        gitignores << '/generated'
+        gitignores << '*/generated'
+      end
 
       gitignores
     end
