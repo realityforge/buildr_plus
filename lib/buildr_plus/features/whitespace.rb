@@ -41,7 +41,7 @@ BuildrPlus::FeatureManager.feature(:whitespace) do |f|
     end
 
     def process_whitespace_files(apply_fix)
-      extensions = %w(jsp sass scss xsl sql haml less rake xml html gemspec properties yml yaml css rb java xhtml rdoc txt erb gitattributes gitignore xsd textile md wsdl)
+      extensions = %w(jsp sass scss xsl sql haml less rake xml html gemspec properties yml yaml css rb java xhtml rdoc txt erb gitattributes gitignore xsd textile md wsdl sh)
       filenames = %w(rakefile Rakefile buildfile Buildfile Gemfile LICENSE)
 
       files = BuildrPlus::Whitespace.collect_files(extensions, filenames)
