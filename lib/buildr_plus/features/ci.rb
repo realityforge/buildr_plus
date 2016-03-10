@@ -188,6 +188,8 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         package_no_test_actions << 'ci:upload'
       end
 
+      commit_actions << 'ws:check' if BuildrPlus::FeatureManager.activated?(:whitespace)
+
       desc 'Perform pre-commit checks and source code analysis'
       task 'ci:commit' => commit_actions
 
