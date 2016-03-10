@@ -114,9 +114,6 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
 
         original_content = content.dup
 
-        # Ignores known to be required
-        content += "\n" + self.gitignores.collect { |v| "#{v}" }.join("\n")
-
         # Remove ignores that should not be present
         (self.global_ignores + self.invalid_ignores).each do |v|
           content = content.gsub(v, '')
@@ -125,6 +122,9 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         self.normalizing_transforms.each_pair do |pattern, replacement|
           content = content.gsub(pattern, replacement)
         end
+
+        # Ignores known to be required
+        content += "\n" + self.gitignores.collect { |v| "#{v}" }.join("\n")
 
         # Normalize new lines, order libes and strip duplicates
         content = content.split("\n").sort.uniq.join("\n") + "\n"
