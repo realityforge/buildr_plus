@@ -92,8 +92,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:domgen)
-        gitignores << '/generated'
-        gitignores << '*/generated'
+        gitignores << '**/generated'
       end
 
       if BuildrPlus::FeatureManager.activated?(:calendar_date_select)
