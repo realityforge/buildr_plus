@@ -103,6 +103,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:sass)
+        gitignores << '/.sass-cache'
         Buildr.projects.each do |project|
           BuildrPlus::Sass.target_css_files(project).each do |css_file|
             gitignores << '/' + ::Buildr::Util.relative_path(File.expand_path(css_file), base_directory)
