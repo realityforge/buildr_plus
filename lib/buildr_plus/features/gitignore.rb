@@ -31,8 +31,8 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         '/attlassian-ide-plugin.xml', # Old IDEA plugin config
         '/.project', '/.classpath', # Eclipse project files
         /^.*\.rdl\.data$/, # Report ignores will be re-added
-        /^.*\.bat\n$/, # No windows development so remove ignores for local bat scripts
-        /^#.*\n$/, # Remove Comments as they will be less relevant when file is resorted
+        /^.*\.bat$/, # No windows development so remove ignores for local bat scripts
+        /^#.*$/, # Remove Comments as they will be less relevant when file is resorted
         /^\n/ # Remove blank lines
       ]
 
