@@ -128,7 +128,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         content += "\n" + self.gitignores.collect { |v| "#{v}" }.join("\n")
 
         # Normalize new lines, order libs and strip duplicates
-        content = content.split("\n").collect{|f|f.strip}.select{|f|f.size > 0}.sort.uniq.join("\n") + "\n"
+        content = content.split("\n").collect { |f| f.strip }.select { |f| f.size > 0 }.sort.uniq.join("\n") + "\n"
 
         if content != original_content
           if apply_fix
