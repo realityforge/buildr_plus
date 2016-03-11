@@ -23,6 +23,24 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
     def sass_paths
       @sass_paths || self.default_sass_paths
     end
+
+    def active_sass_paths(buildr_project)
+      BuildrPlus::Sass.sass_paths.collect { |p| buildr_project._(p) }.select { |p| File.exist?(p) }
+    end
+
+    def sass_files(buildr_project)
+      active_sass_paths(buildr_project).collect do |sass_path|
+        Dir["#{sass_path}/**/*.sass"]
+      end.flatten
+    end
+
+    def target_css_files(buildr_project)
+      sass_files(buildr_project).collect{|sass_file|to_target_file(sass_file)}
+    end
+
+    def to_target_file(sass_file)
+      sass_file.gsub(/\.sass$/, '.css').gsub(/\/sass/, '')
+    end
   end
 
   f.enhance(:ProjectExtension) do
@@ -31,29 +49,27 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
     end
 
     after_define do |project|
-      sass_paths = BuildrPlus::Sass.sass_paths.collect { |p| project._(p) }.select { |p| File.exist?(p) }
-      if sass_paths.size > 0
+      sass_files = BuildrPlus::Sass.sass_files(project)
+      if sass_files.size > 0
         project.iml.excluded_directories << project._('.sass-cache')
         project.clean { rm_rf project._('.sass-cache') }
 
         desc "Precompile assets for #{project.name}"
         t = project.task('assets:precompile') do
 
-          sass_paths.each do |sass_path|
-            Dir["#{sass_path}/**/*.sass"].each do |sass|
-              File.open(sass.gsub(/sass$/, 'css').gsub(/\/sass/, ''), 'w') do |f|
-                f.write(Sass::Engine.new(File.read(sass), :load_paths => [File.dirname(sass)]).render)
-              end
+          sass_files.each do |sass_file|
+            target_file = BuildrPlus::Sass.to_target_file(sass_file)
+            File.open(target_file, 'w') do |out|
+              input = File.read(sass_file)
+              load_paths = [File.dirname(sass_file)]
+              out.write(Sass::Engine.new(input, :load_paths => load_paths).render)
             end
           end
         end
 
         project.clean do
-          sass_paths.each do |sass_path|
-            Dir["#{sass_path}/**/*.sass"].each do |sass|
-              file = sass.gsub(/sass$/, 'css').gsub(/\/sass/, '')
-              FileUtils.rm_f(file)
-            end
+          BuildrPlus::Sass.target_css_files(project).each do |css_file|
+            FileUtils.rm_f(css_file)
           end
         end
 
