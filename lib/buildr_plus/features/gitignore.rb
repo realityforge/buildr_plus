@@ -88,7 +88,6 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << '/.generators'
         gitignores << '/log'
         gitignores << '/vendor/jars'
-        gitignores << '/vendor/jars'
       end
 
       if BuildrPlus::FeatureManager.activated?(:domgen)
