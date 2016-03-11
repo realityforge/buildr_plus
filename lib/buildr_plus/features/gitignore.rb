@@ -102,6 +102,14 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << '/public/stylesheets/calendar_date_select'
       end
 
+      if BuildrPlus::FeatureManager.activated?(:sass)
+        Buildr.projects.each do |project|
+          BuildrPlus::Sass.target_css_files(project).each do |css_file|
+            gitignores << '/' + ::Buildr::Util.relative_path(File.expand_path(css_file), base_directory)
+          end
+        end
+      end
+
       gitignores
     end
 
