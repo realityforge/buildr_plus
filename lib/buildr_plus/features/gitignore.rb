@@ -139,6 +139,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         content = content.split("\n").collect { |f| f.strip }.select { |f| f.size > 0 }.sort.uniq.join("\n") + "\n"
 
         if content != original_content
+          BuildrPlus::Gitignore.gitignore_needs_update = true
           if apply_fix
             puts 'Fixing: .gitignore'
             File.open(filename, 'wb') do |out|
