@@ -14,21 +14,21 @@
 
 require 'buildr_plus/java'
 
-BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :description => 'Persistent Entities, Messages and Data Structures')
-BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :parent => :container, :description => 'Model Test Infrastructure')
-BuildrPlus::Roles.project('server', :roles => [:server], :parent => :container, :description => 'Server Archive')
+BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
+BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :parent => :container, :template => true, :description => 'Model Test Infrastructure')
+BuildrPlus::Roles.project('server', :roles => [:server], :parent => :container, :template => true, :description => 'Server Archive')
 
 if BuildrPlus::FeatureManager.activated?(:gwt)
-  BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :description => 'GWT Library')
-  BuildrPlus::Roles.project('gwt-qa-support', :roles => [:gwt_qa_support], :parent => :container, :description => 'GWT Test Infrastructure')
+  BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :template => true, :description => 'GWT Library')
+  BuildrPlus::Roles.project('gwt-qa-support', :roles => [:gwt_qa_support], :parent => :container, :template => true, :description => 'GWT Test Infrastructure')
 end
 
 if BuildrPlus::FeatureManager.activated?(:soap)
-  BuildrPlus::Roles.project('soap-client', :roles => [:soap_client], :parent => :container, :description => 'SOAP Client API')
-  BuildrPlus::Roles.project('soap-qa-support', :roles => [:soap_qa_support], :parent => :container, :description => 'SOAP Test Infrastructure')
+  BuildrPlus::Roles.project('soap-client', :roles => [:soap_client], :parent => :container, :template => true, :description => 'SOAP Client API')
+  BuildrPlus::Roles.project('soap-qa-support', :roles => [:soap_qa_support], :parent => :container, :template => true, :description => 'SOAP Test Infrastructure')
 end
 
-BuildrPlus::Roles.project('integration-qa-support', :roles => [:integration_qa_support], :parent => :container, :description => 'Integration Test Infrastructure')
-BuildrPlus::Roles.project('integration-tests', :roles => [:integration_tests], :parent => :container, :description => 'Integration Tests')
+BuildrPlus::Roles.project('integration-qa-support', :roles => [:integration_qa_support], :parent => :container, :template => true, :description => 'Integration Test Infrastructure')
+BuildrPlus::Roles.project('integration-tests', :roles => [:integration_tests], :parent => :container, :template => true, :description => 'Integration Tests')
 
 BuildrPlus::ExtensionRegistry.auto_activate!
