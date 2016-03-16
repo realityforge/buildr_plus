@@ -90,6 +90,44 @@ module Buildr #:nodoc:
           end
         end
       end
+
+      protected
+
+      def module_root_component
+        create_component('NewModuleRootManager', 'inherit-compiler-output' => 'false') do |xml|
+          generate_compile_output(xml)
+          generate_content(xml) unless skip_content?
+          generate_initial_order_entries(xml)
+          project_dependencies = []
+
+          self.main_dependency_details.each do |dependency_path, export, source_path|
+            next unless export
+            generate_lib(xml, dependency_path, export, source_path, project_dependencies)
+          end
+
+          self.test_dependency_details.each do |dependency_path, export, source_path|
+            next if export
+            generate_lib(xml, dependency_path, export, source_path, project_dependencies)
+          end
+
+          xml.orderEntryProperties
+        end
+      end
+
+      def main_dependency_details
+        target_dir = buildr_project.compile.target.to_s
+        main_dependencies.select { |d| d.to_s != target_dir }.collect do |d|
+          dependency_path = d.to_s
+          export = true
+          source_path = nil
+          if d.respond_to?(:to_spec_hash)
+            source_spec = d.to_spec_hash.merge(:classifier => 'sources')
+            source_path = Buildr.artifact(source_spec).to_s
+            source_path = nil unless File.exist?(source_path)
+          end
+          [dependency_path, export, source_path]
+        end
+      end
     end
   end
 end
