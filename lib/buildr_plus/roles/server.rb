@@ -23,7 +23,7 @@ BuildrPlus::Roles.role(:server) do
 
     generators << [:gwt_rpc_shared, :gwt_rpc_server, :imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:gwt)
 
-    generators << [:ee_exceptions, :ejb_service_facades, :ejb_test_qa, :ejb_test_qa_external, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
+    generators << [:ee_exceptions, :ejb_service_facades, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
     generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
     generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
