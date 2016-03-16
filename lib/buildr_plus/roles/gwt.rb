@@ -39,6 +39,13 @@ BuildrPlus::Roles.role(:gwt) do
   # This compile exists to verify that module is independently compilable
   gwt(top_level_gwt_modules, :java_args => BuildrPlus::Gwt.gwtc_java_args)
 
+  p = project.root_project
+
+  check package(:jar), 'should contain generated source files' do
+    it.should contain("#{p.group.gsub('.','/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.class")
+    it.should contain("#{p.group.gsub('.','/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.java")
+  end
+
   module_config = {}
   gwt_modules.each do |m|
     module_config[m] = top_level_gwt_modules.include?(m)
