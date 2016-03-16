@@ -27,5 +27,14 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
     def top_level_gwt_modules
       @top_level_gwt_modules ||= []
     end
+
+    def gwt_modules
+      project.resources.sources.collect do |path|
+        Dir["#{path}/**/*.gwt.xml"].collect do |gwt_module|
+          length = path.to_s.length
+          gwt_module[length + 1, gwt_module.length - length - 9].gsub('/', '.')
+        end
+      end.flatten
+    end
   end
 end
