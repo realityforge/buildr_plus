@@ -129,6 +129,16 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
       project.name.gsub(/^[^:]*\:/, '')
     end
 
+    def define_top_level_projects
+      BuildrPlus::Roles.projects.select{|p|!p.template?}.each do |p|
+        Buildr.class_eval do
+          define p.name.to_s do
+            project.apply_roles!
+          end
+        end
+      end
+    end
+
     protected
 
     def project_map
