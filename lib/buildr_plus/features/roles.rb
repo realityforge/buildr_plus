@@ -24,6 +24,11 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
       attr_reader :name
       attr_accessor :description
       attr_accessor :parent
+      attr_writer :template
+
+      def template?
+        !!@template
+      end
 
       def roles
         @roles ||= []
