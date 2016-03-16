@@ -46,7 +46,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
 
     def normalizing_transforms
       {
-        /^(.*[\/])?generated[\/]?$/ => '*/generated',
+        /^(.*[\/])?generated[\/]?$/ => '**/generated',
         /^\/?tmp([\/].*)?$/ => '/tmp',
         /^.*\*.iml/ => '*.iml',
         /^.*\*.ipr/ => '/*.ipr',
