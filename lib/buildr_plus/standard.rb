@@ -12,13 +12,6 @@
 # limitations under the License.
 #
 
-require 'buildr_plus'
-
 require 'buildr_plus/common'
-require 'buildr/jacoco'
-
-BuildrPlus::FeatureManager.activate_features([:findbugs, :pmd, :jdepend, :checkstyle, :compile_options, :testng, :guiceyloops])
-
-BuildrPlus::FeatureManager.activate_features([:gwt]) if BuildrPlus::Util.is_addon_loaded?('gwt')
 
 BuildrPlus::ExtensionRegistry.auto_activate!
