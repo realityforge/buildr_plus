@@ -86,5 +86,6 @@ BuildrPlus::Roles.role(:container) do
                                   :ejb_module_names => ejb_module_names)
 
     ipr.add_glassfish_remote_configuration(project, :server_name => 'Payara 4.1.1.154', :exploded => [project.name])
+    ipr.add_glassfish_configuration(project, :server_name => 'Payara 4.1.1.154', :exploded => [project.name])
   end
 end
