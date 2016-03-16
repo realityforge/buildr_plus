@@ -42,7 +42,7 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
       m = self.top_level_gwt_modules
       return m unless m.empty?
       p = self.root_project
-      "#{p.group}.#{BuildrPlus::Naming.pascal_case(p.name)}"
+      ["#{p.group}.#{BuildrPlus::Naming.pascal_case(p.name)}"]
     end
 
     def gwt_modules
