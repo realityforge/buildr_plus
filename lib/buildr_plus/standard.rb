@@ -12,6 +12,6 @@
 # limitations under the License.
 #
 
-require 'buildr_plus/common'
+require 'buildr_plus/java'
 
 BuildrPlus::ExtensionRegistry.auto_activate!
