@@ -76,6 +76,10 @@ module BuildrPlus #nodoc
         feature_map[feature.key.to_s] = feature
       end
 
+      def ensure_activated(key)
+        raise "Expected feature #{key} to be activated" unless activated?(key)
+      end
+
       def activated?(key)
         feature_by_name(key).activated?
       end
