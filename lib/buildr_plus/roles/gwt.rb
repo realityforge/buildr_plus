@@ -34,7 +34,7 @@ BuildrPlus::Roles.role(:gwt) do
   package(:sources)
 
   gwt_modules = project.gwt_modules
-  top_level_gwt_modules = project.top_level_gwt_modules
+  top_level_gwt_modules = project.determine_top_level_gwt_modules
 
   # This compile exists to verify that module is independently compilable
   gwt(top_level_gwt_modules, :java_args => BuildrPlus::Gwt.gwtc_java_args)

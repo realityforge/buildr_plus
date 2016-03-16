@@ -28,6 +28,23 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
       @top_level_gwt_modules ||= []
     end
 
+    def root_project
+      p = project
+      while p.parent
+        p = p.parent
+      end
+      p
+    end
+
+    # Determine any top level modules.
+    # If none specified then derive one based on root projects name and group
+    def determine_top_level_gwt_modules
+      m = self.top_level_gwt_modules
+      return m unless m.empty?
+      p = self.root_project
+      "#{p.group}.#{BuildrPlus::Naming.pascal_case(p.name)}"
+    end
+
     def gwt_modules
       project.resources.sources.collect do |path|
         Dir["#{path}/**/*.gwt.xml"].collect do |gwt_module|
