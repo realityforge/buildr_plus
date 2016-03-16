@@ -34,6 +34,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(fish.payara.extras:payara-embedded-all:jar:4.1.1.154)
     end
 
+    def eclipselink
+      'org.eclipse.persistence:eclipselink:jar:2.6.0'
+    end
+
     def mockito
       %w(org.mockito:mockito-all:jar:1.9.5)
     end
