@@ -16,7 +16,7 @@ raise 'Patch applied in latest release of buildr' if Buildr::VERSION > '1.4.23'
 
 module Buildr #:nodoc:
   module IntellijIdea
-    class IdeaModule < IdeaFile
+    class IdeaModule
       def main_dependencies
         @main_dependencies ||= buildr_project.compile.dependencies.dup
       end
