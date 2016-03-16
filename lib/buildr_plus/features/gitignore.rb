@@ -113,7 +113,6 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       gitignores
     end
 
-
     def process_gitignore_file(apply_fix)
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/.gitignore"
