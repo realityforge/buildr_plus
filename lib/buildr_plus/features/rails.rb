@@ -55,6 +55,7 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
 
       excludes =
         %w(
+                config/broker.yml
                 config/database.yml
                 config/ci-database.yml
                 config/ci-import-database.yml
@@ -102,6 +103,7 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
         project.package(:war).tap do |war|
           war.merge BuildrPlus::Rails.warble_package
           war.include 'config/prod-database.yml', :as => 'WEB-INF/config/database.yml' if File.exist?("#{base_directory}/config/prod-database.yml")
+          war.include 'config/prod-broker.yml', :as => 'WEB-INF/config/broker.yml' if File.exist?("#{base_directory}/config/prod-broker.yml")
         end
 
         %w(log tmp).each do |path|
