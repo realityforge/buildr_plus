@@ -24,9 +24,10 @@ BuildrPlus::Roles.role(:container) do
   if BuildrPlus::Roles.project_with_role?(:integration_tests)
     server_project = project(BuildrPlus::Roles.project_with_role(:server).name)
     war_package = server_project.package(:war)
+    war_dir = File.dirname(war_package.to_s)
 
     default_testng_args << "-Dembedded.glassfish.artifacts=#{BuildrPlus::Guiceyloops.glassfish_spec_list}"
-    default_testng_args << "-Dwar.dir=#{File.dirname(war_package.to_s)}"
+    default_testng_args << "-Dwar.dir=#{war_dir}"
   end
 
   if BuildrPlus::FeatureManager.activated?(:db)
