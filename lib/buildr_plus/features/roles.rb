@@ -83,7 +83,10 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
 
     def buildr_projects_with_role(role)
       projects = projects_with_role(role).collect { |p| p.name }
-      Buildr.projects(:no_invoke => true).select { |project| projects.include?(project.name.gsub(/^[^:]*\:/, '')) }
+      buildr_projects = Buildr.projects(:no_invoke => true).
+        select { |project| projects.include?(project.name.gsub(/^[^:]*\:/, '')) }
+      buildr_projects.each{|p|p.invoke}
+      buildr_projects
     end
 
     def merge_projects_with_role(target, role)
