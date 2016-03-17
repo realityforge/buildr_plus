@@ -92,7 +92,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
     def merge_projects_with_role(target, role)
       BuildrPlus::Roles.buildr_projects_with_role(role).each do |dep|
         target.with dep.package(:jar),
-                     dep.compile.dependencies
+                    dep.compile.dependencies
       end
     end
 
@@ -133,7 +133,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
     end
 
     def define_top_level_projects
-      BuildrPlus::Roles.projects.select{|p|!p.template?}.each do |p|
+      BuildrPlus::Roles.projects.select { |p| !p.template? }.each do |p|
         Buildr.class_eval do
           define p.name.to_s do
             project.apply_roles!
