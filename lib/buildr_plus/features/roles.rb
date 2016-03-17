@@ -42,18 +42,26 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
         roles.any? { |r| r.to_s == role.to_s }
       end
 
-      def customize(&block)
-        customization_map << block
+      def customize(type = :pre, &block)
+        (type == :pre ? pre_customization_map : post_customization_map) << block
       end
 
-      def customizations
-        customization_map.dup
+      def pre_customizations
+        pre_customization_map.dup
+      end
+
+      def post_customizations
+        post_customization_map.dup
       end
 
       protected
 
-      def customization_map
-        @customizations ||= []
+      def pre_customization_map
+        @pre_customizations ||= []
+      end
+
+      def post_customization_map
+        @post_customizations ||= []
       end
     end
 
@@ -102,7 +110,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
         project = ProjectDescription.new(name, options)
         project_map[name.to_s] = project
       end
-      project.customize(&block) if block_given?
+      project.customize(:pre, &block) if block_given?
       project
     end
 
@@ -183,17 +191,18 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
 
     def apply_roles!
       if apply_roles?
-        BuildrPlus::Roles.projects.each do |p|
-          if p.parent && project.descriptor.in_role?(p.parent)
-            instance_eval do
+        project.descriptor.pre_customizations.each do |customization|
+          instance_eval &customization
+        end
+        instance_eval do
+          BuildrPlus::Roles.projects.each do |p|
+            if p.parent && project.descriptor.in_role?(p.parent)
               desc p.description if p.description
-              define p.name do
+              project.define p.name do
+                self.apply_roles!
               end
             end
           end
-        end
-        project.descriptor.customizations.each do |customization|
-          instance_eval &customization
         end
         project.roles.each do |role_name|
           role = BuildrPlus::Roles.role_by_name(role_name)
@@ -202,15 +211,8 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
             instance_eval &r
           end
         end
-
-        BuildrPlus::Roles.projects.each do |p|
-          if p.parent && project.descriptor.in_role?(p.parent)
-            instance_eval do
-              project(p.name).instance_eval do
-                project.apply_roles!
-              end
-            end
-          end
+        project.descriptor.post_customizations.each do |customization|
+          instance_eval &customization
         end
       end
     end
