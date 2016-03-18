@@ -80,7 +80,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
         Domgen::Build.define_generate_task(BuildrPlus::Domgen.db_generators, :key => :sql, :target_dir => BuildrPlus::Domgen.database_target_dir)
 
         database = Dbt.repository.database_for_key(:default)
-        database.search_dirs = %W(#{BuildrPlus::Domgen.database_target_dir} database)
+        database.search_dirs = %W(#{BuildrPlus::Domgen.database_target_dir} database) unless database.search_dirs?
         database.enable_domgen
       end
     end
