@@ -14,6 +14,12 @@
 
 BuildrPlus::FeatureManager.feature(:ci) do |f|
   f.enhance(:Config) do
+    def additional_pull_request_actions
+      @additional_pull_request_actions ||= []
+    end
+
+    attr_writer :additional_pull_request_actions
+
     def additional_commit_actions
       @additional_commit_actions ||= []
     end
@@ -132,13 +138,18 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
       task 'ci:upload' => %w(ci:setup upload_published)
 
       commit_actions = %w(ci:no_test_setup clean)
+      pull_request_actions = %w(ci:setup clean)
       package_actions = %w(ci:setup clean)
       package_no_test_actions = %w(ci:no_test_setup clean)
 
-      commit_actions << 'rptman:setup' if BuildrPlus::FeatureManager.activated?(:rptman)
+      if BuildrPlus::FeatureManager.activated?(:rptman)
+        commit_actions << 'rptman:setup'
+        pull_request_actions << 'rptman:setup'
+      end
 
       if BuildrPlus::FeatureManager.activated?(:domgen)
         commit_actions << 'domgen:all'
+        pull_request_actions << 'domgen:all'
         package_actions << 'domgen:all'
         package_no_test_actions << 'domgen:all'
       end
@@ -155,12 +166,16 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           prefix = Dbt::Config.default_database?(database_key) ? '' : ":#{database_key}"
 
           commit_actions << "dbt#{prefix}:create"
+          pull_request_actions << "dbt#{prefix}:create"
           package_actions << "dbt#{prefix}:create"
           database_drops << "dbt#{prefix}:drop"
         end
       end
 
-      commit_actions << 'rptman:ssrs:upload' if BuildrPlus::FeatureManager.activated?(:rptman)
+      if BuildrPlus::FeatureManager.activated?(:rptman)
+        commit_actions << 'rptman:ssrs:upload'
+        pull_request_actions << 'rptman:ssrs:upload'
+      end
 
       if BuildrPlus::FeatureManager.activated?(:rails)
         package_actions << 'assets:copy_plugin_assets'
@@ -172,15 +187,25 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
       commit_actions << 'ci:source_code_analysis'
       commit_actions.concat(BuildrPlus::Ci.additional_commit_actions)
 
+      pull_request_actions << 'ci:source_code_analysis'
+
       package_actions << 'test'
+      pull_request_actions << 'test'
       package_no_test_actions << 'test'
 
       package_actions << 'package'
+      pull_request_actions << 'package'
       package_no_test_actions << 'package'
 
-      commit_actions << 'rptman:ssrs:delete' if BuildrPlus::FeatureManager.activated?(:rptman)
+      pull_request_actions.concat(BuildrPlus::Ci.additional_pull_request_actions)
+
+      if BuildrPlus::FeatureManager.activated?(:rptman)
+        commit_actions << 'rptman:ssrs:delete'
+        pull_request_actions << 'rptman:ssrs:delete'
+      end
 
       commit_actions.concat(database_drops)
+      pull_request_actions.concat(database_drops)
       package_actions.concat(database_drops)
 
       if BuildrPlus::Ci.perform_publish?
@@ -188,11 +213,20 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         package_no_test_actions << 'ci:upload'
       end
 
-      commit_actions << 'ws:check' if BuildrPlus::FeatureManager.activated?(:whitespace)
-      commit_actions << 'gitignore:check' if BuildrPlus::FeatureManager.activated?(:gitignore)
+      if BuildrPlus::FeatureManager.activated?(:whitespace)
+        commit_actions << 'ws:check'
+        pull_request_actions << 'ws:check'
+      end
+      if BuildrPlus::FeatureManager.activated?(:gitignore)
+        commit_actions << 'gitignore:check'
+        pull_request_actions << 'gitignore:check'
+      end
 
       desc 'Perform pre-commit checks and source code analysis'
       task 'ci:commit' => commit_actions
+
+      desc 'Perform pre-merge checks for pull requests'
+      task 'ci:pull_request' => commit_actions
 
       desc 'Build the package(s) and run tests'
       task 'ci:package' => package_actions
