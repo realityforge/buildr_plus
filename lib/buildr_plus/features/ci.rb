@@ -15,19 +15,19 @@
 BuildrPlus::FeatureManager.feature(:ci) do |f|
   f.enhance(:Config) do
     def additional_commit_actions
-      @additional_commit_actions || []
+      @additional_commit_actions ||= []
     end
 
     attr_writer :additional_commit_actions
 
     def additional_import_actions
-      @additional_import_actions || []
+      @additional_import_actions ||= []
     end
 
     attr_writer :additional_import_actions
 
     def additional_import_tasks
-      @additional_import_tasks || []
+      @additional_import_tasks ||= []
     end
 
     attr_writer :additional_import_tasks
