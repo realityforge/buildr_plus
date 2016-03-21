@@ -226,7 +226,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
       task 'ci:commit' => commit_actions
 
       desc 'Perform pre-merge checks for pull requests'
-      task 'ci:pull_request' => commit_actions
+      task 'ci:pull_request' => pull_request_actions
 
       desc 'Build the package(s) and run tests'
       task 'ci:package' => package_actions
