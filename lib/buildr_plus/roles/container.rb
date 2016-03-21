@@ -86,7 +86,16 @@ BuildrPlus::Roles.role(:container) do
                                   :jpa_module_names => jpa_module_names,
                                   :ejb_module_names => ejb_module_names)
 
-    ipr.add_glassfish_remote_configuration(project, :server_name => 'Payara 4.1.1.154', :exploded => [project.name])
-    ipr.add_glassfish_configuration(project, :server_name => 'Payara 4.1.1.154', :exploded => [project.name])
+    remote_packaged_apps = BuildrPlus::Glassfish.non_remote_only_packaged_apps.dup.merge(BuildrPlus::Glassfish.packaged_apps)
+    local_packaged_apps = BuildrPlus::Glassfish.remote_only_packaged_apps.dup.merge(BuildrPlus::Glassfish.packaged_apps)
+
+    ipr.add_glassfish_remote_configuration(project,
+                                           :server_name => 'Payara 4.1.1.154',
+                                           :exploded => [project.name],
+                                           :packaged => remote_packaged_apps)
+    ipr.add_glassfish_configuration(project,
+                                    :server_name => 'Payara 4.1.1.154',
+                                    :exploded => [project.name],
+                                    :packaged => local_packaged_apps)
   end
 end
