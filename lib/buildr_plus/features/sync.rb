@@ -12,4 +12,12 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:sync)
+BuildrPlus::FeatureManager.feature(:sync) do |f|
+  f.enhance(:Config) do
+    attr_writer :standalone
+
+    def standalone?
+      @standalone.nil? ? true : !!@standalone
+    end
+  end
+end
