@@ -23,6 +23,8 @@ BuildrPlus::Roles.role(:server) do
 
     generators << [:gwt_rpc_shared, :gwt_rpc_server, :imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:gwt)
 
+    generators << [:sync_ejb] if BuildrPlus::FeatureManager.activated?(:sync)
+
     generators << [:ee_exceptions, :ejb_service_facades, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
     generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
