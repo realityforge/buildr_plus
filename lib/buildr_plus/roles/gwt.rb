@@ -45,6 +45,7 @@ BuildrPlus::Roles.role(:gwt) do
   gwt(top_level_gwt_modules,
       :java_args => BuildrPlus::Gwt.gwtc_java_args,
       :dependencies => project.compile.dependencies + [project.compile.target] + extra_deps)
+  BuildrPlus::Gwt.define_gwt_idea_facet(project)
 
   p = project.root_project
 
@@ -52,12 +53,4 @@ BuildrPlus::Roles.role(:gwt) do
     it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.class")
     it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.java")
   end
-
-  module_config = {}
-  gwt_modules.each do |m|
-    module_config[m] = top_level_gwt_modules.include?(m)
-  end
-  iml.add_gwt_facet(module_config,
-                    :settings => {:compilerMaxHeapSize => '1024'},
-                    :gwt_dev_artifact => BuildrPlus::Libs.gwt_dev)
 end

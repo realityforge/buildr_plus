@@ -25,6 +25,23 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
         end
       end
     end
+
+    def define_gwt_idea_facet(project)
+      gwt_modules = project.gwt_modules
+      module_config = {}
+      gwt_modules.each do |m|
+        module_config[m] = false
+      end
+      if gwt_modules.empty?
+        message = "No gwt modules defined for project '#{project.name}'"
+        puts message
+        raise message
+      end
+      project.iml.add_gwt_facet(module_config,
+                                :settings => {:compilerMaxHeapSize => '1024'},
+                                :gwt_dev_artifact => BuildrPlus::Libs.gwt_dev)
+
+    end
   end
 
   f.enhance(:ProjectExtension) do
