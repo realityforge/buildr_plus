@@ -39,7 +39,7 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
       Dbt::Config.driver = 'postgres' if BuildrPlus::Db.pgsql?
       if Dbt.repository.database_for_key?(:default)
         database = Dbt.repository.database_for_key(:default)
-        database.search_dirs = %w(database) unless database.search_dirs?
+        database.search_dirs = %w(database) if !database.search_dirs? && !BuildrPlus::FeatureManager.activated?(:domgen)
       end
     end
 
