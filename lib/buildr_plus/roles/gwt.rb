@@ -49,8 +49,8 @@ BuildrPlus::Roles.role(:gwt) do
   p = project.root_project
 
   check package(:jar), 'should contain generated source files' do
-    it.should contain("#{p.group.gsub('.','/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.class")
-    it.should contain("#{p.group.gsub('.','/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.java")
+    it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.class")
+    it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.java")
   end
 
   module_config = {}
