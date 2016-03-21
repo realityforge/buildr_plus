@@ -15,6 +15,15 @@
 BuildrPlus::Roles.role(:user_experience) do
   BuildrPlus::FeatureManager.ensure_activated(:user_experience)
 
+  if BuildrPlus::FeatureManager.activated?(:domgen)
+    generators = [:gwt_client_event]
+    Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
+      t.filter = Proc.new do |artifact_type, artifact|
+        artifact_type != :message || artifact.any_non_standard_types?
+      end
+    end
+  end
+
   project.publish = false
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)

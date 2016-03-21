@@ -16,7 +16,12 @@ BuildrPlus::Roles.role(:gwt) do
   BuildrPlus::FeatureManager.ensure_activated(:gwt)
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    Domgen::Build.define_generate_task([:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :imit_shared, :imit_client_service, :imit_client_entity], :buildr_project => project)
+    generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :imit_shared, :imit_client_service, :imit_client_entity]
+    Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
+      t.filter = Proc.new do |artifact_type, artifact|
+        artifact_type != :message || !artifact.any_non_standard_types?
+      end if BuildrPlus::FeatureManager.activated?(:user_experience)
+    end
   end
 
   compile.with BuildrPlus::Libs.findbugs_provided,
