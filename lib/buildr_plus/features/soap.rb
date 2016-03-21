@@ -12,5 +12,4 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:soap => [:xml]) do |f|
-end
+BuildrPlus::FeatureManager.feature(:soap => [:xml])
