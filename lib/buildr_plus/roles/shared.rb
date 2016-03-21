@@ -12,5 +12,18 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:shared) do |f|
+BuildrPlus::Roles.role(:shared) do
+  project.publish = true
+
+  package(:jar)
+  package(:sources)
+
+  if BuildrPlus::FeatureManager.activated?(:gwt)
+    BuildrPlus::Gwt.add_source_to_jar(project)
+
+    # This compile exists to verify that module is independently compilable
+    BuildrPlus::Gwt.define_gwt_task(project, 'Shared')
+
+    BuildrPlus::Gwt.define_gwt_idea_facet(project)
+  end
 end
