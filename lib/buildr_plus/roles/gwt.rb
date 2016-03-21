@@ -36,8 +36,18 @@ BuildrPlus::Roles.role(:gwt) do
   gwt_modules = project.gwt_modules
   top_level_gwt_modules = project.determine_top_level_gwt_modules
 
+  # Unfortunately buildr does not gracefully handle resource directories not being present
+  # when project processed so we collect extra dependencies by looking at the generated directories
+  extra_deps = project.iml.main_generated_resource_directories.flatten.compact.collect do |a|
+      a.is_a?(String) ? file(a) : a
+    end + project.iml.main_generated_source_directories.flatten.compact.collect do |a|
+      a.is_a?(String) ? file(a) : a
+  end
+
   # This compile exists to verify that module is independently compilable
-  gwt(top_level_gwt_modules, :java_args => BuildrPlus::Gwt.gwtc_java_args)
+  gwt(top_level_gwt_modules,
+      :java_args => BuildrPlus::Gwt.gwtc_java_args,
+      :dependencies => project.compile.dependencies + [project.compile.target] + extra_deps)
 
   p = project.root_project
 
