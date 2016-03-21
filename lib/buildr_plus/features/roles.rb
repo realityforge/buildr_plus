@@ -71,7 +71,11 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
         role = []
         role_map[name.to_s] = role
       end
-      role << block
+      if options[:append]
+        role << block
+      else
+        role.unshift(block)
+      end
       nil
     end
 
