@@ -26,13 +26,10 @@ BuildrPlus::Roles.role(:gwt) do
 
   test.with BuildrPlus::Libs.mockito
 
-  package(:jar).tap do |jar|
-    project.compile.sources.each do |src|
-      jar.include("#{src}/*")
-    end
-  end
+  package(:jar)
   package(:sources)
 
+  BuildrPlus::Gwt.add_source_to_jar(project)
   gwt_modules = project.gwt_modules
   top_level_gwt_modules = project.determine_top_level_gwt_modules
 

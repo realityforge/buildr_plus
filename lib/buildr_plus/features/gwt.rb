@@ -17,6 +17,14 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
     def gwtc_java_args
       %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M -XX:PermSize=128M -XX:MaxPermSize=256M)
     end
+
+    def add_source_to_jar(project)
+      project.package(:jar).tap do |jar|
+        project.compile.sources.each do |src|
+          jar.include("#{src}/*")
+        end
+      end
+    end
   end
 
   f.enhance(:ProjectExtension) do
