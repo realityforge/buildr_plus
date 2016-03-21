@@ -44,9 +44,9 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
         a.is_a?(String) ? file(a) : a
       end
 
+      dependencies = project.compile.dependencies + [project.compile.target] + extra_deps
       project.gwt(gwt_modules,
-                  :java_args => BuildrPlus::Gwt.gwtc_java_args,
-                  :dependencies => project.compile.dependencies + [project.compile.target] + extra_deps)
+                  {:java_args => BuildrPlus::Gwt.gwtc_java_args, :dependencies => dependencies}.merge(options))
     end
 
     def define_gwt_idea_facet(project)
