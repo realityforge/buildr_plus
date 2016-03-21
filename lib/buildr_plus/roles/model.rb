@@ -30,6 +30,7 @@ BuildrPlus::Roles.role(:model) do
 
   project.publish = true
 
+  compile.using :javac
   compile.with BuildrPlus::Libs.ee_provided
 
   # Our JPA beans are occasionally generated with eclipselink specific artifacts
