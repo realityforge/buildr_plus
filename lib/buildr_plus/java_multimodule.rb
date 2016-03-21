@@ -16,6 +16,7 @@ require 'buildr_plus/java'
 
 base_directory = File.dirname(Buildr.application.buildfile.to_s)
 BuildrPlus::FeatureManager.activate_features([:shared]) if File.exist?("#{base_directory}/shared/src/main/java")
+BuildrPlus::FeatureManager.activate_features([:user_experience]) if File.exist?("#{base_directory}/user-experience/src/main/java")
 BuildrPlus::FeatureManager.activate_features([:selenium]) if File.exist?("#{base_directory}/selenium-tests/src/test/java")
 
 if BuildrPlus::FeatureManager.activated?(:shared)
@@ -28,6 +29,10 @@ BuildrPlus::Roles.project('server', :roles => [:server], :parent => :container, 
 if BuildrPlus::FeatureManager.activated?(:gwt)
   BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :template => true, :description => 'GWT Library')
   BuildrPlus::Roles.project('gwt-qa-support', :roles => [:gwt_qa_support], :parent => :container, :template => true, :description => 'GWT Test Infrastructure')
+
+  if BuildrPlus::FeatureManager.activated?(:user_experience)
+    BuildrPlus::Roles.project('user-experience', :roles => [:user_experience], :parent => :container, :template => true, :description => 'GWT Client-side UI')
+  end
 end
 
 if BuildrPlus::FeatureManager.activated?(:soap)

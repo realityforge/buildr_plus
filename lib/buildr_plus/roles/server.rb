@@ -57,6 +57,20 @@ BuildrPlus::Roles.role(:server) do
     war.include assets.to_s, :as => '.' if BuildrPlus::FeatureManager.activated?(:gwt)
   end
 
+  if BuildrPlus::FeatureManager.activated?(:gwt)
+    check package(:war), 'should contain generated gwt artifacts' do
+      it.should contain("#{project.root_project.name}/#{project.root_project.name}.nocache.js")
+    end
+  end
+
   iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
-  iml.add_web_facet
+  if BuildrPlus::FeatureManager.activated?(:gwt)
+    webroots = {}
+    webroots[_(:source, :main, :webapp)] = '/'
+    webroots[_(:source, :main, :webapp_local)] = '/'
+    assets.paths.each { |path| webroots[path.to_s] = '/' unless path.to_s =~ /generated\/gwt\// }
+    iml.add_web_facet(:webroots => webroots)
+  else
+    iml.add_web_facet
+  end
 end
