@@ -25,7 +25,7 @@ BuildrPlus::FeatureManager.feature(:findbugs) do |f|
     before_define do |project|
       if project.ipr?
         project.findbugs.enabled = true
-        project.findbugs.config_directory = _(:etc, :findbugs)
+        project.findbugs.config_directory = project._(:etc, :findbugs)
       end
     end
 
