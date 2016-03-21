@@ -34,6 +34,7 @@ BuildrPlus::Roles.role(:server) do
   project.publish = true
 
   compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:soap)
+
   compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
