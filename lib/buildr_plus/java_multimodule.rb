@@ -14,6 +14,8 @@
 
 require 'buildr_plus/java'
 
+base_directory = File.dirname(Buildr.application.buildfile.to_s)
+BuildrPlus::FeatureManager.activate_features([:selenium]) if File.exist?("#{base_directory}/selenium-tests/src/test/java")
 BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
 BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :parent => :container, :template => true, :description => 'Model Test Infrastructure')
 BuildrPlus::Roles.project('server', :roles => [:server], :parent => :container, :template => true, :description => 'Server Archive')
@@ -30,5 +32,9 @@ end
 
 BuildrPlus::Roles.project('integration-qa-support', :roles => [:integration_qa_support], :parent => :container, :template => true, :description => 'Integration Test Infrastructure')
 BuildrPlus::Roles.project('integration-tests', :roles => [:integration_tests], :parent => :container, :template => true, :description => 'Integration Tests')
+
+if BuildrPlus::FeatureManager.activated?(:selenium)
+  BuildrPlus::Roles.project('selenium-tests', :roles => [:selenium_tests], :parent => :container, :template => true, :description => 'Selenium Tests')
+end
 
 BuildrPlus::ExtensionRegistry.auto_activate!
