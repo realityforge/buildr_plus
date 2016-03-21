@@ -33,6 +33,7 @@ BuildrPlus::Roles.role(:server) do
 
   project.publish = true
 
+  # Our soap services use annotation for validation that is metro specific
   compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:soap)
 
   compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
