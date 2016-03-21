@@ -26,6 +26,29 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
       end
     end
 
+    def define_gwt_task(project, suffix = '', options = {})
+      gwt_modules = project.determine_top_level_gwt_modules(suffix)
+      if gwt_modules.empty?
+        puts "Unable to determine top level gwt modules for project '#{project.name}'."
+        puts "Please specify modules via project.top_level_gwt_modules setting or name"
+        puts "module '#{project.guess_gwt_module_name(suffix)}'."
+
+        raise "Unable to determine top level gwt modules for project '#{project.name}'"
+      end
+
+      # Unfortunately buildr does not gracefully handle resource directories not being present
+      # when project processed so we collect extra dependencies by looking at the generated directories
+      extra_deps = project.iml.main_generated_resource_directories.flatten.compact.collect do |a|
+        a.is_a?(String) ? file(a) : a
+      end + project.iml.main_generated_source_directories.flatten.compact.collect do |a|
+        a.is_a?(String) ? file(a) : a
+      end
+
+      project.gwt(gwt_modules,
+                  :java_args => BuildrPlus::Gwt.gwtc_java_args,
+                  :dependencies => project.compile.dependencies + [project.compile.target] + extra_deps)
+    end
+
     def define_gwt_idea_facet(project)
       gwt_modules = project.gwt_modules
       module_config = {}
@@ -63,20 +86,34 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
 
     # Determine any top level modules.
     # If none specified then derive one based on root projects name and group
-    def determine_top_level_gwt_modules
+    def determine_top_level_gwt_modules(suffix)
       m = self.top_level_gwt_modules
       return m unless m.empty?
+      candidate = guess_gwt_module_name(suffix)
+      return [] unless gwt_module?(candidate)
+      [candidate]
+    end
+
+    def guess_gwt_module_name(suffix = '')
       p = self.root_project
-      ["#{p.group}.#{BuildrPlus::Naming.pascal_case(p.name)}"]
+      "#{p.group}.#{BuildrPlus::Naming.pascal_case(p.name)}#{suffix}"
+    end
+
+    def gwt_module?(module_name)
+      self.gwt_modules.include?(module_name)
     end
 
     def gwt_modules
-      project.resources.sources.collect do |path|
-        Dir["#{path}/**/*.gwt.xml"].collect do |gwt_module|
-          length = path.to_s.length
-          gwt_module[length + 1, gwt_module.length - length - 9].gsub('/', '.')
-        end
-      end.flatten
+      unless @gwt_modules
+        @gwt_modules =
+          project.resources.sources.collect do |path|
+            Dir["#{path}/**/*.gwt.xml"].collect do |gwt_module|
+              length = path.to_s.length
+              gwt_module[length + 1, gwt_module.length - length - 9].gsub('/', '.')
+            end
+          end.flatten
+      end
+      @gwt_modules
     end
   end
 end
