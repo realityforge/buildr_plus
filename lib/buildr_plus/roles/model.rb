@@ -32,6 +32,9 @@ BuildrPlus::Roles.role(:model) do
 
   compile.with BuildrPlus::Libs.ee_provided
 
+  # Our JPA beans are occasionally generated with eclipselink specific artifacts
+  compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:db)
+
   if BuildrPlus::FeatureManager.activated?(:gwt)
     compile.with BuildrPlus::Libs.jackson_gwt_support, BuildrPlus::Libs.gwt_datatypes
   end
