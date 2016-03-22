@@ -44,10 +44,9 @@ BuildrPlus::Roles.role(:container) do
           next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
           prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
-          jdbc_url = Dbt.configuration_for_key(database_key).build_jdbc_url(:credentials_inline => true)
-          catalog_name = Dbt.configuration_for_key(database_key).catalog_name
-          default_testng_args << "-D#{prefix}test.db.url=#{jdbc_url}"
-          default_testng_args << "-D#{prefix}test.db.name=#{catalog_name}"
+          database = Dbt.configuration_for_key(database_key, :test)
+          default_testng_args << "-D#{prefix}test.db.url=#{database.build_jdbc_url(:credentials_inline => true)}"
+          default_testng_args << "-D#{prefix}test.db.name=#{database.catalog_name}"
         end
       ensure
         Dbt::Config.environment = old_environment
