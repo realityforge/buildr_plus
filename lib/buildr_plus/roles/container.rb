@@ -31,7 +31,7 @@ BuildrPlus::Roles.role(:container) do
   end
 
   if BuildrPlus::FeatureManager.activated?(:db)
-    default_testng_args << "-javaagent:#{BuildrPlus::Libs.eclipselink.to_s}"
+    default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}"
 
     if BuildrPlus::FeatureManager.activated?(:dbt)
       old_environment = Dbt::Config.environment
