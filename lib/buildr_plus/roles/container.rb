@@ -97,5 +97,18 @@ BuildrPlus::Roles.role(:container) do
                                     :server_name => 'Payara 4.1.1.154',
                                     :exploded => [project.name],
                                     :packaged => local_packaged_apps)
+
+    if BuildrPlus::FeatureManager.activated?(:user_experience)
+      BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
+        candidate = p.guess_gwt_module_name('Dev')
+        if p.gwt_module?(candidate)
+          ipr.add_gwt_configuration(p,
+                                    :gwt_module => candidate,
+                                    :vm_parameters => '-Xmx3G',
+                                    :shell_parameters => '-port 8888',
+                                    :launch_page => "http://127.0.0.1:8080/#{p.root_project.name}" )
+        end
+      end
+    end
   end
 end
