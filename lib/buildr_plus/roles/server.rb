@@ -14,7 +14,7 @@
 
 BuildrPlus::Roles.role(:server) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:ee_web_xml]
+    generators = [:ee_web_xml, :ee_beans_xml]
     if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:jpa_dao_test]
 
