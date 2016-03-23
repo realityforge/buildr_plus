@@ -13,7 +13,7 @@
 #
 
 BuildrPlus::Roles.role(:sync_model) do
-  BuildrPlus::FeatureManager.ensure_activated(:sync_model)
+  BuildrPlus::FeatureManager.ensure_activated(:sync)
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     Domgen::Build.define_generate_task([:sync_master_ejb_impl, :ejb_services], :buildr_project => project) do |t|
