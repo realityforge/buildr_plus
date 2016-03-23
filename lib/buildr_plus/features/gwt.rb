@@ -27,15 +27,6 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
     end
 
     def define_gwt_task(project, suffix = '', options = {})
-      gwt_modules = project.determine_top_level_gwt_modules(suffix)
-      if gwt_modules.empty?
-        puts "Unable to determine top level gwt modules for project '#{project.name}'."
-        puts "Please specify modules via project.top_level_gwt_modules setting or name"
-        puts "module '#{project.guess_gwt_module_name(suffix)}'."
-
-        raise "Unable to determine top level gwt modules for project '#{project.name}'"
-      end
-
       # Unfortunately buildr does not gracefully handle resource directories not being present
       # when project processed so we collect extra dependencies by looking at the generated directories
       extra_deps = project.iml.main_generated_resource_directories.flatten.compact.collect do |a|
@@ -45,7 +36,7 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
       end
 
       dependencies = project.compile.dependencies + [project.compile.target] + extra_deps
-      project.gwt(gwt_modules,
+      project.gwt(project.determine_top_level_gwt_modules(suffix),
                   {:java_args => BuildrPlus::Gwt.gwtc_java_args, :dependencies => dependencies}.merge(options))
     end
 
@@ -88,10 +79,16 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
     # If none specified then derive one based on root projects name and group
     def determine_top_level_gwt_modules(suffix)
       m = self.top_level_gwt_modules
-      return m unless m.empty?
-      candidate = guess_gwt_module_name(suffix)
-      return [] unless gwt_module?(candidate)
-      [candidate]
+      gwt_modules = !m.empty? ? m : self.gwt_modules.select{|m| m =~ /#{suffix}$/}
+
+      if gwt_modules.empty?
+        puts "Unable to determine top level gwt modules for project '#{project.name}'."
+        puts "Please specify modules via project.top_level_gwt_modules setting or name"
+        puts "module '#{project.guess_gwt_module_name(suffix)}' or with suffix '#{suffix}'."
+
+        raise "Unable to determine top level gwt modules for project '#{project.name}'"
+      end
+      gwt_modules
     end
 
     def guess_gwt_module_name(suffix = '')
