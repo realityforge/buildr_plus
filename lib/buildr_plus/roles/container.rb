@@ -97,6 +97,13 @@ BuildrPlus::Roles.role(:container) do
                                     :exploded => [project.name],
                                     :packaged => local_packaged_apps)
 
+    if local_packaged_apps.size > 0
+      ipr.add_glassfish_configuration(project,
+                                      :configuration_name => "#{BuildrPlus::Naming.pascal_case(project.name)} Only - Payara 4.1.1.154",
+                                      :server_name => 'Payara 4.1.1.154',
+                                      :exploded => [project.name])
+    end
+
     if BuildrPlus::FeatureManager.activated?(:user_experience)
       BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
         candidate = p.guess_gwt_module_name('Dev')
