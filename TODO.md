@@ -1,8 +1,7 @@
 # TODO
 
-* Rework publish flag so it defaults to false
 * Add deps list for jett
-* publish in roles should be based on features such as:
+* Default publish role to false, then use roles to enabled based on features such as:
   - is deployable feature enabled?
   - is library feature enabled?
   - is gwt library feature enabled?
