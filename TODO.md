@@ -10,3 +10,4 @@
   such as webapp etc stay in server?
 * Add checkstyle check to ensure none of the "THIS FILE IS GENERATED" style messages occur
   in source
+* Add in role for single-app and rails templates
