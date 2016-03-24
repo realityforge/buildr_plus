@@ -6,3 +6,9 @@
   - is library feature enabled?
   - is gwt library feature enabled?
   - is soap-client project
+
+* Consider updating template such that all services move into a module named "services", the remaining gunk
+  such as webapp etc stay in server?
+
+* Add checkstyle check to ensure none of the "THIS FILE IS GENERATED" style messages occur
+  in source
