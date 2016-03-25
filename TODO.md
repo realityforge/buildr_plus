@@ -10,4 +10,6 @@
   such as webapp etc stay in server?
 * Add checkstyle check to ensure none of the "THIS FILE IS GENERATED" style messages occur
   in source
-* Add in role for single-app and rails templates
+* Add in role for rails apps
+* The all_in_one role has significant overlap with model, server and container roles. Should we consider
+  extracting commonality somehow?
