@@ -26,6 +26,7 @@ require 'buildr_plus/util'
 # Patches that should always be applied
 require 'buildr_plus/patches/activate_jruby_facet'
 require 'buildr_plus/patches/idea_patch'
+require 'buildr_plus/patches/project_patch'
 require 'buildr_plus/patches/projects_patch'
 
 require 'buildr_plus/features/calendar_date_select'

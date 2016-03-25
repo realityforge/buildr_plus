@@ -67,14 +67,6 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
       @top_level_gwt_modules ||= []
     end
 
-    def root_project
-      p = project
-      while p.parent
-        p = p.parent
-      end
-      p
-    end
-
     # Determine any top level modules.
     # If none specified then derive one based on root projects name and group
     def determine_top_level_gwt_modules(suffix)
