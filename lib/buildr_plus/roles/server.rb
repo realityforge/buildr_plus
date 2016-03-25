@@ -70,6 +70,9 @@ BuildrPlus::Roles.role(:server) do
     check package(:war), 'should contain generated gwt artifacts' do
       it.should contain("#{project.root_project.name}/#{project.root_project.name}.nocache.js")
     end
+    check package(:war), 'should contain web.xml' do
+      it.should contain('WEB-INF/web.xml')
+    end
   end
 
   iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)

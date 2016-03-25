@@ -48,6 +48,13 @@ BuildrPlus::Roles.role(:model) do
   package(:sources)
 
   if BuildrPlus::FeatureManager.activated?(:db)
+
+    check package(:jar), 'should contain resources and generated classes' do
+      it.should contain('META-INF/persistence.xml')
+      it.should contain('META-INF/orm.xml')
+      it.should contain("#{project.root_project.group.gsub('.','/')}/server/entity/#{BuildrPlus::Naming.pascal_case(project.root_project.name)}PersistenceUnit.class")
+    end
+
     iml.add_jpa_facet
     iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   end
