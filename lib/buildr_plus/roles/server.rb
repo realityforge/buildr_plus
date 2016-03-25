@@ -63,7 +63,8 @@ BuildrPlus::Roles.role(:server) do
     BuildrPlus::Roles.buildr_projects_with_role(:model).each do |dep|
       war.libs << dep.package(:jar)
     end
-    war.include assets.to_s, :as => '.' if BuildrPlus::FeatureManager.activated?(:gwt)
+    war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)
+    war.include assets.to_s, :as => '.' if BuildrPlus::FeatureManager.activated?(:gwt) || BuildrPlus::FeatureManager.activated?(:less)
   end
 
   if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:user_experience)
@@ -73,16 +74,19 @@ BuildrPlus::Roles.role(:server) do
     check package(:war), 'should contain web.xml' do
       it.should contain('WEB-INF/web.xml')
     end
+    check package(:war), 'should not contain less files' do
+      it.should contain('**/*.less')
+    end if BuildrPlus::FeatureManager.activated?(:less)
   end
 
   iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
-  if BuildrPlus::FeatureManager.activated?(:gwt)
-    webroots = {}
-    webroots[_(:source, :main, :webapp)] = '/'
-    webroots[_(:source, :main, :webapp_local)] = '/'
-    assets.paths.each { |path| webroots[path.to_s] = '/' unless path.to_s =~ /generated\/gwt\// }
-    iml.add_web_facet(:webroots => webroots)
-  else
-    iml.add_web_facet
+  webroots = {}
+  webroots[_(:source, :main, :webapp)] = '/'
+  webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt)
+  assets.paths.each do |path|
+    next if path.to_s =~ /generated\/gwt\// && BuildrPlus::FeatureManager.activated?(:gwt)
+    next if path.to_s =~ /generated\/less\// && BuildrPlus::FeatureManager.activated?(:less)
+    webroots[path.to_s] = '/'
   end
+  iml.add_web_facet(:webroots => webroots)
 end
