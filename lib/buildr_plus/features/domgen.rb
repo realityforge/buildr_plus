@@ -77,7 +77,11 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
       Domgen::Build.define_generate_xmi_task
 
       if BuildrPlus::FeatureManager.activated?(:dbt) && Dbt.repository.database_for_key?(:default)
-        Domgen::Build.define_generate_task(BuildrPlus::Domgen.db_generators, :key => :sql, :target_dir => BuildrPlus::Domgen.database_target_dir)
+        generators = BuildrPlus::Domgen.db_generators
+        if BuildrPlus::FeatureManager.activated?(:sync)
+          generators << (BuildrPlus::Db.mssql? ? :sync_sql : :sync_pgsql)
+        end
+        Domgen::Build.define_generate_task(generators, :key => :sql, :target_dir => BuildrPlus::Domgen.database_target_dir)
 
         database = Dbt.repository.database_for_key(:default)
         database.search_dirs = %W(#{BuildrPlus::Domgen.database_target_dir} database) unless database.search_dirs?
