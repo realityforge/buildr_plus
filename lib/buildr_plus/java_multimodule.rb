@@ -50,4 +50,5 @@ if BuildrPlus::FeatureManager.activated?(:selenium)
   BuildrPlus::Roles.project('selenium-tests', :roles => [:selenium_tests], :parent => :container, :template => true, :description => 'Selenium Tests')
 end
 
+BuildrPlus::Roles.default_role = :container
 BuildrPlus::ExtensionRegistry.auto_activate!

@@ -14,6 +14,8 @@
 
 BuildrPlus::FeatureManager.feature(:roles) do |f|
   f.enhance(:Config) do
+    # The role applied if there is only one project defined and that project has no role
+    attr_accessor :default_role
 
     class ProjectDescription < BuildrPlus::BaseElement
       def initialize(name, options = {}, &block)
