@@ -15,67 +15,82 @@
 BuildrPlus::FeatureManager.feature(:sass) do |f|
   f.enhance(:Config) do
     def default_sass_paths
-      BuildrPlus::FeatureManager.activated?(:rails) ? %w(public/stylesheets/sass) : []
-    end
-
-    attr_writer :sass_paths
-
-    def sass_paths
-      @sass_paths || self.default_sass_paths
-    end
-
-    def active_sass_paths(buildr_project)
-      BuildrPlus::Sass.sass_paths.collect { |p| buildr_project._(p) }.select { |p| File.exist?(p) }
-    end
-
-    def sass_files(buildr_project)
-      active_sass_paths(buildr_project).collect do |sass_path|
-        Dir["#{sass_path}/**/*.sass"]
-      end.flatten
-    end
-
-    def target_css_files(buildr_project)
-      sass_files(buildr_project).collect{|sass_file|to_target_file(sass_file)}
-    end
-
-    def to_target_file(sass_file)
-      sass_file.gsub(/\.sass$/, '.css').gsub(/\/sass/, '')
+      BuildrPlus::FeatureManager.activated?(:rails) ? %w(public/stylesheets/sass) : %w(src/main/webapp/sass)
     end
   end
 
   f.enhance(:ProjectExtension) do
+    attr_writer :sass_paths
+
+    def sass_paths
+      @sass_paths || BuildrPlus::Sass.default_sass_paths.collect { |p| _(p) }
+    end
+
+    def to_target_file(source_dir, sass_file)
+      if BuildrPlus::FeatureManager.activated?(:rails)
+        sass_file.gsub(/\.s[ac]ss$/, '.css').gsub(/\/s[ac]ss\//, '/')
+      else
+        target_dir = _(:generated, :sass, :main, :webapp)
+        "#{target_dir}/css/#{Buildr::Util.relative_path(sass_file, source_dir)[0...-5]}.css"
+      end
+    end
+
     first_time do
       require 'sass'
     end
 
-    after_define do |project|
-      sass_files = BuildrPlus::Sass.sass_files(project)
-      if sass_files.size > 0
-        project.iml.excluded_directories << project._('.sass-cache')
-        project.clean { rm_rf project._('.sass-cache') }
+    before_define do |project|
+      p = project
+      while p.parent
+        p = p.parent
+      end
+      p.clean { rm_rf p._('.sass-cache') }
+      if p.iml?
+        p.iml.excluded_directories << p._('.sass-cache')
+      end
 
-        desc "Precompile assets for #{project.name}"
-        t = project.task('assets:precompile') do
-
-          sass_files.each do |sass_file|
-            target_file = BuildrPlus::Sass.to_target_file(sass_file)
+      desc "Precompile assets for #{project.name}"
+      t = project.task('assets:precompile') do
+        project.sass_paths.select { |p| File.directory?(p) }.collect do |sass_path|
+          Dir["#{sass_path}/**/[^_]*.s[ac]ss"].each do |sass_file|
+            target_file = project.to_target_file(sass_path, sass_file)
+            FileUtils.mkdir_p File.dirname(target_file)
+            syntax = sass_file =~ /.*\.sass$/ ? :sass : :scss
             File.open(target_file, 'w') do |out|
               input = File.read(sass_file)
-              load_paths = [File.dirname(sass_file)]
-              out.write(Sass::Engine.new(input, :load_paths => load_paths).render)
+              load_paths = [sass_path]
+              out.write(Sass::Engine.new(input, :load_paths => load_paths, :syntax => syntax).render)
             end
           end
         end
-
-        project.clean do
-          BuildrPlus::Sass.target_css_files(project).each do |css_file|
-            FileUtils.rm_f(css_file)
-          end
-        end
-
-        desc 'Precompile all assets'
-        project.task(':assets:precompile' => t.name)
       end
+
+      project.clean do
+        if BuildrPlus::FeatureManager.activated?(:rails)
+          project.sass_paths.select { |p| File.directory?(p) }.each do |sass_path|
+            Dir["#{sass_path}/**/[^_]*.s[ac]ss"].each do |sass_file|
+              FileUtils.rm_f project.to_target_file(sass_path, sass_file)
+            end
+          end
+        else
+          FileUtils.rm_rf project._(:generated, :sass, :main, :webapp)
+        end
+      end
+
+      project.assets.enhance([t.name])
+
+      unless BuildrPlus::FeatureManager.activated?(:rails)
+        webapp_dir = project._(:generated, :sass, :main, :webapp)
+
+        project.assets.paths << file(webapp_dir => [t.name]) do
+          mkdir_p webapp_dir
+        end
+      end
+
+      desc 'Precompile all assets'
+      project.task(':assets:precompile' => t.name)
+
+      project.task(':domgen:all' => t.name)
     end
   end
 end
