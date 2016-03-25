@@ -29,6 +29,7 @@ require 'buildr_plus/patches/idea_patch'
 require 'buildr_plus/patches/project_patch'
 require 'buildr_plus/patches/projects_patch'
 
+require 'buildr_plus/features/artifact_assets'
 require 'buildr_plus/features/calendar_date_select'
 require 'buildr_plus/features/checkstyle'
 require 'buildr_plus/features/ci'
