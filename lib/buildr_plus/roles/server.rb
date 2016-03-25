@@ -63,7 +63,7 @@ BuildrPlus::Roles.role(:server) do
     war.include assets.to_s, :as => '.' if BuildrPlus::FeatureManager.activated?(:gwt)
   end
 
-  if BuildrPlus::FeatureManager.activated?(:gwt)
+  if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:user_experience)
     check package(:war), 'should contain generated gwt artifacts' do
       it.should contain("#{project.root_project.name}/#{project.root_project.name}.nocache.js")
     end
