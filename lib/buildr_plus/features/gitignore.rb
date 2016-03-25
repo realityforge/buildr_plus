@@ -106,7 +106,8 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << '/.sass-cache'
         Buildr.projects.each do |project|
           BuildrPlus::Sass.target_css_files(project).each do |css_file|
-            gitignores << '/' + ::Buildr::Util.relative_path(File.expand_path(css_file), base_directory)
+            css_file = ::Buildr::Util.relative_path(File.expand_path(css_file), base_directory)
+            gitignores << '/' + css_file unless css_file =~ /^generated\//
           end
         end
       end

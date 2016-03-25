@@ -17,6 +17,14 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
     def default_sass_paths
       BuildrPlus::FeatureManager.activated?(:rails) ? %w(public/stylesheets/sass) : %w(src/main/webapp/sass)
     end
+
+    def target_css_files(project)
+      project.sass_paths.select { |p| File.directory?(p) }.collect do |sass_path|
+        Dir["#{sass_path}/**/[^_]*.s[ac]ss"].collect do |sass_file|
+          project.to_target_file(sass_path, sass_file)
+        end
+      end.flatten
+    end
   end
 
   f.enhance(:ProjectExtension) do
