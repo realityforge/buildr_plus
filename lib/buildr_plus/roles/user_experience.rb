@@ -17,6 +17,7 @@ BuildrPlus::Roles.role(:user_experience) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:gwt_client_event]
+    generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
         artifact_type != :message || artifact.any_non_standard_types?

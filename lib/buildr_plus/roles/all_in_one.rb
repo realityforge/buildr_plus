@@ -40,6 +40,8 @@ BuildrPlus::Roles.role(:all_in_one) do
 
     generators << [:jms] if BuildrPlus::FeatureManager.activated?(:jms)
 
+    generators += project.additional_domgen_generators
+
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
   end
 

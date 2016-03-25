@@ -66,6 +66,11 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
   end
 
   f.enhance(:ProjectExtension) do
+
+    def additional_domgen_generators
+      @additional_domgen_generators ||= []
+    end
+
     first_time do
       require 'domgen'
 

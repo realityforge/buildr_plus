@@ -17,6 +17,7 @@ BuildrPlus::Roles.role(:gwt) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :imit_shared, :imit_client_service, :imit_client_entity]
+    generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
         artifact_type != :message || !artifact.any_non_standard_types?

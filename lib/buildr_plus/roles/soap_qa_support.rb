@@ -16,7 +16,9 @@ BuildrPlus::Roles.role(:soap_qa_support) do
   BuildrPlus::FeatureManager.ensure_activated(:soap)
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    Domgen::Build.define_generate_task([:ee_data_types, :ee_exceptions, :jws_fake_server], :buildr_project => project)
+    generators = [:ee_data_types, :ee_exceptions, :jws_fake_server]
+    generators += project.additional_domgen_generators
+    Domgen::Build.define_generate_task(generators, :buildr_project => project)
   end
 
   project.publish = true

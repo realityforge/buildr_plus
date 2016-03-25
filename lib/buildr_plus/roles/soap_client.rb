@@ -15,7 +15,11 @@
 BuildrPlus::Roles.role(:soap_client) do
   BuildrPlus::FeatureManager.ensure_activated(:soap)
 
-  Domgen::Build.define_generate_task([:jws_client], :buildr_project => project) if BuildrPlus::FeatureManager.activated?(:domgen)
+  if BuildrPlus::FeatureManager.activated?(:domgen)
+    generators = [:jws_client]
+    generators += project.additional_domgen_generators
+    Domgen::Build.define_generate_task(generators, :buildr_project => project)
+  end
 
   project.publish = true
 

@@ -18,6 +18,8 @@ BuildrPlus::Roles.role(:model_qa_support) do
     generators << [:jpa_main_qa, :jpa_main_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
     generators << [:ejb_main_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
 
+    generators += project.additional_domgen_generators
+
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
   end
 

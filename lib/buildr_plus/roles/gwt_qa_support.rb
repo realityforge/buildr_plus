@@ -16,7 +16,9 @@ BuildrPlus::Roles.role(:gwt_qa_support) do
   BuildrPlus::FeatureManager.ensure_activated(:gwt)
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    Domgen::Build.define_generate_task([:imit_client_main_qa, :gwt_rpc_module], :buildr_project => project)
+    generators = [:imit_client_main_qa, :gwt_rpc_module]
+    generators += project.additional_domgen_generators
+    Domgen::Build.define_generate_task(generators, :buildr_project => project)
   end
 
   compile.with BuildrPlus::Libs.guiceyloops_gwt
