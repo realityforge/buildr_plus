@@ -35,6 +35,7 @@ BuildrPlus::Roles.role(:server) do
 
     generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
     generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
+    generators << [:jms] if BuildrPlus::FeatureManager.activated?(:jms)
 
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
   end
