@@ -12,4 +12,4 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:soap => [:xml])
+BuildrPlus::FeatureManager.feature(:soap => [:ejb, :xml])
