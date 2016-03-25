@@ -18,7 +18,7 @@ require 'buildr/single_intermediate_layout'
 require 'buildr/git_auto_version'
 require 'buildr/top_level_generate_dir'
 
-BuildrPlus::FeatureManager.activate_features([:repositories, :idea_codestyle, :roles, :product_version, :dialect_mapping, :libs, :publish, :whitespace, :gitignore, :ci])
+BuildrPlus::FeatureManager.activate_features([:repositories, :idea, :idea_codestyle, :roles, :product_version, :dialect_mapping, :libs, :publish, :whitespace, :gitignore, :ci])
 
 BuildrPlus::FeatureManager.activate_feature(:dbt) if BuildrPlus::Util.is_dbt_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:domgen) if BuildrPlus::Util.is_domgen_gem_present?
