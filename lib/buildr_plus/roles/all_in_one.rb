@@ -19,12 +19,8 @@ BuildrPlus::Roles.role(:all_in_one) do
     generators = [:ee_data_types, :ee_web_xml, :ee_beans_xml]
     if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:jpa]
-      generators << [:jpa_ejb_dao, :jpa_dao_test] if BuildrPlus::FeatureManager.activated?(:ejb)
-
-      if BuildrPlus::FeatureManager.activated?(:gwt)
-        generators << [:imit_server_entity_listener]
-        generators << [:imit_server_entity_replication]
-      end
+      generators << [:jpa_test_qa, :jpa_test_qa_external, :jpa_ejb_dao, :jpa_dao_test] if BuildrPlus::FeatureManager.activated?(:ejb)
+      generators << [:imit_server_entity_listener, :imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:gwt)
     end
 
     generators << [:gwt_rpc_shared, :gwt_rpc_server, :imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:gwt)
@@ -37,7 +33,7 @@ BuildrPlus::Roles.role(:all_in_one) do
       end
     end
 
-    generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
+    generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ejb_test_qa_external, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
     generators << [:jaxb_marshalling_tests, :xml_xsd_resources, :xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
     generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
