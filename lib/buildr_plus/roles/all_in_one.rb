@@ -57,7 +57,15 @@ BuildrPlus::Roles.role(:all_in_one) do
     war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
     war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)
     war.include assets.to_s, :as => '.' if BuildrPlus::FeatureManager.activated?(:gwt) || BuildrPlus::FeatureManager.activated?(:less)
+  check package(:war), 'should contain generated gwt artifacts' do
+    it.should contain("#{project.root_project.name}/#{project.root_project.name}.nocache.js")
+  end if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:user_experience)
+  check package(:war), 'should contain web.xml' do
+    it.should contain('WEB-INF/web.xml')
   end
+  check package(:war), 'should not contain less files' do
+    it.should_not contain('**/*.less')
+  end if BuildrPlus::FeatureManager.activated?(:less)
 
   iml.add_jpa_facet if BuildrPlus::FeatureManager.activated?(:db)
   iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
