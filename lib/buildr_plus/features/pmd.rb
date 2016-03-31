@@ -29,7 +29,7 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
 
   f.enhance(:ProjectExtension) do
     first_time do
-      require 'buildr_plus/patches/pmd'
+      require 'buildr/pmd'
     end
 
     before_define do |project|

@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-expected_version = '1.4.23'
+expected_version = '1.4.24'
 if Buildr::VERSION != expected_version
   raise "buildr_plus expected Buidlr version #{expected_version} but Buildrs actual version is #{Buildr::VERSION}"
 end
@@ -24,10 +24,7 @@ require 'buildr_plus/feature_manager'
 require 'buildr_plus/util'
 
 # Patches that should always be applied
-require 'buildr_plus/patches/activate_jruby_facet'
-require 'buildr_plus/patches/idea_patch'
 require 'buildr_plus/patches/project_patch'
-require 'buildr_plus/patches/projects_patch'
 
 require 'buildr_plus/features/artifact_assets'
 require 'buildr_plus/features/calendar_date_select'

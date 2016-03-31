@@ -19,7 +19,7 @@ BuildrPlus::FeatureManager.feature(:findbugs) do |f|
 
   f.enhance(:ProjectExtension) do
     first_time do
-      require 'buildr_plus/patches/findbugs'
+      require 'buildr/findbugs'
     end
 
     before_define do |project|

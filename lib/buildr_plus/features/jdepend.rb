@@ -19,7 +19,7 @@ BuildrPlus::FeatureManager.feature(:jdepend) do |f|
 
   f.enhance(:ProjectExtension) do
     first_time do
-      require 'buildr_plus/patches/jdepend'
+      require 'buildr/jdepend'
     end
 
     before_define do |project|

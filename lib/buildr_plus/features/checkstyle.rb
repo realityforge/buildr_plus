@@ -29,7 +29,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
   f.enhance(:ProjectExtension) do
     first_time do
-      require 'buildr_plus/patches/checkstyle'
+      require 'buildr/checkstyle'
     end
 
     before_define do |project|
