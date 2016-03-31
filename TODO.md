@@ -14,3 +14,5 @@
 * Add in role for rails apps
 * The all_in_one role has significant overlap with model, server and container roles. Should we consider
   extracting commonality somehow?
+* Generate a basic checkstyle import-control based on roles and then semantically merge it into any user
+  supplied import-control.
