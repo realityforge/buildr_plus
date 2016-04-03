@@ -15,6 +15,10 @@
 module BuildrPlus
   class ExtensionRegistry
     class << self
+      def activating?
+        !!@activating
+      end
+
       def activated?
         !!@activated
       end
@@ -48,6 +52,8 @@ module BuildrPlus
       end
 
       def activate!
+        @activating = true
+        BuildrPlus::FeatureManager.deactivate_pending
         @activated = true
         raw_extensions.each do |extension|
           Buildr::Project.class_eval do |p|

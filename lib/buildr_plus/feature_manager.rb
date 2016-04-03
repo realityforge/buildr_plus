@@ -124,17 +124,32 @@ module BuildrPlus #nodoc
 
       def deactivate_feature(feature_key)
         feature = feature_by_name(feature_key)
-        return unless feature.activated?
+        if BuildrPlus::ExtensionRegistry.activating? || BuildrPlus::ExtensionRegistry.activated?
+          return unless feature.activated?
 
-        feature_map.values.each do |f|
-          if f.required_features.include?(feature_key)
-            deactivate_feature(f.key)
+          feature_map.values.each do |f|
+            if f.required_features.include?(feature_key)
+              deactivate_feature(f.key)
+            end
           end
+          feature.deactivate
+        else
+          pending_deactivates << feature_key
         end
-        feature.deactivate
+      end
+
+      def deactivate_pending
+        pending_deactivates.each do |feature_key|
+          deactivate_feature(feature_key)
+        end
+        pending_deactivates.clear
       end
 
       private
+
+      def pending_deactivates
+        @pending_deactivates ||= []
+      end
 
       # Map a feature key to a feature.
       def feature_map
