@@ -74,7 +74,7 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
                 vendor/docs/**/*
             )
       excludes.concat(BuildrPlus::Rails.additional_warble_excludes)
-      excludes.concat(BuildrPlus::Sass.sass_paths.collect { |p| [p, "#{p}/**/*"] }.flatten) if BuildrPlus::FeatureManager.activated?(:sass)
+      excludes.concat(BuildrPlus::Sass.default_sass_paths.collect { |p| [p, "#{p}/**/*"] }.flatten) if BuildrPlus::FeatureManager.activated?(:sass)
 
       warbler_config = Warbler::Config.new do |config|
         config.dirs = code_dirs
