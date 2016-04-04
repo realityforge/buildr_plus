@@ -12,6 +12,8 @@
 # limitations under the License.
 #
 
+raise 'Patch applied in latest release of buildr' if Buildr::VERSION > '1.4.24'
+
 class Buildr::Project
   def root_project
     p = project
