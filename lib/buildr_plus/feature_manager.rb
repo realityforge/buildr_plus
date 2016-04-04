@@ -122,6 +122,12 @@ module BuildrPlus #nodoc
         feature.activate
       end
 
+      def deactivate_features(features)
+        features.each do |feature_key|
+          deactivate_feature(feature_key)
+        end
+      end
+
       def deactivate_feature(feature_key)
         feature = feature_by_name(feature_key)
         if BuildrPlus::ExtensionRegistry.activating? || BuildrPlus::ExtensionRegistry.activated?
