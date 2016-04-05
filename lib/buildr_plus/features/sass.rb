@@ -48,10 +48,7 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
     end
 
     before_define do |project|
-      p = project
-      while p.parent
-        p = p.parent
-      end
+      p = project.root_project
       p.clean { rm_rf p._('.sass-cache') }
       if p.iml?
         p.iml.excluded_directories << p._('.sass-cache')
