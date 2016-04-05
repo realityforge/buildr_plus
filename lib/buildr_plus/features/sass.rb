@@ -50,9 +50,7 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
     before_define do |project|
       p = project.root_project
       p.clean { rm_rf p._('.sass-cache') }
-      if p.iml?
-        p.iml.excluded_directories << p._('.sass-cache')
-      end
+      p.iml.excluded_directories << p._('.sass-cache') if p.iml?
 
       desc "Precompile assets for #{project.name}"
       t = project.task('assets:precompile') do
