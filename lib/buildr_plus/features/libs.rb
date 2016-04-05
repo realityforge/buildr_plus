@@ -14,6 +14,10 @@
 
 BuildrPlus::FeatureManager.feature(:libs) do |f|
   f.enhance(:Config) do
+    def javacsv
+      %w(net.sourceforge.javacsv:javacsv:jar:2.1)
+    end
+
     def geolatte_geom
       %w(org.geolatte:geolatte-geom:jar:0.13)
     end
