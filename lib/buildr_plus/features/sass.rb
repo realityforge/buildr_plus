@@ -70,7 +70,7 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
 
       project.clean do
         if BuildrPlus::FeatureManager.activated?(:rails)
-          project.sass_paths.select { |p| File.directory?(p) }.each do |sass_path|
+          project.sass_paths.select { |sass_path| File.directory?(sass_path) }.each do |sass_path|
             Dir["#{sass_path}/**/[^_]*.s[ac]ss"].each do |sass_file|
               FileUtils.rm_f project.to_target_file(sass_path, sass_file)
             end
