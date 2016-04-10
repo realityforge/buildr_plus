@@ -156,7 +156,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops_gwt
-      %w(org.realityforge.guiceyloops:guiceyloops:jar:0.66) + self.mockito + self.guice + self.testng
+      %w(org.realityforge.guiceyloops:guiceyloops:jar:0.67) + self.mockito + self.guice + self.testng
     end
 
     def slf4j
