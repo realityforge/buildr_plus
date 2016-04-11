@@ -47,7 +47,7 @@ BuildrPlus::FeatureManager.feature(:publish) do |f|
 
           if BuildrPlus::Db.is_multi_database_project?
             # Assume this is run with DB_TYPE as mssql or unset
-            group = "#{pkg.to_hash[:group]}#{BuildrPlus::Db.artifact_suffix}"
+            group = "#{pkg.to_hash[:group]}#{BuildrPlus::Db.artifact_suffix(:pgsql)}"
             a = Buildr.artifact(pkg.to_hash.merge(:version => publish_version, :group => group))
             a.invoke
             a.upload

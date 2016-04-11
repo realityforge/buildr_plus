@@ -75,8 +75,8 @@ BuildrPlus::FeatureManager.feature(:db) do |f|
       self.db_type == :pgsql
     end
 
-    def artifact_suffix
-      pgsql? ? '.pg' :''
+    def artifact_suffix(dbt_type = self.db_type)
+      dbt_type == :pgsql ? '.pg' :''
     end
   end
 end
