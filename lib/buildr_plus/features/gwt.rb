@@ -98,7 +98,7 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
     def gwt_modules
       unless @gwt_modules
         @gwt_modules =
-          project.resources.sources.collect do |path|
+          (project.iml.main_generated_resource_directories + project.resources.sources).uniq.collect do |path|
             Dir["#{path}/**/*.gwt.xml"].collect do |gwt_module|
               length = path.to_s.length
               gwt_module[length + 1, gwt_module.length - length - 9].gsub('/', '.')
