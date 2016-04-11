@@ -75,7 +75,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant
-      %w(org.realityforge.replicant:replicant:jar:0.5.54)
+      %w(org.realityforge.replicant:replicant:jar:0.5.55)
     end
 
     def gwt_property_source
