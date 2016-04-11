@@ -120,7 +120,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def simple_session_filter
-      %w(org.realityforge.ssf:simple-session-filter:jar:0.5)
+      %w(org.realityforge.ssf:simple-session-filter:jar:0.6)
     end
 
     def field_filter
