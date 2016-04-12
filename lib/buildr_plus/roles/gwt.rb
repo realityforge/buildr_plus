@@ -37,12 +37,12 @@ BuildrPlus::Roles.role(:gwt) do
 
   BuildrPlus::Gwt.add_source_to_jar(project)
 
+  p = project.root_project
+
   # This compile exists to verify that module is independently compilable
-  BuildrPlus::Gwt.define_gwt_task(project)
+  BuildrPlus::Gwt.define_gwt_task(project, ".#{BuildrPlus::Naming.pascal_case(p.name)}")
 
   BuildrPlus::Gwt.define_gwt_idea_facet(project)
-
-  p = project.root_project
 
   check package(:jar), 'should contain generated source files' do
     it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.class")
