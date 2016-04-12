@@ -1,0 +1,33 @@
+diff --git a/lib/buildr_plus/features/glassfish.rb b/lib/buildr_plus/features/glassfish.rb
+index fd528f2..8148252 100644
+--- a/lib/buildr_plus/features/glassfish.rb
++++ b/lib/buildr_plus/features/glassfish.rb
+@@ -18,6 +18,10 @@ BuildrPlus::FeatureManager.feature(:glassfish) do |f|
+       @packaged_apps ||= {}
+     end
+ 
++    def only_only_packaged_apps
++      @only_only_packaged_apps ||= {}
++    end
++
+     def remote_only_packaged_apps
+       @remote_only_packaged_apps ||= {}
+     end
+diff --git a/lib/buildr_plus/roles/container.rb b/lib/buildr_plus/roles/container.rb
+index 660ed02..03753f2 100644
+--- a/lib/buildr_plus/roles/container.rb
++++ b/lib/buildr_plus/roles/container.rb
+@@ -98,10 +98,12 @@ BuildrPlus::Roles.role(:container) do
+                                     :packaged => local_packaged_apps)
+ 
+     if local_packaged_apps.size > 0
++      only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
+       ipr.add_glassfish_configuration(project,
+                                       :configuration_name => "#{BuildrPlus::Naming.pascal_case(project.name)} Only - Payara 4.1.1.154",
+                                       :server_name => 'Payara 4.1.1.154',
+-                                      :exploded => [project.name])
++                                      :exploded => [project.name],
++                                      :packaged => only_packaged_apps)
+     end
+ 
+     if BuildrPlus::FeatureManager.activated?(:user_experience)

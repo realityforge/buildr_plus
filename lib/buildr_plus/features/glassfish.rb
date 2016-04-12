@@ -18,6 +18,10 @@ BuildrPlus::FeatureManager.feature(:glassfish) do |f|
       @packaged_apps ||= {}
     end
 
+    def only_only_packaged_apps
+      @only_only_packaged_apps ||= {}
+    end
+
     def remote_only_packaged_apps
       @remote_only_packaged_apps ||= {}
     end
