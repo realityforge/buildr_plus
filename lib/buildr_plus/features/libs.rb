@@ -136,7 +136,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_server
-      self.replicant + self.simple_session_filter + self.gwt_datatypes + self.jackson_gwt_support + self.gwt_servlet + self.field_filter
+      self.replicant + self.simple_session_filter + self.gwt_rpc + self.field_filter
+    end
+
+    def gwt_rpc
+      self.gwt_datatypes + self.jackson_gwt_support + self.gwt_servlet
     end
 
     def guice
