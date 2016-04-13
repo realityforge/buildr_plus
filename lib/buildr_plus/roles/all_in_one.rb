@@ -59,8 +59,8 @@ BuildrPlus::Roles.role(:all_in_one) do
   package(:war).tap do |war|
     war.libs.clear
     war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
-    war.libs artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
-    war.libs artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
+    war.libs << artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
+    war.libs << artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
     war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)
     if BuildrPlus::FeatureManager.activated?(:sass)
       project.sass_paths.each do |sass_path|
