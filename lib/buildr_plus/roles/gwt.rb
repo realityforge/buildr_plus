@@ -47,6 +47,7 @@ BuildrPlus::Roles.role(:gwt) do
   BuildrPlus::Gwt.define_gwt_idea_facet(project)
 
   check package(:jar), 'should contain generated source files' do
+    it.should contain("#{p.group.gsub('.', '/')}/client/ioc/#{BuildrPlus::Naming.pascal_case(p.name)}GwtRpcServicesModule.class")
     if BuildrPlus::FeatureManager.activated?(:replicant)
       it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.class")
       it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.java")
