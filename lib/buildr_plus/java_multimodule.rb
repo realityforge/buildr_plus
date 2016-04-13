@@ -15,6 +15,7 @@
 require 'buildr_plus/java'
 
 base_directory = File.dirname(Buildr.application.buildfile.to_s)
+BuildrPlus::FeatureManager.activate_features([:gwt]) if File.exist?("#{base_directory}/gwt")
 BuildrPlus::FeatureManager.activate_features([:shared]) if File.exist?("#{base_directory}/shared/src/main/java")
 BuildrPlus::FeatureManager.activate_features([:user_experience]) if File.exist?("#{base_directory}/user-experience/src/main/java")
 BuildrPlus::FeatureManager.activate_features([:selenium]) if File.exist?("#{base_directory}/selenium-tests/src/test/java")
