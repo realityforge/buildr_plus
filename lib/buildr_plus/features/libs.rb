@@ -14,6 +14,11 @@
 
 BuildrPlus::FeatureManager.feature(:libs) do |f|
   f.enhance(:Config) do
+
+    def mustache
+      %w(com.github.spullara.mustache.java:compiler:jar:0.8.15)
+    end
+
     def javacsv
       %w(net.sourceforge.javacsv:javacsv:jar:2.1)
     end
