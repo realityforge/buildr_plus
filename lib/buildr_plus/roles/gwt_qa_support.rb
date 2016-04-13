@@ -15,6 +15,8 @@
 BuildrPlus::Roles.role(:gwt_qa_support) do
   BuildrPlus::FeatureManager.ensure_activated(:gwt)
 
+  project.publish = BuildrPlus::Artifacts.gwt?
+
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:gwt_rpc_module]
     generators += [:imit_client_main_qa]  if BuildrPlus::FeatureManager.activated?(:replicant)
