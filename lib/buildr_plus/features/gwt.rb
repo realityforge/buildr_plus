@@ -79,7 +79,7 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
       if gwt_modules.empty?
         puts "Unable to determine top level gwt modules for project '#{project.name}'."
         puts 'Please specify modules via project.top_level_gwt_modules setting or name'
-        puts "module '#{project.guess_gwt_module_name(suffix)}' or with suffix '#{suffix}'."
+        puts "with suffix '#{suffix}'."
 
         raise "Unable to determine top level gwt modules for project '#{project.name}'"
       end
