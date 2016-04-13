@@ -142,7 +142,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
       package_actions = %w(ci:setup clean)
       package_no_test_actions = %w(ci:no_test_setup clean)
 
-      if BuildrPlus::FeatureManager.activated?(:rptman)
+      if BuildrPlus::FeatureManager.activated?(:rptman) && ENV['RPTMAN'] != 'no'
         commit_actions << 'rptman:setup'
         pull_request_actions << 'rptman:setup'
       end
@@ -172,7 +172,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         end
       end
 
-      if BuildrPlus::FeatureManager.activated?(:rptman)
+      if BuildrPlus::FeatureManager.activated?(:rptman) && ENV['RPTMAN'] != 'no'
         commit_actions << 'rptman:ssrs:upload'
         pull_request_actions << 'rptman:ssrs:upload'
       end
@@ -199,7 +199,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
       pull_request_actions.concat(BuildrPlus::Ci.additional_pull_request_actions)
 
-      if BuildrPlus::FeatureManager.activated?(:rptman)
+      if BuildrPlus::FeatureManager.activated?(:rptman) && ENV['RPTMAN'] != 'no'
         commit_actions << 'rptman:ssrs:delete'
         pull_request_actions << 'rptman:ssrs:delete'
       end
