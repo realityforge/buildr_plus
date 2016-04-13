@@ -20,7 +20,7 @@ BuildrPlus::Roles.role(:model) do
 
       generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
 
-      generators << [:imit_server_entity_listener] if BuildrPlus::FeatureManager.activated?(:gwt)
+      generators << [:imit_server_entity_listener] if BuildrPlus::FeatureManager.activated?(:replicant)
     end
 
     generators << [:jaxb_marshalling_tests, :xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)

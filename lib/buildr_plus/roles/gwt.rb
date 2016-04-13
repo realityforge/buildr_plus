@@ -16,7 +16,8 @@ BuildrPlus::Roles.role(:gwt) do
   BuildrPlus::FeatureManager.ensure_activated(:gwt)
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :imit_shared, :imit_client_service, :imit_client_entity]
+    generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso]
+    generators += [:imit_shared, :imit_client_service, :imit_client_entity] if BuildrPlus::FeatureManager.activated?(:replicant)
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
@@ -25,8 +26,9 @@ BuildrPlus::Roles.role(:gwt) do
     end
   end
 
-  compile.with BuildrPlus::Libs.findbugs_provided,
-               BuildrPlus::Libs.replicant_client
+  compile.with BuildrPlus::Libs.findbugs_provided, BuildrPlus::Libs.gwt_gin
+
+  compile.with BuildrPlus::Libs.replicant_client if BuildrPlus::FeatureManager.activated?(:replicant)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
 
@@ -45,7 +47,9 @@ BuildrPlus::Roles.role(:gwt) do
   BuildrPlus::Gwt.define_gwt_idea_facet(project)
 
   check package(:jar), 'should contain generated source files' do
-    it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.class")
-    it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.java")
+    if BuildrPlus::FeatureManager.activated?(:replicant)
+      it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.class")
+      it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.java")
+    end
   end
 end

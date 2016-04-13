@@ -20,10 +20,11 @@ BuildrPlus::Roles.role(:all_in_one) do
     if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:jpa]
       generators << [:jpa_test_qa, :jpa_test_qa_external, :jpa_ejb_dao, :jpa_dao_test] if BuildrPlus::FeatureManager.activated?(:ejb)
-      generators << [:imit_server_entity_listener, :imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:gwt)
+      generators << [:imit_server_entity_listener, :imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
     end
 
-    generators << [:gwt_rpc_shared, :gwt_rpc_server, :imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:gwt)
+    generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
+    generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
     if BuildrPlus::FeatureManager.activated?(:sync)
       if BuildrPlus::Sync.standalone?

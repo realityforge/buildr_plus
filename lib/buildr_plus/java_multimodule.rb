@@ -19,6 +19,7 @@ BuildrPlus::FeatureManager.activate_features([:shared]) if File.exist?("#{base_d
 BuildrPlus::FeatureManager.activate_features([:user_experience]) if File.exist?("#{base_directory}/user-experience/src/main/java")
 BuildrPlus::FeatureManager.activate_features([:selenium]) if File.exist?("#{base_directory}/selenium-tests/src/test/java")
 BuildrPlus::FeatureManager.activate_features([:less]) if File.exist?("#{base_directory}/server/#{BuildrPlus::Less.default_less_path}")
+BuildrPlus::FeatureManager.activate_features([:replicant]) if BuildrPlus::FeatureManager.activated?(:gwt)
 
 if BuildrPlus::FeatureManager.activated?(:shared)
   BuildrPlus::Roles.project('shared', :roles => [:shared], :parent => :container, :template => true, :description => 'Shared Components')

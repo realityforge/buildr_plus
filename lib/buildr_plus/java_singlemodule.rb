@@ -16,6 +16,7 @@ require 'buildr_plus/java'
 
 base_directory = File.dirname(Buildr.application.buildfile.to_s)
 BuildrPlus::FeatureManager.activate_features([:less]) if File.exist?("#{base_directory}/#{BuildrPlus::Less.default_less_path}")
+BuildrPlus::FeatureManager.activate_features([:replicant]) if BuildrPlus::FeatureManager.activated?(:gwt)
 
 BuildrPlus::Roles.default_role = :all_in_one
 BuildrPlus::ExtensionRegistry.auto_activate!
