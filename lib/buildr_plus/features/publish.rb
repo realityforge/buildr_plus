@@ -28,6 +28,17 @@ BuildrPlus::FeatureManager.feature(:publish) do |f|
         end
       end
 
+      desc 'List artifacts that will be published'
+      task 'list_published' do
+        Buildr.projects.each do |project|
+          if project.publish?
+            project.packages.each do |a|
+              puts a.to_spec
+            end
+          end
+        end
+      end
+
       desc 'Upload all specified artifacts'
       task 'upload_published' do
         Buildr.projects.each do |project|
