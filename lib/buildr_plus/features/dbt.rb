@@ -54,6 +54,7 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
               desc 'DB Archive'
               define 'db' do
                 project.no_iml
+                project.publish = BuildrPlus::Artifacts.db?
                 Dbt.define_database_package(:default, :include_code => !BuildrPlus::Dbt.library?)
               end
             end

@@ -30,7 +30,7 @@ BuildrPlus::Roles.role(:model) do
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
   end
 
-  project.publish = true
+  project.publish = BuildrPlus::Artifacts.model?
 
   compile.using :javac
   compile.with BuildrPlus::Libs.ee_provided

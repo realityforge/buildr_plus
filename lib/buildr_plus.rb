@@ -27,6 +27,7 @@ require 'buildr_plus/util'
 require 'buildr_plus/patches/project_patch'
 
 require 'buildr_plus/features/artifact_assets'
+require 'buildr_plus/features/artifacts'
 require 'buildr_plus/features/calendar_date_select'
 require 'buildr_plus/features/checkstyle'
 require 'buildr_plus/features/ci'

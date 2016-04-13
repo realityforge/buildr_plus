@@ -13,7 +13,7 @@
 #
 
 BuildrPlus::Roles.role(:shared) do
-  project.publish = true
+  project.publish = BuildrPlus::Artifacts.model? || BuildrPlus::Artifacts.gwt?
 
   package(:jar)
   package(:sources)

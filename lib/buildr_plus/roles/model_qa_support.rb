@@ -23,7 +23,7 @@ BuildrPlus::Roles.role(:model_qa_support) do
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
   end
 
-  project.publish = true
+  project.publish = BuildrPlus::Artifacts.model?
 
   compile.with BuildrPlus::Libs.guiceyloops
 
