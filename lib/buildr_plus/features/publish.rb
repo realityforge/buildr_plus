@@ -21,14 +21,14 @@ BuildrPlus::FeatureManager.feature(:publish) do |f|
     end
 
     first_time do
-      desc 'Publish all specified artifacts '
+      desc 'Publish all specified artifacts'
       task 'publish' do
         Buildr.projects.each do |project|
           project.task('publish').invoke if project.publish?
         end
       end
 
-      desc 'Upload all specified artifacts '
+      desc 'Upload all specified artifacts'
       task 'upload_published' do
         Buildr.projects.each do |project|
           project.task('upload_published').invoke if project.publish?
