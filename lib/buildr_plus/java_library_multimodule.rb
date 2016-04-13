@@ -14,6 +14,7 @@
 
 require 'buildr_plus/java'
 
+BuildrPlus::Dbt.library = true
 BuildrPlus::Artifacts.library = true
 BuildrPlus::Artifacts.war = false
 
