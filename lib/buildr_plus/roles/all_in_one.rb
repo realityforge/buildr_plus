@@ -50,6 +50,11 @@ BuildrPlus::Roles.role(:all_in_one) do
   compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:soap) || BuildrPlus::FeatureManager.activated?(:db)
 
   compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
+  if BuildrPlus::FeatureManager.activated?(:geolatte)
+    compile.with artifacts(BuildrPlus::Libs.geolatte_geom)
+    compile.with artifacts(BuildrPlus::Libs.geolatte_support)
+    compile.with artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
+  end
   compile.with artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
   compile.with artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
 
@@ -59,6 +64,11 @@ BuildrPlus::Roles.role(:all_in_one) do
   package(:war).tap do |war|
     war.libs.clear
     war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
+    if BuildrPlus::FeatureManager.activated?(:geolatte)
+      war.libs << artifacts(BuildrPlus::Libs.geolatte_geom)
+      war.libs << artifacts(BuildrPlus::Libs.geolatte_support)
+      war.libs << artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
+    end
     war.libs << artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
     war.libs << artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
     war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)

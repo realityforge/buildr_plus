@@ -47,6 +47,11 @@ BuildrPlus::Roles.role(:library) do
   project.publish = true
 
   compile.with artifacts(Object.const_get(:LIBRARY_DEPS)) if Object.const_defined?(:LIBRARY_DEPS)
+  if BuildrPlus::FeatureManager.activated?(:geolatte)
+    compile.with artifacts(BuildrPlus::Libs.geolatte_geom)
+    compile.with artifacts(BuildrPlus::Libs.geolatte_support)
+    compile.with artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
+  end
   compile.with artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
   compile.with artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
 

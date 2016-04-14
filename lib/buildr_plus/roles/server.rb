@@ -61,6 +61,11 @@ BuildrPlus::Roles.role(:server) do
   package(:war).tap do |war|
     war.libs.clear
     war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
+    if BuildrPlus::FeatureManager.activated?(:geolatte)
+      war.libs << artifacts(BuildrPlus::Libs.geolatte_geom)
+      war.libs << artifacts(BuildrPlus::Libs.geolatte_support)
+      war.libs << artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
+    end
     war.libs << artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
     war.libs << artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
     BuildrPlus::Roles.buildr_projects_with_role(:shared).each do |dep|
