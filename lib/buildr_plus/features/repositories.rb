@@ -17,6 +17,9 @@ BuildrPlus::FeatureManager.feature(:repositories) do |f|
     first_time do
       Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/public')
       Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/groups/fisg')
+      if BuildrPlus::FeatureManager.activated?(:geolatte)
+        Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/repositories/osgeo')
+      end
     end
   end
 end
