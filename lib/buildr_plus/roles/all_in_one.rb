@@ -141,6 +141,13 @@ BuildrPlus::Roles.role(:all_in_one) do
 
   dependencies = [project]
   dependencies << Object.const_get(:PACKAGED_DEPS) if Object.const_defined?(:PACKAGED_DEPS)
+  if BuildrPlus::FeatureManager.activated?(:geolatte)
+    dependencies << artifacts(BuildrPlus::Libs.geolatte_geom)
+    dependencies << artifacts(BuildrPlus::Libs.geolatte_support)
+    dependencies << artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
+  end
+  dependencies << artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
+  dependencies << artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
 
   war_module_names = [project.iml.name]
   jpa_module_names = BuildrPlus::FeatureManager.activated?(:db) ? [project.iml.name] : []
