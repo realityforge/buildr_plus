@@ -23,6 +23,19 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(net.sourceforge.javacsv:javacsv:jar:2.1)
     end
 
+    def geotools_for_geolatte
+      %w(org.geotools:gt-main:jar:9.4 org.geotools:gt-metadata:jar:9.4 org.geotools:gt-api:jar:9.4 org.geotools:gt-epsg-wkt:jar:9.4 org.geotools:gt-opengis:jar:9.4 org.geotools:gt-transform:jar:9.4 org.geotools:gt-geometry:jar:9.4 org.geotools:gt-jts-wrapper:jar:9.4 org.geotools:gt-referencing:jar:9.4 net.java.dev.jsr-275:jsr-275:jar:1.0-beta-2 java3d:vecmath:jar:1.3.2 javax.media:jai_core:jar:1.1.3)
+    end
+
+    def jts
+      %w(com.vividsolutions:jts:jar:1.13)
+    end
+
+    # Support geo libraries for geolatte
+    def geolatte_support
+      self.jts + self.geotools_for_geolatte + self.slf4j
+    end
+
     def geolatte_geom
       %w(org.geolatte:geolatte-geom:jar:0.13)
     end
