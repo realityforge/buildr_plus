@@ -17,7 +17,7 @@ BuildrPlus::Roles.role(:model) do
     generators = [:ee_data_types]
     if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:jpa_orm_xml, :jpa_model, :jpa_ejb_dao]
-      generators << [:jpa_persistence_xml] unless BuildrPlus::Dbt.library?
+      generators << [:jpa_persistence_xml] if BuildrPlus::Artifacts.is_model_standalone?
 
       generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
 
@@ -58,10 +58,10 @@ BuildrPlus::Roles.role(:model) do
 
     check package(:jar), 'should contain resources and generated classes' do
       it.should contain('META-INF/orm.xml')
-      if BuildrPlus::Dbt.library?
-        it.should_not contain('META-INF/persistence.xml')
-      else
+      if BuildrPlus::Artifacts.is_model_standalone?
         it.should contain('META-INF/persistence.xml')
+      else
+        it.should_not contain('META-INF/persistence.xml')
       end
       it.should contain("#{project.root_project.group.gsub('.','/')}/server/entity/#{BuildrPlus::Naming.pascal_case(project.root_project.name)}PersistenceUnit.class")
     end
