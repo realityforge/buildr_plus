@@ -31,4 +31,8 @@ BuildrPlus::Roles.role(:model_qa_support) do
 
   package(:jar)
   package(:sources)
+
+  check package(:jar), 'should contain generated classes' do
+    it.should contain("#{project.root_project.group.gsub('.','/')}/server/test/util/#{BuildrPlus::Naming.pascal_case(project.root_project.name)}RepositoryModule.class")
+  end
 end
