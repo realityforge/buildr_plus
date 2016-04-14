@@ -28,7 +28,9 @@ if BuildrPlus::FeatureManager.activated?(:shared)
 end
 BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
 BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :parent => :container, :template => true, :description => 'Model Test Infrastructure')
-BuildrPlus::Roles.project('server', :roles => [:library], :parent => :container, :template => true, :description => 'Library Archive')
+if File.exist?("#{base_directory}/server")
+  BuildrPlus::Roles.project('server', :roles => [:library], :parent => :container, :template => true, :description => 'Library Archive')
+end
 
 if BuildrPlus::FeatureManager.activated?(:gwt)
   BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :template => true, :description => 'GWT Library')
