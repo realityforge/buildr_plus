@@ -18,6 +18,8 @@ BuildrPlus::Roles.role(:server) do
     if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:jpa_dao_test]
 
+      generators << [:jpa_test_orm_xml, :jpa_test_persistence_xml] unless BuildrPlus::Artifacts.is_model_standalone?
+
       generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
     end
 
