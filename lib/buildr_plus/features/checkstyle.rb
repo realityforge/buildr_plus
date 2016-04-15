@@ -223,14 +223,10 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
     before_define do |project|
       if project.ipr?
-        BuildrPlus::Checkstyle.setup_checkstyle_import_rules(project)
-
         project.checkstyle.config_directory = project._('etc/checkstyle')
         project.checkstyle.configuration_artifact = BuildrPlus::Checkstyle.checkstyle_rules
 
         import_control_present = File.exist?(project.checkstyle.import_control_file)
-
-        BuildrPlus::Checkstyle::Parser.merge_existing_import_control_file(project)
 
         unless File.exist?(project.checkstyle.suppressions_file)
           dir = File.expand_path(File.dirname(__FILE__))
@@ -267,6 +263,9 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
     after_define do |project|
       if project.ipr?
+        BuildrPlus::Checkstyle.setup_checkstyle_import_rules(project)
+        BuildrPlus::Checkstyle::Parser.merge_existing_import_control_file(project)
+
         project.checkstyle.additional_project_names =
           BuildrPlus::Findbugs.additional_project_names || BuildrPlus::Util.subprojects(project)
       end
