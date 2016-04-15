@@ -132,7 +132,7 @@ XML
           elsif name =~ /^#{Regexp.replace(root.name)}\./
             root.subpackage(name[root.name.length + 1, name.length])
           else
-            raise "Unable to merge checkstyle import rules at #{filename} into rules with base at #{root.name}"
+            raise "Unable to merge checkstyle import rules at #{filename} with base #{name} into rules with base at #{root.name}"
           end
 
         parse_package_elements(base, doc.root.elements)
