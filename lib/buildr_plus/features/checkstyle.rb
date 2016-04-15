@@ -184,6 +184,8 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
       if BuildrPlus::FeatureManager.activated?(:ejb)
         r.subpackage_rule('server.entity', 'javax.persistence')
+        r.subpackage_rule('server.entity', "#{g}.server.data_type")
+        r.subpackage_rule('server.entity', "#{g}.server.entity")
       end
 
       if BuildrPlus::FeatureManager.activated?(:ejb)
@@ -191,6 +193,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server', 'javax.enterprise.context.ApplicationScoped', :rule_type => :class)
         r.subpackage_rule('server', 'javax.transaction.Transactional', :rule_type => :class)
         r.subpackage_rule('server', 'javax.enterprise.inject.Typed', :rule_type => :class)
+        r.subpackage_rule('server', 'javax.enterprise.inject.Produces', :rule_type => :class)
         r.subpackage_rule('server', 'javax.inject')
         r.subpackage_rule('server', 'javax.ejb')
         r.subpackage_rule('server', 'javax.ejb.EJB', :rule_type => :class, :disallow => true)
@@ -199,6 +202,12 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.service', "#{g}.server.data_type")
         r.subpackage_rule('server.service', "#{g}.server.entity")
         r.subpackage_rule('server.service', "#{g}.server.service")
+        r.subpackage_rule('server.service', 'javax.persistence')
+        if BuildrPlus::FeatureManager.activated?(:replicant)
+          r.subpackage_rule('server.service', "#{g}.server.net")
+          r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessage', :rule_type => :class)
+          r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessageSet', :rule_type => :class)
+        end
       end
 
       if BuildrPlus::FeatureManager.activated?(:jaxrs)
@@ -208,6 +217,34 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.rest', "#{g}.server.data_type")
         r.subpackage_rule('server.rest', "#{g}.server.entity")
         r.subpackage_rule('server.rest', "#{g}.server.service")
+        if BuildrPlus::FeatureManager.activated?(:replicant)
+          r.subpackage_rule('server.rest', 'org.realityforge.replicant.server.ee.rest')
+        end
+
+        r.subpackage_rule('server.filter', 'java.io.IOException', :rule_type => :class)
+        r.subpackage_rule('server.filter', 'javax.servlet')
+        r.subpackage_rule('server.filter', "#{g}.server.data_type")
+        r.subpackage_rule('server.filter', "#{g}.server.entity")
+        r.subpackage_rule('server.filter', "#{g}.server.service")
+
+        r.subpackage_rule('server.servlet', 'java.io.IOException', :rule_type => :class)
+        r.subpackage_rule('server.servlet', 'javax.servlet')
+        r.subpackage_rule('server.servlet', "#{g}.server.data_type")
+        r.subpackage_rule('server.servlet', "#{g}.server.entity")
+        r.subpackage_rule('server.servlet', "#{g}.server.service")
+      end
+      r.subpackage_rule('server.test.util', "#{g}.server.data_type")
+      r.subpackage_rule('server.test.util', "#{g}.server.entity")
+      r.subpackage_rule('server.test.util', "#{g}.server.service")
+      r.subpackage_rule('server.test.util', 'org.testng')
+      r.subpackage_rule('server.test.util', 'org.mockito')
+      r.subpackage_rule('server.test.util', 'org.realityforge.guiceyloops')
+      r.subpackage_rule('server.test.util', 'com.google.inject')
+      r.subpackage_rule('server.test.util', 'javax.persistence')
+
+      if BuildrPlus::FeatureManager.activated?(:replicant)
+        r.subpackage_rule('server.test.util', "#{g}.server.net")
+        r.subpackage_rule('server.test.util', 'javax.transaction.TransactionSynchronizationRegistry', :rule_type => :class)
       end
     end
   end
