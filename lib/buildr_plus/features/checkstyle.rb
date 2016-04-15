@@ -182,6 +182,23 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
       r.rule('java.util')
 
+      if BuildrPlus::FeatureManager.activated?(:gwt)
+        r.subpackage_rule('client', 'org.realityforge.gwt.datatypes.client.date')
+        r.subpackage_rule('client', 'javax.inject.Inject', :rule_type => :class)
+        r.subpackage_rule('client', 'javax.inject.Provider', :rule_type => :class)
+        r.subpackage_rule('client', 'javax.inject.Named', :rule_type => :class)
+        r.subpackage_rule('client', "#{g}.shared")
+        r.subpackage_rule('client', "#{g}.client")
+        r.subpackage_rule('client.ioc', 'javax.inject')
+        r.subpackage_rule('client.ioc', 'com.google.inject')
+        r.subpackage_rule('client.ioc', 'com.google.gwt.inject.client')
+
+        if BuildrPlus::FeatureManager.activated?(:replicant)
+          r.subpackage_rule('client', 'org.realityforge.replicant.shared')
+          r.subpackage_rule('client', 'org.realityforge.replicant.client')
+        end
+      end
+
       if BuildrPlus::FeatureManager.activated?(:ejb)
         r.subpackage_rule('server.entity', 'javax.persistence')
         r.subpackage_rule('server.entity', "#{g}.server.data_type")
