@@ -240,6 +240,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.rest', "#{g}.server.data_type")
         r.subpackage_rule('server.rest', "#{g}.server.entity")
         r.subpackage_rule('server.rest', "#{g}.server.service")
+        r.subpackage_rule('server.rest', "#{g}.server.rest")
         if BuildrPlus::FeatureManager.activated?(:replicant)
           r.subpackage_rule('server.rest', 'org.realityforge.replicant.server.ee.rest')
         end
