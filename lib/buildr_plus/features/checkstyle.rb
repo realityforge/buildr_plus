@@ -243,12 +243,14 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         end
 
         r.subpackage_rule('server.filter', 'java.io.IOException', :rule_type => :class)
+        r.subpackage_rule('server.filter', 'java.io.InputStream', :rule_type => :class)
         r.subpackage_rule('server.filter', 'javax.servlet')
         r.subpackage_rule('server.filter', "#{g}.server.data_type")
         r.subpackage_rule('server.filter', "#{g}.server.entity")
         r.subpackage_rule('server.filter', "#{g}.server.service")
 
         r.subpackage_rule('server.servlet', 'java.io.IOException', :rule_type => :class)
+        r.subpackage_rule('server.servlet', 'java.io.InputStream', :rule_type => :class)
         r.subpackage_rule('server.servlet', 'javax.servlet')
         r.subpackage_rule('server.servlet', "#{g}.server.data_type")
         r.subpackage_rule('server.servlet', "#{g}.server.entity")
