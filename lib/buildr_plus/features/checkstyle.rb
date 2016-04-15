@@ -202,9 +202,9 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:jaxrs)
-        r.subpackage_rule('server', 'javax.ws.rs')
-        r.subpackage_rule('server', 'javax.json')
-        r.subpackage_rule('server', 'javax.xml')
+        r.subpackage_rule('server.rest', 'javax.ws.rs')
+        r.subpackage_rule('server.rest', 'javax.json')
+        r.subpackage_rule('server.rest', 'javax.xml')
         r.subpackage_rule('server.rest', "#{g}.server.data_type")
         r.subpackage_rule('server.rest', "#{g}.server.entity")
         r.subpackage_rule('server.rest', "#{g}.server.service")
