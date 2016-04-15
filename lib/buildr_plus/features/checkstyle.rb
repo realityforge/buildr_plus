@@ -183,7 +183,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       r.rule('java.util')
 
       if BuildrPlus::FeatureManager.activated?(:ejb)
-        r.subpackage_rule('server.entity', 'javax.jpa')
+        r.subpackage_rule('server.entity', 'javax.persistence')
       end
 
       if BuildrPlus::FeatureManager.activated?(:ejb)
