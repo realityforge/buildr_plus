@@ -129,7 +129,7 @@ XML
         base =
           if name == root.name
             root
-          elsif name =~ /^#{Regexp.replace(root.name)}\./
+          elsif name =~ /^#{Regexp.escape(root.name)}\./
             root.subpackage(name[root.name.length + 1, name.length])
           else
             raise "Unable to merge checkstyle import rules at #{filename} with base #{name} into rules with base at #{root.name}"
