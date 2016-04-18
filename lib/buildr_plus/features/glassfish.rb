@@ -29,5 +29,9 @@ BuildrPlus::FeatureManager.feature(:glassfish) do |f|
     def non_remote_only_packaged_apps
       @non_remote_only_packaged_apps ||= {}
     end
+
+    def addtional_default_testng_args
+      @addtional_default_testng_args ||= []
+    end
   end
 end

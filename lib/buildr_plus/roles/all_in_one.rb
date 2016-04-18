@@ -137,6 +137,8 @@ BuildrPlus::Roles.role(:all_in_one) do
     end
   end
 
+  default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
+
   ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))
 
   dependencies = [project]

@@ -54,6 +54,8 @@ BuildrPlus::Roles.role(:container) do
     end
   end
 
+  default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
+
   ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))
 
   # Need to use definitions as projects have yet to be when resolving
