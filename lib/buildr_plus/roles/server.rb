@@ -52,8 +52,8 @@ BuildrPlus::Roles.role(:server) do
   compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:soap)
 
   compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
-  compile.with artifacts(BuildrPlus::Appconfig.appconfig_server) if BuildrPlus::FeatureManager.activated?(:appconfig)
-  compile.with artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
+  compile.with artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
+  compile.with artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
   compile.with artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
   compile.with artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
 
@@ -71,8 +71,8 @@ BuildrPlus::Roles.role(:server) do
       war.libs << artifacts(BuildrPlus::Libs.geolatte_support)
       war.libs << artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
     end
-    war.libs << artifacts(BuildrPlus::Appconfig.appconfig_server) if BuildrPlus::FeatureManager.activated?(:appconfig)
-    war.libs << artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
+    war.libs << artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
+    war.libs << artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
     war.libs << artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
     war.libs << artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
     BuildrPlus::Roles.buildr_projects_with_role(:shared).each do |dep|

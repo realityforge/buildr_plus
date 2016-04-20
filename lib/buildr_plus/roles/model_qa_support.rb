@@ -26,8 +26,8 @@ BuildrPlus::Roles.role(:model_qa_support) do
   project.publish = BuildrPlus::Artifacts.model?
 
   compile.with BuildrPlus::Libs.guiceyloops
-  compile.with artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa]) if BuildrPlus::FeatureManager.activated?(:appconfig)
-  compile.with artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
+  compile.with artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
+  compile.with artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
 
