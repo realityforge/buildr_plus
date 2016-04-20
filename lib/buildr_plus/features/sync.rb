@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:sync) do |f|
+BuildrPlus::FeatureManager.feature(:sync => [:syncrecord]) do |f|
   f.enhance(:Config) do
     attr_writer :standalone
 

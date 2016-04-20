@@ -56,11 +56,14 @@ BuildrPlus::Roles.role(:all_in_one) do
     compile.with artifacts(BuildrPlus::Libs.geolatte_support)
     compile.with artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
   end
+  compile.with artifacts(BuildrPlus::Appconfig.appconfig_server) if BuildrPlus::FeatureManager.activated?(:appconfig)
+  compile.with artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
   compile.with artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
   compile.with artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
 
   test.with BuildrPlus::Libs.guiceyloops,
             BuildrPlus::Libs.db_drivers
+  test.with artifacts([BuildrPlus::Syncrecord.syncrecord_server_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
 
   package(:war).tap do |war|
     war.libs.clear
@@ -70,6 +73,8 @@ BuildrPlus::Roles.role(:all_in_one) do
       war.libs << artifacts(BuildrPlus::Libs.geolatte_support)
       war.libs << artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
     end
+    war.libs << artifacts(BuildrPlus::Appconfig.appconfig_server) if BuildrPlus::FeatureManager.activated?(:appconfig)
+    war.libs << artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
     war.libs << artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
     war.libs << artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
     war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)
@@ -148,6 +153,8 @@ BuildrPlus::Roles.role(:all_in_one) do
     dependencies << artifacts(BuildrPlus::Libs.geolatte_support)
     dependencies << artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
   end
+  dependencies << artifacts(BuildrPlus::Appconfig.appconfig_server) if BuildrPlus::FeatureManager.activated?(:appconfig)
+  dependencies << artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
   dependencies << artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
   dependencies << artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
 
