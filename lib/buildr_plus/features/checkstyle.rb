@@ -260,6 +260,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.rest', 'iris.appconfig.server.entity')
         end
         if BuildrPlus::FeatureManager.activated?(:syncrecord)
+          r.subpackage_rule('server.rest', 'iris.syncrecord.server.data_type')
           r.subpackage_rule('server.rest', 'iris.syncrecord.server.rest')
           r.subpackage_rule('server.rest', 'iris.syncrecord.server.entity')
         end
