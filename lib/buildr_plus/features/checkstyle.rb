@@ -232,6 +232,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         end
 
         if BuildrPlus::FeatureManager.activated?(:appconfig)
+          r.subpackage_rule('server.service', 'iris.appconfig.server.entity')
           r.subpackage_rule('server.service', 'iris.appconfig.server.service')
         end
         if BuildrPlus::FeatureManager.activated?(:syncrecord)
@@ -247,6 +248,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.rest', 'javax.json')
         r.subpackage_rule('server.rest', 'javax.xml')
         r.subpackage_rule('server.rest', 'javax.validation')
+        r.subpackage_rule('server.rest', 'javax.servlet')
         r.subpackage_rule('server.rest', "#{g}.server.data_type")
         r.subpackage_rule('server.rest', "#{g}.server.entity")
         r.subpackage_rule('server.rest', "#{g}.server.service")
