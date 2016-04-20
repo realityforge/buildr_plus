@@ -63,7 +63,8 @@ BuildrPlus::Roles.role(:all_in_one) do
 
   test.with BuildrPlus::Libs.guiceyloops,
             BuildrPlus::Libs.db_drivers
-  test.with artifacts([BuildrPlus::Syncrecord.syncrecord_server_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
+  test.with artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa]) if BuildrPlus::FeatureManager.activated?(:appconfig)
+  test.with artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_qa, BuildrPlus::Syncrecord.syncrecord_server_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
 
   package(:war).tap do |war|
     war.libs.clear
