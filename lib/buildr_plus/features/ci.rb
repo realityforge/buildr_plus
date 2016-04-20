@@ -100,7 +100,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         if dbt_present && ci_config_exist
           database_config = if !BuildrPlus::Db.is_multi_database_project? || BuildrPlus::Db.mssql?
             'config/ci-database.yml'
-          elsif BuildrPlus::Db.is_multi_database_project? || BuildrPlus::Db.pgsql?
+          else
             # Assume that a multi database project defaults to sql server and has second yml for pg
             'config/ci-pg-database.yml'
           end
