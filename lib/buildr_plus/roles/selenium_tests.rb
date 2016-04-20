@@ -28,7 +28,7 @@ BuildrPlus::Roles.role(:selenium_tests) do
 
   test.with BuildrPlus::Libs.db_drivers
 
-  test.exclude "#{root_project.group}.*" unless ENV['ENABLE_SELENIUM'] == 'true'
+  test.exclude "#{root_project.group_as_package}.*" unless ENV['ENABLE_SELENIUM'] == 'true'
 
   test.using :java_args => BuildrPlus::Guiceyloops.integration_test_java_args,
              :properties =>

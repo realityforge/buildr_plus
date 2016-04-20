@@ -88,7 +88,7 @@ BuildrPlus::FeatureManager.feature(:gwt) do |f|
 
     def guess_gwt_module_name(suffix = '')
       p = self.root_project
-      "#{p.group}.#{BuildrPlus::Naming.pascal_case(p.name)}#{suffix}"
+      "#{p.group_as_package}.#{p.name_as_class}#{suffix}"
     end
 
     def gwt_module?(module_name)

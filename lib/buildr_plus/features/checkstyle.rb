@@ -176,7 +176,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
     def setup_checkstyle_import_rules(project)
       r = project.import_rules
-      g = project.group
+      g = project.group_as_package
       r.rule('edu.umd.cs.findbugs.annotations.SuppressFBWarnings', :rule_type => :class)
       r.rule('edu.umd.cs.findbugs.annotations.SuppressWarnings', :rule_type => :class, :disallow => true)
 
@@ -277,7 +277,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
   f.enhance(:ProjectExtension) do
     def import_rules
-      @import_rules ||= BuildrPlus::Checkstyle::Subpackage.new(nil, self.root_project.group)
+      @import_rules ||= BuildrPlus::Checkstyle::Subpackage.new(nil, self.root_project.group_as_package)
     end
 
     first_time do

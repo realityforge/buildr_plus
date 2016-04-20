@@ -44,15 +44,15 @@ BuildrPlus::Roles.role(:gwt) do
   p = project.root_project
 
   # This compile exists to verify that module is independently compilable
-  BuildrPlus::Gwt.define_gwt_task(project, ".#{BuildrPlus::Naming.pascal_case(p.name)}")
+  BuildrPlus::Gwt.define_gwt_task(project, ".#{p.name_as_class}")
 
   BuildrPlus::Gwt.define_gwt_idea_facet(project)
 
   check package(:jar), 'should contain generated source files' do
-    it.should contain("#{p.group.gsub('.', '/')}/client/ioc/#{BuildrPlus::Naming.pascal_case(p.name)}GwtRpcServicesModule.class")
+    it.should contain("#{p.group_as_path}/client/ioc/#{p.name_as_class}GwtRpcServicesModule.class")
     if BuildrPlus::FeatureManager.activated?(:replicant)
-      it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.class")
-      it.should contain("#{p.group.gsub('.', '/')}/shared/net/#{BuildrPlus::Naming.pascal_case(p.name)}ReplicationGraph.java")
+      it.should contain("#{p.group_as_path}/shared/net/#{p.name_as_class}ReplicationGraph.class")
+      it.should contain("#{p.group_as_path}/shared/net/#{p.name_as_class}ReplicationGraph.java")
     end
   end
 end

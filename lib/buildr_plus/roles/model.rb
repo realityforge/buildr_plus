@@ -63,7 +63,7 @@ BuildrPlus::Roles.role(:model) do
       else
         it.should_not contain('META-INF/persistence.xml')
       end
-      it.should contain("#{project.root_project.group.gsub('.','/')}/server/entity/#{BuildrPlus::Naming.pascal_case(project.root_project.name)}PersistenceUnit.class")
+      it.should contain("#{project.root_project.group_as_path}/server/entity/#{project.root_project.name_as_class}PersistenceUnit.class")
     end
 
     iml.add_jpa_facet
