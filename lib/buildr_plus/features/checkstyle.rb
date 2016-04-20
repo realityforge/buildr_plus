@@ -230,6 +230,15 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessage', :rule_type => :class)
           r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessageSet', :rule_type => :class)
         end
+
+        if BuildrPlus::FeatureManager.activated?(:appconfig)
+          r.subpackage_rule('server.service', 'iris.appconfig.server.service')
+        end
+        if BuildrPlus::FeatureManager.activated?(:syncrecord)
+          r.subpackage_rule('server.service', 'iris.syncrecord.server.data_type')
+          r.subpackage_rule('server.service', 'iris.syncrecord.server.entity')
+          r.subpackage_rule('server.service', 'iris.syncrecord.server.service')
+        end
       end
 
       if BuildrPlus::FeatureManager.activated?(:jaxrs)
@@ -243,6 +252,16 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.rest', "#{g}.server.rest")
         if BuildrPlus::FeatureManager.activated?(:replicant)
           r.subpackage_rule('server.rest', 'org.realityforge.replicant.server.ee.rest')
+        end
+
+        if BuildrPlus::FeatureManager.activated?(:appconfig)
+          r.subpackage_rule('server.rest', 'org.realityforge.rest.field_filter')
+          r.subpackage_rule('server.rest', 'iris.appconfig.server.rest')
+          r.subpackage_rule('server.rest', 'iris.appconfig.server.entity')
+        end
+        if BuildrPlus::FeatureManager.activated?(:syncrecord)
+          r.subpackage_rule('server.rest', 'iris.syncrecord.server.rest')
+          r.subpackage_rule('server.rest', 'iris.syncrecord.server.entity')
         end
 
         r.subpackage_rule('server.filter', 'java.io.IOException', :rule_type => :class)
