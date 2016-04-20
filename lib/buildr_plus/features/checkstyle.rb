@@ -292,6 +292,18 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.test.util', "#{g}.server.net")
         r.subpackage_rule('server.test.util', 'javax.transaction.TransactionSynchronizationRegistry', :rule_type => :class)
       end
+
+      if BuildrPlus::FeatureManager.activated?(:appconfig)
+        r.subpackage_rule('server.test.util', 'iris.appconfig.server.entity')
+        r.subpackage_rule('server.test.util', 'iris.appconfig.server.service')
+        r.subpackage_rule('server.test.util', 'iris.appconfig.server.test.util')
+      end
+      if BuildrPlus::FeatureManager.activated?(:syncrecord)
+        r.subpackage_rule('server.test.util', 'iris.syncrecord.server.data_type')
+        r.subpackage_rule('server.test.util', 'iris.syncrecord.server.entity')
+        r.subpackage_rule('server.test.util', 'iris.syncrecord.server.service')
+        r.subpackage_rule('server.test.util', 'iris.syncrecord.server.test.util')
+      end
     end
   end
 
