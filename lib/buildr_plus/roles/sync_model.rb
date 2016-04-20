@@ -31,6 +31,9 @@ BuildrPlus::Roles.role(:sync_model) do
   compile.using :javac
   compile.with BuildrPlus::Libs.ee_provided
 
+  compile.with artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter])
+  compile.with artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client])
+
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
 
   package(:jar)
