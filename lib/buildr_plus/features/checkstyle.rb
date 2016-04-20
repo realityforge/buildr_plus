@@ -238,6 +238,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.service', 'iris.syncrecord.server.data_type')
           r.subpackage_rule('server.service', 'iris.syncrecord.server.entity')
           r.subpackage_rule('server.service', 'iris.syncrecord.server.service')
+          r.subpackage_rule('server.service', 'iris.syncrecord.client.rest')
         end
       end
 
