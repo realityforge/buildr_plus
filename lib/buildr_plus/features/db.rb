@@ -67,16 +67,16 @@ BuildrPlus::FeatureManager.feature(:db) do |f|
       raise 'Unable to determine database type'
     end
 
-    def mssql?
-      self.db_type == :mssql
+    def mssql?(dbt_type = self.db_type)
+      dbt_type == :mssql
     end
 
-    def pgsql?
-      self.db_type == :pgsql
+    def pgsql?(dbt_type = self.db_type)
+      dbt_type == :pgsql
     end
 
     def artifact_suffix(dbt_type = self.db_type)
-      dbt_type == :pgsql ? '.pg' : ''
+      (is_multi_database_project? && pgsql?(dbt_type)) ? '.pg' : ''
     end
   end
 end
