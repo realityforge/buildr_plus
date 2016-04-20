@@ -31,6 +31,9 @@ BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :pa
 if File.exist?("#{base_directory}/server")
   BuildrPlus::Roles.project('server', :roles => [:library], :parent => :container, :template => true, :description => 'Library Archive')
 end
+if File.exist?("#{base_directory}/server-qa-support")
+  BuildrPlus::Roles.project('server-qa-support', :roles => [:library_qa_support], :parent => :container, :template => true, :description => 'Library Test Infrastructure')
+end
 
 if BuildrPlus::FeatureManager.activated?(:gwt)
   BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :template => true, :description => 'GWT Library')
