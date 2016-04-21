@@ -78,6 +78,7 @@ BuildrPlus::Roles.role(:container) do
       dependencies << artifacts(BuildrPlus::Libs.geolatte_support)
       dependencies << artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
     end
+    dependencies << artifacts([BuildrPlus::Libs.gwt_cache_filter]) if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
     dependencies << artifacts([BuildrPlus::Timerstatus.timerstatus, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:timerstatus)
     dependencies << artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
     dependencies << artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Libs.mustache]) if BuildrPlus::FeatureManager.activated?(:mail)

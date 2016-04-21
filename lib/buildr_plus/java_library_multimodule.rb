@@ -21,7 +21,10 @@ BuildrPlus::Artifacts.war = false
 base_directory = File.dirname(Buildr.application.buildfile.to_s)
 BuildrPlus::FeatureManager.activate_features([:gwt]) if File.exist?("#{base_directory}/gwt")
 BuildrPlus::FeatureManager.activate_features([:shared]) if File.exist?("#{base_directory}/shared/src/main/java")
-BuildrPlus::FeatureManager.activate_features([:replicant]) if BuildrPlus::FeatureManager.activated?(:gwt)
+if BuildrPlus::FeatureManager.activated?(:gwt)
+  BuildrPlus::FeatureManager.activate_features([:replicant])
+  BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter])
+end
 
 if BuildrPlus::FeatureManager.activated?(:shared)
   BuildrPlus::Roles.project('shared', :roles => [:shared], :parent => :container, :template => true, :description => 'Shared Components')
