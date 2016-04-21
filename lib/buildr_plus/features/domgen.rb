@@ -92,6 +92,18 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
         database.search_dirs = %W(#{BuildrPlus::Domgen.database_target_dir} database) unless database.search_dirs?
         database.enable_domgen
       end
+
+      task 'domgen:postload' do
+        facet_mapping = {:gwt_cache_filter => :gwt_cache_filter}
+
+        Domgen.repositorys.each do |r|
+          facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
+            if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
+              raise "BuildrPlus facet '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."
+            end
+          end
+        end
+      end
     end
   end
 end
