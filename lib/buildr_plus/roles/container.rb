@@ -73,18 +73,8 @@ BuildrPlus::Roles.role(:container) do
 
     dependencies = [server_project, model_project, shared_project].compact
     dependencies << Object.const_get(:PACKAGED_DEPS) if Object.const_defined?(:PACKAGED_DEPS)
-    if BuildrPlus::FeatureManager.activated?(:geolatte)
-      dependencies << artifacts(BuildrPlus::Libs.geolatte_geom)
-      dependencies << artifacts(BuildrPlus::Libs.geolatte_support)
-      dependencies << artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
-    end
-    dependencies << artifacts([BuildrPlus::Libs.gwt_cache_filter]) if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
-    dependencies << artifacts([BuildrPlus::Timerstatus.timerstatus, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:timerstatus)
-    dependencies << artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
-    dependencies << artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Libs.mustache]) if BuildrPlus::FeatureManager.activated?(:mail)
-    dependencies << artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
-    dependencies << artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
-    dependencies << artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
+    dependencies << BuildrPlus::Deps.model_deps
+    dependencies << BuildrPlus::Deps.server_deps
 
     war_module_names = [server_project.iml.name]
     jpa_module_names = []

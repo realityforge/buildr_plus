@@ -39,15 +39,7 @@ BuildrPlus::Roles.role(:model) do
   # Our JPA beans are occasionally generated with eclipselink specific artifacts
   compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:db)
 
-  if BuildrPlus::FeatureManager.activated?(:geolatte)
-    compile.with artifacts(BuildrPlus::Libs.geolatte_geom)
-    compile.with artifacts(BuildrPlus::Libs.geolatte_support)
-    compile.with artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
-  end
-
-  if BuildrPlus::FeatureManager.activated?(:gwt)
-    compile.with BuildrPlus::Libs.jackson_gwt_support, BuildrPlus::Libs.gwt_datatypes
-  end
+  compile.with BuildrPlus::Deps.model_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
 
