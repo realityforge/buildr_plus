@@ -268,6 +268,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.rest', 'org.realityforge.rest.field_filter')
           r.subpackage_rule('server.rest', 'iris.appconfig.server.rest')
           r.subpackage_rule('server.rest', 'iris.appconfig.server.entity')
+          r.subpackage_rule('server.rest', 'iris.appconfig.server.service')
         end
         if BuildrPlus::FeatureManager.activated?(:syncrecord)
           r.subpackage_rule('server.rest', 'iris.syncrecord.server.data_type')
