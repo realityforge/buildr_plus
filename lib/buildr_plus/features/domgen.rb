@@ -94,7 +94,14 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
       end
 
       task 'domgen:postload' do
-        facet_mapping = {:gwt_cache_filter => :gwt_cache_filter}
+        facet_mapping =
+          {
+            :gwt_cache_filter => :gwt_cache_filter,
+            :appconfig => :appconfig,
+            :syncrecord => :syncrecord,
+            :timerstatus => :timerstatus,
+            :appcache => :appcache
+          }
 
         Domgen.repositorys.each do |r|
           facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
