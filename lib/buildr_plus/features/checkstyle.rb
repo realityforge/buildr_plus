@@ -289,6 +289,9 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.servlet', "#{g}.server.data_type")
         r.subpackage_rule('server.servlet', "#{g}.server.entity")
         r.subpackage_rule('server.servlet', "#{g}.server.service")
+        if BuildrPlus::FeatureManager.activated?(:appcache)
+          r.subpackage_rule('server.servlet', 'org.realityforge.gwt.appcache.server')
+        end
       end
       r.subpackage_rule('server.test.util', "#{g}.server.data_type")
       r.subpackage_rule('server.test.util', "#{g}.server.entity")
