@@ -231,6 +231,10 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessageSet', :rule_type => :class)
         end
 
+        if BuildrPlus::FeatureManager.activated?(:mail)
+          r.subpackage_rule('server.service', 'javax.mail')
+          r.subpackage_rule('server.service', 'iris.mail.server.service')
+        end
         if BuildrPlus::FeatureManager.activated?(:appconfig)
           r.subpackage_rule('server.service', 'iris.appconfig.server.entity')
           r.subpackage_rule('server.service', 'iris.appconfig.server.service')
@@ -300,6 +304,12 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.test.util', 'iris.appconfig.server.entity')
         r.subpackage_rule('server.test.util', 'iris.appconfig.server.service')
         r.subpackage_rule('server.test.util', 'iris.appconfig.server.test.util')
+      end
+      if BuildrPlus::FeatureManager.activated?(:mail)
+        r.subpackage_rule('server.test.util', 'javax.mail')
+        r.subpackage_rule('server.test.util', 'iris.mail.server.entity')
+        r.subpackage_rule('server.test.util', 'iris.mail.server.service')
+        r.subpackage_rule('server.test.util', 'iris.mail.server.test.util')
       end
       if BuildrPlus::FeatureManager.activated?(:syncrecord)
         r.subpackage_rule('server.test.util', 'iris.syncrecord.server.data_type')
