@@ -27,6 +27,8 @@ BuildrPlus::Roles.role(:user_experience) do
 
   project.publish = false
 
+  compile.with BuildrPlus::Deps.user_experience_deps
+
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :gwt_qa_support)
 

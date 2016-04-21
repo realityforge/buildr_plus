@@ -24,6 +24,7 @@ BuildrPlus::FeatureManager.activate_features([:shared]) if File.exist?("#{base_d
 if BuildrPlus::FeatureManager.activated?(:gwt)
   BuildrPlus::FeatureManager.activate_features([:replicant])
   BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter])
+  BuildrPlus::FeatureManager.activate_features([:appcache])
 end
 
 if BuildrPlus::FeatureManager.activated?(:shared)

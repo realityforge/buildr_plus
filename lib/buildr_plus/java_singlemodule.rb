@@ -19,6 +19,7 @@ BuildrPlus::FeatureManager.activate_features([:less]) if File.exist?("#{base_dir
 if BuildrPlus::FeatureManager.activated?(:gwt)
   BuildrPlus::FeatureManager.activate_features([:replicant])
   BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter])
+  BuildrPlus::FeatureManager.activate_features([:appcache])
 end
 
 BuildrPlus::Roles.default_role = :all_in_one
