@@ -92,21 +92,31 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
         database.search_dirs = %W(#{BuildrPlus::Domgen.database_target_dir} database) unless database.search_dirs?
         database.enable_domgen
       end
+    end
 
-      task 'domgen:postload' do
-        facet_mapping =
-          {
-            :gwt_cache_filter => :gwt_cache_filter,
-            :appconfig => :appconfig,
-            :syncrecord => :syncrecord,
-            :timerstatus => :timerstatus,
-            :appcache => :appcache
-          }
+    after_define do |project|
+      if project.ipr?
+        project.task(':domgen:postload') do
+          facet_mapping =
+            {
+              :gwt_cache_filter => :gwt_cache_filter,
+              :appconfig => :appconfig,
+              :syncrecord => :syncrecord,
+              :timerstatus => :timerstatus,
+              :appcache => :appcache
+            }
 
-        Domgen.repositorys.each do |r|
-          facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
-            if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
-              raise "BuildrPlus facet '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."
+          Domgen.repositorys.each do |r|
+            if r.java?
+              if r.java.base_package != project.group_as_package
+                raise "Buildr projects group '#{project.group_as_package}' expected to match domgens 'java.base_package' setting ('#{r.java.base_package}') but it does not."
+              end
+            end
+
+            facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
+              if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
+                raise "BuildrPlus facet '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."
+              end
             end
           end
         end
