@@ -41,6 +41,7 @@ BuildrPlus::Roles.role(:all_in_one) do
     generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
 
     generators << [:jms] if BuildrPlus::FeatureManager.activated?(:jms)
+    generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
 
     generators += project.additional_domgen_generators
 
