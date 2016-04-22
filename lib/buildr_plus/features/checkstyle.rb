@@ -197,6 +197,9 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('client', 'org.realityforge.replicant.shared')
           r.subpackage_rule('client', 'org.realityforge.replicant.client')
         end
+        if BuildrPlus::FeatureManager.activated?(:appcache)
+          r.subpackage_rule('client', 'org.realityforge.gwt.appcache.client', :local_only => true)
+        end
       end
 
       if BuildrPlus::FeatureManager.activated?(:ejb)
