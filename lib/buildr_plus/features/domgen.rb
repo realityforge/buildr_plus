@@ -63,6 +63,12 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
     def database_target_dir=(database_target_dir)
       @database_target_dir = database_target_dir
     end
+
+    def enforce_postload_constraints?
+      @enforce_postload_constraints.nil? ? true : !!@enforce_postload_constraints
+    end
+
+    attr_writer :enforce_postload_constraints
   end
 
   f.enhance(:ProjectExtension) do
@@ -97,32 +103,34 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
     after_define do |project|
       if project.ipr?
         project.task(':domgen:postload') do
-          facet_mapping =
-            {
-              :mail => :mail,
-              :soap => :jws,
-              :gwt => :gwt,
-              :replicant => :imit,
-              :gwt_cache_filter => :gwt_cache_filter,
-              :appconfig => :appconfig,
-              :syncrecord => :syncrecord,
-              :timerstatus => :timerstatus,
-              :appcache => :appcache
-            }
+          if BuildrPlus::Domgen.enforce_postload_constraints?
+            facet_mapping =
+              {
+                :mail => :mail,
+                :soap => :jws,
+                :gwt => :gwt,
+                :replicant => :imit,
+                :gwt_cache_filter => :gwt_cache_filter,
+                :appconfig => :appconfig,
+                :syncrecord => :syncrecord,
+                :timerstatus => :timerstatus,
+                :appcache => :appcache
+              }
 
-          Domgen.repositorys.each do |r|
-            if r.java?
-              if r.java.base_package != project.group_as_package
-                raise "Buildr projects group '#{project.group_as_package}' expected to match domgens 'java.base_package' setting ('#{r.java.base_package}') but it does not."
+            Domgen.repositorys.each do |r|
+              if r.java?
+                if r.java.base_package != project.group_as_package
+                  raise "Buildr projects group '#{project.group_as_package}' expected to match domgens 'java.base_package' setting ('#{r.java.base_package}') but it does not."
+                end
               end
-            end
 
-            facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
-              if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
-                raise "BuildrPlus feature '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."
-              end
-              if !BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && r.facet_enabled?(domgen_facet)
-                raise "Domgen facet '#{domgen_facet}' requires that buildrPlus feature '#{buildr_plus_facet}' is enabled but it is not."
+              facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
+                if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
+                  raise "BuildrPlus feature '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."
+                end
+                if !BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && r.facet_enabled?(domgen_facet)
+                  raise "Domgen facet '#{domgen_facet}' requires that buildrPlus feature '#{buildr_plus_facet}' is enabled but it is not."
+                end
               end
             end
           end
