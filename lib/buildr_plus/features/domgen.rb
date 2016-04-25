@@ -99,6 +99,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
         project.task(':domgen:postload') do
           facet_mapping =
             {
+              :mail => :mail,
               :soap => :jws,
               :gwt => :gwt,
               :replicant => :imit,
