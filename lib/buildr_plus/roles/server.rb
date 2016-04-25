@@ -41,6 +41,7 @@ BuildrPlus::Roles.role(:server) do
     generators << [:jms] if BuildrPlus::FeatureManager.activated?(:jms)
     generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
     generators << [:appcache] if BuildrPlus::FeatureManager.activated?(:appcache)
+    generators << [:mail] if BuildrPlus::FeatureManager.activated?(:mail)
 
     generators += project.additional_domgen_generators
 
