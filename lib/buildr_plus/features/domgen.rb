@@ -118,7 +118,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
 
             facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
               if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
-                raise "BuildrPlus facet '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."
+                raise "BuildrPlus feature '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."
               end
             end
           end
