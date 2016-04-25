@@ -34,7 +34,7 @@ BuildrPlus::Roles.role(:library) do
       end
     end
 
-    generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
+    generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
     generators << [:jms] if BuildrPlus::FeatureManager.activated?(:jms)
     generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
