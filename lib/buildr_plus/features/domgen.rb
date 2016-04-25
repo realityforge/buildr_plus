@@ -99,6 +99,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
         project.task(':domgen:postload') do
           facet_mapping =
             {
+              :soap => :jws,
               :gwt => :gwt,
               :replicant => :imit,
               :gwt_cache_filter => :gwt_cache_filter,
