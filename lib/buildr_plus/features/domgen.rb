@@ -99,6 +99,8 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
         project.task(':domgen:postload') do
           facet_mapping =
             {
+              :gwt => :gwt,
+              :replicant => :imit,
               :gwt_cache_filter => :gwt_cache_filter,
               :appconfig => :appconfig,
               :syncrecord => :syncrecord,
