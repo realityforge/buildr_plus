@@ -13,6 +13,14 @@
 #
 
 BuildrPlus::Roles.role(:integration_qa_support) do
+  if BuildrPlus::FeatureManager.activated?(:domgen)
+    generators = [:ee_integration]
+    generators << [:imit_integration_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+    generators += project.additional_domgen_generators
+
+    Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
+  end
+
   project.publish = false
 
   compile.with BuildrPlus::Libs.glassfish_embedded
