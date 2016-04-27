@@ -185,6 +185,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       if BuildrPlus::FeatureManager.activated?(:gwt)
         r.subpackage_rule('client', 'org.realityforge.gwt.datatypes.client.date')
         r.subpackage_rule('client', 'javax.inject.Inject', :rule_type => :class)
+        r.subpackage_rule('client', 'com.google.inject.Inject', :rule_type => :class, :disallow => true)
         r.subpackage_rule('client', 'javax.inject.Provider', :rule_type => :class)
         r.subpackage_rule('client', 'javax.inject.Named', :rule_type => :class)
         r.subpackage_rule('client', "#{g}.shared")
