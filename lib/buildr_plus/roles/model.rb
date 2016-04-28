@@ -26,6 +26,8 @@ BuildrPlus::Roles.role(:model) do
 
     generators << [:jaxb_marshalling_tests, :xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
 
+    generators << [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig) && BuildrPlus::Roles.buildr_projects_with_role(:shared).size == 0
+
     generators += project.additional_domgen_generators
 
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
