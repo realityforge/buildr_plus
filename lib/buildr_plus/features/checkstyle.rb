@@ -182,6 +182,10 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
       r.rule('java.util')
 
+      if BuildrPlus::FeatureManager.activated?(:appconfig)
+        r.rule("#{g}.shared.#{project.name_as_class}FeatureFlags", :rule_type => :class)
+      end
+
       if BuildrPlus::FeatureManager.activated?(:gwt)
         r.subpackage_rule('client', 'org.realityforge.gwt.datatypes.client.date')
         r.subpackage_rule('client', 'javax.inject.Inject', :rule_type => :class)
