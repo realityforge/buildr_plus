@@ -13,6 +13,15 @@
 #
 
 BuildrPlus::Roles.role(:shared) do
+  if BuildrPlus::FeatureManager.activated?(:domgen)
+    generators = []
+    generators << [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
+
+    generators += project.additional_domgen_generators
+
+    Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
+  end
+
   project.publish = BuildrPlus::Artifacts.model? || BuildrPlus::Artifacts.gwt?
 
   package(:jar)

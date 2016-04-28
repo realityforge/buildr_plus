@@ -43,6 +43,7 @@ BuildrPlus::Roles.role(:all_in_one) do
     generators << [:jms] if BuildrPlus::FeatureManager.activated?(:jms)
     generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
     generators << [:mail_mail_queue, :mail_test_module] if BuildrPlus::FeatureManager.activated?(:mail)
+    generators << [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
 
     generators += project.additional_domgen_generators
 

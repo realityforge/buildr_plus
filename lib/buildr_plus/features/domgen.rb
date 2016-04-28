@@ -92,6 +92,9 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
         if BuildrPlus::FeatureManager.activated?(:sync)
           generators << (BuildrPlus::Db.mssql? ? :sync_sql : :sync_pgsql)
         end
+        if BuildrPlus::FeatureManager.activated?(:appconfig)
+          generators << (BuildrPlus::Db.mssql? ? :appconfig_mssql : :appconfig_pgsql)
+        end
         Domgen::Build.define_generate_task(generators, :key => :sql, :target_dir => BuildrPlus::Domgen.database_target_dir)
 
         database = Dbt.repository.database_for_key(:default)
