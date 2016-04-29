@@ -44,6 +44,7 @@ BuildrPlus::Roles.role(:all_in_one) do
     generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
     generators << [:mail_mail_queue, :mail_test_module] if BuildrPlus::FeatureManager.activated?(:mail)
     generators << [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
+    generators << [:syncrecord_datasources, :syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
 
     generators += project.additional_domgen_generators
 

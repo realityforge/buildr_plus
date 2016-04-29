@@ -16,6 +16,7 @@ BuildrPlus::Roles.role(:shared) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = []
     generators << [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
+    generators << [:syncrecord_datasources] if BuildrPlus::FeatureManager.activated?(:syncrecord)
 
     generators += project.additional_domgen_generators
 
