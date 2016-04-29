@@ -16,6 +16,7 @@ BuildrPlus::Roles.role(:integration_tests) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = []
     generators << [:appconfig_integration_test] if BuildrPlus::FeatureManager.activated?(:appconfig)
+    generators << [:syncrecord_integration_test] if BuildrPlus::FeatureManager.activated?(:syncrecord)
     generators << [:timerstatus_integration_test] if BuildrPlus::FeatureManager.activated?(:timerstatus)
     generators += project.additional_domgen_generators
 
