@@ -13,4 +13,40 @@
 #
 
 # Enable this feature if the code is "open source" code
-BuildrPlus::FeatureManager.feature(:oss => [:github])
+BuildrPlus::FeatureManager.feature(:oss => [:github]) do |f|
+  f.enhance(:ProjectExtension) do
+    task 'oss:check_license' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      unless File.exist?("#{base_directory}/LICENSE")
+        raise 'No LICENSE file present for project. Please run "buildr oss:fix_license" and commit changes.'
+      end
+    end
+
+    task 'oss:fix_license' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      license_filename = "#{base_directory}/LICENSE"
+      unless File.exist?(license_filename)
+        FileUtils.cp "#{File.dirname(__FILE__)}/../../../LICENSE", license_filename
+      end
+    end
+
+    task 'oss:check_contributing' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      unless File.exist?("#{base_directory}/CONTRIBUTING.md")
+        raise 'No CONTRIBUTING.md file present for project. Please run "buildr oss:fix_contributing" and commit changes.'
+      end
+    end
+
+    task 'oss:fix_contributing' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      contributing_filename = "#{base_directory}/CONTRIBUTING.md"
+      unless File.exist?(contributing_filename)
+        FileUtils.cp "#{File.dirname(__FILE__)}/../../../CONTRIBUTING.md", contributing_filename
+      end
+    end
+
+    task 'oss:check' => %w(oss:check_license oss:check_contributing)
+
+    task 'oss:fix' => %w(oss:fix_license oss:fix_contributing)
+  end
+end

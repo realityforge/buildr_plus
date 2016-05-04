@@ -217,6 +217,11 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         pull_request_actions << 'gitignore:check'
       end
 
+      if BuildrPlus::FeatureManager.activated?(:oss)
+        commit_actions << 'oss:check'
+        pull_request_actions << 'oss:check'
+      end
+
       desc 'Perform pre-commit checks and source code analysis'
       task 'ci:commit' => commit_actions
 
