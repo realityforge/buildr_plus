@@ -16,9 +16,16 @@ BuildrPlus::FeatureManager.feature(:repositories) do |f|
   f.enhance(:ProjectExtension) do
     first_time do
       Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/public')
-      Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/groups/fisg')
-      if BuildrPlus::FeatureManager.activated?(:geolatte)
-        Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/repositories/osgeo')
+      if BuildrPlus::FeatureManager.activated?(:github)
+        Buildr.repositories.remote.unshift('http://repo1.maven.org/maven2')
+        if BuildrPlus::FeatureManager.activated?(:geolatte)
+          Buildr.repositories.remote.unshift('http://download.osgeo.org/webdav/geotools')
+        end
+      else
+        Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/groups/fisg')
+        if BuildrPlus::FeatureManager.activated?(:geolatte)
+          Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/repositories/osgeo')
+        end
       end
     end
   end
