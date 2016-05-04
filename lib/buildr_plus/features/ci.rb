@@ -98,12 +98,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
       desc 'Setup test environment'
       task 'ci:setup' => %w(ci:common_setup) do
         if dbt_present && ci_config_exist
-          database_config = if !BuildrPlus::Db.is_multi_database_project? || BuildrPlus::Db.mssql?
-            'config/ci-database.yml'
-          else
-            # Assume that a multi database project defaults to sql server and has second yml for pg
-            'config/ci-pg-database.yml'
-          end
+          database_config = 'config/ci-database.yml'
           Dbt::Config.config_filename = database_config
           SSRS::Config.config_filename = database_config if BuildrPlus::FeatureManager.activated?(:rptman)
           ENV['DATABASE_YML'] = database_config if BuildrPlus::FeatureManager.activated?(:rails)
