@@ -222,6 +222,11 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         pull_request_actions << 'oss:check'
       end
 
+      if BuildrPlus::FeatureManager.activated?(:travis)
+        commit_actions << 'travis:check'
+        pull_request_actions << 'travis:check'
+      end
+
       desc 'Perform pre-commit checks and source code analysis'
       task 'ci:commit' => commit_actions
 
