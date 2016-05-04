@@ -45,6 +45,7 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
 
     after_define do |buildr_project|
       if buildr_project.ipr?
+        buildr_project.group = "#{buildr_project.group}#{BuildrPlus::Db.artifact_suffix}"
         # Make sure all the data sources in the configuration file are mapped to idea project
         Dbt::Buildr.add_idea_data_sources_from_configuration_file(buildr_project)
 
