@@ -19,6 +19,7 @@ BuildrPlus::FeatureManager.feature(:repositories) do |f|
       Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/public')
       if BuildrPlus::FeatureManager.activated?(:github)
         Buildr.repositories.remote.unshift('http://repo1.maven.org/maven2')
+        Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/oss')
         if BuildrPlus::FeatureManager.activated?(:geolatte)
           Buildr.repositories.remote.unshift('http://download.osgeo.org/webdav/geotools')
         end
