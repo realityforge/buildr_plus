@@ -31,6 +31,12 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
       @library.nil? ? false : @library
     end
 
+    attr_writer :add_dependent_artifacts
+
+    def add_dependent_artifacts?
+      @add_dependent_artifacts.nil? ? !library? : !!@add_dependent_artifacts
+    end
+
     def add_artifact_unless_present(database, artifact)
       artifact_file = ::Buildr.artifact(artifact).to_s
       if !database.pre_db_artifacts.include?(artifact_file) && !database.post_db_artifacts.include?(artifact_file)
@@ -48,14 +54,16 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
         database = Dbt.repository.database_for_key(:default)
         database.search_dirs = %w(database) if !database.search_dirs? && !BuildrPlus::FeatureManager.activated?(:domgen)
 
-        if BuildrPlus::FeatureManager.activated?(:appconfig)
-          BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Appconfig.appconfig_db)
-        end
-        if BuildrPlus::FeatureManager.activated?(:syncrecord)
-          BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Syncrecord.syncrecord_db)
-        end
-        if BuildrPlus::FeatureManager.activated?(:mail)
-          BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Mail.mail_db)
+        if BuildrPlus::Dbt.add_dependent_artifacts?
+          if BuildrPlus::FeatureManager.activated?(:appconfig)
+            BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Appconfig.appconfig_db)
+          end
+          if BuildrPlus::FeatureManager.activated?(:syncrecord)
+            BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Syncrecord.syncrecord_db)
+          end
+          if BuildrPlus::FeatureManager.activated?(:mail)
+            BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Mail.mail_db)
+          end
         end
       end
     end
