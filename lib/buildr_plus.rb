@@ -14,7 +14,7 @@
 
 expected_version = '1.4.25'
 if Buildr::VERSION != expected_version
-  raise "buildr_plus expected Buidlr version #{expected_version} but Buildrs actual version is #{Buildr::VERSION}"
+  raise "buildr_plus expected Buildr version #{expected_version} but actual version is #{Buildr::VERSION}"
 end
 
 require 'buildr_plus/core'
