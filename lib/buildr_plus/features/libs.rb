@@ -53,7 +53,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def glassfish_embedded
-      %w(fish.payara.extras:payara-embedded-all:jar:4.1.1.154)
+      %w(fish.payara.extras:payara-embedded-all:jar:4.1.1.162)
     end
 
     def eclipselink
@@ -178,7 +178,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops_gwt
-      %w(org.realityforge.guiceyloops:guiceyloops:jar:0.69) + self.mockito + self.guice + self.testng
+      %w(org.realityforge.guiceyloops:guiceyloops:jar:0.71) + self.mockito + self.guice + self.testng
     end
 
     def slf4j

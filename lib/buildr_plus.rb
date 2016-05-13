@@ -12,9 +12,9 @@
 # limitations under the License.
 #
 
-expected_version = '1.4.24'
+expected_version = '1.4.25'
 if Buildr::VERSION != expected_version
-  raise "buildr_plus expected Buidlr version #{expected_version} but Buildrs actual version is #{Buildr::VERSION}"
+  raise "buildr_plus expected Buildr version #{expected_version} but actual version is #{Buildr::VERSION}"
 end
 
 require 'buildr_plus/core'
@@ -24,7 +24,6 @@ require 'buildr_plus/feature_manager'
 require 'buildr_plus/util'
 
 # Patches that should always be applied
-require 'buildr_plus/patches/project_patch'
 require 'buildr_plus/patches/group_project_patch'
 
 require 'buildr_plus/features/appcache'
