@@ -167,9 +167,11 @@ BuildrPlus::Roles.role(:all_in_one) do
                                   :packaged => local_packaged_apps)
 
   if local_packaged_apps.size > 0
+    only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
     ipr.add_glassfish_configuration(project,
                                     :configuration_name => "#{BuildrPlus::Naming.pascal_case(project.name)} Only - Payara 4.1.1.154",
                                     :server_name => 'Payara 4.1.1.154',
-                                    :exploded => [project.name])
+                                    :exploded => [project.name],
+                                    :packaged => only_packaged_apps)
   end
 end
