@@ -150,7 +150,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_client
-      self.gwt_gin + self.replicant + self.gwt_property_source + self.gwt_datatypes + self.gwt_webpoller
+      self.replicant + self.gwt_property_source + self.gwt_datatypes + self.gwt_webpoller
     end
 
     def replicant_server
