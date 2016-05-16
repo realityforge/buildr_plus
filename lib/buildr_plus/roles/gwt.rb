@@ -45,7 +45,7 @@ BuildrPlus::Roles.role(:gwt) do
   p = project.root_project
 
   # This compile exists to verify that module is independently compilable
-  BuildrPlus::Gwt.define_gwt_task(project, ".#{p.name_as_class}")
+  BuildrPlus::Gwt.define_gwt_task(project, ".#{p.name_as_class}") if BuildrPlus::Artifacts.library?
 
   BuildrPlus::Gwt.define_gwt_idea_facet(project)
 
