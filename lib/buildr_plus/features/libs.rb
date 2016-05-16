@@ -33,7 +33,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     # Support geo libraries for geolatte
     def geolatte_support
-      self.jts + self.geotools_for_geolatte + self.slf4j
+      self.jts + self.slf4j
     end
 
     def geolatte_geom

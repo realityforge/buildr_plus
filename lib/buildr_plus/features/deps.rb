@@ -21,6 +21,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       if BuildrPlus::FeatureManager.activated?(:geolatte)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_support)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.geotools_for_geolatte) if BuildrPlus::FeatureManager.activated?(:geotools)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
       end
       if BuildrPlus::FeatureManager.activated?(:gwt)
