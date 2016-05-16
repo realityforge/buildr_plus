@@ -201,8 +201,14 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.postgresql:postgresql:jar:9.2-1003-jdbc4)
     end
 
+    def postgis
+      %w(org.postgis:postgis-jdbc:jar:1.3.3)
+    end
+
     def db_drivers
-      (BuildrPlus::Db.tiny_tds_defined? ? self.jtds : []) + (BuildrPlus::Db.pg_defined? ? self.postgresql : [])
+      return self.jtds if BuildrPlus::Db.tiny_tds_defined?
+      return self.postgresql + (BuildrPlus::FeatureManager.activated?(:geolatte) ? self.postgis : []) if BuildrPlus::Db.pg_defined?
+      []
     end
   end
 end
