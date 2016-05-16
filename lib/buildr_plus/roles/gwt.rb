@@ -18,7 +18,7 @@ BuildrPlus::Roles.role(:gwt) do
   project.publish = BuildrPlus::Artifacts.gwt?
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso]
+    generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :auto_bean]
     generators += [:imit_shared, :imit_client_service, :imit_client_entity] if BuildrPlus::FeatureManager.activated?(:replicant)
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
