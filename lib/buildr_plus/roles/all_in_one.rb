@@ -16,7 +16,8 @@ BuildrPlus::Roles.role(:all_in_one) do
   project.publish = true
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:ee_data_types, :ee_web_xml, :ee_beans_xml]
+    generators = [:ee_data_types, :ee_beans_xml]
+    generators << [:ee_web_xml] if BuildrPlus::Artifacts.war?
     if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:jpa]
       generators << [:jpa_test_qa, :jpa_test_qa_external, :jpa_ejb_dao, :jpa_dao_test] if BuildrPlus::FeatureManager.activated?(:ejb)
