@@ -29,6 +29,10 @@ module BuildrPlus
         Object.const_defined?(symbol.to_s)
       end
 
+      def is_redfish_gem_present?
+        is_gem_present?('redfish','Redfish')
+      end
+
       def is_dbt_gem_present?
         is_gem_present?('dbt','Dbt')
       end

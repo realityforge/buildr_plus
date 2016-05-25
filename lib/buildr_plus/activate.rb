@@ -18,3 +18,4 @@ if BuildrPlus::Roles.default_role
 end
 
 BuildrPlus::Roles.define_top_level_projects
+Redfish::Buildr.define_tasks_for_domains if BuildrPlus::FeatureManager.activated?(:redfish)
