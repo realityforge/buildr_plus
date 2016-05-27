@@ -18,6 +18,16 @@ BuildrPlus::FeatureManager.feature(:redfish) do |f|
       require 'redfish'
     end
 
+    before_define do |buildr_project|
+      if buildr_project.ipr?
+        if Redfish.domain_by_key?("local_#{buildr_project.name}")
+          Redfish::Config.default_domain_key = "local_#{buildr_project.name}"
+        elsif Redfish.domain_by_key?(buildr_project.name)
+          Redfish::Config.default_domain_key = buildr_project.name
+        end
+      end
+    end
+
     after_define do |buildr_project|
       if buildr_project.ipr?
 
