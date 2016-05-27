@@ -47,6 +47,8 @@ BuildrPlus::Roles.role(:all_in_one) do
     generators << [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
     generators << [:syncrecord_datasources, :syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
 
+    generators << [:ee_redfish] if BuildrPlus::FeatureManager.activated?(:redfish)
+
     generators += project.additional_domgen_generators
 
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)

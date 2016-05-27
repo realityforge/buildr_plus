@@ -14,6 +14,16 @@
 
 BuildrPlus::Roles.role(:container) do
 
+  if BuildrPlus::FeatureManager.activated?(:domgen)
+    generators = []
+
+    generators << [:ee_redfish] if BuildrPlus::FeatureManager.activated?(:redfish)
+
+    generators += project.additional_domgen_generators
+
+    Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) unless generators.empty?
+  end
+
   project.publish = false
 
   default_testng_args = []
