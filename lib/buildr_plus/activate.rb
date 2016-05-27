@@ -18,4 +18,8 @@ if BuildrPlus::Roles.default_role
 end
 
 BuildrPlus::Roles.define_top_level_projects
+
+# Force the materialization of projects so the
+# redfish tasks config has been set up
+Buildr.projects
 Redfish::Buildr.define_tasks_for_domains if BuildrPlus::FeatureManager.activated?(:redfish)
