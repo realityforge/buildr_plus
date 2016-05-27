@@ -21,8 +21,8 @@ BuildrPlus::FeatureManager.feature(:redfish) do |f|
     after_define do |buildr_project|
       if buildr_project.ipr?
 
-        if BuildrPlus::FeatureManager.activated?(:domgen) && Redfish.domain_by_name?(buildr_project.name)
-          domain = Redfish.domain_by_name(buildr_project.name)
+        if BuildrPlus::FeatureManager.activated?(:domgen) && Redfish.domain_by_key?(buildr_project.name)
+          domain = Redfish.domain_by_key(buildr_project.name)
           domain.pre_artifacts << buildr_project._("generated/domgen/#{buildr_project.name}/main/etc/#{buildr_project.name_as_class}.redfish.fragment.json")
           buildr_project.task ":#{domain.task_prefix}:pre_build" => ["#{buildr_project.name}:domgen:#{buildr_project.name}"]
         end
