@@ -74,6 +74,10 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
         # Make sure all the data sources in the configuration file are mapped to idea project
         Dbt::Buildr.add_idea_data_sources_from_configuration_file(buildr_project)
 
+        Dbt.repository.database_keys.each do |key|
+          Dbt.repository.database_for_key(key).database_environment_filter = true
+        end
+
         if Dbt.repository.database_for_key?(:default)
           unless BuildrPlus::Util.subprojects(buildr_project).any? { |p| p == "#{buildr_project.name}:db" }
             buildr_project.instance_eval do
