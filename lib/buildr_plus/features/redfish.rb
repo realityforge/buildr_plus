@@ -37,6 +37,12 @@ BuildrPlus::FeatureManager.feature(:redfish) do |f|
           buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
         end
 
+        Redfish.domains.each do |domain|
+          if domain.extends
+            buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{Redfish.domain_by_key(domain.extends).task_prefix}:pre_build"])
+          end
+        end
+
         unless BuildrPlus::Util.subprojects(buildr_project).any? { |p| p == "#{buildr_project.name}:domains" }
           buildr_project.instance_eval do
             desc 'Redfish Domain Definitions'
