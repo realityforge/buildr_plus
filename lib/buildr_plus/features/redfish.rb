@@ -43,6 +43,15 @@ BuildrPlus::FeatureManager.feature(:redfish) do |f|
           end
         end
 
+        [:server, :all_in_one].each do |role|
+          if BuildrPlus::Roles.project_with_role?(role) && Redfish.domain_by_key?("docker_#{buildr_project.name}")
+            domain = Redfish.domain_by_key("docker_#{buildr_project.name}")
+            server_project = Buildr.project(BuildrPlus::Roles.project_with_role(role).name)
+            buildr_project.task(":#{domain.task_prefix}:pre_build" => [server_project.package(:war).to_s])
+            domain.file(buildr_project.name, server_project.package(:war).to_s)
+          end
+        end
+
         unless BuildrPlus::Util.subprojects(buildr_project).any? { |p| p == "#{buildr_project.name}:domains" }
           buildr_project.instance_eval do
             desc 'Redfish Domain Definitions'
