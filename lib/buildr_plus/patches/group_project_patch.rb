@@ -24,7 +24,9 @@ class Buildr::Project
   end
 
   def group_as_package
-    base_group
+    base_group.end_with?(BuildrPlus::Db.artifact_suffix) ?
+      base_group.slice(/(.*)#{BuildrPlus::Db.artifact_suffix}/, 1) :
+      base_group
   end
 
   def group_as_path
