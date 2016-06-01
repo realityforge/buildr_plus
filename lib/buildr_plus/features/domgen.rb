@@ -127,8 +127,12 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
 
             Domgen.repositorys.each do |r|
               if r.java?
-                if r.java.base_package != project.group_as_package
-                  raise "Buildr projects group '#{project.group_as_package}' expected to match domgens 'java.base_package' setting ('#{r.java.base_package}') but it does not."
+                expected_package = project.group_as_package.end_with?(BuildrPlus::Db.artifact_suffix) ?
+                  project.group_as_package.slice(/(.*)#{BuildrPlus::Db.artifact_suffix}/, 1) :
+                  project.group_as_package
+
+                if r.java.base_package != expected_package
+                  raise "Buildr projects group '#{expected_package}' expected to match domgens 'java.base_package' setting ('#{r.java.base_package}') but it does not."
                 end
               end
 
