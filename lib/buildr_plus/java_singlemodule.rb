@@ -15,7 +15,7 @@
 require 'buildr_plus/java'
 
 base_directory = File.dirname(Buildr.application.buildfile.to_s)
-BuildrPlus::FeatureManager.activate_features([:less]) if File.exist?("#{base_directory}/#{BuildrPlus::Less.default_less_path}")
+BuildrPlus::FeatureManager.activate_features([:less]) if File.exist?("#{base_directory}/#{BuildrPlus::Less.less_path}")
 if BuildrPlus::FeatureManager.activated?(:gwt)
   BuildrPlus::FeatureManager.activate_features([:replicant])
   BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter])
