@@ -39,6 +39,7 @@ BuildrPlus::FeatureManager.feature(:redfish) do |f|
 
         Redfish.domains.each do |domain|
           if domain.extends
+            domain.version = buildr_project.version
             buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{Redfish.domain_by_key(domain.extends).task_prefix}:pre_build"])
           end
         end
