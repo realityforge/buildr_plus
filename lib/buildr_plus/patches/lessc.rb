@@ -1,4 +1,4 @@
-def define_less_dir(project, options = {})
+def define_lessc_task(project, options = {})
   params = {
     :strict_math => true,
     :optimize => true,

@@ -37,7 +37,7 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
 
     after_define do |project|
       if project.lessc_required?
-        define_less_dir(project, :source_dir => project.less_path)
+        define_lessc_task(project, project.less_options)
         task(':domgen:all').enhance(["#{project.name}:lessc"])
       end
 
