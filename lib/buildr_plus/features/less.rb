@@ -20,11 +20,15 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
   end
 
   f.enhance(:ProjectExtension) do
-    def less_path
-      @less_path || project._(BuildrPlus::Less.default_less_path)
+    attr_writer :less_options
+
+    def less_options
+      @less_options || {}
     end
 
-    attr_writer :less_path
+    def less_path
+      less_options[:source_dir] || project._(BuildrPlus::Less.default_less_path)
+    end
 
     def lessc_required?
       File.exist?(project._(project.less_path))
