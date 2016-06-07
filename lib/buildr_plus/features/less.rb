@@ -20,11 +20,15 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
   end
 
   f.enhance(:ProjectExtension) do
-    def less_path
-      @less_path || project._(BuildrPlus::Less.default_less_path)
+    attr_writer :less_options
+
+    def less_options
+      @less_options || {}
     end
 
-    attr_writer :less_path
+    def less_path
+      less_options[:source_dir] || project._(BuildrPlus::Less.default_less_path)
+    end
 
     def lessc_required?
       File.exist?(project._(project.less_path))
@@ -35,15 +39,15 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
       require 'buildr_plus/patches/lessc'
     end
 
-    before_define do |project|
+    after_define do |project|
       if project.lessc_required?
-        define_less_dir(project, :source_dir => project.less_path)
+        define_lessc_task(project, project.less_options)
         task(':domgen:all').enhance(["#{project.name}:lessc"])
       end
 
       if project.ipr?
         p = if BuildrPlus::Roles.project_with_role?(:server)
-          project(BuildrPlus::Roles.project_with_role(:server).name)
+          project.project(BuildrPlus::Roles.project_with_role(:server).name)
         elsif project.lessc_required?
           project
         else
