@@ -5,7 +5,8 @@ def define_lessc_task(project, options = {})
     :strict_units => true,
     :target_dir => project._(:generated, :less, :main, :webapp),
     :target_subdir => 'css',
-    :source_dir => project._(:source, :main, :webapp, :less),
+    :source_dir => project._(BuildrPlus::Less.default_less_path),
+    :source_pattern => '**/[^_]*.less'
   }.merge(options)
 
   command = []
@@ -15,13 +16,11 @@ def define_lessc_task(project, options = {})
   command << "--strict-units=#{!!params[:strict_units] ? 'on' : 'off'}"
 
   if params[:optimize]
-    command << '-O0' #-O0, -O1, -O2
-    command << '--compress'
-    command << '--clean-css'
+    command << '--clean-css="--s0"'
   end
 
   source_dir = params[:source_dir]
-  source_pattern = params[:source_pattern] || '**/[^_]*.less'
+  source_pattern = params[:source_pattern]
   target_dir = params[:target_dir]
 
   files = FileList["#{source_dir}/#{source_pattern}"]
