@@ -35,7 +35,7 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
       require 'buildr_plus/patches/lessc'
     end
 
-    before_define do |project|
+    after_define do |project|
       if project.lessc_required?
         define_less_dir(project, :source_dir => project.less_path)
         task(':domgen:all').enhance(["#{project.name}:lessc"])
@@ -43,7 +43,7 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
 
       if project.ipr?
         p = if BuildrPlus::Roles.project_with_role?(:server)
-          project(BuildrPlus::Roles.project_with_role(:server).name)
+          project.project(BuildrPlus::Roles.project_with_role(:server).name)
         elsif project.lessc_required?
           project
         else
