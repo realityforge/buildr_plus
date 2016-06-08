@@ -9,16 +9,6 @@ def define_lessc_task(project, options = {})
     :source_pattern => '**/[^_]*.less'
   }.merge(options)
 
-  command = []
-  command << 'lessc'
-  command << '--no-js'
-  command << "--strict-math=#{!!params[:strict_math] ? 'on' : 'off'}"
-  command << "--strict-units=#{!!params[:strict_units] ? 'on' : 'off'}"
-
-  if params[:optimize]
-    command << '--clean-css="--s0"'
-  end
-
   source_dir = params[:source_dir]
   source_pattern = params[:source_pattern]
   target_dir = params[:target_dir]
@@ -28,6 +18,16 @@ def define_lessc_task(project, options = {})
   if files.size > 0
     desc 'Preprocess Less files'
     compile_task = project.task('lessc' => [files]) do
+      command = []
+      command << 'lessc'
+      command << '--no-js'
+      command << "--strict-math=#{!!params[:strict_math] ? 'on' : 'off'}"
+      command << "--strict-units=#{!!params[:strict_units] ? 'on' : 'off'}"
+
+      if params[:optimize]
+        command << '--clean-css="--s0"'
+      end
+
       puts 'Compiling Less'
       files.each do |f|
         target_subdir = params[:target_subdir].nil? ? '' : "#{params[:target_subdir]}/"
