@@ -97,15 +97,17 @@ BuildrPlus::Roles.role(:server) do
     it.should_not contain('**/*.sass')
   end if BuildrPlus::FeatureManager.activated?(:sass)
 
-  iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
+  project.iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
   webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt)
-  assets.paths.each do |path|
+
+  project.assets.paths.each do |path|
     next if path.to_s =~ /generated\/gwt\// && BuildrPlus::FeatureManager.activated?(:gwt)
     next if path.to_s =~ /generated\/less\// && BuildrPlus::FeatureManager.activated?(:less)
     next if path.to_s =~ /generated\/sass\// && BuildrPlus::FeatureManager.activated?(:sass)
     webroots[path.to_s] = '/'
   end
-  iml.add_web_facet(:webroots => webroots)
+
+  project.iml.add_web_facet(:webroots => webroots)
 end
