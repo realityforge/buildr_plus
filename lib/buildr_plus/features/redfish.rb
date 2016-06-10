@@ -101,6 +101,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         Redfish.domains.each do |domain|
           if domain.dockerize?
             buildr_project.task(":#{domain.task_prefix}:config" => ["#{domain.task_prefix}:setup_env_vars"])
+
             buildr_project.task(":#{domain.task_prefix}:setup_env_vars") do
               environment = BuildrPlus::Config.application_config.environment_by_key('development')
               BuildrPlus::Redfish.configure_system_properties(domain, environment)
