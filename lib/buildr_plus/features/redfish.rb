@@ -84,8 +84,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
               BuildrPlus::Redfish.system_property(domain, 'OPENMQ_ADMIN_USERNAME', environment.broker.admin_username.to_s)
               BuildrPlus::Redfish.system_property(domain, 'OPENMQ_ADMIN_PASSWORD', environment.broker.admin_password.to_s)
             end
-
-            BuildrPlus::Redfish.configure_system_properties(domain, environment)
           end
         end
       end
@@ -101,6 +99,14 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         end
 
         Redfish.domains.each do |domain|
+          if domain.dockerize?
+            buildr_project.task(":#{domain.task_prefix}:config" => ["#{domain.task_prefix}:setup_env_vars"])
+            buildr_project.task(":#{domain.task_prefix}:setup_env_vars") do
+              environment = BuildrPlus::Config.application_config.environment_by_key('development')
+              BuildrPlus::Redfish.configure_system_properties(domain, environment)
+            end
+          end
+
           if domain.extends
             domain.version = buildr_project.version
             buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{Redfish.domain_by_key(domain.extends).task_prefix}:pre_build"])
