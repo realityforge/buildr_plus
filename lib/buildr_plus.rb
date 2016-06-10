@@ -17,6 +17,8 @@ if Buildr::VERSION != expected_version
   raise "buildr_plus expected Buildr version #{expected_version} but actual version is #{Buildr::VERSION}"
 end
 
+require 'yaml'
+
 require 'buildr_plus/core'
 require 'buildr_plus/naming'
 require 'buildr_plus/extension_registry'
@@ -34,6 +36,7 @@ require 'buildr_plus/features/calendar_date_select'
 require 'buildr_plus/features/checkstyle'
 require 'buildr_plus/features/ci'
 require 'buildr_plus/features/compile_options'
+require 'buildr_plus/features/config'
 require 'buildr_plus/features/db'
 require 'buildr_plus/features/dbt'
 require 'buildr_plus/features/deps'
@@ -100,3 +103,9 @@ require 'buildr_plus/roles/all_in_one'
 require 'buildr_plus/roles/all_in_one_library'
 require 'buildr_plus/roles/library'
 require 'buildr_plus/roles/library_qa_support'
+
+require 'buildr_plus/config/application'
+require 'buildr_plus/config/environment'
+require 'buildr_plus/config/database'
+require 'buildr_plus/config/ssrs'
+require 'buildr_plus/config/broker'

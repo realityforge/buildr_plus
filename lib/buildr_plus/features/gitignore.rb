@@ -69,6 +69,11 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
 
       gitignores << '/config/database.yml' if BuildrPlus::FeatureManager.activated?(:dbt)
 
+      gitignores << '/config/application.yml' if BuildrPlus::FeatureManager.activated?(:dbt) ||
+        BuildrPlus::FeatureManager.activated?(:rptman) ||
+        BuildrPlus::FeatureManager.activated?(:jms) ||
+        BuildrPlus::FeatureManager.activated?(:redfish)
+
       if BuildrPlus::FeatureManager.activated?(:rptman)
         gitignores << '/' + ::Buildr::Util.relative_path(File.expand_path(SSRS::Config.projects_dir), base_directory)
         gitignores << "/#{::Buildr::Util.relative_path(File.expand_path(SSRS::Config.reports_dir), base_directory)}/**/*.rdl.data"
