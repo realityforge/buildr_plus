@@ -29,6 +29,17 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       @application_config ||= load_application_config
     end
 
+    attr_writer :environment
+
+    def environment
+      @environment || 'development'
+    end
+
+    def environment_config
+      raise "Attempting to configuration for #{self.environment} environment which is not present." unless self.application_config.environment_by_key?(self.environment)
+      self.application_config.environment_by_key(self.environment)
+    end
+
     private
 
     def load_application_config

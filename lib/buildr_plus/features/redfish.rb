@@ -57,8 +57,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
     before_define do |buildr_project|
       if buildr_project.ipr?
-        raise "Attempting to configure redfish domain with key #{docker_domain_key} but no development configuration present" unless BuildrPlus::Config.application_config.environment_by_key?('development')
-        environment = BuildrPlus::Config.application_config.environment_by_key('development')
+        environment = BuildrPlus::Config.environment_config
 
         local_domain_key = "local_#{buildr_project.name}"
         if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?(local_domain_key)
