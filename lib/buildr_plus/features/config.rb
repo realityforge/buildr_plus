@@ -57,7 +57,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
       if project.ipr?
         desc 'Generate a complete application configuration from context'
-        project.task('config:expand_application_yml') do
+        project.task(':config:expand_application_yml') do
           filename = project._('generated/buildr_plus/config/application.yml')
           info("Expanding application configuration to #{filename}")
           FileUtils.mkdir_p File.dirname(filename)
