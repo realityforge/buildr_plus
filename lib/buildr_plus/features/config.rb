@@ -107,10 +107,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def populate_configuration(config)
-      config.environment(self.environment) unless config.environment_by_key?(self.environment)
-      environment = config.environment_by_key(self.environment)
-
-      populate_environment_configuration(environment)
+      %w(development test).each do |environment_key|
+        config.environment(environment_key) unless config.environment_by_key?(environment_key)
+        populate_environment_configuration(config.environment_by_key(environment_key), false)
+      end
     end
 
     def populate_environment_configuration(environment)
