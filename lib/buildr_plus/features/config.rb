@@ -95,6 +95,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       config = BuildrPlus::Config::ApplicationConfig.new(YAML::load(ERB.new(IO.read(self.application_config_location)).result))
 
       populate_configuration(config)
+
       config
     end
 
