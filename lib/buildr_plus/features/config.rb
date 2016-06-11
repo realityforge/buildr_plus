@@ -103,6 +103,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
       populate_configuration(config)
 
+      ::Dbt.repository.configuration_data = config.to_database_yml if BuildrPlus::FeatureManager.activated?(:dbt)
       config
     end
 
