@@ -113,8 +113,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     def populate_broker_configuration(environment)
       if !BuildrPlus::FeatureManager.activated?(:jms) && environment.broker?
         raise "Broker defined in application configuration but BuildrPlus facet 'jms' not enabled"
-      end
-      if BuildrPlus::FeatureManager.activated?(:jms) && !environment.broker?
+      elsif BuildrPlus::FeatureManager.activated?(:jms) && !environment.broker?
         host = BuildrPlus::Config.environment_var('OPENMQ_HOST')
         raise "Broker not defined in application configuration or environment but BuildrPlus facet 'jms' enabled" unless host
 
