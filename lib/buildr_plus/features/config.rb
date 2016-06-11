@@ -66,6 +66,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         default_value
     end
 
+    def user
+      ENV['USER']
+    end
+
     def app_scope
       ENV['APP_SCOPE']
     end
@@ -110,8 +114,52 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def populate_environment_configuration(environment)
+      populate_database_configuration(environment)
       populate_broker_configuration(environment)
       populate_ssrs_configuration(environment)
+    end
+
+    def populate_database_configuration(environment)
+      if !BuildrPlus::FeatureManager.activated?(:dbt) && !environment.databases.empty?
+        raise "Databases defined in application configuration but BuildrPlus facet 'dbt' not enabled"
+      elsif BuildrPlus::FeatureManager.activated?(:dbt) && !environment.ssrs?
+        # Ensure all databases are registered in dbt
+        environment.databases.each do |database|
+          unless ::Dbt.database_for_key?(database.key)
+            raise "Database '#{database.key}' defined in application configuration but has not been defined as a dbt database"
+          end
+        end
+        # Create database configurations if in Dbt but configuration does not already exist
+        ::Dbt.repository.database_keys.each do |database_key|
+          environment.database(database_key) unless environment.database_by_key?(database_key)
+        end
+
+        scope = self.app_scope
+        buildr_project = if ::Buildr.application.current_scope.size > 0
+          ::Buildr.project(::Buildr.application.current_scope.join(':')) rescue nil
+        else
+          Buildr.projects[0]
+        end
+
+        environment.databases.each do |database|
+          short_name = BuildrPlus::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
+          database.database = "#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}_#{short_name}_#{self.env_code}" unless database.database
+          database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from
+          database.host = environment_var('DB_SERVER_HOST') unless database.host
+          database.port = environment_var('DB_SERVER_PORT', database.port) unless database.port_set?
+          database.admin_username = environment_var('DB_SERVER_USERNAME') unless database.admin_username
+          database.admin_password = environment_var('DB_SERVER_PASSWORD') unless database.admin_password
+
+          if database.is_a?(BuildrPlus::Config::MssqlDatabaseConfig)
+            database.delete_backup_history = environment_var('DB_SERVER_DELETE_BACKUP_HISTORY', 'true') unless database.delete_backup_history_set?
+            database.instance = environment_var('DB_SERVER_INSTANCE', '') unless database.instance
+          end
+
+          raise "Configuration for database key #{database.key} is missing host attribute and can not be derived from environment variable DB_SERVER_HOST" unless database.host
+          raise "Configuration for database key #{database.key} is missing admin_username attribute and can not be derived from environment variable DB_SERVER_USERNAME" unless database.admin_username
+          raise "Configuration for database key #{database.key} is missing admin_password attribute and can not be derived from environment variable DB_SERVER_PASSWORD" unless database.admin_password
+        end
+      end
     end
 
     def populate_ssrs_configuration(environment)
