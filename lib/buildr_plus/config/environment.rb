@@ -68,7 +68,7 @@ module BuildrPlus #nodoc
         @databases.values
       end
 
-      def database(key, config, &block)
+      def database(key, config = {}, &block)
         raise "Attempting to redefine database with key '#{key}'." if @databases[key.to_s]
         config = config.dup
 
