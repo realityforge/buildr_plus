@@ -45,9 +45,11 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       scope = self.app_scope
       code = self.env_code
 
-      ENV["#{domain_name}_#{scope}_#{key}_#{code}"] ||
-        ENV["#{domain_name}_#{key}_#{code}"] ||
-        ENV["#{scope}_#{key}_#{code}"] ||
+      return ENV["#{domain_name}_#{scope}_#{key}_#{code}"] if scope && ENV["#{domain_name}_#{scope}_#{key}_#{code}"]
+      return ENV["#{domain_name}_#{key}_#{code}"] if ENV["#{domain_name}_#{key}_#{code}"]
+      return ENV["#{scope}_#{key}_#{code}"] if scope && ENV["#{scope}_#{key}_#{code}"]
+
+      ENV["#{scope}_#{key}_#{code}"] ||
         ENV["#{key}_#{code}"] ||
         ENV[key] ||
         default_value
@@ -57,14 +59,15 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       scope = self.app_scope
       code = self.env_code
 
-      ENV["#{scope}_#{key}_#{code}"] ||
-        ENV["#{key}_#{code}"] ||
+      return ENV["#{scope}_#{key}_#{code}"] if scope && ENV["#{scope}_#{key}_#{code}"]
+
+      ENV["#{key}_#{code}"] ||
         ENV[key] ||
         default_value
     end
 
     def app_scope
-      ENV['APP_SCOPE'] || 'NONE'
+      ENV['APP_SCOPE']
     end
 
     def env_code
