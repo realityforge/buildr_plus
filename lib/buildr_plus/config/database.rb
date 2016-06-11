@@ -28,6 +28,10 @@ module BuildrPlus #nodoc
         super(options, &block)
       end
 
+      def port_set?
+        !@port.nil?
+      end
+
       def to_h
         {
           'database' => self.database || '',
@@ -48,6 +52,10 @@ module BuildrPlus #nodoc
       attr_accessor :instance
 
       attr_writer :delete_backup_history
+
+      def delete_backup_history_set?
+        !@delete_backup_history.nil?
+      end
 
       def delete_backup_history?
         @delete_backup_history.nil? ? true : @delete_backup_history
