@@ -38,7 +38,7 @@ module BuildrPlus #nodoc
         @environments.values
       end
 
-      def environment(key, config, &block)
+      def environment(key, config = {}, &block)
         raise "Attempting to redefine environment with key '#{key}'." if @environments[key.to_s]
         config = config.dup
         @environments[key.to_s] = BuildrPlus::Config::EnvironmentConfig.new(key, config, &block)
