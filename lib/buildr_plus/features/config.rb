@@ -112,15 +112,20 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         config.environment(environment_key) unless config.environment_by_key?(environment_key)
         populate_environment_configuration(config.environment_by_key(environment_key), false)
       end
+      config.environments.each do |environment|
+        unless %w(development test).include?(environment.key.to_s)
+          populate_environment_configuration(environment, true)
+        end
+      end
     end
 
-    def populate_environment_configuration(environment)
-      populate_database_configuration(environment)
-      populate_broker_configuration(environment)
-      populate_ssrs_configuration(environment)
+    def populate_environment_configuration(environment, check_only = false)
+      populate_database_configuration(environment, check_only)
+      populate_broker_configuration(environment, check_only)
+      populate_ssrs_configuration(environment, check_only)
     end
 
-    def populate_database_configuration(environment)
+    def populate_database_configuration(environment, check_only)
       if !BuildrPlus::FeatureManager.activated?(:dbt) && !environment.databases.empty?
         raise "Databases defined in application configuration but BuildrPlus facet 'dbt' not enabled"
       elsif BuildrPlus::FeatureManager.activated?(:dbt)
@@ -133,7 +138,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         # Create database configurations if in Dbt but configuration does not already exist
         ::Dbt.repository.database_keys.each do |database_key|
           environment.database(database_key) unless environment.database_by_key?(database_key)
-        end
+        end unless check_only
 
         scope = self.app_scope
         buildr_project = if ::Buildr.application.current_scope.size > 0
@@ -166,10 +171,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       end
     end
 
-    def populate_ssrs_configuration(environment)
+    def populate_ssrs_configuration(environment, check_only)
       if !BuildrPlus::FeatureManager.activated?(:rptman) && environment.ssrs?
         raise "Ssrs defined in application configuration but BuildrPlus facet 'rptman' not enabled"
-      elsif BuildrPlus::FeatureManager.activated?(:rptman) && !environment.ssrs?
+      elsif BuildrPlus::FeatureManager.activated?(:rptman) && !environment.ssrs? && !check_only
         endpoint = BuildrPlus::Config.environment_var('RPTMAN_ENDPOINT')
         domain = BuildrPlus::Config.environment_var('RPTMAN_DOMAIN')
         username = BuildrPlus::Config.environment_var('RPTMAN_USERNAME')
@@ -179,10 +184,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       end
     end
 
-    def populate_broker_configuration(environment)
+    def populate_broker_configuration(environment, check_only)
       if !BuildrPlus::FeatureManager.activated?(:jms) && environment.broker?
         raise "Broker defined in application configuration but BuildrPlus facet 'jms' not enabled"
-      elsif BuildrPlus::FeatureManager.activated?(:jms) && !environment.broker?
+      elsif BuildrPlus::FeatureManager.activated?(:jms) && !environment.broker? && !check_only
         host = BuildrPlus::Config.environment_var('OPENMQ_HOST')
         raise "Broker not defined in application configuration or environment but BuildrPlus facet 'jms' enabled" unless host
 
