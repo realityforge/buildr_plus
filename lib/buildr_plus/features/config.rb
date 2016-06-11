@@ -40,6 +40,49 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       self.application_config.environment_by_key(self.environment)
     end
 
+    def domain_environment_var(domain, key, default_value = nil)
+      domain_name = Redfish::Naming.uppercase_constantize(domain.name)
+      scope = self.app_scope
+      code = self.env_code
+
+      ENV["#{domain_name}_#{scope}_#{key}_#{code}"] ||
+        ENV["#{domain_name}_#{key}_#{code}"] ||
+        ENV["#{scope}_#{key}_#{code}"] ||
+        ENV["#{key}_#{code}"] ||
+        ENV[key] ||
+        default_value
+    end
+
+    def environment_var(key, default_value = nil)
+      scope = self.app_scope
+      code = self.env_code
+
+      ENV["#{scope}_#{key}_#{code}"] ||
+        ENV["#{key}_#{code}"] ||
+        ENV[key] ||
+        default_value
+    end
+
+    def app_scope
+      ENV['APP_SCOPE'] || 'NONE'
+    end
+
+    def env_code
+      if self.environment == 'development'
+        'DEV'
+      elsif self.environment == 'uat'
+        'UAT'
+      elsif self.environment == 'training'
+        'TRN'
+      elsif self.environment == 'ci'
+        'CI'
+      elsif self.environment == 'production'
+        'PRD'
+      else
+        self.environment
+      end
+    end
+
     private
 
     def load_application_config
@@ -49,7 +92,38 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       unless File.exist?(self.application_config_location)
         raise "Missing application configuration file at #{self.application_config_location}"
       end
-      BuildrPlus::Config::ApplicationConfig.new(YAML::load(ERB.new(IO.read(self.application_config_location)).result))
+      config = BuildrPlus::Config::ApplicationConfig.new(YAML::load(ERB.new(IO.read(self.application_config_location)).result))
+
+      populate_configuration(config)
+      config
+    end
+
+    def populate_configuration(config)
+      config.environment(self.environment) unless config.environment_by_key?(self.environment)
+      environment = config.environment_by_key(self.environment)
+
+      populate_environment_configuration(environment)
+    end
+
+    def populate_environment_configuration(environment)
+      populate_broker_configuration(environment)
+    end
+
+    def populate_broker_configuration(environment)
+      if !BuildrPlus::FeatureManager.activated?(:jms) && environment.broker?
+        raise "Broker defined in application configuration but BuildrPlus facet 'jms' not enabled"
+      end
+      if BuildrPlus::FeatureManager.activated?(:jms) && !environment.broker?
+        host = BuildrPlus::Config.environment_var('OPENMQ_HOST')
+        raise "Broker not defined in application configuration or environment but BuildrPlus facet 'jms' enabled" unless host
+
+        # The following are the default settings for a default install of openmq
+        port = BuildrPlus::Config.environment_var('OPENMQ_PORT', '7676')
+        username = BuildrPlus::Config.environment_var('OPENMQ_ADMIN_USERNAME', 'admin')
+        password = BuildrPlus::Config.environment_var('OPENMQ_ADMIN_PASSWORD', 'admin')
+
+        environment.broker(:host => host, :port => port, :admin_username => username, :admin_password => password)
+      end
     end
   end
   f.enhance(:ProjectExtension) do
