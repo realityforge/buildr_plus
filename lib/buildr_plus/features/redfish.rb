@@ -73,7 +73,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           Redfish.domain(docker_domain_key, :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_docker(domain, :features => BuildrPlus::Redfish.features)
             RedfishPlus.deploy_application(domain, buildr_project.name, '/', "{{file:#{buildr_project.name}}}")
-
             if BuildrPlus::FeatureManager.activated?(:jms)
               raise "Redfish domain with key #{domain.key} requires broker configuration that is not specified in development configuration." unless environment.broker?
               # These are required as otherwise the glassfish will fail either when the
