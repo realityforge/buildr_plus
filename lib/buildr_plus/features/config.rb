@@ -122,7 +122,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     def populate_database_configuration(environment)
       if !BuildrPlus::FeatureManager.activated?(:dbt) && !environment.databases.empty?
         raise "Databases defined in application configuration but BuildrPlus facet 'dbt' not enabled"
-      elsif BuildrPlus::FeatureManager.activated?(:dbt) && !environment.ssrs?
+      elsif BuildrPlus::FeatureManager.activated?(:dbt)
         # Ensure all databases are registered in dbt
         environment.databases.each do |database|
           unless ::Dbt.database_for_key?(database.key)
