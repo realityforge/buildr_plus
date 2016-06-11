@@ -139,6 +139,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           buildr_project.instance_eval do
             desc 'Redfish Domain Definitions'
             define 'domains' do
+              project.no_iml
               Redfish::Buildr.define_domain_packages
             end
           end
