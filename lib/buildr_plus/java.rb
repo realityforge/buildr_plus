@@ -15,6 +15,6 @@
 require 'buildr_plus/common'
 require 'buildr/jacoco'
 
-BuildrPlus::FeatureManager.activate_features([:findbugs, :pmd, :jdepend, :checkstyle, :compile_options, :testng, :ejb, :jaxrs, :jms, :guiceyloops])
+BuildrPlus::FeatureManager.activate_features([:findbugs, :pmd, :jdepend, :checkstyle, :compile_options, :testng, :ejb, :jaxrs, :guiceyloops])
 
 BuildrPlus::FeatureManager.activate_features([:gwt]) if BuildrPlus::Util.is_addon_loaded?('gwt')
