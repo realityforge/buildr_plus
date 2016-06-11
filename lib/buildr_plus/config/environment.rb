@@ -115,7 +115,7 @@ module BuildrPlus #nodoc
           end
         end
         results['ssrs'] = self.ssrs.to_h if self.ssrs?
-        results['ssrs'] = self.ssrs.to_h if self.ssrs?
+        results['settings'] = self.settings unless self.settings.empty?
         results['broker'] = self.broker.to_h if self.broker?
         results
       end
