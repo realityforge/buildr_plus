@@ -203,6 +203,11 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           File.open(filename, 'wb') do |file|
             file.write BuildrPlus::Config.application_config.to_h.to_yaml
           end
+          database_filename = project._('generated/buildr_plus/config/database.yml')
+          info("Expanding database configuration to #{database_filename}")
+          File.open(database_filename, 'wb') do |file|
+            file.write BuildrPlus::Config.application_config.to_database_yml.to_yaml
+          end
         end
       end
     end

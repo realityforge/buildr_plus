@@ -51,6 +51,37 @@ module BuildrPlus #nodoc
         end
         results
       end
+
+      def to_database_yml
+        results = {}
+        environments.each do |environment|
+          environment.databases.each do |database|
+            database
+            key = database.key.to_s == 'default' ? environment.key.to_s : "#{database.key}_#{environment.key}"
+            results[key] = {}
+            results[key]['host'] = database.host
+            results[key]['port'] = database.port
+            results[key]['database'] = database.database
+            results[key]['username'] = database.admin_username
+            results[key]['password'] = database.admin_password
+            results[key]['timeout'] = 10000 unless defined?(JRUBY_VERSION)
+
+            if database.import_from
+              import_key = database.key.to_s == 'default' ? 'import' : "#{database.key}_import"
+              unless results[import_key]
+                results[import_key] = {}
+                results[import_key]['host'] = database.host
+                results[import_key]['port'] = database.port
+                results[import_key]['database'] = database.import_from
+                results[import_key]['username'] = database.admin_username
+                results[import_key]['password'] = database.admin_password
+                results[key]['timeout'] = 10000 unless defined?(JRUBY_VERSION)
+              end
+            end
+          end
+        end
+        results
+      end
     end
   end
 end
