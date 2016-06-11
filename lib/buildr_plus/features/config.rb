@@ -108,6 +108,20 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
     def populate_environment_configuration(environment)
       populate_broker_configuration(environment)
+      populate_ssrs_configuration(environment)
+    end
+
+    def populate_ssrs_configuration(environment)
+      if !BuildrPlus::FeatureManager.activated?(:rptman) && environment.ssrs?
+        raise "Ssrs defined in application configuration but BuildrPlus facet 'rptman' not enabled"
+      elsif BuildrPlus::FeatureManager.activated?(:rptman) && !environment.ssrs?
+        endpoint = BuildrPlus::Config.environment_var('RPTMAN_ENDPOINT')
+        domain = BuildrPlus::Config.environment_var('RPTMAN_DOMAIN')
+        username = BuildrPlus::Config.environment_var('RPTMAN_USERNAME')
+        password = BuildrPlus::Config.environment_var('RPTMAN_PASSWORD')
+        raise "Ssrs not defined in application configuration or environment but BuildrPlus facet 'rptman' enabled" unless endpoint && domain && username && password
+        environment.ssrs(:report_target => endpoint, :domain => domain, :username => username, :password => password)
+      end
     end
 
     def populate_broker_configuration(environment)
