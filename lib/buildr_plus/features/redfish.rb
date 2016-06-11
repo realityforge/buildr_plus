@@ -39,13 +39,35 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       domain.docker_run_args << "--env=#{key}=#{value}" if domain.dockerize?
     end
 
-    def configure_system_properties(domain, environment)
-      domain.environment_vars.keys.each do |key|
-        if !domain.data['system_properties'].key?(key) || domain.data['system_properties'][key] == 'UNSPECIFIED'
-          raise "Redfish domain with key #{domain.key} requires setting #{key} that is not specified in development configuration." unless environment.setting?(key)
-          value = environment.settings[key]
-          system_property(domain, key, value)
-        end
+    def configure_system_settings(domain, environment)
+      domain.environment_vars.each_pair do |key, default_value|
+        value =
+          if key == 'OPENMQ_HOST' && environment.broker?
+            environment.broker.host.to_s
+          elsif key == 'OPENMQ_PORT' && environment.broker?
+            environment.broker.port.to_s
+          elsif key == 'OPENMQ_ADMIN_USERNAME' && environment.broker?
+            environment.broker.admin_username.to_s
+          elsif key == 'OPENMQ_ADMIN_PASSWORD' && environment.broker?
+            environment.broker.admin_password.to_s
+          elsif environment.setting?(key)
+            raise "Redfish domain with key #{domain.key} requires setting #{key} that is not specified in development configuration." unless environment.setting?(key)
+            environment.settings[key] if environment.setting?(key)
+          else
+            nil
+          end
+        value ||= default_value
+        raise "Redfish domain with key #{domain.key} requires setting #{key} that is not specified and can not be derived." if value.nil?
+        system_property(domain, key, value)
+      end
+    end
+
+    def configure_domain_for_environment(domain, environment)
+      configure_system_settings(domain, environment)
+
+      unless domain.docker_dns
+        dns = BuildrPlus::Config.domain_environment_var(domain, 'DOCKER_DNS')
+        domain.docker_dns = dns if dns
       end
     end
   end
@@ -74,12 +96,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
             RedfishPlus.deploy_application(domain, buildr_project.name, '/', "{{file:#{buildr_project.name}}}")
             if BuildrPlus::FeatureManager.activated?(:jms)
               raise "Redfish domain with key #{domain.key} requires broker configuration that is not specified in development configuration." unless environment.broker?
-              # These are required as otherwise the glassfish will fail either when the
-              # application is deployed or when the server is reloaded
-              BuildrPlus::Redfish.system_property(domain, 'OPENMQ_HOST', environment.broker.host.to_s)
-              BuildrPlus::Redfish.system_property(domain, 'OPENMQ_PORT', environment.broker.port.to_s)
-              BuildrPlus::Redfish.system_property(domain, 'OPENMQ_ADMIN_USERNAME', environment.broker.admin_username.to_s)
-              BuildrPlus::Redfish.system_property(domain, 'OPENMQ_ADMIN_PASSWORD', environment.broker.admin_password.to_s)
             end
           end
         end
@@ -100,8 +116,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
             buildr_project.task(":#{domain.task_prefix}:config" => ["#{domain.task_prefix}:setup_env_vars"])
 
             buildr_project.task(":#{domain.task_prefix}:setup_env_vars") do
-              environment = BuildrPlus::Config.application_config.environment_by_key('development')
-              BuildrPlus::Redfish.configure_system_properties(domain, environment)
+              BuildrPlus::Redfish.configure_domain_for_environment(domain, BuildrPlus::Config.environment_config)
             end
           end
 
