@@ -142,9 +142,11 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         end
 
         environment.databases.each do |database|
+          dbt_database = ::Dbt.database_for_key(database.key)
+          dbt_imports = !dbt_database.imports.empty? || (dbt_database.packaged? && dbt_database.extra_actions.any?{|a| a.to_s =~ /import/})
           short_name = BuildrPlus::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
           database.database = "#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}_#{short_name}_#{self.env_code}" unless database.database
-          database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from
+          database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
           database.host = environment_var('DB_SERVER_HOST') unless database.host
           database.port = environment_var('DB_SERVER_PORT', database.port) unless database.port_set?
           database.admin_username = environment_var('DB_SERVER_USERNAME') unless database.admin_username
@@ -158,6 +160,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           raise "Configuration for database key #{database.key} is missing host attribute and can not be derived from environment variable DB_SERVER_HOST" unless database.host
           raise "Configuration for database key #{database.key} is missing admin_username attribute and can not be derived from environment variable DB_SERVER_USERNAME" unless database.admin_username
           raise "Configuration for database key #{database.key} is missing admin_password attribute and can not be derived from environment variable DB_SERVER_PASSWORD" unless database.admin_password
+          raise "Configuration for database key #{database.key} specifies import_from but dbt defines no import for database" if database.import_from && !dbt_imports
         end
       end
     end
