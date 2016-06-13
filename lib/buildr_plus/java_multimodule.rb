@@ -25,15 +25,20 @@ if BuildrPlus::FeatureManager.activated?(:gwt)
   BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter])
   BuildrPlus::FeatureManager.activate_features([:appcache])
 end
+if BuildrPlus::FeatureManager.activated?(:domgen)
+  BuildrPlus::FeatureManager.activate_features([:model])
+end
 
 if BuildrPlus::FeatureManager.activated?(:shared)
   BuildrPlus::Roles.project('shared', :roles => [:shared], :parent => :container, :template => true, :description => 'Shared Components')
 end
-BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
-if BuildrPlus::FeatureManager.activated?(:sync) && !BuildrPlus::Sync.standalone?
-  BuildrPlus::Roles.project('sync_model', :roles => [:sync_model], :parent => :container, :template => true, :description => 'Shared Model used to write External synchronization services')
+if BuildrPlus::FeatureManager.activated?(:model)
+  BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
+  if BuildrPlus::FeatureManager.activated?(:sync) && !BuildrPlus::Sync.standalone?
+    BuildrPlus::Roles.project('sync_model', :roles => [:sync_model], :parent => :container, :template => true, :description => 'Shared Model used to write External synchronization services')
+  end
+  BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :parent => :container, :template => true, :description => 'Model Test Infrastructure')
 end
-BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :parent => :container, :template => true, :description => 'Model Test Infrastructure')
 BuildrPlus::Roles.project('server', :roles => [:server], :parent => :container, :template => true, :description => 'Server Archive')
 
 if BuildrPlus::FeatureManager.activated?(:gwt)
