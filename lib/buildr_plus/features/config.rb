@@ -103,7 +103,15 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
       populate_configuration(config)
 
-      ::Dbt.repository.configuration_data = config.to_database_yml if BuildrPlus::FeatureManager.activated?(:dbt)
+      if BuildrPlus::FeatureManager.activated?(:dbt)
+        ::Dbt.repository.configuration_data = config.to_database_yml
+        # Also need to write file out for processes that pick up database.yml (like packaged
+        # database definitions run via java -jar)
+        File.open(::Dbt::Config.config_filename, 'wb') do |file|
+          file.write "# DO NOT EDIT: File is auto-generated\n"
+          file.write config.to_database_yml(:jruby => true).to_yaml
+        end
+      end
       config
     end
 
