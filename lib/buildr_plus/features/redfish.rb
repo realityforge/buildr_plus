@@ -30,6 +30,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       if @features.nil?
         @features = []
         @features << :jms if BuildrPlus::FeatureManager.activated?(:jms)
+        @features << :jdbc if BuildrPlus::FeatureManager.activated?(:db)
       end
       @features
     end
