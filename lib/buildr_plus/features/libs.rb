@@ -181,6 +181,14 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.guiceyloops:guiceyloops:jar:0.74) + self.mockito + self.guice + self.testng
     end
 
+    def glassfish_timers_domain
+      %w(org.realityforge.glassfish.timers:glassfish-timers-domain:json:0.1)
+    end
+
+    def glassfish_timers_db
+      %w(org.realityforge.glassfish.timers:glassfish-timers-db:jar:0.1)
+    end
+
     def slf4j
       %w(org.slf4j:slf4j-api:jar:1.6.6 org.slf4j:slf4j-jdk14:jar:1.6.6)
     end
