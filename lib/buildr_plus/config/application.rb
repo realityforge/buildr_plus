@@ -52,7 +52,8 @@ module BuildrPlus #nodoc
         results
       end
 
-      def to_database_yml
+      def to_database_yml(options = {})
+        jruby = options.key?(:jruby) ? !!options[:jruby] : defined?(JRUBY_VERSION)
         results = {}
         environments.each do |environment|
           environment.databases.each do |database|
@@ -64,7 +65,7 @@ module BuildrPlus #nodoc
             results[key]['database'] = database.database
             results[key]['username'] = database.admin_username
             results[key]['password'] = database.admin_password
-            results[key]['timeout'] = 10000 unless defined?(JRUBY_VERSION)
+            results[key]['timeout'] = 10000 unless jruby
 
             if database.import_from
               import_key = database.key.to_s == 'default' ? 'import' : "#{database.key}_import"
@@ -75,7 +76,7 @@ module BuildrPlus #nodoc
                 results[import_key]['database'] = database.import_from
                 results[import_key]['username'] = database.admin_username
                 results[import_key]['password'] = database.admin_password
-                results[key]['timeout'] = 10000 unless defined?(JRUBY_VERSION)
+                results[key]['timeout'] = 10000 unless jruby
               end
             end
           end
