@@ -36,7 +36,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
     def system_property(domain, key, value)
       RedfishPlus.system_property(domain, key, value)
-      domain.docker_run_args << "--env=#{key}=#{value}" if domain.dockerize?
+      domain.docker_run_args << "--env=#{key}=#{value}" if domain.dockerize? && value != ''
     end
 
     def configure_system_settings(domain, environment)
