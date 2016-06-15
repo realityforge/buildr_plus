@@ -66,6 +66,10 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
           end
         end
       end
+
+      if BuildrPlus::FeatureManager.activated?(:timerstatus)
+        Dbt.add_artifact_based_database(:timers, BuildrPlus::Libs.glassfish_timers_db[0])
+      end
     end
 
     after_define do |buildr_project|

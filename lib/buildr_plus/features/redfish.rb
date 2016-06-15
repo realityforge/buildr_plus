@@ -71,16 +71,24 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       constant_prefix = BuildrPlus::Naming.uppercase_constantize(domain.name)
 
       environment.databases.each do |database|
-        prefix =
-          database.key.to_s == 'default' ?
-            constant_prefix :
-            "#{constant_prefix}_#{BuildrPlus::Naming.uppercase_constantize(database.key)}"
+        if BuildrPlus::FeatureManager.activated?(:timerstatus) && database.key.to_s == 'timers'
+          properties['TIMERS_DB_HOST'] = database.host.to_s
+          properties['TIMERS_DB_PORT'] = database.port.to_s
+          properties['TIMERS_DB_DATABASE'] = database.database.to_s
+          properties['TIMERS_DB_USERNAME'] = database.admin_username.to_s
+          properties['TIMERS_DB_PASSWORD'] = database.admin_password.to_s
+        else
+          prefix =
+            database.key.to_s == 'default' ?
+              constant_prefix :
+              "#{constant_prefix}_#{BuildrPlus::Naming.uppercase_constantize(database.key)}"
 
-        properties["#{prefix}_DB_HOST"] = database.host.to_s
-        properties["#{prefix}_DB_PORT"] = database.port.to_s
-        properties["#{prefix}_DB_DATABASE"] = database.database.to_s
-        properties["#{prefix}_DB_USERNAME"] = database.admin_username.to_s
-        properties["#{prefix}_DB_PASSWORD"] = database.admin_password.to_s
+          properties["#{prefix}_DB_HOST"] = database.host.to_s
+          properties["#{prefix}_DB_PORT"] = database.port.to_s
+          properties["#{prefix}_DB_DATABASE"] = database.database.to_s
+          properties["#{prefix}_DB_USERNAME"] = database.admin_username.to_s
+          properties["#{prefix}_DB_PASSWORD"] = database.admin_password.to_s
+        end
       end
 
       properties.merge!(environment.settings)
@@ -114,6 +122,9 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
                 buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
               end
             end
+          end
+          if BuildrPlus::FeatureManager.activated?(:timerstatus)
+            domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
           end
           if BuildrPlus::FeatureManager.activated?(:domgen)
             domain.pre_artifacts << buildr_project._("generated/domgen/#{buildr_project.name}/main/etc/#{buildr_project.name_as_class}.redfish.fragment.json")
