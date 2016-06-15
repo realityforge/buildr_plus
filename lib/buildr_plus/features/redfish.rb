@@ -41,23 +41,9 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
     end
 
     def configure_system_settings(domain, environment)
+      properties = build_property_set(domain, environment)
       domain.environment_vars.each_pair do |key, default_value|
-        value =
-          if key == 'OPENMQ_HOST' && environment.broker?
-            environment.broker.host.to_s
-          elsif key == 'OPENMQ_PORT' && environment.broker?
-            environment.broker.port.to_s
-          elsif key == 'OPENMQ_ADMIN_USERNAME' && environment.broker?
-            environment.broker.admin_username.to_s
-          elsif key == 'OPENMQ_ADMIN_PASSWORD' && environment.broker?
-            environment.broker.admin_password.to_s
-          elsif environment.setting?(key)
-            raise "Redfish domain with key #{domain.key} requires setting #{key} that is not specified in development configuration." unless environment.setting?(key)
-            environment.settings[key] if environment.setting?(key)
-          else
-            nil
-          end
-        value ||= default_value
+        value = properties[key] || default_value
         raise "Redfish domain with key #{domain.key} requires setting #{key} that is not specified and can not be derived." if value.nil?
         system_property(domain, key, value)
       end
@@ -70,6 +56,36 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         dns = BuildrPlus::Config.domain_environment_var(domain, 'DOCKER_DNS')
         domain.docker_dns = dns if dns
       end
+    end
+
+    def build_property_set(domain, environment)
+      properties = {}
+
+      if environment.broker?
+        properties['OPENMQ_HOST'] = environment.broker.host.to_s
+        properties['OPENMQ_PORT'] = environment.broker.port.to_s
+        properties['OPENMQ_ADMIN_USERNAME'] = environment.broker.admin_username.to_s
+        properties['OPENMQ_ADMIN_PASSWORD'] = environment.broker.admin_password.to_s
+      end
+
+      constant_prefix = BuildrPlus::Naming.uppercase_constantize(domain.name)
+
+      environment.databases.each do |database|
+        prefix =
+          database.key.to_s == 'default' ?
+            constant_prefix :
+            "#{constant_prefix}_#{BuildrPlus::Naming.uppercase_constantize(database.key)}"
+
+        properties["#{prefix}_DB_HOST"] = database.host.to_s
+        properties["#{prefix}_DB_PORT"] = database.port.to_s
+        properties["#{prefix}_DB_DATABASE"] = database.database.to_s
+        properties["#{prefix}_DB_USERNAME"] = database.admin_username.to_s
+        properties["#{prefix}_DB_PASSWORD"] = database.admin_password.to_s
+      end
+
+      properties.merge!(environment.settings)
+
+      properties
     end
   end
 
