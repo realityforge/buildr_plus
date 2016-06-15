@@ -149,7 +149,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
         environment.databases.each do |database|
           dbt_database = ::Dbt.database_for_key(database.key)
-          dbt_imports = !dbt_database.imports.empty? || (dbt_database.packaged? && dbt_database.extra_actions.any?{|a| a.to_s =~ /import/})
+          dbt_imports = !dbt_database.imports.empty? || (dbt_database.packaged? && dbt_database.extra_actions.any? { |a| a.to_s =~ /import/ })
           short_name = BuildrPlus::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
           database.database = "#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}_#{short_name}_#{self.env_code}" unless database.database
           database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
