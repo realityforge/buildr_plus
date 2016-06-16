@@ -105,6 +105,9 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
       if BuildrPlus::FeatureManager.activated?(:dbt)
         ::Dbt.repository.configuration_data = config.to_database_yml
+
+        ::SSRS::Config.config_data = config.to_database_yml if BuildrPlus::FeatureManager.activated?(:rptman)
+
         # Also need to write file out for processes that pick up database.yml (like packaged
         # database definitions run via java -jar)
         File.open(::Dbt::Config.config_filename, 'wb') do |file|
