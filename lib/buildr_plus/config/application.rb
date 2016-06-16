@@ -59,6 +59,10 @@ module BuildrPlus #nodoc
           environment.databases.each do |database|
             key = database.key.to_s == 'default' ? environment.key.to_s : "#{database.key}_#{environment.key}"
             results[key] = {}
+            if BuildrPlus::FeatureManager.activated?(:rails)
+              results[key]['ignore_elements'] = %w(adapter)
+              results[key]['adapter'] = 'mssql' if BuildrPlus::Db.mssql?
+            end
             results[key]['host'] = database.host
             results[key]['port'] = database.port
             results[key]['database'] = database.database
@@ -71,6 +75,10 @@ module BuildrPlus #nodoc
               import_key = database.key.to_s == 'default' ? 'import' : "#{database.key}_import"
               unless results[import_key]
                 results[import_key] = {}
+                if BuildrPlus::FeatureManager.activated?(:rails)
+                  results[import_key]['ignore_elements'] = %w(adapter)
+                  results[import_key]['adapter'] = 'mssql' if BuildrPlus::Db.mssql?
+                end
                 results[import_key]['host'] = database.host
                 results[import_key]['port'] = database.port
                 results[import_key]['database'] = database.import_from
