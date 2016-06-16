@@ -64,6 +64,7 @@ module BuildrPlus #nodoc
             results[key]['database'] = database.database
             results[key]['username'] = database.admin_username
             results[key]['password'] = database.admin_password
+            results[key]['force_drop'] = true
             results[key]['timeout'] = 10000 unless jruby
 
             if database.import_from
