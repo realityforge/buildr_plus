@@ -61,6 +61,7 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
                 config/database.yml
                 config/ci-database.yml
                 config/ci-import-database.yml
+                config/ci-report-database.yml
                 config/config.properties
                 config/config.example.properties
                 config/database.example.yml
