@@ -111,7 +111,7 @@ module BuildrPlus #nodoc
         if dbs.size > 0
           results['databases'] = {}
           dbs.each do |db|
-            results['databases'][db.key] = db.to_h
+            results['databases'][db.key.to_s] = db.to_h
           end
         end
         results['ssrs'] = self.ssrs.to_h if self.ssrs?
