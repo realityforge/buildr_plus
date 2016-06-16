@@ -168,17 +168,15 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
         environment = BuildrPlus::Config.environment_config
 
-        local_domain_key = "local_#{buildr_project.name}"
-        if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?(local_domain_key)
-          Redfish.domain(local_domain_key, :extends => buildr_project.name) do |domain|
+        if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?('local')
+          Redfish.domain('local', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_local_development(domain, :features => BuildrPlus::Redfish.features)
           end
-          Redfish::Config.default_domain_key = local_domain_key
+          Redfish::Config.default_domain_key = 'local'
         end
 
-        docker_domain_key = "docker_#{buildr_project.name}"
-        if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?(docker_domain_key)
-          Redfish.domain(docker_domain_key, :extends => buildr_project.name) do |domain|
+        if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?('docker')
+          Redfish.domain('docker', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_docker(domain, :features => BuildrPlus::Redfish.features)
             RedfishPlus.deploy_application(domain, buildr_project.name, '/', "{{file:#{buildr_project.name}}}")
           end
