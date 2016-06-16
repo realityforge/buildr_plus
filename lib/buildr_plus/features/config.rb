@@ -164,7 +164,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
           if database.is_a?(BuildrPlus::Config::MssqlDatabaseConfig)
             database.delete_backup_history = environment_var('DB_SERVER_DELETE_BACKUP_HISTORY', 'true') unless database.delete_backup_history_set?
-            database.instance = environment_var('DB_SERVER_INSTANCE', '') unless database.instance
+            unless database.instance
+              instance = environment_var('DB_SERVER_INSTANCE', '')
+              database.instance = instance unless instance == ''
+            end
           end
 
           raise "Configuration for database key #{database.key} is missing host attribute and can not be derived from environment variable DB_SERVER_HOST" unless database.host
