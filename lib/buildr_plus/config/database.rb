@@ -33,14 +33,14 @@ module BuildrPlus #nodoc
       end
 
       def to_h
-        {
-          'database' => self.database || '',
-          'host' => self.host || '',
-          'port' => self.port || '',
-          'admin_username' => self.admin_username || '',
-          'admin_password' => self.admin_password || '',
-          'import_from' => self.import_from || '',
-        }
+        data = {}
+        data['database'] = self.database if self.database
+        data['host'] = self.host if self.host
+        data['port'] = self.port if self.port
+        data['admin_username'] = self.admin_username if self.admin_username
+        data['admin_password'] = self.admin_password if self.admin_password
+        data['import_from'] = self.import_from if self.import_from
+        data
       end
     end
 
@@ -62,7 +62,9 @@ module BuildrPlus #nodoc
       end
 
       def to_h
-        super.merge('instance' => self.instance || '', 'delete_backup_history' => self.delete_backup_history? || '')
+        data = {'delete_backup_history' => self.delete_backup_history?}
+        data['instance'] = self.instance if self.instance
+        super.merge(data)
       end
     end
 
