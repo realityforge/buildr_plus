@@ -149,11 +149,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         end unless check_only
 
         scope = self.app_scope
-        buildr_project = if ::Buildr.application.current_scope.size > 0
-          ::Buildr.project(::Buildr.application.current_scope.join(':')) rescue nil
-        else
-          Buildr.projects[0]
-        end
+        buildr_project = get_buildr_project
 
         environment.databases.each do |database|
           dbt_database = ::Dbt.database_for_key(database.key)
@@ -205,6 +201,14 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         password = BuildrPlus::Config.environment_var('OPENMQ_ADMIN_PASSWORD', 'admin')
 
         environment.broker(:host => host, :port => port, :admin_username => username, :admin_password => password)
+      end
+    end
+
+    def get_buildr_project
+      if ::Buildr.application.current_scope.size > 0
+        ::Buildr.project(::Buildr.application.current_scope.join(':')) rescue nil
+      else
+        Buildr.projects[0]
       end
     end
   end
