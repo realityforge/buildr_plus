@@ -88,6 +88,15 @@ module BuildrPlus #nodoc
               end
             end
           end
+          if environment.ssrs?
+            key = "ssrs_#{environment.key}"
+            results[key] = {}
+            results[key]['report_target'] = environment.ssrs.report_target.to_s
+            results[key]['domain'] = environment.ssrs.domain.to_s
+            results[key]['username'] = environment.ssrs.admin_username.to_s
+            results[key]['password'] = environment.ssrs.admin_password.to_s
+            results[key]['prefix'] = environment.ssrs.prefix.to_s
+          end
         end
         results
       end
