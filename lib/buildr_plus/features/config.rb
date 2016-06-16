@@ -185,16 +185,38 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def populate_ssrs_configuration(environment, check_only)
+      endpoint = BuildrPlus::Config.environment_var('RPTMAN_ENDPOINT')
+      domain = BuildrPlus::Config.environment_var('RPTMAN_DOMAIN')
+      username = BuildrPlus::Config.environment_var('RPTMAN_USERNAME')
+      password = BuildrPlus::Config.environment_var('RPTMAN_PASSWORD')
+
       if !BuildrPlus::FeatureManager.activated?(:rptman) && environment.ssrs?
         raise "Ssrs defined in application configuration but BuildrPlus facet 'rptman' not enabled"
       elsif BuildrPlus::FeatureManager.activated?(:rptman) && !environment.ssrs? && !check_only
-        endpoint = BuildrPlus::Config.environment_var('RPTMAN_ENDPOINT')
-        domain = BuildrPlus::Config.environment_var('RPTMAN_DOMAIN')
-        username = BuildrPlus::Config.environment_var('RPTMAN_USERNAME')
-        password = BuildrPlus::Config.environment_var('RPTMAN_PASSWORD')
-        raise "Ssrs not defined in application configuration or environment but BuildrPlus facet 'rptman' enabled" unless endpoint && domain && username && password
-        environment.ssrs(:report_target => endpoint, :domain => domain, :username => username, :password => password)
+        environment.ssrs
+      elsif !BuildrPlus::FeatureManager.activated?(:rptman) && !environment.ssrs?
+        return
+      elsif BuildrPlus::FeatureManager.activated?(:rptman) && !environment.ssrs? && check_only
+        return
       end
+
+      scope = self.app_scope
+
+      environment.ssrs.report_target = endpoint if environment.ssrs.report_target.nil?
+      environment.ssrs.domain = domain if environment.ssrs.domain.nil?
+      environment.ssrs.admin_username = username if environment.ssrs.admin_username.nil?
+      environment.ssrs.admin_password = password if environment.ssrs.admin_password.nil?
+
+      if environment.ssrs.prefix.nil?
+        buildr_project = get_buildr_project
+        short_name = BuildrPlus::Naming.uppercase_constantize(buildr_project.root_project.name)
+        environment.ssrs.prefix = "/Auto/#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}/#{self.env_code}/#{short_name}"
+      end
+
+      raise 'Configuration for ssrs is missing report_target attribute and can not be derived from environment variable RPTMAN_ENDPOINT' unless environment.ssrs.report_target
+      raise 'Configuration for ssrs is missing domain attribute and can not be derived from environment variable RPTMAN_DOMAIN' unless environment.ssrs.domain
+      raise 'Configuration for ssrs is missing admin_username attribute and can not be derived from environment variable RPTMAN_USERNAME' unless environment.ssrs.admin_username
+      raise 'Configuration for ssrs is missing admin_password attribute and can not be derived from environment variable RPTMAN_PASSWORD' unless environment.ssrs.admin_password
     end
 
     def populate_broker_configuration(environment, check_only)
