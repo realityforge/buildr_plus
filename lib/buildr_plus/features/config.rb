@@ -158,7 +158,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           database.database = "#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}_#{short_name}_#{self.env_code}" unless database.database
           database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
           database.host = environment_var('DB_SERVER_HOST') unless database.host
-          database.port = environment_var('DB_SERVER_PORT', database.port) unless database.port_set?
+          unless database.port_set?
+            port = environment_var('DB_SERVER_PORT', database.port)
+            database.port = port.to_i if port
+          end
           database.admin_username = environment_var('DB_SERVER_USERNAME') unless database.admin_username
           database.admin_password = environment_var('DB_SERVER_PASSWORD') unless database.admin_password
 
