@@ -56,6 +56,8 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
       excludes =
         %w(
                 config/broker.yml
+                config/application.yml
+                config/application.example.yml
                 config/database.yml
                 config/ci-database.yml
                 config/ci-import-database.yml
