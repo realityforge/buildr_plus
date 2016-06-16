@@ -58,7 +58,7 @@ module BuildrPlus #nodoc
       end
 
       def delete_backup_history?
-        @delete_backup_history.nil? ? true : @delete_backup_history
+        @delete_backup_history.nil? ? true : !!@delete_backup_history
       end
 
       def to_h
