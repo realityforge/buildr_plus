@@ -202,12 +202,17 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           end
         end
 
-        [:server, :all_in_one].each do |role|
-          if BuildrPlus::Roles.project_with_role?(role) && Redfish.domain_by_key?("docker_#{buildr_project.name}")
-            domain = Redfish.domain_by_key("docker_#{buildr_project.name}")
-            server_project = Buildr.project(BuildrPlus::Roles.project_with_role(role).name)
-            buildr_project.task(":#{domain.task_prefix}:pre_build" => [server_project.package(:war).to_s])
-            domain.file(buildr_project.name, server_project.package(:war).to_s)
+        if Redfish.domain_by_key?('docker')
+          domain = Redfish.domain_by_key('docker')
+          prj = nil
+          prj = buildr_project if buildr_project.roles.empty?
+          [:server, :all_in_one].each do |role|
+            prj = Buildr.project(BuildrPlus::Roles.project_with_role(role).name) if BuildrPlus::Roles.project_with_role?(role)
+          end
+
+          if prj
+            buildr_project.task(":#{domain.task_prefix}:pre_build" => [prj.package(:war).to_s])
+            domain.file(buildr_project.name, prj.package(:war).to_s)
           end
         end
 
