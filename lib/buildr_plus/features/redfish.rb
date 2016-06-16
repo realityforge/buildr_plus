@@ -62,7 +62,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       properties = {}
 
       if environment.broker?
-        properties['OPENMQ_HOST'] = environment.broker.host.to_s
+        properties['OPENMQ_HOST'] = as_ip(environment.broker.host.to_s)
         properties['OPENMQ_PORT'] = environment.broker.port.to_s
         properties['OPENMQ_ADMIN_USERNAME'] = environment.broker.admin_username.to_s
         properties['OPENMQ_ADMIN_PASSWORD'] = environment.broker.admin_password.to_s
@@ -72,7 +72,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
       environment.databases.each do |database|
         if BuildrPlus::FeatureManager.activated?(:timerstatus) && database.key.to_s == 'timers'
-          properties['TIMERS_DB_HOST'] = database.host.to_s
+          properties['TIMERS_DB_HOST'] = as_ip(database.host.to_s)
           properties['TIMERS_DB_PORT'] = database.port.to_s
           properties['TIMERS_DB_DATABASE'] = database.database.to_s
           properties['TIMERS_DB_USERNAME'] = database.admin_username.to_s
@@ -83,7 +83,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
               constant_prefix :
               "#{constant_prefix}_#{BuildrPlus::Naming.uppercase_constantize(database.key)}"
 
-          properties["#{prefix}_DB_HOST"] = database.host.to_s
+          properties["#{prefix}_DB_HOST"] = as_ip(database.host.to_s)
           properties["#{prefix}_DB_PORT"] = database.port.to_s
           properties["#{prefix}_DB_DATABASE"] = database.database.to_s
           properties["#{prefix}_DB_USERNAME"] = database.admin_username.to_s
@@ -94,6 +94,40 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       properties.merge!(environment.settings)
 
       properties
+    end
+
+    def as_ip(name)
+      return name if valid_v4?(name)
+
+      # First collect all the entries from local resolve.conf
+      addresses = Resolv.getaddresses(name).select { |a| valid_v4?(a) }.collect { |a| a == '127.0.0.1' ? host_ip : a }
+
+      # Then use configured DNS server if any
+
+      if ENV['DOCKER_DNS']
+        addresses += Resolv::DNS.new(:nameserver => [ENV['DOCKER_DNS']]).
+          getaddresses(name).
+          collect { |a| a.address.unpack('CCCC').join('.') }
+      end
+
+      return addresses[0] unless addresses.empty?
+      raise "Unable to determine ip address of #{name}. Are you connected to the correct networks?"
+    end
+
+    def host_ip
+      return ENV['HOST_IP_ADDRESS'] if ENV['HOST_IP_ADDRESS']
+      address_list = Socket.ip_address_list.select { |a| a.ipv4? && a.inspect_sockaddr != '127.0.0.1' }.collect { |a| a.inspect_sockaddr }
+
+      return address_list[0] unless address_list.empty?
+
+      raise 'Unable to determine host address to use in place of 127.0.0.1, please specify environment variable HOST_IP_ADDRESS'
+    end
+
+    def valid_v4?(addr)
+      if /\A(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\Z/ =~ addr
+        return $~.captures.all? { |i| i.to_i < 256 }
+      end
+      return false
     end
   end
 
