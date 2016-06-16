@@ -57,7 +57,6 @@ module BuildrPlus #nodoc
         results = {}
         environments.each do |environment|
           environment.databases.each do |database|
-            database
             key = database.key.to_s == 'default' ? environment.key.to_s : "#{database.key}_#{environment.key}"
             results[key] = {}
             results[key]['host'] = database.host
