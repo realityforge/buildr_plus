@@ -43,7 +43,7 @@ module BuildrPlus #nodoc
       attr_reader :key
 
       def setting(key, value)
-        raise "Attempting to redefine stting with key '#{key}'." if @settings[key.to_s]
+        raise "Attempting to redefine setting with key '#{key}'." if @settings[key.to_s]
         @settings[key.to_s] = value.to_s
       end
 
