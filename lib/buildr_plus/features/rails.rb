@@ -51,7 +51,7 @@ BuildrPlus::FeatureManager.feature(:rails) do |f|
       task 'assets:copy_plugin_assets' => %w(domgen:all) if  BuildrPlus::FeatureManager.activated?(:domgen)
 
       code_dirs = %w(app config vendor lib)
-      code_dirs << 'generated' if  BuildrPlus::FeatureManager.activated?(:domgen)
+      code_dirs << 'generated/domgen' if  BuildrPlus::FeatureManager.activated?(:domgen)
 
       excludes =
         %w(
