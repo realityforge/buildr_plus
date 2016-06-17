@@ -18,6 +18,7 @@ if Buildr::VERSION != expected_version
 end
 
 require 'yaml'
+require 'resolv'
 
 require 'buildr_plus/core'
 require 'buildr_plus/naming'
