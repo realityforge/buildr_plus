@@ -116,9 +116,13 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
     def host_ip
       return ENV['HOST_IP_ADDRESS'] if ENV['HOST_IP_ADDRESS']
-      address_list = Socket.ip_address_list.select { |a| a.ipv4? && a.inspect_sockaddr != '127.0.0.1' }.collect { |a| a.inspect_sockaddr }
 
-      return address_list[0] unless address_list.empty?
+      # Old versions of jruby do not support this method on Socket
+      if Socket.respond_to?(:ip_address_list)
+        address_list = Socket.ip_address_list.select { |a| a.ipv4? && a.inspect_sockaddr != '127.0.0.1' }.collect { |a| a.inspect_sockaddr }
+
+        return address_list[0] unless address_list.empty?
+      end
 
       raise 'Unable to determine host address to use in place of 127.0.0.1, please specify environment variable HOST_IP_ADDRESS'
     end
