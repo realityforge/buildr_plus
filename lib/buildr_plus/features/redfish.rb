@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
+BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
   f.enhance(:Config) do
     attr_writer :local_domain
 
