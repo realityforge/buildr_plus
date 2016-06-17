@@ -170,8 +170,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           end
         end
 
-        environment = BuildrPlus::Config.environment_config
-
         if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?('local')
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_local_development(domain, :features => BuildrPlus::Redfish.features)
