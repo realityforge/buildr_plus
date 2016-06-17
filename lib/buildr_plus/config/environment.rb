@@ -22,6 +22,7 @@ module BuildrPlus #nodoc
 
         @databases = {}
         @settings = {}
+        @volumes = {}
 
         (options.delete('databases') || {}).each_pair do |database_key, config|
           database(database_key, config)
@@ -32,6 +33,10 @@ module BuildrPlus #nodoc
 
         (options.delete('settings') || {}).each_pair do |setting_key, value|
           setting(setting_key, value)
+        end
+
+        (options.delete('volumes') || {}).each_pair do |volume_key, local_path|
+          volume(volume_key, local_path)
         end
 
         broker_config = options.delete('broker')
@@ -53,6 +58,23 @@ module BuildrPlus #nodoc
 
       def settings
         @settings.dup
+      end
+
+      def volume(key, value)
+        raise "Attempting to redefine volume with key '#{key}'." if @volumes[key.to_s]
+        @volumes[key.to_s] = value.to_s
+      end
+
+      def set_volume(key, value)
+        @volumes[key.to_s] = value.to_s
+      end
+
+      def volume?(key)
+        !!@volumes[key.to_s]
+      end
+
+      def volumes
+        @volumes.dup
       end
 
       def database_by_key?(key)
@@ -116,6 +138,7 @@ module BuildrPlus #nodoc
         end
         results['ssrs'] = self.ssrs.to_h if self.ssrs?
         results['settings'] = self.settings unless self.settings.empty?
+        results['volumes'] = self.volumes unless self.volumes.empty?
         results['broker'] = self.broker.to_h if self.broker?
         results
       end

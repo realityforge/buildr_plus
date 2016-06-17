@@ -168,6 +168,22 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       populate_database_configuration(environment, check_only)
       populate_broker_configuration(environment, check_only)
       populate_ssrs_configuration(environment, check_only)
+      populate_volume_configuration(environment) unless check_only
+    end
+
+    def populate_volume_configuration(environment)
+      buildr_project = get_buildr_project.root_project
+      if Redfish.domain_by_key?(buildr_project.name)
+        domain = Redfish.domain_by_key(buildr_project.name)
+
+        domain.volume_requirements.keys.each do |key|
+          environment.set_volume(key, "volumes/#{key}") unless environment.volume?(key)
+        end
+      end
+      base_directory = File.dirname(::Buildr.application.buildfile.to_s)
+      environment.volumes.each_pair do |key, local_path|
+        environment.set_volume(key, File.expand_path(local_path, base_directory))
+      end
     end
 
     def populate_database_configuration(environment, check_only)

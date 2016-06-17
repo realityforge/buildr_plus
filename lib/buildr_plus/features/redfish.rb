@@ -47,6 +47,11 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         raise "Redfish domain with key #{domain.key} requires setting #{key} that is not specified and can not be derived." if value.nil?
         system_property(domain, key, value)
       end
+      domain.volume_requirements.keys.each do |key|
+        local_path = environment.volumes[key]
+        raise "Redfish domain with key #{domain.key} requires volume #{key} that is not specified and can not be derived." if local_path.nil?
+        domain.volume(key, local_path)
+      end
     end
 
     def configure_domain_for_environment(domain, environment)

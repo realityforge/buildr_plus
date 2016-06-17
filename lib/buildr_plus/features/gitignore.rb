@@ -69,6 +69,8 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
 
       gitignores << '/config/database.yml' if BuildrPlus::FeatureManager.activated?(:dbt)
 
+      gitignores << '/volumes' if BuildrPlus::FeatureManager.activated?(:redfish)
+
       gitignores << '/config/application.yml' if BuildrPlus::FeatureManager.activated?(:dbt) ||
         BuildrPlus::FeatureManager.activated?(:rptman) ||
         BuildrPlus::FeatureManager.activated?(:jms) ||
