@@ -108,7 +108,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           desc 'Test the import process'
           import_actions = []
           import_actions << "ci#{ci_import_config_exist ? ':import' : ''}:setup"
-          import_actions.concat(%w(clean dbt:create_by_import dbt:verify_constraints))
+          import_actions.concat(%w(dbt:create_by_import dbt:verify_constraints))
           import_actions.concat(BuildrPlus::Ci.additional_import_actions)
           import_actions << 'dbt:drop'
 
@@ -116,7 +116,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
           BuildrPlus::Ci.additional_import_tasks.each do |import_variant|
             desc "Test the import #{import_variant} process"
-            task "ci:import:#{import_variant}" => %W(ci#{ci_import_config_exist ? ':import' : ''}:setup clean dbt:create_by_import:#{import_variant} dbt:verify_constraints dbt:drop)
+            task "ci:import:#{import_variant}" => %W(ci#{ci_import_config_exist ? ':import' : ''}:setup dbt:create_by_import:#{import_variant} dbt:verify_constraints dbt:drop)
           end
         end
 
@@ -126,10 +126,10 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         desc 'Publish artifacts to repository'
         project.task ':ci:upload' => %w(ci:setup upload_published)
 
-        commit_actions = %w(ci:no_test_setup clean)
-        pull_request_actions = %w(ci:setup clean)
-        package_actions = %w(ci:setup clean)
-        package_no_test_actions = %w(ci:no_test_setup clean)
+        commit_actions = %w(ci:no_test_setup)
+        pull_request_actions = %w(ci:setup)
+        package_actions = %w(ci:setup)
+        package_no_test_actions = %w(ci:no_test_setup)
 
         if BuildrPlus::FeatureManager.activated?(:redfish)
           Redfish.domains.each do |domain|
