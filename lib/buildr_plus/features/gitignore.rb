@@ -82,8 +82,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << "/#{::Buildr::Util.relative_path(File.expand_path(SSRS::Config.reports_dir), base_directory)}/**/*.rdl.data"
       end
 
-      if File.exist?("#{base_directory}/config/setup.sh")
-        gitignores << '/config/local.sh'
+      if BuildrPlus::FeatureManager.activated?(:redfish)
         gitignores << '/artifacts'
       end
 
