@@ -90,6 +90,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       end
     end
 
+    def load_application_config!
+      @application_config = load_application_config
+    end
+
     private
 
     def load_application_config

@@ -46,6 +46,7 @@ BuildrPlus::Roles.role(:container) do
     if BuildrPlus::FeatureManager.activated?(:dbt)
       old_environment = Dbt::Config.environment
       begin
+        BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
         Dbt.repository.load_configuration_data
 
         Dbt.database_keys.each do |database_key|
