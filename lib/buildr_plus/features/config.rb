@@ -301,14 +301,14 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         desc 'Generate a complete application configuration from context'
         project.task(':config:expand_application_yml') do
           filename = project._('generated/buildr_plus/config/application.yml')
-          info("Expanding application configuration to #{filename}")
+          trace("Expanding application configuration to #{filename}")
           FileUtils.mkdir_p File.dirname(filename)
           File.open(filename, 'wb') do |file|
             file.write "# DO NOT EDIT: File is auto-generated\n"
             file.write BuildrPlus::Config.application_config.to_h.to_yaml
           end
           database_filename = project._('generated/buildr_plus/config/database.yml')
-          info("Expanding database configuration to #{database_filename}")
+          trace("Expanding database configuration to #{database_filename}")
           File.open(database_filename, 'wb') do |file|
             file.write "# DO NOT EDIT: File is auto-generated\n"
             file.write BuildrPlus::Config.application_config.to_database_yml.to_yaml
