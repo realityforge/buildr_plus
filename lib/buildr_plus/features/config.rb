@@ -298,6 +298,8 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     after_define do |project|
 
       if project.ipr?
+        project.task(':domgen:all' => ['config:expand_application_yml']) if BuildrPlus::FeatureManager.activated?(:domgen)
+
         desc 'Generate a complete application configuration from context'
         project.task(':config:expand_application_yml') do
           filename = project._('generated/buildr_plus/config/application.yml')
