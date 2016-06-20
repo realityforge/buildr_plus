@@ -105,13 +105,13 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         end
 
         if dbt_present
-          desc 'Test the import process'
           import_actions = []
           import_actions << "ci#{ci_import_config_exist ? ':import' : ''}:setup"
           import_actions.concat(%w(dbt:create_by_import dbt:verify_constraints))
           import_actions.concat(BuildrPlus::Ci.additional_import_actions)
           import_actions << 'dbt:drop'
 
+          desc 'Test the import process'
           project.task ':ci:import' => import_actions
 
           BuildrPlus::Ci.additional_import_tasks.each do |import_variant|
