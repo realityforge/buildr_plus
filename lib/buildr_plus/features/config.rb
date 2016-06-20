@@ -111,6 +111,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
         # Also need to write file out for processes that pick up database.yml (like packaged
         # database definitions run via java -jar)
+        FileUtils.mkdir_p File.dirname(::Dbt::Config.config_filename)
         File.open(::Dbt::Config.config_filename, 'wb') do |file|
           file.write "# DO NOT EDIT: File is auto-generated\n"
           file.write config.to_database_yml(:jruby => true).to_yaml
@@ -134,6 +135,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
           base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
+          FileUtils.mkdir_p "#{base_directory}/config"
           File.open("#{base_directory}/config/config.properties", 'wb') do |file|
             file.write "# DO NOT EDIT: File is auto-generated\n"
             data = ''
