@@ -65,7 +65,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           if dbt_present
             Dbt::Config.environment = 'test'
             SSRS::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:rptman)
-            BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
+            BuildrPlus::Config.reload_application_config! if BuildrPlus::FeatureManager.activated?(:config)
             Dbt.repository.load_configuration_data
 
             Dbt.database_keys.each do |database_key|
