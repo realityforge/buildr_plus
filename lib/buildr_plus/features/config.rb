@@ -193,7 +193,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
     def populate_volume_configuration(environment)
       buildr_project = get_buildr_project.root_project
-      if Redfish.domain_by_key?(buildr_project.name)
+      if BuildrPlus::FeatureManager.activated?(:redfish) && Redfish.domain_by_key?(buildr_project.name)
         domain = Redfish.domain_by_key(buildr_project.name)
 
         domain.volume_requirements.keys.each do |key|
