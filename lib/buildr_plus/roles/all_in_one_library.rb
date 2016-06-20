@@ -85,7 +85,6 @@ BuildrPlus::Roles.role(:all_in_one_library) do
 
         Dbt.database_keys.each do |database_key|
           database = Dbt.database_for_key(database_key)
-          next unless database.enable_rake_integration? || database.packaged? || !database.managed?
           next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
           prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
