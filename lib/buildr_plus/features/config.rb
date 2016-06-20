@@ -96,10 +96,11 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       if !File.exist?(self.application_config_location) && File.exist?(self.application_config_example_location)
         FileUtils.cp self.application_config_example_location, self.application_config_location
       end
-      unless File.exist?(self.application_config_location)
-        raise "Missing application configuration file at #{self.application_config_location}"
-      end
-      config = BuildrPlus::Config::ApplicationConfig.new(YAML::load(ERB.new(IO.read(self.application_config_location)).result))
+      data = File.exist?(self.application_config_location) ?
+        YAML::load(ERB.new(IO.read(self.application_config_location)).result) :
+        {}
+
+      config = BuildrPlus::Config::ApplicationConfig.new(data)
 
       populate_configuration(config)
 
