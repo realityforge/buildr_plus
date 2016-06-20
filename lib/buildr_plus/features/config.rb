@@ -99,6 +99,14 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       load_application_config!
     end
 
+    def get_buildr_project
+      if ::Buildr.application.current_scope.size > 0
+        ::Buildr.project(::Buildr.application.current_scope.join(':')) rescue nil
+      else
+        Buildr.projects[0]
+      end
+    end
+
     private
 
     def load_application_config
@@ -294,14 +302,6 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         password = BuildrPlus::Config.environment_var('OPENMQ_ADMIN_PASSWORD', 'admin')
 
         environment.broker(:host => host, :port => port, :admin_username => username, :admin_password => password)
-      end
-    end
-
-    def get_buildr_project
-      if ::Buildr.application.current_scope.size > 0
-        ::Buildr.project(::Buildr.application.current_scope.join(':')) rescue nil
-      else
-        Buildr.projects[0]
       end
     end
   end
