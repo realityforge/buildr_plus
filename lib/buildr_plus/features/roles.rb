@@ -99,7 +99,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
       projects = projects_with_role(role).collect { |p| p.name }
       buildr_projects = Buildr.projects(:no_invoke => true).
         select { |project| projects.include?(project.name.gsub(/^[^:]*\:/, '')) }
-      buildr_projects.each{|p|p.invoke unless Redfish::Buildr.get_buildr_project('buildr_projects_with_role')}
+      buildr_projects.each{|p|p.invoke unless BuildrPlus::Config.get_buildr_project}
       buildr_projects
     end
 
