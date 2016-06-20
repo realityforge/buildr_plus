@@ -18,8 +18,8 @@ module BuildrPlus #nodoc
       def initialize(options = {}, &block)
         @environments = {}
 
-        options.each_pair do |environment_key, config|
-          environment(environment_key, config)
+        (options || {}).each_pair do |environment_key, config|
+          environment(environment_key, config || {})
         end
 
         super({}, &block)
