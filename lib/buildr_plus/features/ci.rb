@@ -92,7 +92,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
             Dbt::Config.config_filename = database_config
             SSRS::Config.config_filename = database_config if BuildrPlus::FeatureManager.activated?(:rptman)
             ENV['DATABASE_YML'] = database_config if BuildrPlus::FeatureManager.activated?(:rails)
-            task('ci:test_configure').invoke
+            project.task('ci:test_configure').invoke
           end
         end
 
