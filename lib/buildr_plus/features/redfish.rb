@@ -149,6 +149,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
       if buildr_project.ipr?
         if Redfish.domain_by_key?(buildr_project.name)
           domain = Redfish.domain_by_key(buildr_project.name)
+          domain.complete = false
           if BuildrPlus::FeatureManager.activated?(:db)
             if BuildrPlus::Db.mssql?
               library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])
