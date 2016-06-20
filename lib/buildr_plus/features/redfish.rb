@@ -214,7 +214,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
           prj = nil
           prj = buildr_project if buildr_project.roles.empty?
           [:server, :all_in_one].each do |role|
-            prj = Buildr.project(BuildrPlus::Roles.project_with_role(role).name) if BuildrPlus::Roles.project_with_role?(role)
+            prj = Buildr.project(BuildrPlus::Roles.buildr_project_with_role(role).name) if BuildrPlus::Roles.project_with_role?(role)
           end
 
           if prj
