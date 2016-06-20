@@ -26,6 +26,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
     def invalid_ignores
       invalid = [
         '/_reports',
+        '/config/local.sh', # No longer needed post redfish
         '/Gemfile.lock', 'Gemfile.lock', # We require lock files due to periodic instability of rubygems
         '/.idea', '.idea/', '.idea', # IDEA in directory format
         '/attlassian-ide-plugin.xml', # Old IDEA plugin config
