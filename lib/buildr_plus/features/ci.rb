@@ -59,7 +59,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         dbt_present = BuildrPlus::FeatureManager.activated?(:dbt)
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
-        ci_config_exist = ::File.exist?(File.expand_path("#{base_directory}/config/ci-database.yml"))
         ci_import_config_exist = ::File.exist?(File.expand_path("#{base_directory}/config/ci-import-database.yml"))
 
         project.task ':ci:test_configure' do
@@ -98,7 +97,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         desc 'Setup test environment'
         project.task ':ci:setup' => %w(ci:common_setup) do
-          if dbt_present && ci_config_exist
+          if dbt_present
             database_config = 'config/ci-database.yml'
             Dbt::Config.config_filename = database_config
             SSRS::Config.config_filename = database_config if BuildrPlus::FeatureManager.activated?(:rptman)
@@ -112,7 +111,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           ENV['TEST'] = 'no'
         end
 
-        if dbt_present && (ci_config_exist || ci_import_config_exist)
+        if dbt_present
           desc 'Test the import process'
           import_actions = []
           import_actions << "ci#{ci_import_config_exist ? ':import' : ''}:setup"
