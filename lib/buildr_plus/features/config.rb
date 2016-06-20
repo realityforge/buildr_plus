@@ -91,7 +91,12 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def load_application_config!
-      @application_config = load_application_config
+      @application_config = load_application_config unless @application_config
+    end
+
+    def reload_application_config!
+      @application_config = nil
+      load_application_config!
     end
 
     private
