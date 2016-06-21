@@ -208,6 +208,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
               project.define p.name do
                 self.apply_roles!
               end
+              project(p.name)
             end
           end
         end
