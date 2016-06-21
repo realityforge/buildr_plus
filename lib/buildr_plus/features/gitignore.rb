@@ -37,6 +37,10 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         /^\n/ # Remove blank lines
       ]
 
+      unless BuildrPlus::FeatureManager.activated?(:dbt)
+        invalid << '/*.ids'
+      end
+
       unless BuildrPlus::FeatureManager.activated?(:rails)
         invalid << '/.generators'
         invalid << '.generators'
