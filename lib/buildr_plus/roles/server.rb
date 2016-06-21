@@ -58,8 +58,8 @@ BuildrPlus::Roles.role(:server) do
   compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
   compile.with BuildrPlus::Deps.server_deps
 
-  BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
-  BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
+  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :model)
+  BuildrPlus::Roles.merge_projects_with_role(project, project.test, :model_qa_support)
 
   test.with BuildrPlus::Libs.db_drivers
   test.with artifacts([BuildrPlus::Syncrecord.syncrecord_server_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)

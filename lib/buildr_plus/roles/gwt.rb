@@ -33,7 +33,7 @@ BuildrPlus::Roles.role(:gwt) do
 
   compile.with BuildrPlus::Libs.replicant_client if BuildrPlus::FeatureManager.activated?(:replicant)
 
-  BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
+  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :shared)
 
   test.with BuildrPlus::Libs.mockito
 

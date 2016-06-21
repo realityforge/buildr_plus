@@ -31,7 +31,7 @@ BuildrPlus::Roles.role(:soap_qa_support) do
     compile.with BuildrPlus::Libs.jackson_gwt_support, BuildrPlus::Libs.gwt_datatypes
   end
 
-  BuildrPlus::Roles.merge_projects_with_role(project.compile, :soap_client)
+  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :soap_client)
 
   package(:jar)
   package(:sources)
