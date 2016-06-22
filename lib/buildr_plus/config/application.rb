@@ -68,8 +68,10 @@ module BuildrPlus #nodoc
             results[key]['database'] = database.database
             results[key]['username'] = database.admin_username
             results[key]['password'] = database.admin_password
-            results[key]['force_drop'] = true if BuildrPlus::Db.mssql?
-            results[key]['timeout'] = 10000 unless jruby
+            if BuildrPlus::Db.mssql?
+              results[key]['force_drop'] = true
+              results[key]['timeout'] = 10000 unless jruby
+            end
 
             if database.import_from
               import_key = database.key.to_s == 'default' ? 'import' : "#{database.key}_import"
@@ -84,7 +86,10 @@ module BuildrPlus #nodoc
                 results[import_key]['database'] = database.import_from
                 results[import_key]['username'] = database.admin_username
                 results[import_key]['password'] = database.admin_password
-                results[key]['timeout'] = 10000 unless jruby
+                if BuildrPlus::Db.mssql?
+                  results[import_key]['force_drop'] = true
+                  results[import_key]['timeout'] = 10000 unless jruby
+                end
               end
             end
           end
