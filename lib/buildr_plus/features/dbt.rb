@@ -70,6 +70,35 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
       if BuildrPlus::FeatureManager.activated?(:timerstatus)
         Dbt.add_artifact_based_database(:timers, BuildrPlus::Libs.glassfish_timers_db[0])
       end
+
+      if BuildrPlus::Db.mssql? && Dbt.repository.database_for_key?(:default) && BuildrPlus::FeatureManager.activated?(:config)
+        database = Dbt.repository.database_for_key(:default)
+
+        desc 'Show all owned databases'
+        task 'dbt:show_owned_databases' => ["#{database.task_prefix}:load_config"] do
+          sql = "SELECT name FROM sys.databases WHERE name LIKE '#{BuildrPlus::Config.user || 'NOBODY'}_%'"
+          puts 'Owned databases:'
+          puts '========================================'
+          Dbt.runtime.query(database, sql).each do |v|
+            puts v['name']
+          end
+          puts '========================================'
+        end
+
+        desc 'Remove all owned databases'
+        task 'dbt:remove_owned_databases' => ["#{database.task_prefix}:load_config"] do
+          sql = "SELECT name FROM sys.databases WHERE name LIKE '#{BuildrPlus::Config.user || 'NOBODY'}_%'"
+          Dbt.runtime.query(database, sql).each do |v|
+            name = v['name']
+            puts "Dropping database #{name}"
+            begin
+              Dbt.runtime.drop(database)
+            rescue => e
+              puts e
+            end
+          end
+        end
+      end
     end
 
     after_define do |buildr_project|
