@@ -74,19 +74,21 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       ENV['APP_SCOPE']
     end
 
-    def env_code
-      if self.environment == 'development'
+    def env_code(environment = self.environment)
+      if environment == 'development'
         'DEV'
-      elsif self.environment == 'uat'
+      elsif environment == 'test'
+        'TEST'
+      elsif environment == 'uat'
         'UAT'
-      elsif self.environment == 'training'
+      elsif environment == 'training'
         'TRN'
-      elsif self.environment == 'ci'
+      elsif environment == 'ci'
         'CI'
-      elsif self.environment == 'production'
+      elsif environment == 'production'
         'PRD'
       else
-        self.environment
+        environment
       end
     end
 
@@ -228,7 +230,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           dbt_database = ::Dbt.database_for_key(database.key)
           dbt_imports = !dbt_database.imports.empty? || (dbt_database.packaged? && dbt_database.extra_actions.any? { |a| a.to_s =~ /import/ })
           short_name = BuildrPlus::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
-          database.database = "#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}_#{short_name}_#{self.env_code}" unless database.database
+          database.database = "#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}_#{short_name}_#{self.env_code(environment.key)}" unless database.database
           database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
           database.host = environment_var('DB_SERVER_HOST') unless database.host
           unless database.port_set?
