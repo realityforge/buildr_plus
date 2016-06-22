@@ -44,22 +44,16 @@ BuildrPlus::Roles.role(:container) do
     default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}"
 
     if BuildrPlus::FeatureManager.activated?(:dbt)
-      old_environment = Dbt::Config.environment
-      begin
-        BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
-        Dbt.repository.load_configuration_data
+      BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
+      Dbt.repository.load_configuration_data
 
-        Dbt.database_keys.each do |database_key|
-          database = Dbt.database_for_key(database_key)
-          next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
+      Dbt.database_keys.each do |database_key|
+        next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
-          prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
-          database = Dbt.configuration_for_key(database_key, :test)
-          default_testng_args << "-D#{prefix}test.db.url=#{database.build_jdbc_url(:credentials_inline => true)}"
-          default_testng_args << "-D#{prefix}test.db.name=#{database.catalog_name}"
-        end
-      ensure
-        Dbt::Config.environment = old_environment
+        prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
+        database = Dbt.configuration_for_key(database_key, :test)
+        default_testng_args << "-D#{prefix}test.db.url=#{database.build_jdbc_url(:credentials_inline => true)}"
+        default_testng_args << "-D#{prefix}test.db.name=#{database.catalog_name}"
       end
     end
   end
@@ -126,14 +120,14 @@ BuildrPlus::Roles.role(:container) do
       BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
         gwt_modules = p.determine_top_level_gwt_modules('Dev')
         gwt_modules.each do |gwt_module|
-          short_name = gwt_module.gsub(/.*\.([^.]+)Dev$/,'\1')
-          path = short_name.gsub(/^#{BuildrPlus::Naming.pascal_case(project.name)}/,'')
+          short_name = gwt_module.gsub(/.*\.([^.]+)Dev$/, '\1')
+          path = short_name.gsub(/^#{BuildrPlus::Naming.pascal_case(project.name)}/, '')
           path = "#{BuildrPlus::Naming.underscore(path)}.html" if path.size > 0
           ipr.add_gwt_configuration(p,
                                     :gwt_module => gwt_module,
                                     :vm_parameters => '-Xmx3G',
                                     :shell_parameters => "-port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:artifacts, project.name)}/",
-                                    :launch_page => "http://127.0.0.1:8080/#{p.root_project.name}/#{path}" )
+                                    :launch_page => "http://127.0.0.1:8080/#{p.root_project.name}/#{path}")
         end
       end
     end

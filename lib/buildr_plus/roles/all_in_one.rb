@@ -115,22 +115,16 @@ BuildrPlus::Roles.role(:all_in_one) do
     default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}"
 
     if BuildrPlus::FeatureManager.activated?(:dbt)
-      old_environment = Dbt::Config.environment
-      begin
-        BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
-        Dbt.repository.load_configuration_data
+      BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
+      Dbt.repository.load_configuration_data
 
-        Dbt.database_keys.each do |database_key|
-          database = Dbt.database_for_key(database_key)
-          next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
+      Dbt.database_keys.each do |database_key|
+        next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
-          prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
-          database = Dbt.configuration_for_key(database_key, :test)
-          default_testng_args << "-D#{prefix}test.db.url=#{database.build_jdbc_url(:credentials_inline => true)}"
-          default_testng_args << "-D#{prefix}test.db.name=#{database.catalog_name}"
-        end
-      ensure
-        Dbt::Config.environment = old_environment
+        prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
+        database = Dbt.configuration_for_key(database_key, :test)
+        default_testng_args << "-D#{prefix}test.db.url=#{database.build_jdbc_url(:credentials_inline => true)}"
+        default_testng_args << "-D#{prefix}test.db.name=#{database.catalog_name}"
       end
     end
   end
