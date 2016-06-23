@@ -295,10 +295,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       if !BuildrPlus::FeatureManager.activated?(:jms) && environment.broker?
         raise "Broker defined in application configuration but BuildrPlus facet 'jms' not enabled"
       elsif BuildrPlus::FeatureManager.activated?(:jms) && !environment.broker? && !check_only
-        host = BuildrPlus::Config.environment_var('OPENMQ_HOST')
-        raise "Broker not defined in application configuration or environment but BuildrPlus facet 'jms' enabled" unless host
-
-        # The following are the default settings for a default install of openmq
+        host = BuildrPlus::Config.environment_var('OPENMQ_HOST', 'localhost')
         port = BuildrPlus::Config.environment_var('OPENMQ_PORT', '7676')
         username = BuildrPlus::Config.environment_var('OPENMQ_ADMIN_USERNAME', 'admin')
         password = BuildrPlus::Config.environment_var('OPENMQ_ADMIN_PASSWORD', 'admin')
