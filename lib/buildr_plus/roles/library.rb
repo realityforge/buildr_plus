@@ -50,8 +50,8 @@ BuildrPlus::Roles.role(:library) do
   compile.with artifacts(Object.const_get(:LIBRARY_DEPS)) if Object.const_defined?(:LIBRARY_DEPS)
   compile.with BuildrPlus::Deps.server_deps
 
-  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :model)
-  BuildrPlus::Roles.merge_projects_with_role(project, project.test, :model_qa_support)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
+  BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
 
   test.with BuildrPlus::Libs.db_drivers
 

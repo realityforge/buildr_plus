@@ -103,9 +103,8 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
       buildr_projects
     end
 
-    def merge_projects_with_role(container, target, role)
+    def merge_projects_with_role(target, role)
       BuildrPlus::Roles.buildr_projects_with_role(role).each do |dep|
-        container.project(dep.name)
         target.with dep.package(:jar),
                     dep.compile.dependencies
       end

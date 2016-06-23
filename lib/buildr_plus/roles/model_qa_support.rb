@@ -28,7 +28,7 @@ BuildrPlus::Roles.role(:model_qa_support) do
   compile.with BuildrPlus::Libs.guiceyloops
   compile.with BuildrPlus::Deps.model_qa_support_deps
 
-  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :model)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
 
   package(:jar)
   package(:sources)

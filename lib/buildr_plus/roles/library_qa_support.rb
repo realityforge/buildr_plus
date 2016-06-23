@@ -28,8 +28,8 @@ BuildrPlus::Roles.role(:library_qa_support) do
 
   project.publish = true
 
-  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :library)
-  BuildrPlus::Roles.merge_projects_with_role(project, project.test, :model_qa_support)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :library)
+  BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
 
   compile.with BuildrPlus::Libs.guiceyloops
 

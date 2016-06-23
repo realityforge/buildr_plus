@@ -32,8 +32,8 @@ BuildrPlus::Roles.role(:integration_tests) do
 
   test.with BuildrPlus::Libs.db_drivers
 
-  BuildrPlus::Roles.merge_projects_with_role(project, project.test, :integration_qa_support)
-  BuildrPlus::Roles.merge_projects_with_role(project, project.test, :soap_client)
+  BuildrPlus::Roles.merge_projects_with_role(project.test, :integration_qa_support)
+  BuildrPlus::Roles.merge_projects_with_role(project.test, :soap_client)
 
   test.using :java_args => BuildrPlus::Guiceyloops.integration_test_java_args,
              :properties =>

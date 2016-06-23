@@ -25,7 +25,7 @@ BuildrPlus::Roles.role(:integration_qa_support) do
 
   compile.with BuildrPlus::Libs.glassfish_embedded
 
-  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :model_qa_support)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :model_qa_support)
 
   package(:jar)
   package(:sources)

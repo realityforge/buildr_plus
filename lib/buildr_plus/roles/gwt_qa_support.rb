@@ -26,7 +26,7 @@ BuildrPlus::Roles.role(:gwt_qa_support) do
 
   compile.with BuildrPlus::Libs.guiceyloops_gwt
 
-  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :gwt)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
 
   package(:jar)
   package(:sources)

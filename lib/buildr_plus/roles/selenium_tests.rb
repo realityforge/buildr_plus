@@ -23,8 +23,8 @@ BuildrPlus::Roles.role(:selenium_tests) do
   compile.with BuildrPlus::Libs.findbugs_provided,
                Buildr::Selenium.dependencies
 
-  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :soap_client)
-  BuildrPlus::Roles.merge_projects_with_role(project, project.test, :integration_qa_support)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :soap_client)
+  BuildrPlus::Roles.merge_projects_with_role(project.test, :integration_qa_support)
 
   test.with BuildrPlus::Libs.db_drivers
 

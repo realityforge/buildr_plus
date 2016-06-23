@@ -46,7 +46,7 @@ BuildrPlus::Roles.role(:model) do
 
   compile.with BuildrPlus::Deps.model_deps
 
-  BuildrPlus::Roles.merge_projects_with_role(project, project.compile, :shared)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
 
   package(:jar)
   package(:sources)
