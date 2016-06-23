@@ -214,8 +214,8 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def db_drivers
-      return self.jtds if BuildrPlus::Db.tiny_tds_defined?
-      return self.postgresql + (BuildrPlus::FeatureManager.activated?(:geolatte) ? self.postgis : []) if BuildrPlus::Db.pg_defined?
+      return self.jtds if BuildrPlus::Db.mssql?
+      return self.postgresql + (BuildrPlus::FeatureManager.activated?(:geolatte) ? self.postgis : []) if BuildrPlus::Db.pgsql?
       []
     end
   end
