@@ -71,7 +71,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def app_scope
-      ENV['APP_SCOPE']
+      ENV['APP_SCOPE'] || ENV['JOB_NAME']
     end
 
     def env_code(environment = self.environment)
