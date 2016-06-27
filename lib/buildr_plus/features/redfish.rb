@@ -20,10 +20,30 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
       @local_domain.nil? ? true : @local_domain
     end
 
+    def customize_local_domain(&block)
+      raise 'Attempting to customize local domain when local domain disabled' unless local_domain?
+      (@local_domain_customizations ||= []) << block
+    end
+
+    def local_domain_customizations
+      raise 'Attempting to access local domain configurations when local domain disabled' unless local_domain?
+      (@local_domain_customizations ||= []).dup
+    end
+
     attr_writer :docker_domain
 
     def docker_domain?
       @docker_domain.nil? ? true : @docker_domain
+    end
+
+    def customize_docker_domain(&block)
+      raise 'Attempting to customize docker domain when docker domain disabled' unless docker_domain?
+      (@docker_domain_customizations ||= []) << block
+    end
+
+    def docker_domain_customizations
+      raise 'Attempting to access docker domain configurations when docker domain disabled' unless docker_domain?
+      (@docker_domain_customizations ||= []).dup
     end
 
     def features
@@ -181,6 +201,9 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
         if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?('local')
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_local_development(domain, :features => BuildrPlus::Redfish.features)
+            BuildrPlus::Redfish.local_domain_customizations.each do |customization|
+              customization.call(domain)
+            end
           end
           Redfish::Config.default_domain_key = 'local'
         end
@@ -189,6 +212,9 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
           Redfish.domain('docker', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_docker(domain, :features => BuildrPlus::Redfish.features)
             RedfishPlus.deploy_application(domain, buildr_project.name, '/', "{{file:#{buildr_project.name}}}")
+            BuildrPlus::Redfish.docker_domain_customizations.each do |customization|
+              customization.call(domain)
+            end
           end
         end
       end
