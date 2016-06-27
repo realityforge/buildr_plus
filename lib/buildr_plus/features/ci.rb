@@ -59,7 +59,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         dbt_present = BuildrPlus::FeatureManager.activated?(:dbt)
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
-        ci_import_config_exist = ::File.exist?(File.expand_path("#{base_directory}/config/ci-import-database.yml"))
 
         project.task ':ci:test_configure' do
           if dbt_present
@@ -84,16 +83,11 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           ::RAILS_ENV = ENV['RAILS_ENV'] = 'test' if BuildrPlus::FeatureManager.activated?(:rails)
         end
 
-        if ci_import_config_exist
-          desc 'Setup test environment for testing import process'
-          project.task ':ci:import:setup' => %w(ci:common_setup) do
-            database_config = 'config/ci-import-database.yml'
-            Dbt::Config.config_filename = database_config
-            SSRS::Config.config_filename = database_config if BuildrPlus::FeatureManager.activated?(:rptman)
-            ENV['DATABASE_YML'] = database_config if BuildrPlus::FeatureManager.activated?(:rails)
-            BuildrPlus::Config.reload_application_config! if BuildrPlus::FeatureManager.activated?(:config)
-            project.task('ci:test_configure').invoke
-          end
+        desc 'Setup test environment for testing import process'
+        project.task ':ci:import:setup' => %w(ci:common_setup) do
+          Dbt::Config.environment = 'import_test'
+          BuildrPlus::Config.reload_application_config! if BuildrPlus::FeatureManager.activated?(:config)
+          project.task('ci:test_configure').invoke
         end
 
         desc 'Setup test environment'
@@ -107,7 +101,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         if dbt_present
           import_actions = []
-          import_actions << "ci#{ci_import_config_exist ? ':import' : ''}:setup"
+          import_actions << 'ci:import:setup'
           import_actions.concat(%w(dbt:create_by_import dbt:verify_constraints))
           import_actions.concat(BuildrPlus::Ci.additional_import_actions)
           import_actions << 'dbt:drop'
@@ -117,7 +111,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
           BuildrPlus::Ci.additional_import_tasks.each do |import_variant|
             desc "Test the import #{import_variant} process"
-            project.task ":ci:import:#{import_variant}" => %W(ci#{ci_import_config_exist ? ':import' : ''}:setup dbt:create_by_import:#{import_variant} dbt:verify_constraints dbt:drop)
+            project.task ":ci:import:#{import_variant}" => %W(ci:import:setup dbt:create_by_import:#{import_variant} dbt:verify_constraints dbt:drop)
           end
         end
 

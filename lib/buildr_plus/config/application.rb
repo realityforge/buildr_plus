@@ -92,6 +92,26 @@ module BuildrPlus #nodoc
                 end
               end
             end
+
+            # This is to support having separate configuration during import process where the main
+            # database is effectively development and all others are effectively the import from
+            if environment.key.to_s == 'development'
+              key = database.key.to_s == 'default' ? 'import_test' : "#{database.key}_import_test"
+              results[key] = {}
+              if BuildrPlus::FeatureManager.activated?(:rails)
+                results[key]['ignore_elements'] = %w(adapter)
+                results[key]['adapter'] = 'mssql' if BuildrPlus::Db.mssql?
+              end
+              results[key]['host'] = database.host
+              results[key]['port'] = database.port
+              results[key]['database'] = database.key.to_s == 'default' ? database.database : (database.import_from || database.database)
+              results[key]['username'] = database.admin_username
+              results[key]['password'] = database.admin_password
+              if BuildrPlus::Db.mssql?
+                results[key]['force_drop'] = true
+                results[key]['timeout'] = 10000 unless jruby
+              end
+            end
           end
           if environment.ssrs?
             key = "ssrs_#{environment.key}"
