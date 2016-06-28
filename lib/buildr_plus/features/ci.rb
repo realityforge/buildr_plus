@@ -57,10 +57,10 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         project.task ':ci:common_setup' => %w(db:driver:download) if BuildrPlus::FeatureManager.activated?(:rails)
 
-        dbt_present = BuildrPlus::FeatureManager.activated?(:dbt)
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
         project.task ':ci:test_configure' do
+          if BuildrPlus::FeatureManager.activated?(:dbt)
           if dbt_present
             Dbt::Config.environment = 'test'
             SSRS::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:rptman)
@@ -98,7 +98,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           ENV['TEST'] = 'no'
         end
 
-        if dbt_present
+        if BuildrPlus::FeatureManager.activated?(:dbt)
           import_actions = []
           import_actions << 'ci:import:setup'
           import_actions.concat(%w(dbt:create_by_import dbt:verify_constraints))
