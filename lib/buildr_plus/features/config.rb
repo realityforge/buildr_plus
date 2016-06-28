@@ -166,7 +166,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
             properties.each_pair do |key, value|
               data.gsub!("${#{key}}", value)
             end
-            data = Redfish::Interpreter::Interpolater.interpolate(domain.to_task_context, :data => data)[:data]
+            data = Redfish::Interpreter::Interpolater.interpolate_definition(domain, :data => data)[:data]
             file.write data
           end
         end
