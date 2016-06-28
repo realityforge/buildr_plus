@@ -57,8 +57,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         project.task ':ci:common_setup' => %w(db:driver:download) if BuildrPlus::FeatureManager.activated?(:rails)
 
-        base_directory = File.dirname(Buildr.application.buildfile.to_s)
-
         project.task ':ci:test_configure' do
           if BuildrPlus::FeatureManager.activated?(:dbt)
           if dbt_present
