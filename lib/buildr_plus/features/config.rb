@@ -235,7 +235,18 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
         environment.databases.each do |database|
           dbt_database = ::Dbt.database_for_key(database.key)
-          dbt_imports = !dbt_database.imports.empty? || (dbt_database.packaged? && dbt_database.extra_actions.any? { |a| a.to_s =~ /import/ })
+          dbt_imports =
+            !dbt_database.imports.empty? ||
+              (dbt_database.packaged? && dbt_database.extra_actions.any? { |a| a.to_s =~ /import/ })
+
+          environment.databases.select { |d| d != database }.each do |d|
+            ::Dbt.database_for_key(d.key).filters.each do |f|
+              if f.is_a?(Struct::DatabaseNameFilter) && f.database_key.to_s == database.key.to_s
+                dbt_imports = true
+              end
+            end
+          end unless dbt_imports
+
           short_name = BuildrPlus::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
           database.database = "#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}_#{short_name}_#{self.env_code(environment.key)}" unless database.database
           database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
