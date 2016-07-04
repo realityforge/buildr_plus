@@ -109,6 +109,26 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       end
     end
 
+    def output_aux_confgs!(config = application_config)
+      emit_database_yml(config)
+
+      buildr_project = get_buildr_project.root_project
+
+      if BuildrPlus::FeatureManager.activated?(:rails) &&
+        BuildrPlus::FeatureManager.activated?(:redfish) &&
+        Redfish.domain_by_key?(buildr_project.name)
+
+        domain = Redfish.domain_by_key(buildr_project.name)
+
+        buildr_project.task(':domgen:all' => ['rails:config:generate']) if BuildrPlus::FeatureManager.activated?(:domgen)
+
+        buildr_project.task(':rails:config:generate' => ["#{domain.task_prefix}:setup_env_vars"]) do
+          # Also need to populate rails configuration
+          emit_rails_configuration(domain)
+        end
+      end
+    end
+
     private
 
     def load_application_config
@@ -123,6 +143,12 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
       populate_configuration(config)
 
+      output_aux_confgs!(config)
+
+      config
+    end
+
+    def emit_database_yml(config)
       if BuildrPlus::FeatureManager.activated?(:dbt)
         ::Dbt.repository.configuration_data = config.to_database_yml
 
@@ -136,42 +162,28 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           file.write config.to_database_yml(:jruby => true).to_yaml
         end
       end
+    end
 
-      buildr_project = get_buildr_project.root_project
+    def emit_rails_configuration(domain)
+      properties = BuildrPlus::Redfish.build_property_set(domain, BuildrPlus::Config.environment_config)
 
-      if BuildrPlus::FeatureManager.activated?(:rails) &&
-        BuildrPlus::FeatureManager.activated?(:redfish) &&
-        Redfish.domain_by_key?(buildr_project.name)
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
-        domain = Redfish.domain_by_key(buildr_project.name)
-
-        buildr_project.task(':domgen:all' => ['rails:config:generate']) if BuildrPlus::FeatureManager.activated?(:domgen)
-
-        buildr_project.task(':rails:config:generate' => ["#{domain.task_prefix}:setup_env_vars"]) do
-          # Also need to populate rails configuration
-
-          properties = BuildrPlus::Redfish.build_property_set(domain, BuildrPlus::Config.environment_config)
-
-          base_directory = File.dirname(Buildr.application.buildfile.to_s)
-
-          FileUtils.mkdir_p "#{base_directory}/config"
-          File.open("#{base_directory}/config/config.properties", 'wb') do |file|
-            file.write "# DO NOT EDIT: File is auto-generated\n"
-            data = ''
-            domain.data['custom_resources'].each_pair do |key, resource_config|
-              value = resource_config['properties']['value']
-              data += "#{key.gsub('/', '.')}=#{value}\n"
-            end
-
-            properties.each_pair do |key, value|
-              data.gsub!("${#{key}}", value)
-            end
-            data = Redfish::Interpreter::Interpolater.interpolate_definition(domain, :data => data)[:data]
-            file.write data
-          end
+      FileUtils.mkdir_p "#{base_directory}/config"
+      File.open("#{base_directory}/config/config.properties", 'wb') do |file|
+        file.write "# DO NOT EDIT: File is auto-generated\n"
+        data = ''
+        domain.data['custom_resources'].each_pair do |key, resource_config|
+          value = resource_config['properties']['value']
+          data += "#{key.gsub('/', '.')}=#{value}\n"
         end
+
+        properties.each_pair do |key, value|
+          data.gsub!("${#{key}}", value)
+        end
+        data = Redfish::Interpreter::Interpolater.interpolate_definition(domain, :data => data)[:data]
+        file.write data
       end
-      config
     end
 
     def populate_configuration(config)
