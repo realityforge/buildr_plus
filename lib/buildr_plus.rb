@@ -19,6 +19,7 @@ end
 
 require 'yaml'
 require 'resolv'
+require 'socket'
 
 require 'buildr_plus/core'
 require 'buildr_plus/naming'

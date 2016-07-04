@@ -322,6 +322,9 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def populate_broker_configuration(environment, check_only)
+      if BuildrPlus::FeatureManager.activated?(:jms) && BuildrPlus::FeatureManager.activated?(:redfish)
+        BuildrPlus::Jms.link_container_to_configuration(BuildrPlus::Config.get_buildr_project, environment)
+      end
       if !BuildrPlus::FeatureManager.activated?(:jms) && environment.broker?
         raise "Broker defined in application configuration but BuildrPlus facet 'jms' not enabled"
       elsif BuildrPlus::FeatureManager.activated?(:jms) && !environment.broker? && !check_only

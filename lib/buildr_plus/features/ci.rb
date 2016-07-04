@@ -190,6 +190,10 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         pull_request_actions.concat(BuildrPlus::Ci.additional_pull_request_actions)
 
         if BuildrPlus::FeatureManager.activated?(:redfish)
+          if BuildrPlus::FeatureManager.activated?(:jms)
+            package_actions << 'openmq:start'
+          end
+
           Redfish.domains.each do |domain|
             next unless domain.enable_rake_integration?
             next unless domain.dockerize?
@@ -197,6 +201,10 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
             pull_request_actions << taskname
             package_actions << taskname
             package_no_test_actions << taskname
+          end
+
+          if BuildrPlus::FeatureManager.activated?(:jms)
+            package_actions << 'openmq:stop'
           end
         end
 
