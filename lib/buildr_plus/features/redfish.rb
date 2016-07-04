@@ -135,6 +135,14 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
       raise "Unable to determine ip address of #{name}. Are you connected to the correct networks?"
     end
 
+    def docker_ip
+      if ENV['DOCKER_HOST']
+        ENV['DOCKER_HOST'].gsub(/\:\d+$/,'').gsub(/^.*\:\/\//,'')
+      else
+        host_ip
+      end
+    end
+
     def host_ip
       return ENV['HOST_IP_ADDRESS'] if ENV['HOST_IP_ADDRESS']
 
