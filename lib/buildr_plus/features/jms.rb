@@ -33,7 +33,7 @@ BuildrPlus::FeatureManager.feature(:jms => [:ejb]) do |f|
 
       port = find_free_port
 
-      sh "docker run -d -ti -P --name=#{name} --net=host -eIMQ_PORTMAPPER_PORT=\"#{port}\" --label org.realityforge.buildr_plus.omq.port=#{port} stocksoftware/openmq > /dev/null"
+      sh "docker run -d -ti -P --name=#{name} --net=host --env=\"IMQ_PORTMAPPER_PORT=#{port}\" --label org.realityforge.buildr_plus.omq.port=#{port} stocksoftware/openmq > /dev/null"
       link_container_to_configuration(project, BuildrPlus::Config.environment_config)
       BuildrPlus::Config.output_aux_confgs!
     end
