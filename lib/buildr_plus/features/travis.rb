@@ -23,15 +23,22 @@ BuildrPlus::FeatureManager.feature(:travis => [:oss]) do |f|
 
     def travis_content
       rv = ruby_version
+      docker_active = BuildrPlus::FeatureManager.activated?(:docker)
+
       content = <<CONTENT
 language: ruby
 jdk:
   - oraclejdk7
-sudo: false
+sudo: #{docker_active ? 'required' : 'false'}
 rvm:
   - #{rv}
 CONTENT
-
+      if docker_active
+        content += <<CONTENT
+services:
+  - docker
+CONTENT
+      end
       if BuildrPlus::Db.tiny_tds_defined?
         content += <<CONTENT
 addons:
