@@ -39,12 +39,19 @@ services:
   - docker
 CONTENT
       end
-      if BuildrPlus::Db.tiny_tds_defined?
-        content += <<CONTENT
+      content += <<CONTENT
 addons:
   apt:
     packages:
+CONTENT
+      if BuildrPlus::Db.tiny_tds_defined?
+        content += <<CONTENT
     - freetds-dev
+CONTENT
+      end
+      if docker_active
+        content += <<CONTENT
+    - socat
 CONTENT
       end
       content += <<CONTENT
@@ -59,8 +66,21 @@ CONTENT
   - export DB_TYPE=pg
   - export DB_SERVER_USERNAME=postgres
   - export DB_SERVER_PASSWORD=postgres
+CONTENT
+        if docker_active
+          # We need to introduce a local port proxy and expose it on public ip so that
+          # any code inside the container can access the postgres server
+          content += <<CONTENT
+  - export HOST_IP_ADDRESS=`ifconfig eth0 | sed -En 's/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\\.){3}[0-9]*).*/\\2/p'`
+  - socat TCP-LISTEN:10000,fork TCP:127.0.0.1:5432 &
+  - export DB_SERVER_HOST=${HOST_IP_ADDRESS}
+  - export DB_SERVER_PORT=10000
+CONTENT
+        else
+          content += <<CONTENT
   - export DB_SERVER_HOST=127.0.0.1
 CONTENT
+        end
       end
 
       content += <<CONTENT
