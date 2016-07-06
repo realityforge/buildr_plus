@@ -57,6 +57,7 @@ BuildrPlus::Roles.role(:server) do
 
   compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
   compile.with BuildrPlus::Deps.server_deps
+  compile.with BuildrPlus::Libs.ee_provided unless BuildrPlus::FeatureManager.activated?(:model)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
