@@ -64,7 +64,7 @@ CONTENT
       end
 
       content += <<CONTENT
-script: buildr ci:pull_request --trace
+script: buildr ci:pull_request
 git:
   depth: 10
 CONTENT
