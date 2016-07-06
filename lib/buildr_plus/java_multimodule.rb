@@ -19,6 +19,7 @@ BuildrPlus::FeatureManager.activate_features([:gwt]) if File.exist?("#{base_dire
 BuildrPlus::FeatureManager.activate_features([:shared]) if File.exist?("#{base_directory}/shared/src/main")
 BuildrPlus::FeatureManager.activate_features([:user_experience]) if File.exist?("#{base_directory}/user-experience/src/main/java")
 BuildrPlus::FeatureManager.activate_features([:selenium]) if File.exist?("#{base_directory}/selenium-tests/src/test/java")
+BuildrPlus::FeatureManager.activate_features([:integration_tests]) if File.exist?("#{base_directory}/integration-qa-support/src/main/java")
 BuildrPlus::FeatureManager.activate_features([:less]) if File.exist?("#{base_directory}/server/#{BuildrPlus::Less.default_less_path}")
 if BuildrPlus::FeatureManager.activated?(:gwt)
   BuildrPlus::FeatureManager.activate_features([:replicant])
@@ -55,8 +56,10 @@ if BuildrPlus::FeatureManager.activated?(:soap)
   BuildrPlus::Roles.project('soap-qa-support', :roles => [:soap_qa_support], :parent => :container, :template => true, :description => 'SOAP Test Infrastructure')
 end
 
-BuildrPlus::Roles.project('integration-qa-support', :roles => [:integration_qa_support], :parent => :container, :template => true, :description => 'Integration Test Infrastructure')
-BuildrPlus::Roles.project('integration-tests', :roles => [:integration_tests], :parent => :container, :template => true, :description => 'Integration Tests')
+if BuildrPlus::FeatureManager.activated?(:integration_tests)
+  BuildrPlus::Roles.project('integration-qa-support', :roles => [:integration_qa_support], :parent => :container, :template => true, :description => 'Integration Test Infrastructure')
+  BuildrPlus::Roles.project('integration-tests', :roles => [:integration_tests], :parent => :container, :template => true, :description => 'Integration Tests')
+end
 
 if BuildrPlus::FeatureManager.activated?(:selenium)
   BuildrPlus::Roles.project('selenium-tests', :roles => [:selenium_tests], :parent => :container, :template => true, :description => 'Selenium Tests')
