@@ -51,7 +51,7 @@ CONTENT
         content += <<CONTENT
   - export DB_TYPE=pg
   - export DB_SERVER_USERNAME=postgres
-  - export DB_SERVER_PASSWORD=
+  - export DB_SERVER_PASSWORD=postgres
   - export DB_SERVER_HOST=127.0.0.1
 CONTENT
       end
