@@ -71,6 +71,9 @@ module BuildrPlus #nodoc
             if BuildrPlus::Db.mssql?
               results[key]['force_drop'] = true
               results[key]['timeout'] = 10000 unless jruby
+              results[key]['restore_from'] = database.restore_from if database.restore_from
+              results[key]['backup_location'] = database.backup_location if database.backup_location
+              results[key]['instance_registry_key'] = database.instance_registry_key if database.instance_registry_key
             end
 
             if database.import_from
@@ -110,6 +113,9 @@ module BuildrPlus #nodoc
               if BuildrPlus::Db.mssql?
                 results[key]['force_drop'] = true
                 results[key]['timeout'] = 10000 unless jruby
+                results[key]['restore_from'] = database.restore_from if database.restore_from
+                results[key]['backup_location'] = database.backup_location if database.backup_location
+                results[key]['instance_registry_key'] = database.instance_registry_key if database.instance_registry_key
               end
             end
           end

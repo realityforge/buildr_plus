@@ -53,6 +53,12 @@ module BuildrPlus #nodoc
 
       attr_writer :delete_backup_history
 
+      attr_accessor :restore_from
+
+      attr_accessor :backup_location
+
+      attr_accessor :instance_registry_key
+
       def delete_backup_history_set?
         !@delete_backup_history.nil?
       end
@@ -64,6 +70,9 @@ module BuildrPlus #nodoc
       def to_h
         data = {'delete_backup_history' => self.delete_backup_history?}
         data['instance'] = self.instance if self.instance
+        data['restore_from'] = self.restore_from if self.restore_from
+        data['backup_location'] = self.backup_location if self.backup_location
+        data['instance_registry_key'] = self.instance_registry_key if self.instance_registry_key
         super.merge(data)
       end
     end
