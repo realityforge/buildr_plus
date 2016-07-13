@@ -161,6 +161,30 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.bouncycastle:bcprov-jdk15on:jar:1.52 org.bouncycastle:bcpkix-jdk15on:jar:1.52)
     end
 
+    def httpclient
+      %w(org.apache.httpcomponents:httpclient:jar:4.5 org.apache.httpcomponents:httpcore:jar:4.4.1) +
+        self.commons_logging + self.commons_codec
+    end
+
+    def keycloak_domgen_support
+      %w(org.realityforge.keycloak.domgen:keycloak-domgen-support:jar:1.0)
+    end
+
+    def jboss_logging
+      %w(org.jboss.logging:jboss-logging:jar:3.3.0.Final)
+    end
+
+    def keycloak
+      %w(
+        org.keycloak:keycloak-servlet-filter-adapter:jar:2.0.0.Final
+        org.keycloak:keycloak-core:jar:2.0.0.Final
+        org.keycloak:keycloak-common:jar:2.0.0.Final
+        org.keycloak:keycloak-adapter-spi:jar:2.0.0.Final
+        org.keycloak:keycloak-adapter-core:jar:2.0.0.Final
+        org.realityforge.org.keycloak:keycloak-servlet-adapter-spi:jar:2.0.0.Final
+      ) + self.bouncycastle + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
+    end
+
     def replicant_client
       self.replicant + self.gwt_property_source + self.gwt_datatypes + self.gwt_webpoller
     end
