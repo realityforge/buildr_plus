@@ -209,7 +209,24 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       populate_database_configuration(environment, check_only)
       populate_broker_configuration(environment, check_only)
       populate_ssrs_configuration(environment, check_only)
-      populate_volume_configuration(environment) unless check_only
+      unless check_only
+        populate_volume_configuration(environment)
+        populate_settings(environment)
+      end
+    end
+
+    def populate_settings(environment)
+      buildr_project = get_buildr_project.root_project
+      if BuildrPlus::FeatureManager.activated?(:keycloak)
+        constant_prefix = BuildrPlus::Naming.uppercase_constantize(buildr_project.name)
+        environment.setting("#{constant_prefix}_KEYCLOAK_REALM", environment_var('KEYCLOAK_REALM')) if !environment.setting?("#{constant_prefix}_KEYCLOAK_REALM") && environment_var('KEYCLOAK_REALM')
+        environment.setting("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY", environment_var('KEYCLOAK_REALM_PUBLIC_KEY')) if !environment.setting?("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY") && environment_var('KEYCLOAK_REALM_PUBLIC_KEY')
+        environment.setting("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL", environment_var('KEYCLOAK_AUTH_SERVER_URL')) if !environment.setting?("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL") && environment_var('KEYCLOAK_AUTH_SERVER_URL')
+
+        raise "Setting #{constant_prefix}_KEYCLOAK_REALM is missing and can not be derived from environment variable KEYCLOAK_REALM" unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM")
+        raise "Setting #{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY is missing and can not be derived from environment variable KEYCLOAK_REALM_PUBLIC_KEY" unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY")
+        raise "Setting #{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL is missing and can not be derived from environment variable KEYCLOAK_AUTH_SERVER_URL" unless environment.setting?("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL")
+      end
     end
 
     def populate_volume_configuration(environment)
