@@ -64,16 +64,21 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.mockito:mockito-all:jar:1.9.5)
     end
 
+    def jackson_annotations
+      %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.5.4)
+    end
+
     def jackson_core
-      %w(org.codehaus.jackson:jackson-core-asl:jar:1.9.13)
+      %w(com.fasterxml.jackson.core:jackson-core:jar:2.5.4)
     end
 
-    def jackson_mapper
-      %w(org.codehaus.jackson:jackson-mapper-asl:jar:1.9.13)
+    def jackson_databind
+      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.5.4)
     end
 
+    # TODO: Update domgen to work with the latest jackson
     def jackson_gwt_support
-      self.jackson_core + self.jackson_mapper
+      self.jackson_core + self.jackson_databind + self.jackson_annotations
     end
 
     def gwt_user
