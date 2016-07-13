@@ -149,6 +149,18 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.rest.criteria:rest-criteria:jar:0.9.3 org.antlr:antlr4-runtime:jar:4.3 org.antlr:antlr4-annotations:jar:4.3) + self.field_filter
     end
 
+    def commons_logging
+      %w(commons-logging:commons-logging:jar:1.2)
+    end
+
+    def commons_codec
+      %w(commons-codec:commons-codec:jar:1.9)
+    end
+
+    def bouncycastle
+      %w(org.bouncycastle:bcprov-jdk15on:jar:1.52 org.bouncycastle:bcpkix-jdk15on:jar:1.52)
+    end
+
     def replicant_client
       self.replicant + self.gwt_property_source + self.gwt_datatypes + self.gwt_webpoller
     end
