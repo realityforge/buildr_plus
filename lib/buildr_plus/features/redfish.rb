@@ -56,6 +56,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
     end
 
     def configure_system_settings(domain, environment)
+      domain.checkpoint_data!
       properties = build_property_set(domain, environment)
       domain.environment_vars.each_pair do |key, default_value|
         value = properties[key] || default_value
