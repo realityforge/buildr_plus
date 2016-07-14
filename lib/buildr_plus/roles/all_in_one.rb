@@ -49,6 +49,7 @@ BuildrPlus::Roles.role(:all_in_one) do
     generators << [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
     generators << [:syncrecord_datasources, :syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
     generators << [:keycloak_filter] if BuildrPlus::FeatureManager.activated?(:keycloak)
+    generators << [:timerstatus_filter] if BuildrPlus::FeatureManager.activated?(:timerstatus)
 
     generators << [:ee_redfish] if BuildrPlus::FeatureManager.activated?(:redfish)
 

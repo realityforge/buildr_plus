@@ -45,6 +45,7 @@ BuildrPlus::Roles.role(:server) do
     generators << [:mail_mail_queue, :mail_test_module] if BuildrPlus::FeatureManager.activated?(:mail)
     generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
     generators << [:keycloak_filter] if BuildrPlus::FeatureManager.activated?(:keycloak)
+    generators << [:timerstatus_filter] if BuildrPlus::FeatureManager.activated?(:timerstatus)
 
     generators += project.additional_domgen_generators
 
