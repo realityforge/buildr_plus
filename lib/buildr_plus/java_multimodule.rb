@@ -22,6 +22,7 @@ BuildrPlus::FeatureManager.activate_features([:selenium]) if File.exist?("#{base
 BuildrPlus::FeatureManager.activate_features([:integration_tests]) if File.exist?("#{base_directory}/integration-qa-support/src/main/java")
 BuildrPlus::FeatureManager.activate_features([:less]) if File.exist?("#{base_directory}/server/#{BuildrPlus::Less.default_less_path}")
 if BuildrPlus::FeatureManager.activated?(:gwt)
+  BuildrPlus::FeatureManager.activate_features([:jackson])
   BuildrPlus::FeatureManager.activate_features([:replicant])
   BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter])
   BuildrPlus::FeatureManager.activate_features([:appcache])

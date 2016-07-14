@@ -24,9 +24,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geotools_for_geolatte) if BuildrPlus::FeatureManager.activated?(:geotools)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
       end
-      if BuildrPlus::FeatureManager.activated?(:gwt)
-        dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_gwt_support, BuildrPlus::Libs.gwt_datatypes])
-      end
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_datatypes]) if BuildrPlus::FeatureManager.activated?(:gwt)
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_gwt_support]) if BuildrPlus::FeatureManager.activated?(:jackson)
 
       dependencies.flatten
     end

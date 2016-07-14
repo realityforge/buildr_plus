@@ -76,7 +76,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(com.fasterxml.jackson.core:jackson-databind:jar:2.5.4)
     end
 
-    # TODO: Update domgen to work with the latest jackson
     def jackson_gwt_support
       self.jackson_core + self.jackson_databind + self.jackson_annotations
     end

@@ -38,6 +38,8 @@ BuildrPlus::Roles.role(:all_in_one_library) do
 
     generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ejb_test_qa_external, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
+    generators << [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
+
     generators << [:jaxb_marshalling_tests, :xml_xsd_resources, :xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
     generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
 
