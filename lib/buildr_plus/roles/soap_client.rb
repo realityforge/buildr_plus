@@ -17,7 +17,7 @@ BuildrPlus::Roles.role(:soap_client) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:jws_client]
-    generators += [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
+    generators += [:jackson_date_util] if BuildrPlus::FeatureManager.activated?(:jackson)
 
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project)
