@@ -138,7 +138,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
 
     def docker_ip
       if ENV['DOCKER_HOST']
-        ENV['DOCKER_HOST'].gsub(/\:\d+$/,'').gsub(/^.*\:\/\//,'')
+        ENV['DOCKER_HOST'].gsub(/\:\d+$/, '').gsub(/^.*\:\/\//, '')
       else
         host_ip
       end
