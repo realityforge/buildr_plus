@@ -285,6 +285,10 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.rest', 'iris.syncrecord.server.entity')
         end
 
+        if BuildrPlus::FeatureManager.activated?(:keycloak)
+          r.subpackage_rule('server.filter', 'org.realityforge.keycloak.domgen.KeycloakUrlFilter', :rule_type => :class)
+        end
+
         r.subpackage_rule('server.filter', 'java.io.IOException', :rule_type => :class)
         r.subpackage_rule('server.filter', 'java.io.InputStream', :rule_type => :class)
         r.subpackage_rule('server.filter', 'javax.servlet')
