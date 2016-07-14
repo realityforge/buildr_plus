@@ -46,6 +46,17 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
       (@docker_domain_customizations ||= []).dup
     end
 
+    def define_database_config_prefixes(database_key, *prefixes)
+      prefix_map = self.database_config_prefix_map
+      raise "Prefixes for key #{database_key} already defined as #{prefix_map[database_key.to_s].inspect}" if prefix_map[database_key.to_s]
+      prefix_map[database_key.to_s] = prefixes
+    end
+
+
+    def database_config_prefix_map
+      (@database_config_prefix_map ||= {})
+    end
+
     def features
       if @features.nil?
         @features = []
@@ -93,23 +104,17 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
       constant_prefix = BuildrPlus::Naming.uppercase_constantize(domain.name)
 
       environment.databases.each do |database|
-        if BuildrPlus::FeatureManager.activated?(:timerstatus) && database.key.to_s == 'timers'
-          properties['TIMERS_DB_HOST'] = as_ip(database.host.to_s)
-          properties['TIMERS_DB_PORT'] = database.port.to_s
-          properties['TIMERS_DB_DATABASE'] = database.database.to_s
-          properties['TIMERS_DB_USERNAME'] = database.admin_username.to_s
-          properties['TIMERS_DB_PASSWORD'] = database.admin_password.to_s
-        else
-          prefix =
-            database.key.to_s == 'default' ?
-              constant_prefix :
-              "#{constant_prefix}_#{BuildrPlus::Naming.uppercase_constantize(database.key)}"
-
-          properties["#{prefix}_DB_HOST"] = as_ip(database.host.to_s)
-          properties["#{prefix}_DB_PORT"] = database.port.to_s
-          properties["#{prefix}_DB_DATABASE"] = database.database.to_s
-          properties["#{prefix}_DB_USERNAME"] = database.admin_username.to_s
-          properties["#{prefix}_DB_PASSWORD"] = database.admin_password.to_s
+        prefixes = self.database_config_prefix_map[database.key.to_s] || [constant_prefix]
+        prefixes.each do |prefix|
+          components = []
+          components << prefix if prefix
+          components << BuildrPlus::Naming.uppercase_constantize(database.key) unless database.key.to_s == 'default'
+          db_prefix = components.join('_')
+          properties["#{db_prefix}_DB_HOST"] = as_ip(database.host.to_s)
+          properties["#{db_prefix}_DB_PORT"] = database.port.to_s
+          properties["#{db_prefix}_DB_DATABASE"] = database.database.to_s
+          properties["#{db_prefix}_DB_USERNAME"] = database.admin_username.to_s
+          properties["#{db_prefix}_DB_PASSWORD"] = database.admin_password.to_s
         end
       end
 
@@ -194,6 +199,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
           end
           if BuildrPlus::FeatureManager.activated?(:timerstatus)
             domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
+            BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)
           end
           if BuildrPlus::FeatureManager.activated?(:domgen) && !BuildrPlus::FeatureManager.activated?(:rails)
             file = buildr_project._("generated/domgen/#{buildr_project.name}/main/etc/#{buildr_project.name_as_class}.redfish.fragment.json")
