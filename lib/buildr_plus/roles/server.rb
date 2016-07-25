@@ -104,6 +104,7 @@ BuildrPlus::Roles.role(:server) do
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
   webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt)
+  webroots[_('..', :generated, 'gwt-export')] = '/' if BuildrPlus::FeatureManager.activated?(:gwt)
 
   project.assets.paths.each do |path|
     next if path.to_s =~ /generated\/gwt\// && BuildrPlus::FeatureManager.activated?(:gwt)
