@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:rails) do |f|
+BuildrPlus::FeatureManager.feature(:rails => [:ruby]) do |f|
   f.enhance(:Config) do
     attr_writer :warble
 

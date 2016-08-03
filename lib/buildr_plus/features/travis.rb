@@ -16,13 +16,8 @@
 BuildrPlus::FeatureManager.feature(:travis => [:oss]) do |f|
   f.enhance(:Config) do
 
-    def ruby_version
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      IO.read("#{base_directory}/.ruby-version").strip
-    end
-
     def travis_content
-      rv = ruby_version
+      rv = BuildrPlus::Ruby.ruby_version
       docker_active = BuildrPlus::FeatureManager.activated?(:docker)
 
       content = <<CONTENT
