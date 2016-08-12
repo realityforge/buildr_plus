@@ -24,9 +24,9 @@ BuildrPlus::FeatureManager.feature(:repositories) do |f|
           Buildr.repositories.remote.unshift('http://download.osgeo.org/webdav/geotools')
         end
       else
-        Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/groups/fisg')
+        Buildr.repositories.remote.unshift('http://repo.ffm.vic.gov.au/repository/ffm')
         if BuildrPlus::FeatureManager.activated?(:geolatte)
-          Buildr.repositories.remote.unshift('http://repo.fire.dse.vic.gov.au/content/repositories/osgeo')
+          Buildr.repositories.remote.unshift('http://repo.ffm.vic.gov.au/repository/osgeo')
         end
       end
     end
