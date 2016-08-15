@@ -12,5 +12,4 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:ejb => [:java]) do |f|
-end
+BuildrPlus::FeatureManager.feature(:ejb => [:java])
