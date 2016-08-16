@@ -178,15 +178,20 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.jboss.logging:jboss-logging:jar:3.3.0.Final)
     end
 
+    def keycloak_core
+      %w(
+        org.keycloak:keycloak-core:jar:2.0.0.Final
+        org.keycloak:keycloak-common:jar:2.0.0.Final
+      ) + self.bouncycastle
+    end
+
     def keycloak
       %w(
         org.keycloak:keycloak-servlet-filter-adapter:jar:2.0.0.Final
-        org.keycloak:keycloak-core:jar:2.0.0.Final
-        org.keycloak:keycloak-common:jar:2.0.0.Final
         org.keycloak:keycloak-adapter-spi:jar:2.0.0.Final
         org.keycloak:keycloak-adapter-core:jar:2.0.0.Final
         org.realityforge.org.keycloak:keycloak-servlet-adapter-spi:jar:2.0.0.Final
-      ) + self.bouncycastle + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
+      ) + self.keycloak_core + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
     end
 
     def replicant_client
