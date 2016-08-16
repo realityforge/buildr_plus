@@ -193,7 +193,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.realityforge.org.keycloak:keycloak-servlet-adapter-spi:jar:2.0.0.Final
       ) + self.keycloak_core + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
     end
-  
+
     def replicant_client
       self.replicant + self.gwt_property_source + self.gwt_datatypes + self.gwt_webpoller
     end
