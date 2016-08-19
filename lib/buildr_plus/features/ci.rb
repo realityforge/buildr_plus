@@ -251,6 +251,11 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           pull_request_actions << 'travis:check'
         end
 
+        if BuildrPlus::FeatureManager.activated?(:jenkins)
+          commit_actions << 'jenkins:check'
+          pull_request_actions << 'jenkins:check'
+        end
+
         desc 'Perform pre-commit checks and source code analysis'
         project.task ':ci:commit' => commit_actions
 
