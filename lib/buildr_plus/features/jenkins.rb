@@ -166,6 +166,7 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
         file.write BuildrPlus::Jenkins.jenkinsfile_content
       end
       filename = "#{base_directory}/.jenkins/main.groovy"
+      FileUtils.mkdir_p File.dirname(filename)
       File.open(filename, 'wb') do |file|
         file.write BuildrPlus::Jenkins.main_content(Buildr.projects[0].root_project)
       end
