@@ -16,7 +16,7 @@
 BuildrPlus::FeatureManager.feature(:jenkins) do |f|
   f.enhance(:Config) do
     def jenkinsfile_content
-      inside_node("  load \"${pwd()}@script/.jenkins/main.groovy\"")
+      inside_node("  checkout scm\n  load '.jenkins/main.groovy'")
     end
 
     def main_content(root_project)
