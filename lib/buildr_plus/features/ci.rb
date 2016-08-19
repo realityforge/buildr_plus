@@ -80,7 +80,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           end
         end
 
-        desc 'Setup test environment for testing import process'
         project.task ':ci:import:setup' => %w(ci:common_setup) do
           Dbt::Config.environment = 'import_test' if BuildrPlus::FeatureManager.activated?(:dbt)
           project.task('ci:test_configure').invoke
