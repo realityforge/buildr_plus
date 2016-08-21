@@ -149,26 +149,37 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
   f.enhance(:ProjectExtension) do
     task 'jenkins:check' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      filename = "#{base_directory}/Jenkinsfile"
-      if !File.exist?(filename) || IO.read(filename) != BuildrPlus::Jenkins.jenkinsfile_content
-        raise 'The Jenkinsfile configuration file does not exist or is not up to date. Please run "buildr jenkins:fix" and commit changes.'
-      end
-      filename = "#{base_directory}/.jenkins/main.groovy"
-      if !File.exist?(filename) || IO.read(filename) != BuildrPlus::Jenkins.main_content(Buildr.projects[0].root_project)
-        raise 'The .jenkins/main.groovy configuration file does not exist or is not up to date. Please run "buildr jenkins:fix" and commit changes.'
+      if BuildrPlus::FeatureManager.activated?(:jenkins)
+        filename = "#{base_directory}/Jenkinsfile"
+        if !File.exist?(filename) || IO.read(filename) != BuildrPlus::Jenkins.jenkinsfile_content
+          raise 'The Jenkinsfile configuration file does not exist or is not up to date. Please run "buildr jenkins:fix" and commit changes.'
+        end
+        filename = "#{base_directory}/.jenkins/main.groovy"
+        if !File.exist?(filename) || IO.read(filename) != BuildrPlus::Jenkins.main_content(Buildr.projects[0].root_project)
+          raise 'The .jenkins/main.groovy configuration file does not exist or is not up to date. Please run "buildr jenkins:fix" and commit changes.'
+        end
+      else
+        if File.exist?("#{base_directory}/Jenkinsfile")
+          raise 'The Jenkinsfile configuration file exists but the project does not have the jenkins facet enabled.'
+        end
+        if File.exist?("#{base_directory}/.jenkins")
+          raise 'The .jenkins directory exists but the project does not have the jenkins facet enabled.'
+        end
       end
     end
 
-    task 'jenkins:fix' do
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      filename = "#{base_directory}/Jenkinsfile"
-      File.open(filename, 'wb') do |file|
-        file.write BuildrPlus::Jenkins.jenkinsfile_content
-      end
-      filename = "#{base_directory}/.jenkins/main.groovy"
-      FileUtils.mkdir_p File.dirname(filename)
-      File.open(filename, 'wb') do |file|
-        file.write BuildrPlus::Jenkins.main_content(Buildr.projects[0].root_project)
+    if BuildrPlus::FeatureManager.activated?(:jenkins)
+      task 'jenkins:fix' do
+        base_directory = File.dirname(Buildr.application.buildfile.to_s)
+        filename = "#{base_directory}/Jenkinsfile"
+        File.open(filename, 'wb') do |file|
+          file.write BuildrPlus::Jenkins.jenkinsfile_content
+        end
+        filename = "#{base_directory}/.jenkins/main.groovy"
+        FileUtils.mkdir_p File.dirname(filename)
+        File.open(filename, 'wb') do |file|
+          file.write BuildrPlus::Jenkins.main_content(Buildr.projects[0].root_project)
+        end
       end
     end
   end
