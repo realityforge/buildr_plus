@@ -31,6 +31,13 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
       @library.nil? ? false : @library
     end
 
+    def database_import?(database_key)
+      dbt_database = ::Dbt.database_for_key(database_key)
+      return true unless dbt_database.imports.empty?
+      return true if (dbt_database.packaged? && dbt_database.extra_actions.any? { |a| a.to_s =~ /import/ })
+      false
+    end
+
     attr_writer :add_dependent_artifacts
 
     def add_dependent_artifacts?
