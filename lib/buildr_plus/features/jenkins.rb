@@ -168,8 +168,8 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
       end
     end
 
-    if BuildrPlus::FeatureManager.activated?(:jenkins)
-      task 'jenkins:fix' do
+    task 'jenkins:fix' do
+      if BuildrPlus::FeatureManager.activated?(:jenkins)
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
         filename = "#{base_directory}/Jenkinsfile"
         File.open(filename, 'wb') do |file|
