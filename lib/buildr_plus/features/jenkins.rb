@@ -101,12 +101,13 @@ CONTENT
 
     private
 
-    def buildr_command(args)
-      shell_command("xvfb-run -a bundle exec buildr #{args}")
+    def buildr_command(args, options = {})
+      shell_command("xvfb-run -a bundle exec buildr #{args}", options)
     end
 
-    def shell_command(command)
-      "sh \"\"\"\n#{standard_command_env}\n#{command}\n\"\"\""
+    def shell_command(command, options = {})
+      pre_script = options[:pre_script] ? "#{options[:pre_script]}\n" : ''
+      "sh \"\"\"\n#{standard_command_env}\n#{pre_script}#{command}\n\"\"\""
     end
 
     def inside_node(content)
