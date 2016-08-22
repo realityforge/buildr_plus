@@ -38,7 +38,7 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
           'Jenkinsfile' => jenkinsfile_content,
           '.jenkins/main.groovy' => main_content(Buildr.projects[0].root_project),
         }
-      scripts['.jenkins/publish_oss.groovy'] = publish_content(self.publish_task_type == :oss) unless self.publish_task_type == :none
+      scripts['.jenkins/publish.groovy'] = publish_content(self.publish_task_type == :oss) unless self.publish_task_type == :none
       scripts
     end
 
