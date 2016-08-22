@@ -138,7 +138,9 @@ CONTENT
 CONTENT
       end
 
-      if BuildrPlus::FeatureManager.activated?(:dbt) && BuildrPlus::Dbt.database_import?(:default)
+      if BuildrPlus::FeatureManager.activated?(:dbt) &&
+        ::Dbt.database_for_key?(:default) &&
+        BuildrPlus::Dbt.database_import?(:default)
         content += <<CONTENT
 
   stage 'DB Import'
