@@ -15,6 +15,32 @@
 # Enable this feature if the code is tested using travis
 BuildrPlus::FeatureManager.feature(:jenkins) do |f|
   f.enhance(:Config) do
+    def jenkins_build_scripts
+      (@jenkins_build_scripts ||= standard_build_scripts).dup
+    end
+
+    def publish_task_type=(publish_task_type)
+      raise "Can not set publish task type to #{publish_task_type.inspect} as not one of expected values" unless [:oss, :external, :none].include?(publish_task_type)
+      @publish_task_type = publish_task_type
+    end
+
+    def publish_task_type
+      return @publish_task_type unless @publish_task_type.nil?
+      return :oss if BuildrPlus::FeatureManager.activated?(:oss)
+      :none
+    end
+
+    private
+
+    def standard_build_scripts
+      scripts =
+        {
+          'Jenkinsfile' => jenkinsfile_content,
+          '.jenkins/main.groovy' => main_content(Buildr.projects[0].root_project),
+        }
+      scripts
+    end
+
     def jenkinsfile_content
       inside_node("  checkout scm\n  load '.jenkins/main.groovy'")
     end
@@ -107,8 +133,6 @@ CONTENT
       inside_docker_image(content)
     end
 
-    private
-
     def buildr_command(args, options = {})
       shell_command("xvfb-run -a bundle exec buildr #{args}", options)
     end
@@ -159,13 +183,11 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
     task 'jenkins:check' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       if BuildrPlus::FeatureManager.activated?(:jenkins)
-        filename = "#{base_directory}/Jenkinsfile"
-        if !File.exist?(filename) || IO.read(filename) != BuildrPlus::Jenkins.jenkinsfile_content
-          raise 'The Jenkinsfile configuration file does not exist or is not up to date. Please run "buildr jenkins:fix" and commit changes.'
-        end
-        filename = "#{base_directory}/.jenkins/main.groovy"
-        if !File.exist?(filename) || IO.read(filename) != BuildrPlus::Jenkins.main_content(Buildr.projects[0].root_project)
-          raise 'The .jenkins/main.groovy configuration file does not exist or is not up to date. Please run "buildr jenkins:fix" and commit changes.'
+        BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
+          full_filename = "#{base_directory}/#{filename}"
+          if !File.exist?(full_filename) || IO.read(full_filename) != content
+            raise "The jenkins configuration file #{full_filename} does not exist or is not up to date. Please run \"buildr jenkins:fix\" and commit changes."
+          end
         end
       else
         if File.exist?("#{base_directory}/Jenkinsfile")
@@ -180,14 +202,12 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
     task 'jenkins:fix' do
       if BuildrPlus::FeatureManager.activated?(:jenkins)
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
-        filename = "#{base_directory}/Jenkinsfile"
-        File.open(filename, 'wb') do |file|
-          file.write BuildrPlus::Jenkins.jenkinsfile_content
-        end
-        filename = "#{base_directory}/.jenkins/main.groovy"
-        FileUtils.mkdir_p File.dirname(filename)
-        File.open(filename, 'wb') do |file|
-          file.write BuildrPlus::Jenkins.main_content(Buildr.projects[0].root_project)
+        BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
+          full_filename = "#{base_directory}/#{filename}"
+          FileUtils.mkdir_p File.dirname(full_filename)
+          File.open(full_filename, 'wb') do |file|
+            file.write content
+          end
         end
       end
     end
