@@ -242,7 +242,7 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
         BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
           full_filename = "#{base_directory}/#{filename}"
           if content.nil?
-            FileUtils.rm full_filename
+            FileUtils.rm_f full_filename
           else
             FileUtils.mkdir_p File.dirname(full_filename)
             File.open(full_filename, 'wb') do |file|
