@@ -48,7 +48,7 @@ export DOWNLOAD_REPO=${env.UPLOAD_REPO}
 export UPLOAD_REPO=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_REPO}
 export UPLOAD_USER=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_USER}
 export UPLOAD_PASSWORD=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_PASSWORD}
-export PUBLISH_VERSION=${env.PUBLISH_VERSION}
+export PUBLISH_VERSION=${PUBLISH_VERSION}
 PRE
       content = <<CONTENT
 #{prepare_content(false)}
