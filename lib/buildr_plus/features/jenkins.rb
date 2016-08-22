@@ -50,8 +50,8 @@ export UPLOAD_USER=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_USER}
 export UPLOAD_PASSWORD=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_PASSWORD}
 PRE
       content = <<CONTENT
+#{prepare_content(false)}
   stage 'Publish'
-  checkout scm
   #{buildr_command('ci:publish', :pre_script => pre_script)}
 CONTENT
       inside_node(inside_docker_image(content))
@@ -61,7 +61,7 @@ CONTENT
       inside_node("  checkout scm\n  load '.jenkins/main.groovy'")
     end
 
-    def main_content(root_project)
+    def prepare_content(include_artifacts)
       content = <<CONTENT
   stage 'Prepare'
   checkout scm
@@ -71,10 +71,20 @@ CONTENT
   retry(8) {
     #{shell_command('bundle install --deployment')}
   }
+CONTENT
+      if include_artifacts
+      content += <<CONTENT
   retry(8) {
     #{buildr_command('artifacts')}
   }
+CONTENT
+      end
+      content
+    end
 
+    def main_content(root_project)
+      content = <<CONTENT
+#{prepare_content(true)}
   stage 'Commit'
   #{buildr_command('ci:commit')}
 CONTENT
