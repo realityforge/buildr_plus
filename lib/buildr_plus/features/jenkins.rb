@@ -42,6 +42,10 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       post_package_stages[label] = "  #{buildr_command(buildr_task)}"
     end
 
+    def add_post_import_buildr_stage(label, buildr_task)
+      post_import_stages[label] = "  #{buildr_command(buildr_task)}"
+    end
+
     private
 
     def pre_package_stages
@@ -50,6 +54,10 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
 
     def post_package_stages
       @post_package_stages ||= {}
+    end
+
+    def post_import_stages
+      @post_import_stages ||= {}
     end
 
     def additional_tasks
@@ -179,7 +187,6 @@ CONTENT
 CONTENT
       end
 
-
       if BuildrPlus::FeatureManager.activated?(:dbt) &&
         ::Dbt.database_for_key?(:default) &&
         BuildrPlus::Dbt.database_import?(:default)
@@ -203,6 +210,14 @@ CONTENT
   #{buildr_command("ci:import:#{import_variant}")}
 CONTENT
         end
+      end
+
+      post_import_stages.each do |label, stage_content|
+        content += <<CONTENT
+
+  stage '#{label}'
+#{stage_content}
+CONTENT
       end
 
       inside_docker_image(content)
