@@ -98,7 +98,7 @@ module BuildrPlus #nodoc
 
             # This is to support having separate configuration during import process where the main
             # database is effectively development and all others are effectively the import from
-            if environment.key.to_s == 'test' && BuildrPlus::Dbt.database_import?(database.key)
+            if environment.key.to_s == 'test'
               key = database.key.to_s == 'default' ? 'import_test' : "#{database.key}_import_test"
               results[key] = {}
               if BuildrPlus::FeatureManager.activated?(:rails)
