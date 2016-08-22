@@ -38,7 +38,23 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
           'Jenkinsfile' => jenkinsfile_content,
           '.jenkins/main.groovy' => main_content(Buildr.projects[0].root_project),
         }
+      scripts['.jenkins/publish_oss.groovy'] = publish_content(self.publish_task_type == :oss) unless self.publish_task_type == :none
       scripts
+    end
+
+    def publish_content(oss)
+      pre_script = <<PRE
+export DOWNLOAD_REPO=${env.UPLOAD_REPO}
+export UPLOAD_REPO=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_REPO}
+export UPLOAD_USER=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_USER}
+export UPLOAD_PASSWORD=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_PASSWORD}
+PRE
+      content = <<CONTENT
+  stage 'Publish'
+  checkout scm
+  #{buildr_command('ci:publish', :pre_script => pre_script)}
+CONTENT
+      inside_node(inside_docker_image(content))
     end
 
     def jenkinsfile_content
