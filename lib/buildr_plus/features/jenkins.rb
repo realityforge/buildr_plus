@@ -73,6 +73,14 @@ CONTENT
 CONTENT
       end
 
+      if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.is_multi_database_project?
+        content += <<CONTENT
+
+  stage 'Package Pg'
+  #{buildr_command('ci:package', :pre_script => "export DB_TYPE=pg\nexport TEST=no")}
+CONTENT
+      end
+
       if BuildrPlus::FeatureManager.activated?(:dbt) && BuildrPlus::Dbt.database_import?(:default)
         content += <<CONTENT
 
