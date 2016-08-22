@@ -34,7 +34,23 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       additional_tasks[".jenkins/#{key}.groovy"] = buildr_task_content(label, task, pre_script)
     end
 
+    def add_pre_package_buildr_stage(label, buildr_task)
+      pre_package_stages[label] = "  #{buildr_command(buildr_task)}"
+    end
+
+    def add_post_package_buildr_stage(label, buildr_task)
+      post_package_stages[label] = "  #{buildr_command(buildr_task)}"
+    end
+
     private
+
+    def pre_package_stages
+      @pre_package_stages ||= {}
+    end
+
+    def post_package_stages
+      @post_package_stages ||= {}
+    end
 
     def additional_tasks
       @additional_scripts ||= {}
@@ -127,6 +143,14 @@ CONTENT
 CONTENT
       end
 
+      pre_package_stages.each do |label, stage_content|
+        content += <<CONTENT
+
+  stage '#{label}'
+#{stage_content}
+CONTENT
+      end
+
       content += <<CONTENT
 
   stage 'Package'
@@ -146,6 +170,15 @@ CONTENT
   #{buildr_command('ci:package_no_test', :pre_script => "export DB_TYPE=pg\nexport TEST=no")}
 CONTENT
       end
+
+      post_package_stages.each do |label, stage_content|
+        content += <<CONTENT
+
+  stage '#{label}'
+#{stage_content}
+CONTENT
+      end
+
 
       if BuildrPlus::FeatureManager.activated?(:dbt) &&
         ::Dbt.database_for_key?(:default) &&
