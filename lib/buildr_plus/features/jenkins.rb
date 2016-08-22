@@ -30,7 +30,15 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       :none
     end
 
+    def add_ci_task(key, label, task, pre_script = nil)
+      additional_tasks[".jenkins/#{key}.groovy"] = buildr_task_content(label, task, pre_script)
+    end
+
     private
+
+    def additional_tasks
+      @additional_scripts ||= {}
+    end
 
     def standard_build_scripts
       scripts =
@@ -39,6 +47,7 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
           '.jenkins/main.groovy' => main_content(Buildr.projects[0].root_project),
         }
       scripts['.jenkins/publish.groovy'] = publish_content(self.publish_task_type == :oss) unless self.publish_task_type == :none
+      scripts.merge!(additional_tasks)
       scripts
     end
 
