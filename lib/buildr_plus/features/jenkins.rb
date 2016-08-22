@@ -50,10 +50,14 @@ export UPLOAD_USER=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_USER}
 export UPLOAD_PASSWORD=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_PASSWORD}
 export PUBLISH_VERSION=${PUBLISH_VERSION}
 PRE
+      buildr_task_content('Publish', 'ci:publish', pre_script)
+    end
+
+    def buildr_task_content(label, task, pre_script)
       content = <<CONTENT
 #{prepare_content(false)}
-  stage 'Publish'
-  #{buildr_command('ci:publish', :pre_script => pre_script)}
+  stage '#{label}'
+  #{buildr_command(task, :pre_script => pre_script)}
 CONTENT
       inside_node(inside_docker_image(content))
     end
