@@ -38,7 +38,11 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
           'Jenkinsfile' => jenkinsfile_content,
           '.jenkins/main.groovy' => main_content(Buildr.projects[0].root_project),
         }
-      scripts['.jenkins/publish.groovy'] = publish_content(self.publish_task_type == :oss) unless self.publish_task_type == :none
+      if self.publish_task_type == :none
+        scripts['.jenkins/publish.groovy'] = nil
+      else
+        scripts['.jenkins/publish.groovy'] = publish_content(self.publish_task_type == :oss)
+      end
       scripts
     end
 
@@ -74,7 +78,7 @@ CONTENT
   }
 CONTENT
       if include_artifacts
-      content += <<CONTENT
+        content += <<CONTENT
   retry(8) {
     #{buildr_command('artifacts')}
   }
@@ -212,8 +216,14 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
       if BuildrPlus::FeatureManager.activated?(:jenkins)
         BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
           full_filename = "#{base_directory}/#{filename}"
-          if !File.exist?(full_filename) || IO.read(full_filename) != content
-            raise "The jenkins configuration file #{full_filename} does not exist or is not up to date. Please run \"buildr jenkins:fix\" and commit changes."
+          if content.nil?
+            if File.exist?(full_filename)
+              raise "The jenkins configuration file #{full_filename} exists when not expected. Please run \"buildr jenkins:fix\" and commit changes."
+            end
+          else
+            if !File.exist?(full_filename) || IO.read(full_filename) != content
+              raise "The jenkins configuration file #{full_filename} does not exist or is not up to date. Please run \"buildr jenkins:fix\" and commit changes."
+            end
           end
         end
       else
@@ -231,9 +241,13 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
         BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
           full_filename = "#{base_directory}/#{filename}"
-          FileUtils.mkdir_p File.dirname(full_filename)
-          File.open(full_filename, 'wb') do |file|
-            file.write content
+          if content.nil?
+            FileUtils.rm full_filename
+          else
+            FileUtils.mkdir_p File.dirname(full_filename)
+            File.open(full_filename, 'wb') do |file|
+              file.write content
+            end
           end
         end
       end
