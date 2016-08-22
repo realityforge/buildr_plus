@@ -38,11 +38,7 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
           'Jenkinsfile' => jenkinsfile_content,
           '.jenkins/main.groovy' => main_content(Buildr.projects[0].root_project),
         }
-      if self.publish_task_type == :none
-        scripts['.jenkins/publish.groovy'] = nil
-      else
-        scripts['.jenkins/publish.groovy'] = publish_content(self.publish_task_type == :oss)
-      end
+      scripts['.jenkins/publish.groovy'] = publish_content(self.publish_task_type == :oss) unless self.publish_task_type == :none
       scripts
     end
 
@@ -216,8 +212,10 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
     task 'jenkins:check' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       if BuildrPlus::FeatureManager.activated?(:jenkins)
+        existing = File.exist?("#{base_directory}/.jenkins") ? Dir["#{base_directory}/.jenkins/*.groovy"] : []
         BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
           full_filename = "#{base_directory}/#{filename}"
+          existing.delete(full_filename)
           if content.nil?
             if File.exist?(full_filename)
               raise "The jenkins configuration file #{full_filename} exists when not expected. Please run \"buildr jenkins:fix\" and commit changes."
@@ -227,6 +225,9 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
               raise "The jenkins configuration file #{full_filename} does not exist or is not up to date. Please run \"buildr jenkins:fix\" and commit changes."
             end
           end
+        end
+        unless existing.empty?
+          raise "The following jenkins configuration file(s) exist but are not expected. Please run \"buildr jenkins:fix\" and commit changes.\n#{existing.collect { |e| "\t* #{e}" }.join("\n")}"
         end
       else
         if File.exist?("#{base_directory}/Jenkinsfile")
@@ -241,8 +242,10 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
     task 'jenkins:fix' do
       if BuildrPlus::FeatureManager.activated?(:jenkins)
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
+        existing = File.exist?("#{base_directory}/.jenkins") ? Dir["#{base_directory}/.jenkins/*.groovy"] : []
         BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
           full_filename = "#{base_directory}/#{filename}"
+          existing.delete(full_filename)
           if content.nil?
             FileUtils.rm_f full_filename
           else
@@ -251,6 +254,9 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
               file.write content
             end
           end
+        end
+        existing.each do |f|
+          FileUtils.rm_f f
         end
       end
     end
