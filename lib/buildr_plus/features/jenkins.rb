@@ -197,6 +197,7 @@ CONTENT
           content += <<CONTENT
 
   stage 'Package Pg'
+  #{buildr_command('clean')}
   #{buildr_command('ci:package_no_test', :pre_script => "export DB_TYPE=pg\nexport TEST=no")}
 CONTENT
         end
