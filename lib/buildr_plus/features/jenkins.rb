@@ -30,6 +30,18 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       :none
     end
 
+    def skip_stage?(stage)
+      skip_stage_list.include?(stage)
+    end
+
+    def skip_stage!(stage)
+      skip_stage_list << stage
+    end
+
+    def skip_stages
+      skip_stage_list.dup
+    end
+
     def add_ci_task(key, label, task, pre_script = nil)
       additional_tasks[".jenkins/#{key}.groovy"] = buildr_task_content(label, task, pre_script)
     end
@@ -47,6 +59,10 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
     end
 
     private
+
+    def skip_stage_list
+      @skip_stages ||= []
+    end
 
     def pre_package_stages
       @pre_package_stages ||= {}
@@ -121,34 +137,37 @@ CONTENT
     end
 
     def main_content(root_project)
-      content = <<CONTENT
-#{prepare_content(true)}
+      content = "#{prepare_content(true)}\n"
+
+      unless skip_stage?('Commit')
+        content += <<CONTENT
   stage 'Commit'
   #{buildr_command('ci:commit')}
 CONTENT
 
-      if BuildrPlus::FeatureManager.activated?(:checkstyle)
-        content += <<CONTENT
+        if BuildrPlus::FeatureManager.activated?(:checkstyle)
+          content += <<CONTENT
   step([$class: 'hudson.plugins.checkstyle.CheckStylePublisher', pattern: 'reports/#{root_project.name}/checkstyle/checkstyle.xml'])
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/checkstyle', reportFiles: 'checkstyle.html', reportName: 'Checkstyle issues'])
 CONTENT
-      end
-      if BuildrPlus::FeatureManager.activated?(:findbugs)
-        content += <<CONTENT
+        end
+        if BuildrPlus::FeatureManager.activated?(:findbugs)
+          content += <<CONTENT
   step([$class: 'FindBugsPublisher', pattern: 'reports/#{root_project.name}/findbugs/findbugs.xml', unstableTotalAll: '1', failedTotalAll: '1', isRankActivated: true, canComputeNew: true, shouldDetectModules: false, useDeltaValues: false, canRunOnFailed: false, thresholdLimit: 'low'])
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/findbugs', reportFiles: 'findbugs.html', reportName: 'Findbugs issues'])
 CONTENT
-      end
-      if BuildrPlus::FeatureManager.activated?(:pmd)
-        content += <<CONTENT
+        end
+        if BuildrPlus::FeatureManager.activated?(:pmd)
+          content += <<CONTENT
   step([$class: 'PmdPublisher', pattern: 'reports/#{root_project.name}/pmd/pmd.xml'])
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/pmd/', reportFiles: 'pmd.html', reportName: 'PMD Issues'])
 CONTENT
-      end
-      if BuildrPlus::FeatureManager.activated?(:jdepend)
-        content += <<CONTENT
+        end
+        if BuildrPlus::FeatureManager.activated?(:jdepend)
+          content += <<CONTENT
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/jdepend', reportFiles: 'jdepend.html', reportName: 'JDepend Report'])
 CONTENT
+        end
       end
 
       pre_package_stages.each do |label, stage_content|
@@ -159,24 +178,28 @@ CONTENT
 CONTENT
       end
 
-      content += <<CONTENT
+      unless skip_stage?('Package')
+        content += <<CONTENT
 
   stage 'Package'
   #{buildr_command('ci:package')}
 CONTENT
-      if BuildrPlus::FeatureManager.activated?(:testng)
-        content += <<CONTENT
+        if BuildrPlus::FeatureManager.activated?(:testng)
+          content += <<CONTENT
 
   step([$class: 'hudson.plugins.testng.Publisher', reportFilenamePattern: 'reports/*/testng/testng-results.xml'])
 CONTENT
+        end
       end
 
-      if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.is_multi_database_project?
-        content += <<CONTENT
+      unless skip_stage?('Package Pg')
+        if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.is_multi_database_project?
+          content += <<CONTENT
 
   stage 'Package Pg'
   #{buildr_command('ci:package_no_test', :pre_script => "export DB_TYPE=pg\nexport TEST=no")}
 CONTENT
+        end
       end
 
       post_package_stages.each do |label, stage_content|
@@ -190,25 +213,29 @@ CONTENT
       if BuildrPlus::FeatureManager.activated?(:dbt) &&
         ::Dbt.database_for_key?(:default) &&
         BuildrPlus::Dbt.database_import?(:default)
-        content += <<CONTENT
+        unless skip_stage?('DB Import')
+          content += <<CONTENT
 
   stage 'DB Import'
   #{shell_command('xvfb-run -a bundle exec buildr ci:import')}
 CONTENT
-        #TODO: Collect tests for iris that runs tests after import
-        if BuildrPlus::FeatureManager.activated?(:testng) && false
-          content += <<CONTENT
+          #TODO: Collect tests for iris that runs tests after import
+          if BuildrPlus::FeatureManager.activated?(:testng) && false
+            content += <<CONTENT
 
   step([$class: 'hudson.plugins.testng.Publisher', reportFilenamePattern: 'reports/*/testng/testng-results.xml'])
 CONTENT
+          end
         end
 
         BuildrPlus::Ci.additional_import_tasks.each do |import_variant|
-          content += <<CONTENT
+          unless skip_stage?("DB #{import_variant} Import")
+            content += <<CONTENT
 
   stage 'DB #{import_variant} Import'
   #{buildr_command("ci:import:#{import_variant}")}
 CONTENT
+          end
         end
       end
 
