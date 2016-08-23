@@ -343,8 +343,8 @@ export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
             end
           end
         end
-        existing.each do |f|
-          FileUtils.rm_f f
+        existing.each do |filename|
+          FileUtils.rm_f filename
         end
       end
     end
