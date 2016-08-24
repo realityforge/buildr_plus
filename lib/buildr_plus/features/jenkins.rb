@@ -292,8 +292,7 @@ CONTENT
     end
 
     def inside_try_catch(content, handler_content)
-      hash_bang(
-        <<CONTENT
+      <<CONTENT
 try {
 
 def err = null
@@ -311,7 +310,6 @@ currentBuild.result = 'SUCCESS'
     }
 }
 CONTENT
-      )
     end
 
     def standard_exception_handling
