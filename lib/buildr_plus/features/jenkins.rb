@@ -103,10 +103,12 @@ PRE
     end
 
     def buildr_task_content(label, task, pre_script)
+      quote = pre_script.to_s.include?("\n") ? '"""' : '"'
+      separator = pre_script.to_s != '' ? ';' : ''
       content = <<CONTENT
 #{prepare_content(false)}
   stage '#{label}'
-  sh \"#{pre_script};#{docker_setup}#{buildr_command(task)}\"
+  sh #{quote}#{pre_script}#{separator}#{docker_setup}#{buildr_command(task)}#{quote}
 CONTENT
       hash_bang(inside_try_catch(inside_node(inside_docker_image(content)), standard_exception_handling))
     end
@@ -121,27 +123,27 @@ CONTENT
   env.BUILD_NUMBER = "${env.BUILD_NUMBER}"
   env.GEM_HOME = '/home/buildbot/.gems'
   env.GEM_PATH = '/home/buildbot/.gems'
-  env.PATH = "/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:${env.PATH}"
+  env.PATH = "#{is_old_jruby? ? '' : '/home/buildbot/.gems/bin:'}/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:${env.PATH}"
   checkout scm
   env.PRODUCT_VERSION = sh(script: 'echo $BUILD_NUMBER-`git rev-parse --short HEAD`', returnStdout: true).trim()
   sh 'echo "gem: --no-ri --no-rdoc" > ~/.gemrc'
         CONTENT
-        if BuildrPlus::Ruby.ruby_version =~ /jruby/
+        if is_old_jruby?
           content += <<-CONTENT
   retry(8) { sh 'rbenv exec gem install jruby-openssl --version 0.8.2; rbenv rehash' }
   retry(8) { sh 'rbenv exec gem install bundler --version 1.3.1; rbenv rehash' }
           CONTENT
         else
           content += <<-CONTENT
-  retry(8) { sh 'rbenv exec gem install bundler; rbenv rehash' }
+  retry(8) { sh 'gem install bundler; rbenv rehash' }
           CONTENT
         end
         content += <<CONTENT
-  retry(8) { sh 'rbenv exec bundle install --deployment; rbenv rehash' }
+  retry(8) { sh '#{is_old_jruby? ? 'rbenv exec ' : ''}bundle install --deployment; rbenv rehash' }
 CONTENT
         if include_artifacts
           content += <<CONTENT
-  retry(8) { sh 'rbenv exec bundle exec buildr artifacts' }
+  retry(8) { sh '#{is_old_jruby? ? 'rbenv exec ' : ''}bundle exec buildr artifacts' }
 CONTENT
         end
         content
@@ -273,7 +275,7 @@ CONTENT
     end
 
     def rbenv_command(command)
-      "rbenv exec #{command}"
+      "#{is_old_jruby? ? 'rbenv exec ' : ''}#{command}"
     end
 
     def inside_node(content)
@@ -305,6 +307,10 @@ currentBuild.result = 'SUCCESS'
     }
 }
 CONTENT
+    end
+
+    def is_old_jruby?
+      BuildrPlus::Ruby.ruby_version =~ /jruby/
     end
 
     def standard_exception_handling
