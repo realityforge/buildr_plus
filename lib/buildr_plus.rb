@@ -17,6 +17,11 @@ if Buildr::VERSION != expected_version
   raise "buildr_plus expected Buildr version #{expected_version} but actual version is #{Buildr::VERSION}"
 end
 
+bundler_version = '1.12.5'
+unless Bundler::VERSION >= bundler_version
+  raise "buildr_plus expected Bundler version #{bundler_version} but actual version is #{Bundler::VERSION}"
+end
+
 require 'yaml'
 require 'resolv'
 require 'socket'
