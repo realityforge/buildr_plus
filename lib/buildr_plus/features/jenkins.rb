@@ -106,9 +106,10 @@ PRE
       content = <<CONTENT
 #{prepare_content(false)}
   stage '#{label}'
-  #{buildr_command(task, :pre_script => pre_script)}
+  sh '#{pre_script}'
+  sh '#{buildr_command(task)}'
 CONTENT
-      inside_node(inside_docker_image(content))
+      hash_bang(inside_try_catch(inside_node(inside_docker_image(content)), standard_exception_handling))
     end
 
     def jenkinsfile_content
@@ -116,156 +117,273 @@ CONTENT
     end
 
     def prepare_content(include_artifacts)
-      content = <<CONTENT
-  stage 'Prepare'
+      stage('Prepare') do
+        content = ''
+        if BuildrPlus::FeatureManager.activated?(:docker)
+          content += <<-CONTENT
+  env.DOCKER_TLS_VERIFY = "${env.DOCKER_TLS_VERIFY}"
+  env.DOCKER_HOST = "${env.DOCKER_HOST}"
+  env.DOCKER_CERT_PATH = "${env.DOCKER_CERT_PATH}"
+          CONTENT
+        end
+        content += <<-CONTENT
+  env.BUILD_NUMBER = "${env.BUILD_NUMBER}"
+  env.GEM_HOME = '/home/buildbot/.gems'
+  env.GEM_PATH = '/home/buildbot/.gems'
   checkout scm
-  retry(8) {
-    #{shell_command('gem install bundler')}
-  }
-  retry(8) {
-    #{shell_command('bundle install --deployment')}
-  }
-CONTENT
-      if include_artifacts
+  sh 'export PRODUCT_VERSION=$BUILD_NUMBER-`git rev-parse --short HEAD`'
+  sh 'export PATH="/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:$PATH"'
+  sh 'echo "gem: --no-ri --no-rdoc" > ~/.gemrc'
+        CONTENT
+        if BuildrPlus::Ruby.ruby_version =~ /jruby/
+          content += <<-CONTENT
+  retry(8) { sh 'rbenv exec gem install jruby-openssl --version 0.8.2; rbenv rehash' }
+  retry(8) { sh 'rbenv exec gem install bundler --version 1.3.1; rbenv rehash' }
+          CONTENT
+        else
+          content += <<-CONTENT
+  retry(8) { sh 'rbenv exec gem install bundler; rbenv rehash' }
+          CONTENT
+        end
         content += <<CONTENT
-  retry(8) {
-    #{buildr_command('artifacts')}
-  }
+  retry(8) { sh 'rbenv exec bundle install --deployment; rbenv rehash' }
 CONTENT
+        if include_artifacts
+          content += <<CONTENT
+  retry(8) { sh 'rbenv exec bundle exec buildr artifacts' }
+CONTENT
+        end
+        content
       end
-      content
     end
 
     def main_content(root_project)
-      content = "#{prepare_content(true)}\n"
+      content = prepare_content(true)
 
-      unless skip_stage?('Commit')
-        content += <<CONTENT
-  stage 'Commit'
-  #{buildr_command('ci:commit')}
-CONTENT
-
-        if BuildrPlus::FeatureManager.activated?(:checkstyle)
-          content += <<CONTENT
-  step([$class: 'hudson.plugins.checkstyle.CheckStylePublisher', pattern: 'reports/#{root_project.name}/checkstyle/checkstyle.xml'])
-  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/checkstyle', reportFiles: 'checkstyle.html', reportName: 'Checkstyle issues'])
-CONTENT
-        end
-        if BuildrPlus::FeatureManager.activated?(:findbugs)
-          content += <<CONTENT
-  step([$class: 'FindBugsPublisher', pattern: 'reports/#{root_project.name}/findbugs/findbugs.xml', unstableTotalAll: '1', failedTotalAll: '1', isRankActivated: true, canComputeNew: true, shouldDetectModules: false, useDeltaValues: false, canRunOnFailed: false, thresholdLimit: 'low'])
-  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/findbugs', reportFiles: 'findbugs.html', reportName: 'Findbugs issues'])
-CONTENT
-        end
-        if BuildrPlus::FeatureManager.activated?(:pmd)
-          content += <<CONTENT
-  step([$class: 'PmdPublisher', pattern: 'reports/#{root_project.name}/pmd/pmd.xml'])
-  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/pmd/', reportFiles: 'pmd.html', reportName: 'PMD Issues'])
-CONTENT
-        end
-        if BuildrPlus::FeatureManager.activated?(:jdepend)
-          content += <<CONTENT
-  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/jdepend', reportFiles: 'jdepend.html', reportName: 'JDepend Report'])
-CONTENT
-        end
-      end
+      content += commit_stage(root_project)
 
       pre_package_stages.each do |label, stage_content|
-        content += <<CONTENT
-
-  stage '#{label}'
-#{stage_content}
-CONTENT
-      end
-
-      unless skip_stage?('Package')
-        content += <<CONTENT
-
-  stage 'Package'
-  #{buildr_command('ci:package')}
-CONTENT
-        if BuildrPlus::FeatureManager.activated?(:testng)
-          content += <<CONTENT
-
-  step([$class: 'hudson.plugins.testng.Publisher', reportFilenamePattern: 'reports/*/testng/testng-results.xml'])
-CONTENT
+        content += stage(label) do
+          stage_content
         end
       end
 
-      unless skip_stage?('Package Pg')
-        if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.is_multi_database_project?
-          content += <<CONTENT
+      content += package_stage
 
-  stage 'Package Pg'
-  #{buildr_command('clean')}
-  #{buildr_command('ci:package_no_test', :pre_script => "export DB_TYPE=pg\nexport TEST=no")}
-CONTENT
-        end
+      if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.is_multi_database_project?
+        content += package_pg_stage
       end
 
       post_package_stages.each do |label, stage_content|
-        content += <<CONTENT
-
-  stage '#{label}'
-#{stage_content}
-CONTENT
+        content += stage(label) do
+          stage_content
+        end
       end
 
       if BuildrPlus::FeatureManager.activated?(:dbt) &&
         ::Dbt.database_for_key?(:default) &&
         BuildrPlus::Dbt.database_import?(:default)
-        unless skip_stage?('DB Import')
-          content += <<CONTENT
-
-  stage 'DB Import'
-  #{shell_command('xvfb-run -a bundle exec buildr ci:import')}
-CONTENT
-          #TODO: Collect tests for iris that runs tests after import
-          if BuildrPlus::FeatureManager.activated?(:testng) && false
-            content += <<CONTENT
-
-  step([$class: 'hudson.plugins.testng.Publisher', reportFilenamePattern: 'reports/*/testng/testng-results.xml'])
-CONTENT
-          end
-        end
+        content += import_stage
 
         BuildrPlus::Ci.additional_import_tasks.each do |import_variant|
-          unless skip_stage?("DB #{import_variant} Import")
-            content += <<CONTENT
-
-  stage 'DB #{import_variant} Import'
-  #{buildr_command("ci:import:#{import_variant}")}
-CONTENT
-          end
+          content += import_variant_stage(import_variant)
         end
       end
 
       post_import_stages.each do |label, stage_content|
-        content += <<CONTENT
-
-  stage '#{label}'
-#{stage_content}
-CONTENT
+        content += stage(label) do
+          stage_content
+        end
       end
 
-      inside_docker_image(content)
+      hash_bang(inside_try_catch(inside_docker_image(content), standard_exception_handling))
     end
 
-    def buildr_command(args, options = {})
-      shell_command("xvfb-run -a bundle exec buildr #{args}", options)
+    def commit_stage(root_project)
+      stage('Commit') do
+        stage = "  sh '#{buildr_command('ci:commit')}'\n"
+
+        if BuildrPlus::FeatureManager.activated?(:checkstyle)
+          stage += <<CONTENT
+  step([$class: 'hudson.plugins.checkstyle.CheckStylePublisher', pattern: 'reports/#{root_project.name}/checkstyle/checkstyle.xml'])
+  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/checkstyle', reportFiles: 'checkstyle.html', reportName: 'Checkstyle issues'])
+CONTENT
+        end
+        if BuildrPlus::FeatureManager.activated?(:findbugs)
+          stage += <<CONTENT
+  step([$class: 'FindBugsPublisher', pattern: 'reports/#{root_project.name}/findbugs/findbugs.xml', unstableTotalAll: '1', failedTotalAll: '1', isRankActivated: true, canComputeNew: true, shouldDetectModules: false, useDeltaValues: false, canRunOnFailed: false, thresholdLimit: 'low'])
+  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/findbugs', reportFiles: 'findbugs.html', reportName: 'Findbugs issues'])
+CONTENT
+        end
+        if BuildrPlus::FeatureManager.activated?(:pmd)
+          stage += <<CONTENT
+  step([$class: 'PmdPublisher', pattern: 'reports/#{root_project.name}/pmd/pmd.xml'])
+  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/pmd/', reportFiles: 'pmd.html', reportName: 'PMD Issues'])
+CONTENT
+        end
+        if BuildrPlus::FeatureManager.activated?(:jdepend)
+          stage += <<CONTENT
+  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/jdepend', reportFiles: 'jdepend.html', reportName: 'JDepend Report'])
+CONTENT
+        end
+        stage
+      end
     end
 
-    def shell_command(command, options = {})
-      pre_script = options[:pre_script] ? "#{options[:pre_script]}\n" : ''
-      "sh \"\"\"\n#{standard_command_env}\n#{pre_script}#{command}\n\"\"\""
+    def import_stage
+      stage('DB Import') do
+        "  sh '#{buildr_command('ci:import')}'\n"
+      end
+    end
+
+    def import_variant_stage(import_variant)
+      stage("DB #{import_variant} Import") do
+        "  sh '#{buildr_command("ci:import:#{import_variant}")}'\n"
+      end
+    end
+
+    def package_pg_stage
+      stage('Package Pg') do
+        "  sh '#{buildr_command('clean')}'\n  sh 'DB_TYPE=pg #{buildr_command('ci:package_no_test')}'\n"
+      end
+    end
+
+    def package_stage
+      stage('Package') do
+        stage = "  sh '#{buildr_command('ci:package')}'\n"
+        if BuildrPlus::FeatureManager.activated?(:testng)
+          stage += <<CONTENT
+
+  step([$class: 'hudson.plugins.testng.Publisher', reportFilenamePattern: 'reports/*/testng/testng-results.xml'])
+CONTENT
+        end
+        stage
+      end
+    end
+
+    def stage(name)
+      return '' if skip_stage?(name)
+      <<CONTENT
+  stage '#{name}'
+#{yield}
+CONTENT
+    end
+
+    def buildr_command(args)
+      "xvfb-run -a #{bundle_command("buildr #{args}")}"
+    end
+
+    def bundle_command(command)
+      rbenv_command("bundle exec #{command}")
+    end
+
+    def rbenv_command(command)
+      "rbenv exec #{command}"
     end
 
     def inside_node(content)
-      <<CONTENT
+      hash_bang(
+        <<CONTENT
 node {
 #{content}
 }
 CONTENT
+      )
+    end
+
+    def inside_try_catch(content, handler_content)
+      hash_bang(
+        <<CONTENT
+try {
+
+def err = null
+
+currentBuild.result = 'SUCCESS'
+
+#{content}
+} catch (exception) {
+    currentBuild.result = "FAILURE"
+    err = exception;
+} finally {
+#{handler_content}
+    if (err) {
+        throw err
+    }
+}
+CONTENT
+      )
+    end
+
+    def standard_exception_handling
+      <<CONTENT
+    if (currentBuild.result == 'SUCCESS' && currentBuild.rawBuild.previousBuild.result.toString() == 'FAILURE') {
+        emailext attachLog: true,
+                body: "<p>Check console output at <a href=\\"${env.BUILD_URL}\\">${env.BUILD_URL}</a> to view the results.</p>",
+                mimeType: 'text/html',
+                subject: "\\ud83d\\udc4d ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - SUCCESS",
+                to: env.BUILD_NOTIFICATION_EMAIL
+    }
+
+    if (currentBuild.result != 'SUCCESS') {
+        emailBody = """
+<title>${env.JOB_NAME} - \#${env.BUILD_NUMBER} - ${currentBuild.result}</title>
+<BODY>
+    <div style="font:normal normal 100% Georgia, Serif; background: #ffffff; border: dotted 1px #666; margin: 2px; content: 2px; padding: 2px;">
+      <table style="width: 100%">
+        <tr style="background-color:#f0f0f0;">
+          <th colspan=2 valign="center"><b style="font-size: 200%;">BUILD ${currentBuild.result}</b></th>
+        </tr>
+        <tr>
+          <th align="right"><b>Build URL</b></th>
+          <td>
+            <a href="${env.BUILD_URL}">${env.BUILD_URL}</a>
+          </td>
+        </tr>
+        <tr>
+          <th align="right"><b>Job</b></th>
+          <td>${env.JOB_NAME}</td>
+        </tr>
+        <tr>
+          <td align="right"><b>Build Number</b></td>
+          <td>${env.BUILD_NUMBER}</td>
+        </tr>
+        <tr>
+          <td align="right"><b>Branch</b></td>
+          <td>${env.BRANCH_NAME}</td>
+        </tr>
+ """
+        if (null != env.CHANGE_ID) {
+            emailBody += """
+       <tr>
+          <td align="right"><b>Change</b></td>
+          <td><a href="${env.CHANGE_URL}">${env.CHANGE_ID} - ${env.CHANGE_TITLE}</a></td>
+        </tr>
+"""
+        }
+
+        emailBody += """
+      </table>
+    </div>
+
+    <div style="background: lightyellow; border: dotted 1px #666; margin: 2px; content: 2px; padding: 2px;">
+"""
+        for (String line : currentBuild.rawBuild.getLog(1000)) {
+            emailBody += "${line}<br/>"
+        }
+        emailBody += """
+    </div>
+</BODY>
+"""
+        emailext body: emailBody,
+                mimeType: 'text/html',
+                subject: "\\ud83d\\udca3 ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - FAILED",
+                to: env.BUILD_NOTIFICATION_EMAIL
+    }
+CONTENT
+    end
+
+    def hash_bang(content)
+      "#!/usr/bin/env groovy\n\n#{content}"
     end
 
     def inside_docker_image(content)
@@ -274,27 +392,8 @@ CONTENT
 
       <<CONTENT
 docker.image('stocksoftware/build:#{java_version}_#{ruby_version}').inside {
-#{content}
-}
+#{content}}
 CONTENT
-    end
-
-    def standard_command_env
-      env = <<-SH
-export PRODUCT_VERSION=${env.BUILD_NUMBER}-`git rev-parse --short HEAD`
-export GEM_HOME=`pwd`/.gems;
-export GEM_PATH=`pwd`/.gems;
-export M2_REPO=`pwd`/.repo;
-export PATH=\\${PATH}:\\${GEM_PATH}/bin;
-      SH
-      if BuildrPlus::FeatureManager.activated?(:docker)
-        env += <<-SH
-export DOCKER_TLS_VERIFY=${env.DOCKER_TLS_VERIFY};
-export DOCKER_HOST=${env.DOCKER_HOST}
-export DOCKER_CERT_PATH=${env.DOCKER_CERT_PATH}
-        SH
-      end
-      env
     end
   end
   f.enhance(:ProjectExtension) do
