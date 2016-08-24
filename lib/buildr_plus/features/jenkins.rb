@@ -318,8 +318,9 @@ CONTENT
         emailext attachLog: true,
                 body: "<p>Check console output at <a href=\\"${env.BUILD_URL}\\">${env.BUILD_URL}</a> to view the results.</p>",
                 mimeType: 'text/html',
+                replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
                 subject: "\\ud83d\\udc4d ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - SUCCESS",
-                to: env.BUILD_NOTIFICATION_EMAIL
+                to: "${env.BUILD_NOTIFICATION_EMAIL}"
     }
 
     if (currentBuild.result != 'SUCCESS') {
@@ -374,8 +375,9 @@ CONTENT
 """
         emailext body: emailBody,
                 mimeType: 'text/html',
+                replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
                 subject: "\\ud83d\\udca3 ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - FAILED",
-                to: env.BUILD_NOTIFICATION_EMAIL
+                to: "${env.BUILD_NOTIFICATION_EMAIL}"
     }
 CONTENT
     end
