@@ -47,15 +47,15 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
     end
 
     def add_pre_package_buildr_stage(label, buildr_task)
-      pre_package_stages[label] = "  #{buildr_command(buildr_task)}"
+      pre_package_stages[label] = "  sh '#{docker_setup}#{buildr_command(buildr_task)}'"
     end
 
     def add_post_package_buildr_stage(label, buildr_task)
-      post_package_stages[label] = "  #{buildr_command(buildr_task)}"
+      post_package_stages[label] = "  sh '#{docker_setup}#{buildr_command(buildr_task)}'"
     end
 
     def add_post_import_buildr_stage(label, buildr_task)
-      post_import_stages[label] = "  #{buildr_command(buildr_task)}"
+      post_import_stages[label] = "  sh '#{docker_setup}#{buildr_command(buildr_task)}'"
     end
 
     private
@@ -106,8 +106,7 @@ PRE
       content = <<CONTENT
 #{prepare_content(false)}
   stage '#{label}'
-  sh '#{pre_script}'
-  sh '#{buildr_command(task)}'
+  sh \"#{pre_script};#{docker_setup}#{buildr_command(task)}\"
 CONTENT
       hash_bang(inside_try_catch(inside_node(inside_docker_image(content)), standard_exception_handling))
     end
@@ -118,21 +117,13 @@ CONTENT
 
     def prepare_content(include_artifacts)
       stage('Prepare') do
-        content = ''
-        if BuildrPlus::FeatureManager.activated?(:docker)
-          content += <<-CONTENT
-  env.DOCKER_TLS_VERIFY = "${env.DOCKER_TLS_VERIFY}"
-  env.DOCKER_HOST = "${env.DOCKER_HOST}"
-  env.DOCKER_CERT_PATH = "${env.DOCKER_CERT_PATH}"
-          CONTENT
-        end
-        content += <<-CONTENT
+        content = <<-CONTENT
   env.BUILD_NUMBER = "${env.BUILD_NUMBER}"
   env.GEM_HOME = '/home/buildbot/.gems'
   env.GEM_PATH = '/home/buildbot/.gems'
+  env.PATH = "/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:${env.PATH}"
   checkout scm
-  sh 'export PRODUCT_VERSION=$BUILD_NUMBER-`git rev-parse --short HEAD`'
-  sh 'export PATH="/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:$PATH"'
+  env.PRODUCT_VERSION = sh(script: 'echo $BUILD_NUMBER-`git rev-parse --short HEAD`', returnStdout: true).trim()
   sh 'echo "gem: --no-ri --no-rdoc" > ~/.gemrc'
         CONTENT
         if BuildrPlus::Ruby.ruby_version =~ /jruby/
@@ -201,7 +192,7 @@ CONTENT
 
     def commit_stage(root_project)
       stage('Commit') do
-        stage = "  sh '#{buildr_command('ci:commit')}'\n"
+        stage = "  sh \"#{docker_setup}#{buildr_command('ci:commit')}\"\n"
 
         if BuildrPlus::FeatureManager.activated?(:checkstyle)
           stage += <<CONTENT
@@ -232,25 +223,25 @@ CONTENT
 
     def import_stage
       stage('DB Import') do
-        "  sh '#{buildr_command('ci:import')}'\n"
+        "  sh \"#{docker_setup}#{buildr_command('ci:import')}\"\n"
       end
     end
 
     def import_variant_stage(import_variant)
       stage("DB #{import_variant} Import") do
-        "  sh '#{buildr_command("ci:import:#{import_variant}")}'\n"
+        "  sh \"#{docker_setup}#{buildr_command("ci:import:#{import_variant}")}\"\n"
       end
     end
 
     def package_pg_stage
       stage('Package Pg') do
-        "  sh '#{buildr_command('clean')}'\n  sh 'DB_TYPE=pg #{buildr_command('ci:package_no_test')}'\n"
+        "  sh \"#{docker_setup}#{buildr_command('clean')}; export DB_TYPE=pg; #{buildr_command('ci:package_no_test')}\"\n"
       end
     end
 
     def package_stage
       stage('Package') do
-        stage = "  sh '#{buildr_command('ci:package')}'\n"
+        stage = "  sh \"#{docker_setup}#{buildr_command('ci:package')}\"\n"
         if BuildrPlus::FeatureManager.activated?(:testng)
           stage += <<CONTENT
 
@@ -259,6 +250,10 @@ CONTENT
         end
         stage
       end
+    end
+
+    def docker_setup
+      BuildrPlus::FeatureManager.activated?(:docker) ? 'export DOCKER_HOST=${env.DOCKER_HOST}; export DOCKER_TLS_VERIFY=${env.DOCKER_TLS_VERIFY}; ' : ''
     end
 
     def stage(name)
@@ -293,9 +288,9 @@ CONTENT
 
     def inside_try_catch(content, handler_content)
       <<CONTENT
-try {
-
 def err = null
+
+try {
 
 currentBuild.result = 'SUCCESS'
 
@@ -393,10 +388,20 @@ CONTENT
       java_version = BuildrPlus::Java.version == 7 ? 'java-7.80.15' : 'java-8.92.14'
       ruby_version = "#{BuildrPlus::Ruby.ruby_version =~ /jruby/ ? '' : 'ruby-'}#{BuildrPlus::Ruby.ruby_version}"
 
-      <<CONTENT
-docker.image('stocksoftware/build:#{java_version}_#{ruby_version}').inside {
+      c = content
+      if BuildrPlus::FeatureManager.activated?(:docker)
+        c = <<CONTENT
+docker.withServer("${env.DOCKER_HOST}", 'docker') {
 #{content}}
 CONTENT
+      end
+
+
+      result = <<CONTENT
+docker.image('stocksoftware/build:#{java_version}_#{ruby_version}').inside {
+#{c}}
+CONTENT
+      result
     end
   end
   f.enhance(:ProjectExtension) do
