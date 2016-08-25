@@ -114,7 +114,7 @@ CONTENT
     end
 
     def jenkinsfile_content
-      inside_node("  checkout scm\n  load '.jenkins/main.groovy'")
+      hash_bang(inside_node("  checkout scm\n  load '.jenkins/main.groovy'"))
     end
 
     def prepare_content(include_artifacts)
@@ -279,13 +279,11 @@ CONTENT
     end
 
     def inside_node(content)
-      hash_bang(
-        <<CONTENT
+      <<CONTENT
 node {
 #{content}
 }
 CONTENT
-      )
     end
 
     def inside_try_catch(content, handler_content)
