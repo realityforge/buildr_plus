@@ -110,7 +110,7 @@ PRE
   stage '#{label}'
   sh #{quote}#{pre_script}#{separator}#{docker_setup}#{buildr_command(task)}#{quote}
 CONTENT
-      hash_bang(inside_try_catch(inside_node(inside_docker_image(content)), standard_exception_handling))
+      hash_bang(inside_node(inside_try_catch(inside_docker_image(content), standard_exception_handling)))
     end
 
     def jenkinsfile_content
