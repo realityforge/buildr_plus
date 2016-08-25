@@ -42,23 +42,29 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       skip_stage_list.dup
     end
 
-    def add_ci_task(key, label, task, pre_script = nil)
-      additional_tasks[".jenkins/#{key}.groovy"] = buildr_task_content(label, task, pre_script)
+    def add_ci_task(key, label, task, options = {})
+      additional_tasks[".jenkins/#{key}.groovy"] = buildr_task_content(label, task, options)
     end
 
-    def add_pre_package_buildr_stage(label, buildr_task)
-      pre_package_stages[label] = "  sh '#{docker_setup}#{buildr_command(buildr_task)}'"
+    def add_pre_package_buildr_stage(label, buildr_task, options = {})
+      pre_package_stages[label] = buildr_stage_content(buildr_task, options)
     end
 
-    def add_post_package_buildr_stage(label, buildr_task)
-      post_package_stages[label] = "  sh '#{docker_setup}#{buildr_command(buildr_task)}'"
+    def add_post_package_buildr_stage(label, buildr_task, options = {})
+      post_package_stages[label] = buildr_stage_content(buildr_task, options)
     end
 
-    def add_post_import_buildr_stage(label, buildr_task)
-      post_import_stages[label] = "  sh '#{docker_setup}#{buildr_command(buildr_task)}'"
+    def add_post_import_buildr_stage(label, buildr_task, options = {})
+      post_import_stages[label] = buildr_stage_content(buildr_task, options)
     end
 
     private
+
+    def buildr_stage_content(buildr_task, options = {})
+      docker = options[:docker].nil? ? true : !!options[:docker]
+      "  sh '#{docker ? docker_setup : ''}#{buildr_command(buildr_task, options)}'"
+    end
+
 
     def skip_stage_list
       @skip_stages ||= []
@@ -99,18 +105,25 @@ export UPLOAD_USER=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_USER}
 export UPLOAD_PASSWORD=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_PASSWORD}
 export PUBLISH_VERSION=${PUBLISH_VERSION}
 PRE
-      buildr_task_content('Publish', 'ci:publish', pre_script)
+      buildr_task_content('Publish', 'ci:publish', :pre_script => pre_script, :xvfb => false, :docker => false)
     end
 
-    def buildr_task_content(label, task, pre_script)
+    def buildr_task_content(label, task, options = {})
+      pre_script = options[:pre_script]
       quote = pre_script.to_s.include?("\n") ? '"""' : '"'
       separator = pre_script.to_s != '' ? ';' : ''
+
+      artifacts = options[:artifacts].nil? ? false : !!options[:artifacts]
+      docker = options[:docker].nil? ? false : !!options[:docker]
       content = <<CONTENT
-#{prepare_content(false)}
+#{prepare_content(artifacts)}
   stage '#{label}'
-  sh #{quote}#{pre_script}#{separator}#{docker_setup}#{buildr_command(task)}#{quote}
+  sh #{quote}#{pre_script}#{separator}#{docker ? docker_setup : ''}#{buildr_command(task, options)}#{quote}
 CONTENT
-      hash_bang(inside_node(inside_try_catch(inside_docker_image(content), standard_exception_handling)))
+      inner_content = inside_docker_image(content)
+      email = options[:email].nil? ? true : !!options[:email]
+      outer_content = email ? inside_try_catch(inner_content, standard_exception_handling) : inner_content
+      hash_bang(inside_node(outer_content))
     end
 
     def jenkinsfile_content
@@ -266,8 +279,9 @@ CONTENT
 CONTENT
     end
 
-    def buildr_command(args)
-      "xvfb-run -a #{bundle_command("buildr #{args}")}"
+    def buildr_command(args, options = {})
+      xvfb = options[:xvfb].nil? ? true : !!options[:xvfb]
+      "#{xvfb ? 'xvfb-run -a ' : ''}#{bundle_command("buildr #{args}")}"
     end
 
     def bundle_command(command)
