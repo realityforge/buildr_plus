@@ -123,7 +123,7 @@ CONTENT
   env.BUILD_NUMBER = "${env.BUILD_NUMBER}"
   env.GEM_HOME = '/home/buildbot/.gems'
   env.GEM_PATH = '/home/buildbot/.gems'
-  env.PATH = "#{is_old_jruby? ? '' : '/home/buildbot/.gems/bin:'}/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:${env.PATH}"
+  env.PATH = "#{is_old_jruby? ? '' : '/home/buildbot/.gems/bin:'}/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:${sh(script: 'echo $PATH', returnStdout: true).trim()}"
   checkout scm
   env.PRODUCT_VERSION = sh(script: 'echo $BUILD_NUMBER-`git rev-parse --short HEAD`', returnStdout: true).trim()
   sh 'echo "gem: --no-ri --no-rdoc" > ~/.gemrc'
