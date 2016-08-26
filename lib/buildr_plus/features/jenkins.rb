@@ -111,7 +111,7 @@ PRE
     def buildr_task_content(label, task, options = {})
       pre_script = options[:pre_script]
       quote = pre_script.to_s.include?("\n") ? '"""' : '"'
-      separator = pre_script.to_s != '' ? ';' : ''
+      separator = pre_script.to_s != '' && !(pre_script.to_s =~ /\n$/) ? ';' : ''
 
       artifacts = options[:artifacts].nil? ? false : !!options[:artifacts]
       docker = options[:docker].nil? ? false : !!options[:docker]
