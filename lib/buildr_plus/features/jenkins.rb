@@ -294,8 +294,10 @@ CONTENT
 
     def inside_node(content)
       <<CONTENT
+timestamps {
 node {
 #{content}
+}
 }
 CONTENT
     end
