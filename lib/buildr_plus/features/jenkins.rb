@@ -256,7 +256,7 @@ CONTENT
 
     def package_stage
       stage('Package') do
-        stage = "  sh \"#{docker_setup}#{buildr_command('ci:package')}\"\n"
+        stage = "  sh \"#{is_old_jruby? ? 'TZ=Australia/Melbourne ' : ''}#{docker_setup}#{buildr_command('ci:package')}\"\n"
         if BuildrPlus::FeatureManager.activated?(:testng)
           stage += <<CONTENT
 
