@@ -258,6 +258,11 @@ CONTENT
     def package_stage
       stage('Package') do
         stage = "  sh \"#{is_old_jruby? ? 'TZ=Australia/Melbourne ' : ''}#{docker_setup}#{buildr_command('ci:package')}\"\n"
+        if BuildrPlus::FeatureManager.activated?(:rails)
+          stage += <<CONTENT
+  step([$class: 'JUnitResultArchiver', testResults: 'reports/**/TEST-*.xml'])
+CONTENT
+        end
         if BuildrPlus::FeatureManager.activated?(:testng)
           stage += <<CONTENT
   step([$class: 'hudson.plugins.testng.Publisher', reportFilenamePattern: 'reports/*/testng/testng-results.xml'])
