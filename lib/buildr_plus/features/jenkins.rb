@@ -144,6 +144,8 @@ CONTENT
   env.GEM_PATH = '/home/buildbot/.gems'
   env.PATH = "#{is_old_jruby? ? '' : '/home/buildbot/.gems/bin:'}/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:${sh(script: 'echo $PATH', returnStdout: true).trim()}"
   checkout scm
+  sh 'git reset --hard'
+  sh 'git clean -ffdx'
   env.PRODUCT_VERSION = sh(script: 'echo $BUILD_NUMBER-`git rev-parse --short HEAD`', returnStdout: true).trim()
   sh 'echo "gem: --no-ri --no-rdoc" > ~/.gemrc'
         CONTENT
