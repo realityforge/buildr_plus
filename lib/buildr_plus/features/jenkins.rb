@@ -193,7 +193,7 @@ CONTENT
       end
 
       if BuildrPlus::FeatureManager.activated?(:dbt) &&
-        !BuildrPlus::Dbt.library &&
+        !BuildrPlus::Dbt.library? &&
         ::Dbt.database_for_key?(:default) &&
         BuildrPlus::Dbt.database_import?(:default)
         content += import_stage
