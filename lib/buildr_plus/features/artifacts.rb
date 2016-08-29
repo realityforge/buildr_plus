@@ -59,6 +59,9 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
   end
   f.enhance(:ProjectExtension) do
     after_define do |project|
+      if project.ipr?
+        project.iml.excluded_directories << project._(:artifacts)
+      end
       project.publish = false unless BuildrPlus::Artifacts.publish?
     end
   end
