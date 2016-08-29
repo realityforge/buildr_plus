@@ -15,6 +15,12 @@
 # Enable this feature if the code is tested using travis
 BuildrPlus::FeatureManager.feature(:jenkins) do |f|
   f.enhance(:Config) do
+    attr_writer :manual_configuration
+
+    def manual_configuration?
+      !!@manual_configuration
+    end
+
     def jenkins_build_scripts
       (@jenkins_build_scripts ||= standard_build_scripts).dup
     end
@@ -431,22 +437,24 @@ CONTENT
     task 'jenkins:check' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       if BuildrPlus::FeatureManager.activated?(:jenkins)
-        existing = File.exist?("#{base_directory}/.jenkins") ? Dir["#{base_directory}/.jenkins/*.groovy"] : []
-        BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
-          full_filename = "#{base_directory}/#{filename}"
-          existing.delete(full_filename)
-          if content.nil?
-            if File.exist?(full_filename)
-              raise "The jenkins configuration file #{full_filename} exists when not expected. Please run \"buildr jenkins:fix\" and commit changes."
-            end
-          else
-            if !File.exist?(full_filename) || IO.read(full_filename) != content
-              raise "The jenkins configuration file #{full_filename} does not exist or is not up to date. Please run \"buildr jenkins:fix\" and commit changes."
+        unless BuildrPlus::Jenkins.manual_configuration?
+          existing = File.exist?("#{base_directory}/.jenkins") ? Dir["#{base_directory}/.jenkins/*.groovy"] : []
+          BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
+            full_filename = "#{base_directory}/#{filename}"
+            existing.delete(full_filename)
+            if content.nil?
+              if File.exist?(full_filename)
+                raise "The jenkins configuration file #{full_filename} exists when not expected. Please run \"buildr jenkins:fix\" and commit changes."
+              end
+            else
+              if !File.exist?(full_filename) || IO.read(full_filename) != content
+                raise "The jenkins configuration file #{full_filename} does not exist or is not up to date. Please run \"buildr jenkins:fix\" and commit changes."
+              end
             end
           end
-        end
-        unless existing.empty?
-          raise "The following jenkins configuration file(s) exist but are not expected. Please run \"buildr jenkins:fix\" and commit changes.\n#{existing.collect { |e| "\t* #{e}" }.join("\n")}"
+          unless existing.empty?
+            raise "The following jenkins configuration file(s) exist but are not expected. Please run \"buildr jenkins:fix\" and commit changes.\n#{existing.collect { |e| "\t* #{e}" }.join("\n")}"
+          end
         end
       else
         if File.exist?("#{base_directory}/Jenkinsfile")
@@ -459,7 +467,7 @@ CONTENT
     end
 
     task 'jenkins:fix' do
-      if BuildrPlus::FeatureManager.activated?(:jenkins)
+      if BuildrPlus::FeatureManager.activated?(:jenkins) && !BuildrPlus::Jenkins.manual_configuration?
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
         existing = File.exist?("#{base_directory}/.jenkins") ? Dir["#{base_directory}/.jenkins/*.groovy"] : []
         BuildrPlus::Jenkins.jenkins_build_scripts.each_pair do |filename, content|
