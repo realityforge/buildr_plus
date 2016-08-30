@@ -211,7 +211,20 @@ CONTENT
         end
       end
 
+      content += deploy_stage(root_project)
+
       hash_bang(inside_try_catch(inside_docker_image(content), standard_exception_handling))
+    end
+
+    def deploy_stage(root_project)
+      content = stage('Deploy') do
+        "  build job: '#{root_project.name}/deploy-to-development', parameters: [string(name: 'PRODUCT_ENVIRONMENT', value: 'development'), string(name: 'PRODUCT_NAME', value: 'gmr'), string(name: 'PRODUCT_VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
+      end
+      <<-DEPLOY_STEP
+if (env.BRANCH_NAME == 'master') {
+#{content}
+}
+      DEPLOY_STEP
     end
 
     def commit_stage(root_project)
