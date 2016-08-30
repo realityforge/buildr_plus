@@ -226,7 +226,7 @@ CONTENT
 
     def deploy_stage(root_project)
       content = stage('Deploy') do
-        "  build job: '#{root_project.name}/deploy-to-development', parameters: [string(name: 'PRODUCT_ENVIRONMENT', value: 'development'), string(name: 'PRODUCT_NAME', value: 'gmr'), string(name: 'PRODUCT_VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
+        "  build job: '#{root_project.name}/deploy-to-development', parameters: [string(name: 'PRODUCT_ENVIRONMENT', value: 'development'), string(name: 'PRODUCT_NAME', value: '#{root_project.name}'), string(name: 'PRODUCT_VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
       end
       <<-DEPLOY_STEP
 if (env.BRANCH_NAME == 'master') {
