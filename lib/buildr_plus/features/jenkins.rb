@@ -259,7 +259,7 @@ CONTENT
 
     def package_pg_stage
       stage('Package Pg') do
-        "  sh 'git reset --hard'\n  sh 'git clean -ffdx'\n  sh \"#{docker_setup}export DB_TYPE=pg; #{buildr_command('ci:package_no_test')}\"\n"
+        "  sh \"#{docker_setup}#{buildr_command('clean')}; export DB_TYPE=pg; #{buildr_command('ci:package_no_test')}\"\n"
       end
     end
 
