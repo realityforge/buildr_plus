@@ -24,6 +24,8 @@ BuildrPlus::FeatureManager.feature(:idea) do |f|
   f.enhance(:ProjectExtension) do
     after_define do |project|
       if project.ipr?
+        project.iml.excluded_directories << project._(:artifacts)
+
         BuildrPlus::Idea.peer_projects.each do |project_name|
           if File.exist?(project._("../#{project_name}"))
             Dir["#{project._("../#{project_name}")}/**/*.iml"].each do |filename|
