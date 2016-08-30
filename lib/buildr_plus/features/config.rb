@@ -283,6 +283,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           database.restore_name = short_name unless database.restore_name
           database.backup_name = short_name unless database.backup_name
           database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
+          database.backup_location = environment_var('DB_BACKUPS_LOCATION') unless database.backup_location
           database.host = environment_var('DB_SERVER_HOST') unless database.host
           unless database.port_set?
             port = environment_var('DB_SERVER_PORT', database.port)
