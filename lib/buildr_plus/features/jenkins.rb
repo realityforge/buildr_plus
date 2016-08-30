@@ -15,6 +15,12 @@
 # Enable this feature if the code is tested using travis
 BuildrPlus::FeatureManager.feature(:jenkins) do |f|
   f.enhance(:Config) do
+    attr_writer :auto_deploy
+
+    def auto_deploy?
+      @auto_deploy.nil? ? (BuildrPlus::Artifacts.war? || (BuildrPlus::Artifacts.db? && !BuildrPlus::Dbt.library?)) : !!@auto_deploy
+    end
+
     attr_writer :manual_configuration
 
     def manual_configuration?
@@ -211,7 +217,9 @@ CONTENT
         end
       end
 
-      content += deploy_stage(root_project)
+      if BuildrPlus::Jenkins.auto_deploy?
+        content += deploy_stage(root_project)
+      end
 
       hash_bang(inside_try_catch(inside_docker_image(content), standard_exception_handling))
     end
