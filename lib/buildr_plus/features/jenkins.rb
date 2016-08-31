@@ -353,14 +353,14 @@ currentBuild.result = 'SUCCESS'
 
 #{content}
 } catch (exception) {
-    currentBuild.result = "FAILURE"
-    err = exception;
+   currentBuild.result = "FAILURE"
+   err = exception;
 } finally {
 #{update_status ? "  step([$class: 'GitHubCommitNotifier', resultOnFailure: 'FAILURE'])" : ''}
 #{handler_content}
-    if (err) {
-        throw err
-    }
+   if (err) {
+     throw err
+   }
 }
 CONTENT
     end
@@ -371,18 +371,18 @@ CONTENT
 
     def standard_exception_handling
       <<CONTENT
-    if (currentBuild.result == 'SUCCESS' && currentBuild.rawBuild.previousBuild != null && currentBuild.rawBuild.previousBuild.result.toString() == 'FAILURE') {
-        echo "Emailing SUCCESS notification to ${env.BUILD_NOTIFICATION_EMAIL}"
+  if (currentBuild.result == 'SUCCESS' && currentBuild.rawBuild.previousBuild != null && currentBuild.rawBuild.previousBuild.result.toString() == 'FAILURE') {
+    echo "Emailing SUCCESS notification to ${env.BUILD_NOTIFICATION_EMAIL}"
 
-        emailext body: "<p>Check console output at <a href=\\"${env.BUILD_URL}\\">${env.BUILD_URL}</a> to view the results.</p>",
-                mimeType: 'text/html',
-                replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
-                subject: "\\ud83d\\udc4d ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - SUCCESS",
-                to: "${env.BUILD_NOTIFICATION_EMAIL}"
-    }
+    emailext body: "<p>Check console output at <a href=\\"${env.BUILD_URL}\\">${env.BUILD_URL}</a> to view the results.</p>",
+             mimeType: 'text/html',
+             replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
+             subject: "\\ud83d\\udc4d ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - SUCCESS",
+             to: "${env.BUILD_NOTIFICATION_EMAIL}"
+  }
 
-    if (currentBuild.result != 'SUCCESS') {
-        emailBody = """
+  if (currentBuild.result != 'SUCCESS') {
+    emailBody = """
 <title>${env.JOB_NAME} - \#${env.BUILD_NUMBER} - ${currentBuild.result}</title>
 <BODY>
     <div style="font:normal normal 100% Georgia, Serif; background: #ffffff; border: dotted 1px #666; margin: 2px; content: 2px; padding: 2px;">
@@ -409,8 +409,8 @@ CONTENT
           <td>${env.BRANCH_NAME}</td>
         </tr>
  """
-        if (null != env.CHANGE_ID) {
-            emailBody += """
+    if (null != env.CHANGE_ID) {
+      emailBody += """
        <tr>
           <td align="right"><b>Change</b></td>
           <td><a href="${env.CHANGE_URL}">${env.CHANGE_ID} - ${env.CHANGE_TITLE}</a></td>
@@ -424,20 +424,20 @@ CONTENT
 
     <div style="background: lightyellow; border: dotted 1px #666; margin: 2px; content: 2px; padding: 2px;">
 """
-        for (String line : currentBuild.rawBuild.getLog(1000)) {
-            emailBody += "${line}<br/>"
-        }
-        emailBody += """
+    for (String line : currentBuild.rawBuild.getLog(1000)) {
+      emailBody += "${line}<br/>"
+    }
+    emailBody += """
     </div>
 </BODY>
 """
-        echo "Emailing FAILED notification to ${env.BUILD_NOTIFICATION_EMAIL}"
-        emailext body: emailBody,
-                mimeType: 'text/html',
-                replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
-                subject: "\\ud83d\\udca3 ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - FAILED",
-                to: "${env.BUILD_NOTIFICATION_EMAIL}"
-    }
+    echo "Emailing FAILED notification to ${env.BUILD_NOTIFICATION_EMAIL}"
+    emailext body: emailBody,
+             mimeType: 'text/html',
+             replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
+             subject: "\\ud83d\\udca3 ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - FAILED",
+             to: "${env.BUILD_NOTIFICATION_EMAIL}"
+  }
 CONTENT
     end
 
