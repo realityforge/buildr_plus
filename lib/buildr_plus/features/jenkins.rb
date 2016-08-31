@@ -140,7 +140,7 @@ PRE
 CONTENT
       inner_content = inside_docker_image(content)
       email = options[:email].nil? ? true : !!options[:email]
-      outer_content = email ? inside_try_catch(inner_content, standard_exception_handling) : inner_content
+      outer_content = email ? inside_try_catch(inner_content, standard_exception_handling, false) : inner_content
       hash_bang(inside_node(outer_content))
     end
 
@@ -227,7 +227,7 @@ CONTENT
         content += deploy_stage(root_project)
       end
 
-      hash_bang(inside_try_catch(inside_docker_image(content), standard_exception_handling))
+      hash_bang(inside_try_catch(inside_docker_image(content), standard_exception_handling, true))
     end
 
     def deploy_stage(root_project)
@@ -342,19 +342,21 @@ node {
 CONTENT
     end
 
-    def inside_try_catch(content, handler_content)
+    def inside_try_catch(content, handler_content, update_status)
       <<CONTENT
 def err = null
 
 try {
 
 currentBuild.result = 'SUCCESS'
+#{update_status ? "step([$class: 'GitHubSetCommitStatusBuilder'])" : ''}
 
 #{content}
 } catch (exception) {
     currentBuild.result = "FAILURE"
     err = exception;
 } finally {
+#{update_status ? "  step([$class: 'GitHubCommitNotifier', resultOnFailure: 'FAILURE'])" : ''}
 #{handler_content}
     if (err) {
         throw err
