@@ -21,6 +21,12 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       @auto_deploy.nil? ? (BuildrPlus::Artifacts.war? || (BuildrPlus::Artifacts.db? && !BuildrPlus::Dbt.library?)) : !!@auto_deploy
     end
 
+    attr_writer :deployment_environment
+
+    def deployment_environment
+      @deployment_environment || 'development'
+    end
+
     attr_writer :manual_configuration
 
     def manual_configuration?
@@ -226,7 +232,7 @@ CONTENT
 
     def deploy_stage(root_project)
       content = stage('Deploy') do
-        "  build job: '#{root_project.name}/deploy-to-development', parameters: [string(name: 'PRODUCT_ENVIRONMENT', value: 'development'), string(name: 'PRODUCT_NAME', value: '#{root_project.name}'), string(name: 'PRODUCT_VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
+        "  build job: '#{root_project.name}/deploy-to-#{deployment_environment}', parameters: [string(name: 'PRODUCT_ENVIRONMENT', value: '#{deployment_environment}'), string(name: 'PRODUCT_NAME', value: '#{root_project.name}'), string(name: 'PRODUCT_VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
       end
       <<-DEPLOY_STEP
 if (env.BRANCH_NAME == 'master') {
