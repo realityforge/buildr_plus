@@ -497,6 +497,7 @@ CONTENT
       end
     end
 
+    desc 'Recreate the Jenkinsfile and associated groovy scripts'
     task 'jenkins:fix' do
       if BuildrPlus::FeatureManager.activated?(:jenkins) && !BuildrPlus::Jenkins.manual_configuration?
         base_directory = File.dirname(Buildr.application.buildfile.to_s)
