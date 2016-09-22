@@ -18,6 +18,7 @@ BuildrPlus::Roles.role(:container) do
     generators = []
 
     generators << [:ee_redfish] if BuildrPlus::FeatureManager.activated?(:redfish)
+    generators << [:keycloak_client_config] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
     generators += project.additional_domgen_generators
 

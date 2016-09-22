@@ -127,6 +127,20 @@ module BuildrPlus #nodoc
         @broker
       end
 
+      def keycloak?
+        !@keycloak.nil?
+      end
+
+      def keycloak(options = {}, &block)
+        if @keycloak.nil?
+          @keycloak = BuildrPlus::Config::KeycloakConfig.new(options, &block)
+        else
+          @keycloak.options = options
+          yield @keycloak if block_given?
+        end
+        @keycloak
+      end
+
       def to_h
         results = {}
         dbs = self.databases
@@ -140,6 +154,7 @@ module BuildrPlus #nodoc
         results['settings'] = self.settings unless self.settings.empty?
         results['volumes'] = self.volumes unless self.volumes.empty?
         results['broker'] = self.broker.to_h if self.broker?
+        results['keycloak'] = self.keycloak.to_h if self.keycloak?
         results
       end
     end

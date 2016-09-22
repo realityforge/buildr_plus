@@ -210,6 +210,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     def populate_environment_configuration(environment, check_only = false)
       populate_database_configuration(environment, check_only)
       populate_broker_configuration(environment, check_only)
+      populate_keycloak_configuration(environment, check_only)
       populate_ssrs_configuration(environment, check_only)
       unless check_only
         populate_volume_configuration(environment)
@@ -221,13 +222,9 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       buildr_project = get_buildr_project.root_project
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         constant_prefix = BuildrPlus::Naming.uppercase_constantize(buildr_project.name)
-        environment.setting("#{constant_prefix}_KEYCLOAK_REALM", environment_var('KEYCLOAK_REALM')) if !environment.setting?("#{constant_prefix}_KEYCLOAK_REALM") && environment_var('KEYCLOAK_REALM')
-        environment.setting("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY", environment_var('KEYCLOAK_REALM_PUBLIC_KEY')) if !environment.setting?("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY") && environment_var('KEYCLOAK_REALM_PUBLIC_KEY')
-        environment.setting("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL", environment_var('KEYCLOAK_AUTH_SERVER_URL')) if !environment.setting?("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL") && environment_var('KEYCLOAK_AUTH_SERVER_URL')
-
-        raise "Setting #{constant_prefix}_KEYCLOAK_REALM is missing and can not be derived from environment variable KEYCLOAK_REALM" unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM")
-        raise "Setting #{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY is missing and can not be derived from environment variable KEYCLOAK_REALM_PUBLIC_KEY" unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY")
-        raise "Setting #{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL is missing and can not be derived from environment variable KEYCLOAK_AUTH_SERVER_URL" unless environment.setting?("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL")
+        environment.setting("#{constant_prefix}_KEYCLOAK_REALM", environment.keycloak.realm) unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM")
+        environment.setting("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY", environment.keycloak.public_key) unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY")
+        environment.setting("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL", environment.keycloak.base_url) unless environment.setting?("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL")
       end
     end
 
@@ -356,6 +353,30 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         password = BuildrPlus::Config.environment_var('OPENMQ_ADMIN_PASSWORD', 'admin')
 
         environment.broker(:host => host, :port => port, :admin_username => username, :admin_password => password)
+      end
+    end
+
+    def populate_keycloak_configuration(environment, check_only)
+      if !BuildrPlus::FeatureManager.activated?(:keycloak) && environment.keycloak?
+        raise "Keycloak defined in application configuration but BuildrPlus facet 'keycloak' not enabled"
+      elsif BuildrPlus::FeatureManager.activated?(:keycloak) && !environment.keycloak? && !check_only
+
+        base_url = BuildrPlus::Config.environment_var('KEYCLOAK_AUTH_SERVER_URL')
+        public_key = BuildrPlus::Config.environment_var('KEYCLOAK_REALM_PUBLIC_KEY')
+        realm = BuildrPlus::Config.environment_var('KEYCLOAK_REALM')
+        username = BuildrPlus::Config.environment_var('KEYCLOAK_ADMIN_USERNAME')
+        password = BuildrPlus::Config.environment_var('KEYCLOAK_ADMIN_PASSWORD')
+
+        environment.keycloak.base_url = base_url if environment.keycloak.base_url.nil?
+        environment.keycloak.public_key = public_key if environment.keycloak.public_key.nil?
+        environment.keycloak.realm = realm if environment.keycloak.realm.nil?
+        environment.keycloak.admin_username = username if environment.keycloak.admin_username.nil?
+        environment.keycloak.admin_password = password if environment.keycloak.admin_password.nil?
+
+        raise 'Configuration for keycloak is missing base_url attribute and can not be derived from environment variable KEYCLOAK_AUTH_SERVER_URL' unless environment.keycloak.base_url
+        raise 'Configuration for keycloak is missing public_key attribute and can not be derived from environment variable KEYCLOAK_REALM_PUBLIC_KEY' unless environment.keycloak.public_key
+        raise 'Configuration for keycloak is missing realm attribute and can not be derived from environment variable KEYCLOAK_REALM' unless environment.keycloak.realm
+        raise 'Configuration for keycloak is missing admin_password attribute and can not be derived from environment variable KEYCLOAK_ADMIN_PASSWORD' unless environment.keycloak.admin_password
       end
     end
   end
