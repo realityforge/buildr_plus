@@ -14,22 +14,41 @@
 
 BuildrPlus::FeatureManager.feature(:keycloak) do |f|
   f.enhance(:Config) do
-    def default_client_name(project)
-      @default_client_name || "#{BuildrPlus::Config.app_scope}#{BuildrPlus::Config.app_scope.nil? ? '' : '_'}#{BuildrPlus::Config.user || 'NOBODY'}_#{BuildrPlus::Naming.uppercase_constantize(project.root_project.name)}_#{BuildrPlus::Config.env_code}"
+    def client_types
+      [root_project.name] + self.additional_client_types
     end
 
-    attr_writer :default_client_name
+    attr_writer :additional_client_types
+
+    def additional_client_types
+      @additional_client_types ||= []
+    end
+
+    def client_name_overrides
+      @client_name_overrides ||= {}
+    end
+
+    def client_name_for(client_type)
+      client_name_overrides[client_type] || "#{BuildrPlus::Config.app_scope}#{BuildrPlus::Config.app_scope.nil? ? '' : '_'}#{BuildrPlus::Config.user || 'NOBODY'}_#{BuildrPlus::Naming.uppercase_constantize(client_type.to_s)}_#{BuildrPlus::Config.env_code}"
+    end
+
+    def root_project
+      if Buildr.application.current_scope.size > 0
+        return Buildr.project(Buildr.application.current_scope.join(':')).root_project rescue nil
+      end
+      Buildr.projects.first.root_project
+    end
   end
 
   f.enhance(:ProjectExtension) do
-    after_define do |project|
-      if project.ipr?
-        project.task ':keycloak:create' do
+    after_define do |buildr_project|
+      if buildr_project.ipr?
+        buildr_project.task ':keycloak:create' do
 
           a = Buildr.artifact('org.realityforge.keycloak.converger:keycloak-converger:jar:1.3')
           a.invoke
 
-          name = project.name
+          name = buildr_project.name
           cname = BuildrPlus::Naming.uppercase_constantize(name)
 
           args = []
@@ -41,13 +60,41 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << "--realm-name=#{BuildrPlus::Config.environment_config.keycloak.realm}"
           args << "--admin-username=#{BuildrPlus::Config.environment_config.keycloak.admin_username}" if BuildrPlus::Config.environment_config.keycloak.admin_username
           args << "--admin-password=#{BuildrPlus::Config.environment_config.keycloak.admin_password}"
-          args << "-e#{cname}_NAME=#{BuildrPlus::Keycloak.default_client_name(project)}"
+          BuildrPlus::Keycloak.client_types.each do |client_type|
+            args << "-e#{BuildrPlus::Naming.uppercase_constantize(client_type)}_NAME=#{BuildrPlus::Keycloak.client_name_for(client_type)}"
+          end
           args << "-e#{cname}_URL=http://127.0.0.1:8080/#{name}"
 
           Java::Commands.java(args)
+        end
 
+        unless BuildrPlus::Util.subprojects(buildr_project).any? { |p| p == "#{buildr_project.name}:keycloak-clients" }
+          buildr_project.instance_eval do
+            desc 'Keycloak Client Definitions'
+            define 'keycloak-clients' do
+              project.no_iml
+              BuildrPlus::Keycloak.client_types.each do |client_type|
+                desc "Keycloak #{client_type} Client Definition"
+                define client_type.to_s do
+                  project.no_iml
+
+                  package(:json).enhance do |t|
+                    project.task(':domgen:all').invoke
+                    mkdir_p File.dirname(t.to_s)
+                    cp "generated/domgen/#{buildr_project.root_project.name}/main/etc/keycloak/#{client_type}.json", t.to_s
+                  end
+                end
+              end
+            end
+          end
         end
       end
     end
+  end
+end
+
+class Buildr::Project
+  def package_as_json(file_name)
+    file(file_name)
   end
 end
