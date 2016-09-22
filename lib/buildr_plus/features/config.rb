@@ -72,7 +72,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
     def app_scope
       return ENV['APP_SCOPE'] if ENV['APP_SCOPE']
-      return "#{ENV['JOB_NAME']}_#{ENV['BUILD_NUMBER']}".gsub(/[\/-]/,'_') if ENV['JOB_NAME']
+      return "#{ENV['JOB_NAME']}_#{ENV['BUILD_NUMBER']}".gsub(/[\/-]/, '_') if ENV['JOB_NAME']
       nil
     end
 
