@@ -68,21 +68,19 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           Java::Commands.java(args)
         end
 
-        unless BuildrPlus::Util.subprojects(buildr_project).any? { |p| p == "#{buildr_project.name}:keycloak-clients" }
-          buildr_project.instance_eval do
-            desc 'Keycloak Client Definitions'
-            define 'keycloak-clients' do
-              project.no_iml
-              BuildrPlus::Keycloak.client_types.each do |client_type|
-                desc "Keycloak #{client_type} Client Definition"
-                define client_type.to_s do
-                  project.no_iml
+        buildr_project.instance_eval do
+          desc 'Keycloak Client Definitions'
+          define 'keycloak-clients' do
+            project.no_iml
+            BuildrPlus::Keycloak.client_types.each do |client_type|
+              desc "Keycloak #{client_type} Client Definition"
+              define client_type.to_s do
+                project.no_iml
 
-                  package(:json).enhance do |t|
-                    project.task(':domgen:all').invoke
-                    mkdir_p File.dirname(t.to_s)
-                    cp "generated/domgen/#{buildr_project.root_project.name}/main/etc/keycloak/#{client_type}.json", t.to_s
-                  end
+                package(:json).enhance do |t|
+                  project.task(':domgen:all').invoke
+                  mkdir_p File.dirname(t.to_s)
+                  cp "generated/domgen/#{buildr_project.root_project.name}/main/etc/keycloak/#{client_type}.json", t.to_s
                 end
               end
             end
