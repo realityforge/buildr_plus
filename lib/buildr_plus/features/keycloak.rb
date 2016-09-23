@@ -14,8 +14,12 @@
 
 BuildrPlus::FeatureManager.feature(:keycloak) do |f|
   f.enhance(:Config) do
+    def default_client_type
+      root_project.name
+    end
+
     def client_types
-      [root_project.name] + self.additional_client_types
+      [default_client_type] + self.additional_client_types
     end
 
     attr_writer :additional_client_types
