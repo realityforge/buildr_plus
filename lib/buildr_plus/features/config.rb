@@ -225,6 +225,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         environment.setting("#{constant_prefix}_KEYCLOAK_REALM", environment.keycloak.realm) unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM")
         environment.setting("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY", environment.keycloak.public_key) unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY")
         environment.setting("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL", environment.keycloak.base_url) unless environment.setting?("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL")
+        environment.setting("#{constant_prefix}_KEYCLOAK_CLIENT_NAME", BuildrPlus::Keycloak.client_name_for(BuildrPlus::Keycloak.default_client_type)) unless environment.setting?("#{constant_prefix}_KEYCLOAK_CLIENT_NAME")
       end
     end
 
