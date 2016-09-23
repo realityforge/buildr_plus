@@ -43,8 +43,9 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
   f.enhance(:ProjectExtension) do
     after_define do |buildr_project|
       if buildr_project.ipr?
-        buildr_project.task ':keycloak:create' do
 
+        desc 'Upload keycloak client definition to realm'
+        buildr_project.task ':keycloak:create' do
           a = Buildr.artifact('org.realityforge.keycloak.converger:keycloak-converger:jar:1.3')
           a.invoke
 
