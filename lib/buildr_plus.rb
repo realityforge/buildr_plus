@@ -12,9 +12,9 @@
 # limitations under the License.
 #
 
-expected_version = '1.4.25'
-if Buildr::VERSION != expected_version
-  raise "buildr_plus expected Buildr version #{expected_version} but actual version is #{Buildr::VERSION}"
+expected_versions = %w(1.4.25 1.5.0)
+unless expected_versions.include?(Buildr::VERSION.to_s)
+  raise "buildr_plus expected one of the Buildr versions #{expected_versions.join(', ')} but actual version is #{Buildr::VERSION}"
 end
 
 bundler_version = '1.12.5'
