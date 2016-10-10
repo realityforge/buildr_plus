@@ -27,6 +27,13 @@ BuildrPlus::Roles.role(:server) do
     generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
     generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
+    if BuildrPlus::FeatureManager.activated?(:keycloak)
+      generators << [:keycloak_config_service] if BuildrPlus::FeatureManager.activated?(:gwt)
+      if BuildrPlus::Roles.buildr_projects_with_role(:shared).size == 0
+        generators << [:keycloak_client_definitions]
+      end
+    end
+
     if BuildrPlus::FeatureManager.activated?(:sync)
       if BuildrPlus::Sync.standalone?
         generators << [:sync_ejb]
