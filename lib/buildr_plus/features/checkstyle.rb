@@ -177,6 +177,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
     def setup_checkstyle_import_rules(project)
       r = project.import_rules
       g = project.group_as_package
+      c = project.name_as_class
       r.rule('edu.umd.cs.findbugs.annotations.SuppressFBWarnings', :rule_type => :class)
       r.rule('edu.umd.cs.findbugs.annotations.SuppressWarnings', :rule_type => :class, :disallow => true)
       r.rule('javax.faces.bean', :disallow => true)
@@ -206,6 +207,10 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         if BuildrPlus::FeatureManager.activated?(:appcache)
           r.subpackage_rule('client', 'org.realityforge.gwt.appcache.client', :local_only => true)
         end
+      end
+
+      if BuildrPlus::FeatureManager.activated?(:keycloak)
+        r.subpackage_rule('server.filter', "#{g}.shared.#{c}KeycloakClients", :rule_type => :class)
       end
 
       if BuildrPlus::FeatureManager.activated?(:ejb)
