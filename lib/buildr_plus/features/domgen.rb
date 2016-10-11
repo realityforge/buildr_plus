@@ -119,6 +119,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 :mail => :mail,
                 :soap => :jws,
                 :gwt => :gwt,
+                :sync => :sync,
                 :replicant => :imit,
                 :gwt_cache_filter => :gwt_cache_filter,
                 :appconfig => :appconfig,
