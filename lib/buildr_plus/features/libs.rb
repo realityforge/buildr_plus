@@ -165,6 +165,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.bouncycastle:bcprov-jdk15on:jar:1.52 org.bouncycastle:bcpkix-jdk15on:jar:1.52)
     end
 
+    def proxy_servlet
+      self.httpclient + %w(org.realityforge.proxy-servlet:proxy-servlet:jar:0.2.0)
+    end
+
     def httpclient
       %w(org.apache.httpcomponents:httpclient:jar:4.5 org.apache.httpcomponents:httpcore:jar:4.4.1) +
         self.commons_logging + self.commons_codec
