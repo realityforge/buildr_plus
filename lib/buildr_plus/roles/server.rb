@@ -28,7 +28,7 @@ BuildrPlus::Roles.role(:server) do
     generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
     if BuildrPlus::FeatureManager.activated?(:keycloak)
-      generators << [:keycloak_config_service] if BuildrPlus::FeatureManager.activated?(:gwt)
+      generators << [:keycloak_config_service, :keycloak_js_service] if BuildrPlus::FeatureManager.activated?(:gwt)
       if BuildrPlus::Roles.buildr_projects_with_role(:shared).size == 0
         generators << [:keycloak_client_definitions]
       end
