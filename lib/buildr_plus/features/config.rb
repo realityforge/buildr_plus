@@ -221,11 +221,16 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     def populate_settings(environment)
       buildr_project = get_buildr_project.root_project
       if BuildrPlus::FeatureManager.activated?(:keycloak)
-        constant_prefix = BuildrPlus::Naming.uppercase_constantize(buildr_project.name)
-        environment.setting("#{constant_prefix}_KEYCLOAK_REALM", environment.keycloak.realm) unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM")
-        environment.setting("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY", environment.keycloak.public_key) unless environment.setting?("#{constant_prefix}_KEYCLOAK_REALM_PUBLIC_KEY")
-        environment.setting("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL", environment.keycloak.base_url) unless environment.setting?("#{constant_prefix}_KEYCLOAK_AUTH_SERVER_URL")
-        environment.setting("#{constant_prefix}_KEYCLOAK_CLIENT_NAME", BuildrPlus::Keycloak.client_name_for(BuildrPlus::Keycloak.default_client_type)) unless environment.setting?("#{constant_prefix}_KEYCLOAK_CLIENT_NAME")
+        BuildrPlus::Keycloak.client_types.each do |client_type|
+          name = buildr_project.name
+          constant_prefix = BuildrPlus::Naming.uppercase_constantize(name)
+          prefix = "#{name == client_type ? '' : "#{constant_prefix}_"}#{BuildrPlus::Naming.uppercase_constantize(client_type)}"
+
+          environment.setting("#{prefix}_KEYCLOAK_REALM", environment.keycloak.realm) unless environment.setting?("#{prefix}_KEYCLOAK_REALM")
+          environment.setting("#{prefix}_KEYCLOAK_REALM_PUBLIC_KEY", environment.keycloak.public_key) unless environment.setting?("#{prefix}_KEYCLOAK_REALM_PUBLIC_KEY")
+          environment.setting("#{prefix}_KEYCLOAK_AUTH_SERVER_URL", environment.keycloak.base_url) unless environment.setting?("#{prefix}_KEYCLOAK_AUTH_SERVER_URL")
+          environment.setting("#{prefix}_KEYCLOAK_CLIENT_NAME", BuildrPlus::Keycloak.client_name_for(client_type)) unless environment.setting?("#{prefix}_KEYCLOAK_CLIENT_NAME")
+        end
       end
     end
 
