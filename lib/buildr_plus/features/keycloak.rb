@@ -23,7 +23,9 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     end
 
     def client_types
-      [default_client_type] + self.additional_client_types
+      client_types = [default_client_type] + self.additional_client_types
+      client_types += ['api'] if BuildrPlus::FeatureManager.activated?(:gwt)
+      client_types
     end
 
     attr_writer :additional_client_types
