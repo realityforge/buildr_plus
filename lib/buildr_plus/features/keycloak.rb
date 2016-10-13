@@ -18,6 +18,10 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       root_project.name
     end
 
+    def default_client_type?(client_type)
+      default_client_type == client_type
+    end
+
     def client_types
       [default_client_type] + self.additional_client_types
     end
