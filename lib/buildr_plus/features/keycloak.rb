@@ -74,6 +74,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           BuildrPlus::Keycloak.client_types.each do |client_type|
             args << "-e#{name == client_type ? '' : "#{cname}_"}#{BuildrPlus::Naming.uppercase_constantize(client_type)}_NAME=#{BuildrPlus::Keycloak.client_name_for(client_type)}"
           end
+          args << "-e#{cname}_ORIGIN=http://127.0.0.1:8080"
           args << "-e#{cname}_URL=http://127.0.0.1:8080/#{name}"
 
           Java::Commands.java(args)
