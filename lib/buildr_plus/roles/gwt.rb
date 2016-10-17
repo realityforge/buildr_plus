@@ -31,6 +31,7 @@ BuildrPlus::Roles.role(:gwt) do
 
   compile.with BuildrPlus::Libs.findbugs_provided, BuildrPlus::Libs.gwt_gin
   compile.with BuildrPlus::Libs.gwt_datatypes
+  compile.with BuildrPlus::Libs.keycloak_gwt if BuildrPlus::FeatureManager.activated?(:keycloak)
 
   compile.with BuildrPlus::Libs.replicant_client if BuildrPlus::FeatureManager.activated?(:replicant)
 

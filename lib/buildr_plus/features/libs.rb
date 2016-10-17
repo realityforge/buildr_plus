@@ -174,6 +174,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         self.commons_logging + self.commons_codec
     end
 
+    def keycloak_gwt
+      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.1)
+    end
+
     def keycloak_domgen_support
       %w(org.realityforge.keycloak.domgen:keycloak-domgen-support:jar:1.3)
     end
