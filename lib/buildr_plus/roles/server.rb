@@ -110,7 +110,7 @@ BuildrPlus::Roles.role(:server) do
   project.iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
-  webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt)
+  webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:user_experience)
   webroots[_('..', :generated, 'gwt-export')] = '/' if BuildrPlus::FeatureManager.activated?(:gwt)
 
   project.assets.paths.each do |path|

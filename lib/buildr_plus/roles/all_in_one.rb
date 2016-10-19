@@ -101,7 +101,7 @@ BuildrPlus::Roles.role(:all_in_one) do
 
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
-  webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt)
+  webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:user_experience)
   assets.paths.each do |path|
     next if path.to_s =~ /generated\/gwt\// && BuildrPlus::FeatureManager.activated?(:gwt)
     next if path.to_s =~ /generated\/less\// && BuildrPlus::FeatureManager.activated?(:less)
