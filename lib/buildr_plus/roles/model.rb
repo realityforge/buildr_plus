@@ -16,7 +16,7 @@ BuildrPlus::Roles.role(:model) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:ee_data_types]
     if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:jpa_orm_xml, :jpa_model, :jpa_ejb_dao]
+      generators << [:jpa_orm_xml, :jpa_model, :jpa_ejb_dao, :jpa_template_persistence_xml, :jpa_template_orm_xml]
       generators << [:jpa_persistence_xml] if BuildrPlus::Artifacts.is_model_standalone?
 
       generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
