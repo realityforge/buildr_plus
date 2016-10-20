@@ -21,6 +21,8 @@ BuildrPlus::Artifacts.war = false
 base_directory = File.dirname(Buildr.application.buildfile.to_s)
 BuildrPlus::FeatureManager.activate_features([:gwt]) if File.exist?("#{base_directory}/gwt")
 BuildrPlus::FeatureManager.activate_features([:shared]) if File.exist?("#{base_directory}/shared/src/main/java")
+BuildrPlus::FeatureManager.activate_features([:library]) if File.exist?("#{base_directory}/server")
+BuildrPlus::FeatureManager.activate_features([:library_qa_support]) if File.exist?("#{base_directory}/server-qa-support")
 if BuildrPlus::FeatureManager.activated?(:gwt)
   BuildrPlus::FeatureManager.activate_features([:jackson])
   BuildrPlus::FeatureManager.activate_features([:replicant])
@@ -38,10 +40,10 @@ if BuildrPlus::FeatureManager.activated?(:model)
   BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
   BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :parent => :container, :template => true, :description => 'Model Test Infrastructure')
 end
-if File.exist?("#{base_directory}/server")
+if BuildrPlus::FeatureManager.activated?(:library)
   BuildrPlus::Roles.project('server', :roles => [:library], :parent => :container, :template => true, :description => 'Library Archive')
 end
-if File.exist?("#{base_directory}/server-qa-support")
+if BuildrPlus::FeatureManager.activated?(:library_qa_support)
   BuildrPlus::Roles.project('server-qa-support', :roles => [:library_qa_support], :parent => :container, :template => true, :description => 'Library Test Infrastructure')
 end
 
