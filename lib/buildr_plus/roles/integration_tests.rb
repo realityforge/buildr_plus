@@ -15,6 +15,7 @@
 BuildrPlus::Roles.role(:integration_tests) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:ee_integration_test]
+    generators << [:jpa_test_orm_xml, :jpa_test_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
     generators << [:appconfig_integration_test] if BuildrPlus::FeatureManager.activated?(:appconfig)
     generators << [:syncrecord_integration_test] if BuildrPlus::FeatureManager.activated?(:syncrecord)
     generators << [:timerstatus_integration_test] if BuildrPlus::FeatureManager.activated?(:timerstatus)
