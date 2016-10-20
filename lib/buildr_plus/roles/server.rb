@@ -17,10 +17,7 @@ BuildrPlus::Roles.role(:server) do
     generators = [:ee_beans_xml]
     generators << [:ee_web_xml] if BuildrPlus::Artifacts.war?
     if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:jpa_dao_test]
-
-      generators << [:jpa_test_orm_xml, :jpa_test_persistence_xml] unless BuildrPlus::Artifacts.is_model_standalone?
-
+      generators << [:jpa_dao_test, :jpa_application_orm_xml, :jpa_application_persistence_xml, :jpa_test_orm_xml, :jpa_test_persistence_xml]
       generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
     end
 
@@ -100,6 +97,10 @@ BuildrPlus::Roles.role(:server) do
   check package(:war), 'should contain web.xml' do
     it.should contain('WEB-INF/web.xml')
   end
+  check package(:war), 'should contain orm.xml and persistence.xml' do
+    it.should contain('META-INF/orm.xml')
+    it.should contain('META-INF/persistence.xml')
+  end if BuildrPlus::FeatureManager.activated?(:db)
   check package(:war), 'should not contain less files' do
     it.should_not contain('**/*.less')
   end if BuildrPlus::FeatureManager.activated?(:less)

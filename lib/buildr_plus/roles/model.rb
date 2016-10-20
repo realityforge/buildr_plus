@@ -16,8 +16,7 @@ BuildrPlus::Roles.role(:model) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:ee_data_types]
     if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:jpa_orm_xml, :jpa_model, :jpa_ejb_dao, :jpa_template_persistence_xml, :jpa_template_orm_xml]
-      generators << [:jpa_persistence_xml] if BuildrPlus::Artifacts.is_model_standalone?
+      generators << [:jpa_model, :jpa_ejb_dao, :jpa_template_persistence_xml, :jpa_template_orm_xml]
 
       generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
 
@@ -56,12 +55,8 @@ BuildrPlus::Roles.role(:model) do
   if BuildrPlus::FeatureManager.activated?(:db)
 
     check package(:jar), 'should contain resources and generated classes' do
-      it.should contain('META-INF/orm.xml')
-      if BuildrPlus::Artifacts.is_model_standalone?
-        it.should contain('META-INF/persistence.xml')
-      else
-        it.should_not contain('META-INF/persistence.xml')
-      end
+      it.should_not contain('META-INF/orm.xml')
+      it.should_not contain('META-INF/persistence.xml')
     end
 
     iml.add_jpa_facet

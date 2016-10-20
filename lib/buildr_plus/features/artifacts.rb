@@ -33,12 +33,6 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
       @model.nil? ? library? : !!@model
     end
 
-    attr_writer :is_model_standalone
-
-    def is_model_standalone?
-      @is_model_standalone.nil? ? !BuildrPlus::Dbt.library? : !!@is_model_standalone
-    end
-
     attr_writer :gwt
 
     def gwt?
