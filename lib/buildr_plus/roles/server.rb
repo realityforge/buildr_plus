@@ -98,8 +98,8 @@ BuildrPlus::Roles.role(:server) do
     it.should contain('WEB-INF/web.xml')
   end
   check package(:war), 'should contain orm.xml and persistence.xml' do
-    it.should contain('META-INF/orm.xml')
-    it.should contain('META-INF/persistence.xml')
+    it.should contain('WEB-INF/classes/META-INF/orm.xml')
+    it.should contain('WEB-INF/classes/META-INF/persistence.xml')
   end if BuildrPlus::FeatureManager.activated?(:db)
   check package(:war), 'should not contain less files' do
     it.should_not contain('**/*.less')
