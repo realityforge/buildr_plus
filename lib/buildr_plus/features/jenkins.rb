@@ -135,8 +135,9 @@ PRE
       docker = options[:docker].nil? ? false : !!options[:docker]
       content = <<CONTENT
 #{prepare_content(artifacts)}
-  stage '#{label}'
+  stage('#{label}') {
   sh #{quote}#{pre_script}#{separator}#{docker ? docker_setup : ''}#{buildr_command(task, options)}#{quote}
+  }
 CONTENT
       inner_content = inside_docker_image(content)
       email = options[:email].nil? ? true : !!options[:email]
@@ -331,7 +332,7 @@ CONTENT
     def stage(name)
       return '' if skip_stage?(name)
       <<CONTENT
-  stage '#{name}' {
+  stage('#{name}'){
 #{yield}
   }
 CONTENT
