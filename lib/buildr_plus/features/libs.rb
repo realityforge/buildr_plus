@@ -61,7 +61,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def mockito
-      %w(org.mockito:mockito-all:jar:1.9.5)
+      %w(org.mockito:mockito-all:jar:1.10.19)
     end
 
     def jackson_annotations
