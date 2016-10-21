@@ -250,7 +250,7 @@ if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
         if BuildrPlus::FeatureManager.activated?(:checkstyle)
           analysis = true
           stage += <<CONTENT
-  step([$class: 'hudson.plugins.checkstyle.CheckStylePublisher', pattern: 'reports/#{root_project.name}/checkstyle/checkstyle.xml'])
+  step([$class: 'hudson.plugins.checkstyle.CheckStylePublisher', pattern: 'reports/#{root_project.name}/checkstyle/checkstyle.xml', unstableTotalAll: '1', failedTotalAll: '1'])
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/checkstyle', reportFiles: 'checkstyle.html', reportName: 'Checkstyle issues'])
 CONTENT
         end
@@ -264,7 +264,7 @@ CONTENT
         if BuildrPlus::FeatureManager.activated?(:pmd)
           analysis = true
           stage += <<CONTENT
-  step([$class: 'PmdPublisher', pattern: 'reports/#{root_project.name}/pmd/pmd.xml'])
+  step([$class: 'PmdPublisher', pattern: 'reports/#{root_project.name}/pmd/pmd.xml', unstableTotalAll: '1', failedTotalAll: '1'])
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/pmd/', reportFiles: 'pmd.html', reportName: 'PMD Issues'])
 CONTENT
         end
@@ -276,7 +276,7 @@ CONTENT
         end
         if analysis
           stage += <<CONTENT
-  step([$class: 'AnalysisPublisher', failedTotalAll: 1])
+  step([$class: 'AnalysisPublisher', unstableTotalAll: '1', failedTotalAll: '1'])
 CONTENT
         end
 
