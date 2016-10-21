@@ -245,29 +245,40 @@ if (env.BRANCH_NAME == 'master' && env.BRANCH_NAME == 'master') {
       stage('Commit') do
         stage = "  sh \"#{docker_setup}#{buildr_command('ci:commit')}\"\n"
 
+        analysis = false
         if BuildrPlus::FeatureManager.activated?(:checkstyle)
+          analysis = true
           stage += <<CONTENT
   step([$class: 'hudson.plugins.checkstyle.CheckStylePublisher', pattern: 'reports/#{root_project.name}/checkstyle/checkstyle.xml'])
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/checkstyle', reportFiles: 'checkstyle.html', reportName: 'Checkstyle issues'])
 CONTENT
         end
         if BuildrPlus::FeatureManager.activated?(:findbugs)
+          analysis = true
           stage += <<CONTENT
   step([$class: 'FindBugsPublisher', pattern: 'reports/#{root_project.name}/findbugs/findbugs.xml', unstableTotalAll: '1', failedTotalAll: '1', isRankActivated: true, canComputeNew: true, shouldDetectModules: false, useDeltaValues: false, canRunOnFailed: false, thresholdLimit: 'low'])
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/findbugs', reportFiles: 'findbugs.html', reportName: 'Findbugs issues'])
 CONTENT
         end
         if BuildrPlus::FeatureManager.activated?(:pmd)
+          analysis = true
           stage += <<CONTENT
   step([$class: 'PmdPublisher', pattern: 'reports/#{root_project.name}/pmd/pmd.xml'])
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/pmd/', reportFiles: 'pmd.html', reportName: 'PMD Issues'])
 CONTENT
         end
         if BuildrPlus::FeatureManager.activated?(:jdepend)
+          analysis = true
           stage += <<CONTENT
   publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/jdepend', reportFiles: 'jdepend.html', reportName: 'JDepend Report'])
 CONTENT
         end
+        if analysis
+          stage += <<CONTENT
+   step([$class: 'AnalysisPublisher', failedTotalAll: 1])
+CONTENT
+        end
+
         stage
       end
     end
