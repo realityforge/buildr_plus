@@ -275,7 +275,7 @@ CONTENT
         end
         if analysis
           stage += <<CONTENT
-   step([$class: 'AnalysisPublisher', failedTotalAll: 1])
+  step([$class: 'AnalysisPublisher', failedTotalAll: 1])
 CONTENT
         end
 
