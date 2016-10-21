@@ -235,7 +235,7 @@ CONTENT
         "  build job: '#{root_project.name}/deploy-to-#{deployment_environment}', parameters: [string(name: 'PRODUCT_ENVIRONMENT', value: '#{deployment_environment}'), string(name: 'PRODUCT_NAME', value: '#{root_project.name}'), string(name: 'PRODUCT_VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
       end
       <<-DEPLOY_STEP
-if (env.BRANCH_NAME == 'master' && env.BRANCH_NAME == 'master') {
+if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
 #{content}
 }
       DEPLOY_STEP
