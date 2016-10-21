@@ -279,6 +279,12 @@ CONTENT
 CONTENT
         end
 
+          stage += <<CONTENT
+  if ( currentBuild.result != 'SUCCESS' ) {
+    error("Build failed commit stage")
+  }
+CONTENT
+
         stage
       end
     end
