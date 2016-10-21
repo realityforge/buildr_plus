@@ -325,8 +325,9 @@ CONTENT
     def stage(name)
       return '' if skip_stage?(name)
       <<CONTENT
-  stage '#{name}'
+  stage '#{name}' {
 #{yield}
+  }
 CONTENT
     end
 
