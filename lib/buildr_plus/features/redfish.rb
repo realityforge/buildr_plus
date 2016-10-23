@@ -71,7 +71,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
       properties = build_property_set(domain, environment)
       domain.environment_vars.each_pair do |key, default_value|
         value = properties[key] || default_value
-        raise "Redfish domain with key #{domain.key} requires setting #{key} that is not specified and can not be derived." if value.nil?
+        raise "Redfish domain with key #{domain.key} requires setting #{key} that is not specified and can not be derived." if value.nil? || value == ''
         RedfishPlus.system_property(domain, key, value)
         domain.data['environment_vars'][key] = value
       end
