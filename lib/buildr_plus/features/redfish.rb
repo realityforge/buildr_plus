@@ -62,6 +62,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
         @features = []
         @features << :jms if BuildrPlus::FeatureManager.activated?(:jms)
         @features << :jdbc if BuildrPlus::FeatureManager.activated?(:db)
+        @features << :mail if BuildrPlus::FeatureManager.activated?(:mail)
       end
       @features
     end
@@ -94,6 +95,8 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
     def build_property_set(domain, environment)
       properties = {}
 
+      constant_prefix = BuildrPlus::Naming.uppercase_constantize(domain.name)
+
       if environment.broker?
         properties['OPENMQ_HOST'] = as_ip(environment.broker.host.to_s)
         properties['OPENMQ_PORT'] = environment.broker.port.to_s
@@ -101,7 +104,11 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
         properties['OPENMQ_ADMIN_PASSWORD'] = environment.broker.admin_password.to_s
       end
 
-      constant_prefix = BuildrPlus::Naming.uppercase_constantize(domain.name)
+      if BuildrPlus::FeatureManager.activated?(:mail)
+        properties["#{constant_prefix}_MAIL_HOST"] = 'localhost'
+        properties["#{constant_prefix}_MAIL_USER"] = domain.name
+        properties["#{constant_prefix}_MAIL_FROM"] = "#{domain.name}@example.com"
+      end
 
       environment.databases.each do |database|
         prefixes = self.database_config_prefix_map[database.key.to_s] || [constant_prefix]
