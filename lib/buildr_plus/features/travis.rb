@@ -21,6 +21,7 @@ BuildrPlus::FeatureManager.feature(:travis => [:oss]) do |f|
       docker_active = BuildrPlus::FeatureManager.activated?(:docker)
 
       content = <<CONTENT
+# DO NOT EDIT: File is auto-generated
 language: ruby
 jdk:
   - oraclejdk7

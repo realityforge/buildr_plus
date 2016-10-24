@@ -461,7 +461,7 @@ CONTENT
     end
 
     def hash_bang(content)
-      "#!/usr/bin/env groovy\n\n#{content}"
+      "#!/usr/bin/env groovy\n/* DO NOT EDIT: File is auto-generated */\n\n#{content}"
     end
 
     def inside_docker_image(content)
