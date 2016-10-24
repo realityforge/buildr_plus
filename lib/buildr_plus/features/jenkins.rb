@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-# Enable this feature if the code is tested using travis
+# Enable this feature if the code is tested using jenkins
 BuildrPlus::FeatureManager.feature(:jenkins) do |f|
   f.enhance(:Config) do
     attr_writer :auto_deploy
