@@ -16,7 +16,7 @@ BuildrPlus::Roles.role(:user_experience) do
   BuildrPlus::FeatureManager.ensure_activated(:user_experience)
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:gwt_client_event, :gwt_client_app]
+    generators = [:gwt_client_event, :gwt_client_app, :gwt_client_gwt_modules]
     generators += [:keycloak_gwt_app] if BuildrPlus::FeatureManager.activated?(:keycloak)
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
