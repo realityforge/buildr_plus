@@ -80,7 +80,8 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
 
     def buildr_stage_content(buildr_task, options = {})
       docker = options[:docker].nil? ? true : !!options[:docker]
-      "  sh '#{docker ? docker_setup : ''}#{buildr_command(buildr_task, options)}'"
+      suffix = options[:additional_steps].nil? ? '' : "\n  #{options[:additional_steps]}"
+      "  sh '#{docker ? docker_setup : ''}#{buildr_command(buildr_task, options)}'#{suffix}"
     end
 
 
