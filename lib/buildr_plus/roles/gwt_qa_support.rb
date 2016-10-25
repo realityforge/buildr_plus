@@ -21,7 +21,9 @@ BuildrPlus::Roles.role(:gwt_qa_support) do
     generators = [:gwt_rpc_module]
     generators += [:imit_client_main_qa]  if BuildrPlus::FeatureManager.activated?(:replicant)
     generators += project.additional_domgen_generators
-    Domgen::Build.define_generate_task(generators, :buildr_project => project)
+    Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
+      t.filter = project.domgen_filter
+    end
   end
 
   compile.with BuildrPlus::Libs.guiceyloops_gwt

@@ -20,7 +20,9 @@ BuildrPlus::Roles.role(:model_qa_support) do
 
     generators += project.additional_domgen_generators
 
-    Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
+    Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
+      t.filter = project.domgen_filter
+    end
   end
 
   project.publish = BuildrPlus::Artifacts.model?

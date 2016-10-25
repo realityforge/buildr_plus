@@ -83,6 +83,8 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
 
   f.enhance(:ProjectExtension) do
 
+    attr_accessor :domgen_filter
+
     def additional_domgen_generators
       @additional_domgen_generators ||= []
     end
