@@ -283,10 +283,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
           short_name = BuildrPlus::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
           database.database = "#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}_#{short_name}_#{self.env_code(environment.key)}" unless database.database
-          database.restore_name = short_name unless database.restore_name
-          database.backup_name = short_name unless database.backup_name
           database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
-          database.backup_location = environment_var('DB_BACKUPS_LOCATION') unless database.backup_location
           database.host = environment_var('DB_SERVER_HOST') unless database.host
           unless database.port_set?
             port = environment_var('DB_SERVER_PORT', database.port)
