@@ -213,10 +213,6 @@ CONTENT
         ::Dbt.database_for_key?(:default) &&
         BuildrPlus::Dbt.database_import?(:default)
         content += import_stage
-
-        BuildrPlus::Ci.additional_import_tasks.each do |import_variant|
-          content += import_variant_stage(import_variant)
-        end
       end
 
       post_import_stages.each do |label, stage_content|
