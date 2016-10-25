@@ -14,6 +14,12 @@
 
 BuildrPlus::FeatureManager.feature(:mail) do |f|
   f.enhance(:Config) do
+    attr_writer :include_db_artifact
+
+    def include_db_artifact?
+      @include_db_artifact.nil? ? true : !!@include_db_artifact
+    end
+
     def mail_db
       pg_suffix? ? :mail_db_pg : :mail_db
     end

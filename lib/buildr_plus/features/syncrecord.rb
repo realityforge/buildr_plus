@@ -14,6 +14,11 @@
 
 BuildrPlus::FeatureManager.feature(:syncrecord => [:appconfig]) do |f|
   f.enhance(:Config) do
+    attr_writer :include_db_artifact
+
+    def include_db_artifact?
+      @include_db_artifact.nil? ? true : !!@include_db_artifact
+    end
 
     def syncrecord_db
       pg_suffix? ? :syncrecord_db_pg : :syncrecord_db

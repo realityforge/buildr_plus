@@ -62,13 +62,13 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
         database.search_dirs = %w(database) if !database.search_dirs? && !BuildrPlus::FeatureManager.activated?(:domgen)
 
         if BuildrPlus::Dbt.add_dependent_artifacts?
-          if BuildrPlus::FeatureManager.activated?(:appconfig)
+          if BuildrPlus::FeatureManager.activated?(:appconfig) && BuildrPlus::Appconfig.include_db_artifact?
             BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Appconfig.appconfig_db)
           end
-          if BuildrPlus::FeatureManager.activated?(:syncrecord)
+          if BuildrPlus::FeatureManager.activated?(:syncrecord) && BuildrPlus::Syncrecord.include_db_artifact?
             BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Syncrecord.syncrecord_db)
           end
-          if BuildrPlus::FeatureManager.activated?(:mail)
+          if BuildrPlus::FeatureManager.activated?(:mail) && BuildrPlus::Mail.include_db_artifact?
             BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Mail.mail_db)
           end
         end

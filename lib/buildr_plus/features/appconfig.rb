@@ -15,6 +15,12 @@
 BuildrPlus::FeatureManager.feature(:appconfig) do |f|
   f.enhance(:Config) do
 
+    attr_writer :include_db_artifact
+
+    def include_db_artifact?
+      @include_db_artifact.nil? ? true : !!@include_db_artifact
+    end
+
     def appconfig_db
       pg_suffix? ? :appconfig_db_pg : :appconfig_db
     end
