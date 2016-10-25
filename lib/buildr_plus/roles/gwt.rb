@@ -57,5 +57,5 @@ BuildrPlus::Roles.role(:gwt) do
       it.should contain("#{p.group_as_path}/shared/net/#{p.name_as_class}ReplicationGraph.class")
       it.should contain("#{p.group_as_path}/shared/net/#{p.name_as_class}ReplicationGraph.java")
     end
-  end
+  end if BuildrPlus::Domgen.enforce_package_name?
 end
