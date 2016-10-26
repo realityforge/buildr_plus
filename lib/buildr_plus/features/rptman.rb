@@ -28,6 +28,7 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
           old_environment = SSRS::Config.environment
           old_filename = SSRS::Config.config_filename
           begin
+            SSRS::Config.config_data = nil
             SSRS::Config.environment = 'production'
             SSRS::Config.config_filename = 'config/ci-report-database.yml'
             task('rptman:ssrs:download').invoke
@@ -45,6 +46,7 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
               end
             end
           ensure
+            SSRS::Config.config_data = nil
             SSRS::Config.environment = old_environment
             SSRS::Config.config_filename = old_filename
           end
@@ -56,10 +58,12 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
           old_environment = SSRS::Config.environment
           old_filename = SSRS::Config.config_filename
           begin
+            SSRS::Config.config_data = nil
             SSRS::Config.environment = 'production'
             SSRS::Config.config_filename = 'config/ci-report-database.yml'
             task('rptman:ssrs:upload_reports').invoke
           ensure
+            SSRS::Config.config_data = nil
             SSRS::Config.environment = old_environment
             SSRS::Config.config_filename = old_filename
           end
