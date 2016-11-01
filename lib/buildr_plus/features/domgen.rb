@@ -143,17 +143,17 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 end
               end
 
-              if r.application.db_deployable? && BuildrPlus::Dbt.library?
+              if r.application? && r.application.db_deployable? && BuildrPlus::Dbt.library?
                 raise "Domgen declared 'repository.application.db_deployable = true' but buildr configured 'BuildrPlus::Dbt.library = true'."
               end
 
-              if r.sql? && !r.application.db_deployable? && !BuildrPlus::Dbt.library?
+              if r.application? && r.sql? && !r.application.db_deployable? && !BuildrPlus::Dbt.library?
                 raise "Domgen declared 'repository.application.db_deployable = false' but buildr configured 'BuildrPlus::Dbt.library = false'."
               end
 
-              if r.application.service_library? && !BuildrPlus::FeatureManager.activated?(:library)
+              if r.application? && r.application.service_library? && !BuildrPlus::FeatureManager.activated?(:role_library)
                 raise "Domgen declared 'repository.application.service_library = true' but buildr is not configured as a library."
-              elsif !r.application.service_library? && BuildrPlus::FeatureManager.activated?(:library)
+              elsif r.application? && !r.application.service_library? && BuildrPlus::FeatureManager.activated?(:role_library)
                 raise "Domgen declared 'repository.application.service_library = false' but buildr is configured as a library."
               end
 
