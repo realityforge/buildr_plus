@@ -147,6 +147,12 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 raise "Domgen declared 'repository.application.db_deployable = true' but buildr configured 'BuildrPlus::Dbt.library = true'."
               end
 
+              if r.application? && r.application.user_experience? && !BuildrPlus::FeatureManager.activated?(:role_user_experience)
+                raise "Domgen declared 'repository.application.user_experience = true' but buildr has not configured user_experience role."
+              elsif r.application? && !r.application.user_experience? && BuildrPlus::FeatureManager.activated?(:role_user_experience)
+                raise "Domgen declared 'repository.application.user_experience = false' but buildr has configured user_experience role."
+              end
+
               if r.application? && r.sql? && !r.application.db_deployable? && !BuildrPlus::Dbt.library?
                 raise "Domgen declared 'repository.application.db_deployable = false' but buildr configured 'BuildrPlus::Dbt.library = false'."
               end
