@@ -12,8 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:soap_qa_support) do
-  BuildrPlus::FeatureManager.ensure_activated(:soap)
+BuildrPlus::Roles.role(:soap_qa_support, :requires => [:role_soap_client]) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:ee_data_types, :ee_exceptions, :jws_fake_server]

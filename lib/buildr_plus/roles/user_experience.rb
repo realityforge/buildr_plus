@@ -12,8 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:user_experience) do
-  BuildrPlus::FeatureManager.ensure_activated(:user_experience)
+BuildrPlus::Roles.role(:user_experience, :requires => [:role_gwt, :gwt]) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:gwt_client_event, :gwt_client_app, :gwt_client_gwt_modules]

@@ -12,8 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:gwt) do
-  BuildrPlus::FeatureManager.ensure_activated(:gwt)
+BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
 
   project.publish = BuildrPlus::Artifacts.gwt?
 

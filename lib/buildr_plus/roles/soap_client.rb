@@ -12,8 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:soap_client) do
-  BuildrPlus::FeatureManager.ensure_activated(:soap)
+BuildrPlus::Roles.role(:soap_client, :requires => [:soap]) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:jws_client]

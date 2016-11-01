@@ -12,8 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:sync_model) do
-  BuildrPlus::FeatureManager.ensure_activated(:sync)
+BuildrPlus::Roles.role(:sync_model, :requires => [:sync]) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:sync_master_ejb_impl, :ejb_services]

@@ -70,6 +70,9 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
     def role(name, options = {}, &block)
       role = role_map[name.to_s]
       BuildrPlus::FeatureManager.feature(:"role_#{name}") if role.nil?
+      (options[:requires] || {}).each do |feature|
+        BuildrPlus::FeatureManager.activate_feature(feature) unless BuildrPlus::FeatureManager.activated?(feature)
+      end
       if role.nil? || options[:replace]
         role = []
         role_map[name.to_s] = role
