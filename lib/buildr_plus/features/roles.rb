@@ -69,6 +69,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
 
     def role(name, options = {}, &block)
       role = role_map[name.to_s]
+      BuildrPlus::FeatureManager.feature(:"role_#{name}") if role.nil?
       if role.nil? || options[:replace]
         role = []
         role_map[name.to_s] = role
@@ -112,6 +113,9 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
 
     def project(name, options = {}, &block)
       project = project_map[name.to_s]
+      (options[:role] || {}).each do |role|
+        BuildrPlus::FeatureManager.activate_features([:"role_#{role}"])
+      end
       unless project
         project = ProjectDescription.new(name, options)
         project_map[name.to_s] = project
