@@ -23,8 +23,16 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     end
 
     def client_types
-      client_types = [default_client_type] + self.additional_client_types
-      client_types += ['api'] if BuildrPlus::FeatureManager.activated?(:gwt)
+
+      client_types = []
+      client_types += self.additional_client_types
+      if BuildrPlus::FeatureManager.activated?(:role_user_experience)
+        # api client is for gwt_rpc, default_client_type is for UX
+        client_types += [default_client_type, 'api']
+      else
+        # default_client_type is for api as there is no UX client
+        client_types += [default_client_type]
+      end
       client_types
     end
 
