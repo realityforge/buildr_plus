@@ -19,6 +19,46 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       @gitignore_needs_update.nil? ? false : !!@gitignore_needs_update
     end
 
+    def process_gitignore_file(apply_fix)
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      filename = "#{base_directory}/.gitignore"
+      if File.exist?(filename)
+        content = IO.read(filename)
+
+        original_content = content.dup
+
+        # Remove ignores that should not be present
+        (global_ignores + invalid_ignores).each do |v|
+          content = content.gsub(v, '')
+        end
+
+        # Transform known bad patterns to good patterns
+        normalizing_transforms.each_pair do |pattern, replacement|
+          content = content.gsub(pattern, replacement)
+        end
+
+        # Ignores known to be required
+        content += "\n" + gitignores.collect { |v| "#{v}" }.join("\n")
+
+        # Normalize new lines, order libs and strip duplicates
+        content = content.split("\n").collect { |f| f.strip }.select { |f| f.size > 0 }.sort.uniq.join("\n") + "\n"
+
+        if content != original_content
+          BuildrPlus::Gitignore.gitignore_needs_update = true
+          if apply_fix
+            puts 'Fixing: .gitignore'
+            File.open(filename, 'wb') do |out|
+              out.write content
+            end
+          else
+            puts 'Non-normalized .gitignore'
+          end
+        end
+      end
+    end
+
+    private
+
     def global_ignores
       %w(*~ .DS_Store .DS_Store? ._* .Spotlight-V100 .Trashes ehthumbs.db Thumbs.db)
     end
@@ -126,43 +166,6 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       gitignores
     end
 
-    def process_gitignore_file(apply_fix)
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      filename = "#{base_directory}/.gitignore"
-      if File.exist?(filename)
-        content = IO.read(filename)
-
-        original_content = content.dup
-
-        # Remove ignores that should not be present
-        (self.global_ignores + self.invalid_ignores).each do |v|
-          content = content.gsub(v, '')
-        end
-
-        # Transform known bad patterns to good patterns
-        self.normalizing_transforms.each_pair do |pattern, replacement|
-          content = content.gsub(pattern, replacement)
-        end
-
-        # Ignores known to be required
-        content += "\n" + self.gitignores.collect { |v| "#{v}" }.join("\n")
-
-        # Normalize new lines, order libs and strip duplicates
-        content = content.split("\n").collect { |f| f.strip }.select { |f| f.size > 0 }.sort.uniq.join("\n") + "\n"
-
-        if content != original_content
-          BuildrPlus::Gitignore.gitignore_needs_update = true
-          if apply_fix
-            puts 'Fixing: .gitignore'
-            File.open(filename, 'wb') do |out|
-              out.write content
-            end
-          else
-            puts 'Non-normalized .gitignore'
-          end
-        end
-      end
-    end
   end
 
   f.enhance(:ProjectExtension) do
