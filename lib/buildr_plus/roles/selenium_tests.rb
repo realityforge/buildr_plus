@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:selenium_tests) do
+BuildrPlus::Roles.role(:selenium_tests, :requires => [:role_integration_tests, :selenium]) do
   server_project = BuildrPlus::Roles.buildr_project_with_role(:server)
   war_package = server_project.package(:war)
 

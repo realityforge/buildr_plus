@@ -65,7 +65,7 @@ BuildrPlus::Roles.role(:server) do
 
   compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
   compile.with BuildrPlus::Deps.server_deps
-  compile.with BuildrPlus::Libs.ee_provided unless BuildrPlus::FeatureManager.activated?(:model)
+  compile.with BuildrPlus::Libs.ee_provided unless BuildrPlus::FeatureManager.activated?(:role_model)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
@@ -95,7 +95,7 @@ BuildrPlus::Roles.role(:server) do
 
   check package(:war), 'should contain generated gwt artifacts' do
     it.should contain("#{project.root_project.name}/#{project.root_project.name}.nocache.js")
-  end if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:user_experience)
+  end if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:role_user_experience)
   check package(:war), 'should contain web.xml' do
     it.should contain('WEB-INF/web.xml')
   end
@@ -113,7 +113,7 @@ BuildrPlus::Roles.role(:server) do
   project.iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
-  webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:user_experience)
+  webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:role_user_experience)
   webroots[_('..', :generated, 'gwt-export')] = '/' if BuildrPlus::FeatureManager.activated?(:gwt)
 
   project.assets.paths.each do |path|

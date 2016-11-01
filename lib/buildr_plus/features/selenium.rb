@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:selenium => [:integration_tests]) do |f|
+BuildrPlus::FeatureManager.feature(:selenium) do |f|
   f.enhance(:ProjectExtension) do
     first_time do
       require 'buildr_plus/patches/selenium'
