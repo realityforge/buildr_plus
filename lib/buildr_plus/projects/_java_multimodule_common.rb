@@ -42,9 +42,7 @@ end
 if File.exist?("#{base_directory}/gwt")
   BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :template => true, :description => 'GWT Library')
   BuildrPlus::Roles.project('gwt-qa-support', :roles => [:gwt_qa_support], :parent => :container, :template => true, :description => 'GWT Test Infrastructure')
-end
-if File.exist?("#{base_directory}/user-experience")
-  BuildrPlus::Roles.project('user-experience', :roles => [:user_experience], :parent => :container, :template => true, :description => 'GWT Client-side UI')
+  BuildrPlus::FeatureManager.activate_features([:jackson]) unless BuildrPlus::FeatureManager.activated?(:jackson)
 end
 
 if BuildrPlus::FeatureManager.activated?(:soap)
@@ -55,15 +53,6 @@ end
 if File.exist?("#{base_directory}/integration-qa-support")
   BuildrPlus::Roles.project('integration-qa-support', :roles => [:integration_qa_support], :parent => :container, :template => true, :description => 'Integration Test Infrastructure')
   BuildrPlus::Roles.project('integration-tests', :roles => [:integration_tests], :parent => :container, :template => true, :description => 'Integration Tests')
-end
-
-if BuildrPlus::FeatureManager.activated?(:role_gwt) || BuildrPlus::FeatureManager.activated?(:role_user_experience)
-  BuildrPlus::FeatureManager.activate_features([:jackson])
-  BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter])
-end
-
-if BuildrPlus::FeatureManager.activated?(:role_user_experience)
-  BuildrPlus::FeatureManager.activate_features([:appcache])
 end
 
 BuildrPlus::Roles.default_role = :container

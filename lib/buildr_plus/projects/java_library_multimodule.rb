@@ -20,6 +20,13 @@ BuildrPlus::Artifacts.war = false
 
 base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
+if File.exist?("#{base_directory}/user-experience")
+  BuildrPlus::Roles.project('user-experience', :roles => [:user_experience], :parent => :container, :template => true, :description => 'GWT Client-side UI')
+
+  BuildrPlus::FeatureManager.activate_features([:appcache]) unless BuildrPlus::FeatureManager.activated?(:appcache)
+  BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter]) unless BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
+end
+
 if File.exist?("#{base_directory}/server")
   BuildrPlus::Roles.project('server', :roles => [:library], :parent => :container, :template => true, :description => 'Library Archive')
 end
