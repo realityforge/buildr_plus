@@ -240,6 +240,10 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           commit_actions << 'gitignore:check'
           pull_request_actions << 'gitignore:check'
         end
+        if BuildrPlus::FeatureManager.activated?(:gitattributes)
+          commit_actions << 'gitattributes:check'
+          pull_request_actions << 'gitattributes:check'
+        end
 
         if BuildrPlus::FeatureManager.activated?(:oss)
           commit_actions << 'oss:check'
