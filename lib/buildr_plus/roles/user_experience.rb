@@ -31,6 +31,7 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:role_gwt, :gwt]) do
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :gwt_qa_support)
+  BuildrPlus::Roles.merge_projects_with_role(project.test, :replicant_qa_support)
 
   package(:jar)
   package(:sources)

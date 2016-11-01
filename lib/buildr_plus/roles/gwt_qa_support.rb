@@ -28,6 +28,7 @@ BuildrPlus::Roles.role(:gwt_qa_support, :requires => [:gwt]) do
   compile.with BuildrPlus::Libs.guiceyloops_gwt
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_qa_support)
 
   package(:jar)
   package(:sources)
