@@ -39,6 +39,12 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
       @gwt.nil? ? library? : !!@gwt
     end
 
+    attr_writer :replicant_client
+
+    def replicant_client?
+      @replicant_client.nil? ? library? : !!@replicant_client
+    end
+
     attr_writer :db
 
     def db?
