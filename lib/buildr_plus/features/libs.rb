@@ -92,8 +92,12 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       'com.google.gwt:gwt-dev:jar:2.7.0'
     end
 
+    def javax_inject
+      %w(javax.inject:javax.inject:jar:1)
+    end
+
     def gwt_gin
-      %w(com.google.gwt.inject:gin:jar:2.1.2 javax.inject:javax.inject:jar:1) + self.guice + self.gwt_user
+      %w(com.google.gwt.inject:gin:jar:2.1.2) + self.javax_inject + self.guice + self.gwt_user
     end
 
     def replicant
