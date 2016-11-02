@@ -29,6 +29,7 @@ BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_share
   end
 
   compile.with BuildrPlus::Libs.ee_provided
+  compile.with BuildrPlus::Libs.gwt_webpoller
   compile.with BuildrPlus::Libs.glassfish_embedded
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_shared)
