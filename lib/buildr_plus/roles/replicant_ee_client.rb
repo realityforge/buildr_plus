@@ -42,6 +42,8 @@ BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_share
   package(:jar)
   package(:sources)
 
+  p = project.root_project
+
   check package(:jar), 'should contain generated source files' do
     it.should contain("#{p.group_as_path}/client/net/#{p.name_as_class}EeDataLoaderServiceImpl.class")
   end if BuildrPlus::Domgen.enforce_package_name?
