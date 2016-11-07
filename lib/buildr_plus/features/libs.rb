@@ -206,6 +206,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       ) + self.keycloak_core + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
     end
 
+    def replicant_ee_client
+      self.replicant + self.gwt_datatypes + self.gwt_webpoller
+    end
+
     def replicant_client
       self.replicant + self.gwt_property_source + self.gwt_datatypes + self.gwt_webpoller
     end
