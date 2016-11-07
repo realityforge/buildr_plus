@@ -187,6 +187,12 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
               elsif !(r.imit? && r.imit.support_ee_client?) && BuildrPlus::Artifacts.replicant_client?
                 raise "Domgen repository #{r.name} declares repository.imit.support_ee_client = false while in BuildrPlus BuildrPlus::Artifacts.replicant_client? is true"
               end
+
+              if !r.robots? && BuildrPlus::Artifacts.war?
+                raise "Domgen repository #{r.name} should enable robots facet as BuildrPlus BuildrPlus::Artifacts.war? is true"
+              elsif r.robots? && !BuildrPlus::Artifacts.war?
+                raise "Domgen repository #{r.name} should disable robots facet as BuildrPlus BuildrPlus::Artifacts.war? is false"
+              end
             end
           end
         end
