@@ -17,6 +17,30 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
     # The role applied if there is only one project defined and that project has no role
     attr_accessor :default_role
 
+    class RoleDescription < BuildrPlus::BaseElement
+      def initialize(name, options = {}, &block)
+        @name = name
+        super(options, &block)
+      end
+
+      attr_reader :name
+      attr_writer :requires
+
+      def requires
+        @requires || []
+      end
+
+      def actions
+        @actions ||= []
+      end
+
+      def activate
+        self.requires.each do |feature|
+          BuildrPlus::FeatureManager.activate_feature(feature) unless BuildrPlus::FeatureManager.activated?(feature)
+        end
+      end
+    end
+
     class ProjectDescription < BuildrPlus::BaseElement
       def initialize(name, options = {}, &block)
         @name = name
@@ -70,17 +94,14 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
     def role(name, options = {}, &block)
       role = role_map[name.to_s]
       BuildrPlus::FeatureManager.feature(:"role_#{name}") if role.nil?
-      (options[:requires] || {}).each do |feature|
-        BuildrPlus::FeatureManager.activate_feature(feature) unless BuildrPlus::FeatureManager.activated?(feature)
-      end
       if role.nil? || options[:replace]
-        role = []
+        role = RoleDescription.new(name, :requires => options[:requires])
         role_map[name.to_s] = role
       end
       if options[:append]
-        role << block
+        role.actions << block
       else
-        role.unshift(block)
+        role.actions.unshift(block)
       end
       nil
     end
@@ -220,7 +241,8 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
         project.roles.each do |role_name|
           role = BuildrPlus::Roles.role_by_name(role_name)
           raise "Unknown role #{role_name} declared on project #{project.name}" unless role
-          role.each do |r|
+          role.activate
+          role.actions.each do |r|
             instance_eval &r
           end
         end
