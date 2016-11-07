@@ -34,9 +34,20 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
         @actions ||= []
       end
 
-      def activate
+      def activate_extensions
         self.requires.each do |feature|
           BuildrPlus::FeatureManager.activate_feature(feature) unless BuildrPlus::FeatureManager.activated?(feature)
+        end
+        unless @activated
+          @activated = true
+          projects =
+            BuildrPlus::Roles.projects_with_role(name) + BuildrPlus::Roles.projects_with_parent_role(name)
+
+          projects.each do |project|
+            project.roles.each do |role_name|
+              BuildrPlus::Roles.role_by_name(role_name).activate_extensions
+            end
+          end
         end
       end
     end
@@ -107,11 +118,15 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
     end
 
     def role_by_name(name)
-      role_map[name.to_s]
+      role_map[name.to_s] || (raise "Unknown role #{name}")
     end
 
     def roles
       role_map.dup
+    end
+
+    def projects_with_parent_role(role)
+      self.projects.select { |p| p.parent.to_s == role.to_s }
     end
 
     def buildr_project_with_role(role)
@@ -241,7 +256,6 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
         project.roles.each do |role_name|
           role = BuildrPlus::Roles.role_by_name(role_name)
           raise "Unknown role #{role_name} declared on project #{project.name}" unless role
-          role.activate
           role.actions.each do |r|
             instance_eval &r
           end
