@@ -34,4 +34,4 @@ if File.exist?("#{base_directory}/server-qa-support")
   BuildrPlus::Roles.project('server-qa-support', :roles => [:library_qa_support], :parent => :container, :template => true, :description => 'Library Test Infrastructure')
 end
 
-BuildrPlus::ExtensionRegistry.auto_activate!
+require 'buildr_plus/projects/_activate'

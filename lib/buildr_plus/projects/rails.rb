@@ -20,4 +20,4 @@ BuildrPlus::FeatureManager.activate_features([:itest, :rails])
 
 BuildrPlus::FeatureManager.activate_feature(:calendar_date_select) if BuildrPlus::Util.is_calendar_date_select_gem_present?
 
-BuildrPlus::ExtensionRegistry.auto_activate!
+require 'buildr_plus/projects/_activate'

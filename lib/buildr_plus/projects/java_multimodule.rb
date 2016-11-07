@@ -22,4 +22,4 @@ if File.exist?("#{base_directory}/selenium-tests")
   BuildrPlus::Roles.project('selenium-tests', :roles => [:selenium_tests], :parent => :container, :template => true, :description => 'Selenium Tests')
 end
 
-BuildrPlus::ExtensionRegistry.auto_activate!
+require 'buildr_plus/projects/_activate'

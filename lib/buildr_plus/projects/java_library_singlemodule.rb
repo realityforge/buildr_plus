@@ -19,4 +19,5 @@ BuildrPlus::Artifacts.library = true
 BuildrPlus::Artifacts.war = false
 
 BuildrPlus::Roles.default_role = :all_in_one_library
-BuildrPlus::ExtensionRegistry.auto_activate!
+
+require 'buildr_plus/projects/_activate'
