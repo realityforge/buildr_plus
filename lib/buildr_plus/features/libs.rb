@@ -207,7 +207,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_ee_client
-      self.replicant + self.gwt_datatypes + self.gwt_webpoller
+      self.replicant + self.gwt_datatypes + self.gwt_webpoller + self.simple_session_filter + self.field_filter
     end
 
     def replicant_client
