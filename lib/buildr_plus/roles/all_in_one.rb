@@ -73,6 +73,8 @@ BuildrPlus::Roles.role(:all_in_one) do
   package(:war).tap do |war|
     war.libs.clear
     war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
+    # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+    war.libs << BuildrPlus::Deps.findbugs_provided
     war.libs << BuildrPlus::Deps.model_deps
     war.libs << BuildrPlus::Deps.server_deps
     war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)
@@ -140,6 +142,8 @@ BuildrPlus::Roles.role(:all_in_one) do
 
   dependencies = [project]
   dependencies << Object.const_get(:PACKAGED_DEPS) if Object.const_defined?(:PACKAGED_DEPS)
+  # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+  dependencies << BuildrPlus::Deps.findbugs_provided
   dependencies << BuildrPlus::Deps.model_deps
   dependencies << BuildrPlus::Deps.server_deps
 
