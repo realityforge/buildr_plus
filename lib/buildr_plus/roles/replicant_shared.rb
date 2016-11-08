@@ -25,8 +25,7 @@ BuildrPlus::Roles.role(:replicant_shared, :requires => [:replicant]) do
   end
 
   compile.with BuildrPlus::Libs.findbugs_provided
-  compile.with BuildrPlus::Libs.gwt_datatypes
-  compile.with BuildrPlus::Libs.replicant
+  compile.with BuildrPlus::Libs.replicant_client_common
   compile.with BuildrPlus::Libs.javax_inject
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)

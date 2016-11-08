@@ -100,10 +100,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(com.google.gwt.inject:gin:jar:2.1.2) + self.javax_inject + self.guice + self.gwt_user
     end
 
-    def replicant
-      %w(org.realityforge.replicant:replicant:jar:0.5.59)
-    end
-
     def gwt_property_source
       %w(org.realityforge.gwt.property-source:gwt-property-source:jar:0.2)
     end
@@ -206,16 +202,32 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       ) + self.keycloak_core + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
     end
 
-    def replicant_ee_client
-      self.replicant + self.gwt_datatypes + self.gwt_webpoller + self.simple_session_filter + self.field_filter
+    def replicant_version
+      '0.5.60'
     end
 
-    def replicant_client
-      self.replicant + self.gwt_property_source + self.gwt_datatypes + self.gwt_webpoller
+    def replicant_shared
+      %W(org.realityforge.replicant:replicant-shared:jar:#{replicant_version})
+    end
+
+    def replicant_client_common
+      %W(org.realityforge.replicant:replicant-client-common:jar:#{replicant_version}) + self.replicant_shared + self.gwt_webpoller + self.gwt_datatypes
+    end
+
+    def replicant_client_qa_support
+      %W(org.realityforge.replicant:replicant-client-qa-support:jar:#{replicant_version})
+    end
+
+    def replicant_ee_client
+      %W(org.realityforge.replicant:replicant-client-ee:jar:#{replicant_version}) + self.replicant_client_common
+    end
+
+    def replicant_gwt_client
+      %W(org.realityforge.replicant:replicant-client-gwt:jar:#{replicant_version}) + self.replicant_client_common + self.gwt_property_source
     end
 
     def replicant_server
-      self.replicant + self.simple_session_filter + self.gwt_rpc + self.field_filter
+      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.replicant_shared + self.simple_session_filter + self.gwt_rpc + self.field_filter
     end
 
     def gwt_rpc

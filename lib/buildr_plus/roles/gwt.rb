@@ -32,12 +32,13 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
   compile.with BuildrPlus::Libs.gwt_datatypes
   compile.with BuildrPlus::Libs.keycloak_gwt if BuildrPlus::FeatureManager.activated?(:keycloak)
 
-  compile.with BuildrPlus::Libs.replicant_client if BuildrPlus::FeatureManager.activated?(:replicant)
+  compile.with BuildrPlus::Libs.replicant_gwt_client if BuildrPlus::FeatureManager.activated?(:replicant)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_shared)
 
   test.with BuildrPlus::Libs.mockito
+  test.with BuildrPlus::Libs.replicant_client_qa_support if BuildrPlus::FeatureManager.activated?(:replicant)
 
   package(:jar)
   package(:sources)

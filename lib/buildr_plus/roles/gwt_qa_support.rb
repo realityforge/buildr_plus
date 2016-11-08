@@ -26,6 +26,7 @@ BuildrPlus::Roles.role(:gwt_qa_support, :requires => [:gwt]) do
   end
 
   compile.with BuildrPlus::Libs.guiceyloops_gwt
+  compile.with BuildrPlus::Libs.replicant_client_qa_support if BuildrPlus::FeatureManager.activated?(:replicant)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_qa_support)
