@@ -152,7 +152,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
 
     def project(name, options = {}, &block)
       project = project_map[name.to_s]
-      (options[:role] || {}).each do |role|
+      (options[:roles] || []).each do |role|
         BuildrPlus::FeatureManager.activate_features([:"role_#{role}"])
       end
       unless project
