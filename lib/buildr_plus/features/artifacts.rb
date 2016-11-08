@@ -36,7 +36,7 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
     attr_writer :gwt
 
     def gwt?
-      @gwt.nil? ? library? : !!@gwt
+      @gwt.nil? ? library? && BuildrPlus::FeatureManager.activated?(:gwt) : !!@gwt
     end
 
     attr_writer :replicant_client
