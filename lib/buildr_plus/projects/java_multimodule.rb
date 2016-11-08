@@ -16,6 +16,13 @@ require 'buildr_plus/projects/_java_multimodule_common'
 
 base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
+if File.exist?("#{base_directory}/user-experience")
+  BuildrPlus::Roles.project('user-experience', :roles => [:user_experience], :parent => :container, :template => true, :description => 'GWT Client-side UI')
+
+  BuildrPlus::FeatureManager.activate_features([:appcache]) unless BuildrPlus::FeatureManager.activated?(:appcache)
+  BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter]) unless BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
+end
+
 BuildrPlus::Roles.project('server', :roles => [:server], :parent => :container, :template => true, :description => 'Server Archive')
 
 if File.exist?("#{base_directory}/selenium-tests")
