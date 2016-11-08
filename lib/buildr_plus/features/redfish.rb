@@ -134,6 +134,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
 
     def as_ip(name)
       return name if valid_v4?(name)
+      return name if ENV['CONFIG_ALLOW_HOSTNAME'] == 'true'
 
       # First collect all the entries from local resolve.conf
       addresses = Resolv.getaddresses(name).select { |a| valid_v4?(a) }.collect { |a| a == '127.0.0.1' ? host_ip : a }
