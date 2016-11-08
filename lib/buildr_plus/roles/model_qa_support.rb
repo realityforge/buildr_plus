@@ -37,5 +37,5 @@ BuildrPlus::Roles.role(:model_qa_support) do
 
   check package(:jar), 'should contain generated classes' do
     it.should contain("#{project.root_project.group_as_path}/server/test/util/#{project.root_project.name_as_class}RepositoryModule.class")
-  end if BuildrPlus::Domgen.enforce_package_name?
+  end if BuildrPlus::Domgen.enforce_package_name? && BuildrPlus::FeatureManager.activated?(:db)
 end
