@@ -12,5 +12,5 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role_by_name(BuildrPlus::Roles.default_role).activate_extensions
+BuildrPlus::Roles.role_by_name(BuildrPlus::Roles.default_role).activate_extensions if BuildrPlus::Roles.default_role
 BuildrPlus::ExtensionRegistry.auto_activate!
