@@ -215,7 +215,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_client_qa_support
-      %W(org.realityforge.replicant:replicant-client-qa-support:jar:#{replicant_version})
+      %W(org.realityforge.replicant:replicant-client-qa-support:jar:#{replicant_version}) + self.guiceyloops_gwt
     end
 
     def replicant_ee_client
