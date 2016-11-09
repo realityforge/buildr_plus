@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:gwt) do |f|
+BuildrPlus::FeatureManager.feature(:gwt => [:jackson]) do |f|
   f.enhance(:Config) do
     def gwtc_java_args
       %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M -XX:PermSize=128M -XX:MaxPermSize=256M)

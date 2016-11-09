@@ -42,7 +42,6 @@ end
 if File.exist?("#{base_directory}/gwt")
   BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :template => true, :description => 'GWT Library')
   BuildrPlus::Roles.project('gwt-qa-support', :roles => [:gwt_qa_support], :parent => :container, :template => true, :description => 'GWT Test Infrastructure')
-  BuildrPlus::FeatureManager.activate_features([:jackson]) unless BuildrPlus::FeatureManager.activated?(:jackson)
 end
 
 if BuildrPlus::FeatureManager.activated?(:soap) || File.exist?("#{base_directory}/replicant-ee-client")
