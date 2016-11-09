@@ -241,11 +241,12 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.service', 'javax.persistence')
         r.subpackage_rule('server.service', 'javax.validation')
         if BuildrPlus::FeatureManager.activated?(:replicant)
-          r.subpackage_rule('client.entity', 'com.google.inject.Injector', :rule_type => :class)
           r.subpackage_rule('server.net', "#{g}.shared.net")
           r.subpackage_rule('server.service', "#{g}.server.net")
           r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessage', :rule_type => :class)
           r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessageSet', :rule_type => :class)
+          # The following is for test infrastructure
+          r.subpackage_rule('client.entity', 'com.google.inject.Injector', :rule_type => :class)
         end
 
         if BuildrPlus::FeatureManager.activated?(:mail)
