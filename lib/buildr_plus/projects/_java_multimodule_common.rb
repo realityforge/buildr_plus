@@ -21,6 +21,9 @@ BuildrPlus::FeatureManager.activate_features([:less]) if File.exist?("#{base_dir
 if File.exist?("#{base_directory}/replicant-shared") || BuildrPlus::FeatureManager.activated?(:replicant)
   BuildrPlus::Roles.project('replicant-shared', :roles => [:replicant_shared], :parent => :container, :template => true, :description => 'Shared Replicant Components')
   BuildrPlus::Roles.project('replicant-qa-support', :roles => [:replicant_qa_support], :parent => :container, :template => true, :description => 'Shared Replicant Test Infrastructure')
+  if File.exist?("#{base_directory}/replicant-qa")
+    BuildrPlus::Roles.project('replicant-qa', :roles => [:replicant_qa], :parent => :container, :template => true, :description => 'GWT Model Tests')
+  end
 end
 
 if File.exist?("#{base_directory}/replicant-ee-client")
@@ -42,6 +45,9 @@ end
 if File.exist?("#{base_directory}/gwt")
   BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :template => true, :description => 'GWT Library')
   BuildrPlus::Roles.project('gwt-qa-support', :roles => [:gwt_qa_support], :parent => :container, :template => true, :description => 'GWT Test Infrastructure')
+  if File.exist?("#{base_directory}/gwt-qa")
+    BuildrPlus::Roles.project('gwt-qa', :roles => [:gwt_qa], :parent => :container, :template => true, :description => 'GWT Model Tests')
+  end
 end
 
 if BuildrPlus::FeatureManager.activated?(:soap) || File.exist?("#{base_directory}/replicant-ee-client")
