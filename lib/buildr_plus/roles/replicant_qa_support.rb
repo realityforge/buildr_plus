@@ -25,7 +25,7 @@ BuildrPlus::Roles.role(:replicant_qa_support, :requires => [:role_replicant_shar
     end
   end
 
-  compile.with BuildrPlus::Libs.guiceyloops_gwt
+  compile.with BuildrPlus::Libs.replicant_client_qa_support
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
 
