@@ -38,9 +38,5 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:role_gwt, :gwt]) do
 
   BuildrPlus::Gwt.add_source_to_jar(project)
 
-  BuildrPlus::Gwt.define_gwt_task(project,
-                                  'Prod',
-                                  :target_project => BuildrPlus::Roles.buildr_project_with_role('server').name)
-
   BuildrPlus::Gwt.define_gwt_idea_facet(project)
 end

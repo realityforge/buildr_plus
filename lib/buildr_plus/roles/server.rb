@@ -116,8 +116,17 @@ BuildrPlus::Roles.role(:server) do
   project.iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
-  webroots[_(:source, :main, :webapp_local)] = '/' if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:role_user_experience)
-  webroots[_('..', :generated, 'gwt-export')] = '/' if BuildrPlus::FeatureManager.activated?(:gwt)
+  if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:role_user_experience)
+    webroots[_(:source, :main, :webapp_local)] = '/'
+    BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
+      gwt_modules = p.determine_top_level_gwt_modules('Dev')
+      gwt_modules.each do |gwt_module|
+        short_name = gwt_module.gsub(/.*\.([^.]+)Dev$/, '\1').downcase
+        webroots[_('..', :generated, 'gwt-export', short_name)] = "/#{short_name}"
+      end
+      BuildrPlus::Gwt.define_gwt_task(p, 'Prod', :target_project => project.name)
+    end
+  end
 
   project.assets.paths.each do |path|
     next if path.to_s =~ /generated\/gwt\// && BuildrPlus::FeatureManager.activated?(:gwt)
