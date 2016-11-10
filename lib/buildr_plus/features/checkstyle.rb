@@ -246,7 +246,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessage', :rule_type => :class)
           r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessageSet', :rule_type => :class)
 
-          if BuildrPlus::Artifacts.replicant_client?
+          if BuildrPlus::Artifacts.replicant_ee_client?
             r.subpackage_rule('client.net.ee', 'javax.enterprise.context.ApplicationScoped', :rule_type => :class)
             r.subpackage_rule('client.net.ee', 'javax.transaction.Transactional', :rule_type => :class)
             r.subpackage_rule('client.net.ee', 'javax.enterprise.inject.Typed', :rule_type => :class)

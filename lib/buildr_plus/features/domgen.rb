@@ -182,10 +182,10 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 raise "Can not enable the BuildrPlus 'appcache' feature for libraries"
               end
 
-              if r.imit? && r.imit.support_ee_client? && !BuildrPlus::Artifacts.replicant_client?
-                raise "Domgen repository #{r.name} declares repository.imit.support_ee_client = true while in BuildrPlus BuildrPlus::Artifacts.replicant_client? is false"
-              elsif !(r.imit? && r.imit.support_ee_client?) && BuildrPlus::Artifacts.replicant_client?
-                raise "Domgen repository #{r.name} declares repository.imit.support_ee_client = false while in BuildrPlus BuildrPlus::Artifacts.replicant_client? is true"
+              if r.imit? && r.imit.support_ee_client? && !BuildrPlus::Artifacts.replicant_ee_client?
+                raise "Domgen repository #{r.name} declares repository.imit.support_ee_client = true while in BuildrPlus BuildrPlus::Artifacts.replicant_ee_client? is false"
+              elsif !(r.imit? && r.imit.support_ee_client?) && BuildrPlus::Artifacts.replicant_ee_client?
+                raise "Domgen repository #{r.name} declares repository.imit.support_ee_client = false while in BuildrPlus BuildrPlus::Artifacts.replicant_ee_client? is true"
               end
 
               if !r.robots? && BuildrPlus::Artifacts.war?

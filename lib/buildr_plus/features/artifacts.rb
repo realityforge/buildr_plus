@@ -45,6 +45,12 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
       @replicant_client.nil? ? library? && BuildrPlus::FeatureManager.activated?(:replicant) : !!@replicant_client
     end
 
+    attr_writer :replicant_ee_client
+
+    def replicant_ee_client?
+      replicant_client? && @replicant_ee_client.nil? ? replicant_client? : !!@replicant_ee_client
+    end
+
     attr_writer :db
 
     def db?

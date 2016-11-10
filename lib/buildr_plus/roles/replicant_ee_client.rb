@@ -14,7 +14,7 @@
 
 BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_shared, :soap]) do
 
-  project.publish = BuildrPlus::Artifacts.replicant_client?
+  project.publish = BuildrPlus::Artifacts.replicant_ee_client?
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:imit_client_entity_ee, :ee_data_types, :ee_exceptions, :jws_type_converter]
