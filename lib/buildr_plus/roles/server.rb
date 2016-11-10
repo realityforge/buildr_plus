@@ -116,7 +116,7 @@ BuildrPlus::Roles.role(:server) do
   project.iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
-  if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:role_user_experience)
+  if BuildrPlus::FeatureManager.activated?(:role_user_experience)
     webroots[_(:source, :main, :webapp_local)] = '/'
     BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
       gwt_modules = p.determine_top_level_gwt_modules('Dev')
