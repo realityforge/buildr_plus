@@ -39,9 +39,6 @@ BuildrPlus::Roles.role(:replicant_shared, :requires => [:replicant]) do
 
     p = project.root_project
 
-    # This compile exists to verify that module is independently compilable
-    BuildrPlus::Gwt.define_gwt_task(project, ".#{p.name_as_class}Replicant") if BuildrPlus::Artifacts.library?
-
     BuildrPlus::Gwt.define_gwt_idea_facet(project)
   end
 
