@@ -147,7 +147,18 @@ CONTENT
     end
 
     def jenkinsfile_content
-      hash_bang(inside_node("  checkout scm\n  load '.jenkins/main.groovy'"))
+      hash_bang(inside_node(<<CONTENT))
+  checkout scm
+  if (env.BRANCH_NAME ==~ /^AM_.*/) {
+    env.LOCAL_GIT_COMMIT = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
+    env.LOCAL_MASTER_GIT_COMMIT = sh(script: 'git show-ref --hash refs/remotes/origin/master', returnStdout: true).trim()
+    echo "Automerge branch ${env.BRANCH_NAME} detected. Merging master."
+    sh("git config --global user.email \\"${env.BUILD_NOTIFICATION_EMAIL}\\"")
+    sh('git config --global user.name "Build Tool"')
+    sh('git merge origin/master')
+  }
+  load '.jenkins/main.groovy'
+CONTENT
     end
 
     def prepare_content(include_artifacts)
@@ -157,7 +168,6 @@ CONTENT
   env.GEM_HOME = '/home/buildbot/.gems'
   env.GEM_PATH = '/home/buildbot/.gems'
   env.PATH = "#{is_old_jruby? ? '' : '/home/buildbot/.gems/bin:'}/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:${sh(script: 'echo $PATH', returnStdout: true).trim()}"
-  checkout scm
   sh 'git reset --hard'
   sh 'git clean -ffdx'
   env.PRODUCT_VERSION = sh(script: 'echo $BUILD_NUMBER-`git rev-parse --short HEAD`', returnStdout: true).trim()
@@ -225,7 +235,35 @@ CONTENT
         content += deploy_stage(root_project)
       end
 
-      hash_bang(inside_try_catch(inside_docker_image(content), standard_exception_handling, true))
+      docker_content = inside_docker_image(content)
+
+      docker_content += <<CONTENT
+  if (env.BRANCH_NAME ==~ /^AM_.*/ && currentBuild.result == 'SUCCESS') {
+    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'stock-hudson', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
+      sh "echo \\"machine github.com login ${GIT_USERNAME} password ${GIT_PASSWORD}\\" > ~/.netrc"
+      sh("git fetch --prune")
+      env.LATEST_REMOTE_MASTER_GIT_COMMIT = sh(script: 'git show-ref --hash refs/remotes/origin/master', returnStdout: true).trim()
+      env.LATEST_REMOTE_GIT_COMMIT = sh(script: "git show-ref --hash refs/remotes/origin/${env.BRANCH_NAME}", returnStdout: true).trim()
+      if (env.LOCAL_MASTER_GIT_COMMIT != env.LATEST_REMOTE_MASTER_GIT_COMMIT) {
+        if (env.LOCAL_GIT_COMMIT == env.LATEST_REMOTE_GIT_COMMIT)
+        {
+          echo('Merging changes from master to kick off another build cycle.')
+          sh('git merge origin/master')
+          echo('Changes merged.')
+          sh("git push origin HEAD:${env.BRANCH_NAME}")
+          sh("git checkout ${env.LOCAL_GIT_COMMIT}")
+        }
+      } else {
+        echo "Pushing automerge branch ${env.BRANCH_NAME}."
+        sh("git push origin HEAD:master")
+        if (env.LOCAL_GIT_COMMIT == env.LATEST_REMOTE_GIT_COMMIT) {
+          sh("git push origin :${env.BRANCH_NAME}")
+        }
+      }
+    }
+  }
+CONTENT
+      hash_bang(inside_try_catch(docker_content, standard_exception_handling, true))
     end
 
     def deploy_stage(root_project)
