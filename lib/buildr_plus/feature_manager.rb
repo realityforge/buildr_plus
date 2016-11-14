@@ -81,7 +81,7 @@ module BuildrPlus #nodoc
       end
 
       def activated?(key)
-        feature_by_name(key).activated?
+        feature?(key) && feature_by_name(key).activated?
       end
 
       def feature?(key)
