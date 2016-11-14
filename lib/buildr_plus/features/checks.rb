@@ -14,7 +14,7 @@
 
 BuildrPlus::FeatureManager.feature(:checks) do |f|
   f.enhance(:ProjectExtension) do
-    fixable_features = %w(oss gitignore gitattributes whitespace travis jenkins)
+    fixable_features = %w(oss gitignore gitattributes whitespace travis jenkins gems)
     features = fixable_features + %w(ruby braid)
 
     desc 'Perform basic checks on formats of local files'
