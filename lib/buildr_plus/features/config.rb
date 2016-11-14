@@ -94,6 +94,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       end
     end
 
+    def db_scope
+      "#{user || 'NOBODY'}#{self.app_scope.nil? ? '' : "_#{self.app_scope}"}_"
+    end
+
     def load_application_config!
       @application_config = load_application_config unless @application_config
     end
@@ -264,7 +268,6 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           environment.database(database_key) unless environment.database_by_key?(database_key)
         end unless check_only
 
-        scope = self.app_scope
         buildr_project = get_buildr_project
 
         environment.databases.each do |database|
@@ -282,7 +285,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           end unless dbt_imports
 
           short_name = BuildrPlus::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
-          database.database = "#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}_#{short_name}_#{self.env_code(environment.key)}" unless database.database
+          database.database = "#{BuildrPlus::Config.db_scope}#{short_name}_#{self.env_code(environment.key)}" unless database.database
           database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
           database.host = environment_var('DB_SERVER_HOST') unless database.host
           unless database.port_set?
