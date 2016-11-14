@@ -14,7 +14,8 @@
 
 BuildrPlus::FeatureManager.feature(:checks) do |f|
   f.enhance(:ProjectExtension) do
-    features = %w(oss gitignore gitattributes whitespace travis jenkins)
+    fixable_features = %w(oss gitignore gitattributes whitespace travis jenkins)
+    features = fixable_features + %w(ruby braid)
 
     desc 'Perform basic checks on formats of local files'
     task 'checks:check' do
@@ -27,7 +28,7 @@ BuildrPlus::FeatureManager.feature(:checks) do |f|
 
     desc 'Apply basic fixes on formats of local files'
     task 'checks:fix' do
-      features.each do |feature|
+      fixable_features.each do |feature|
         if BuildrPlus::FeatureManager.activated?(feature.to_sym)
           task("#{feature}:fix").invoke
         end
