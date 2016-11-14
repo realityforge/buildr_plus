@@ -165,7 +165,6 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
 
       gitignores
     end
-
   end
 
   f.enhance(:ProjectExtension) do
