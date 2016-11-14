@@ -353,7 +353,7 @@ CONTENT
         end
         if BuildrPlus::FeatureManager.activated?(:testng)
           stage += <<CONTENT
-  step([$class: 'hudson.plugins.testng.Publisher', reportFilenamePattern: 'reports/*/testng/testng-results.xml'])
+  step([$class: 'hudson.plugins.testng.Publisher', reportFilenamePattern: 'reports/*/testng/testng-results.xml', failureOnFailedTestConfig: true, unstableFails: 0, unstableSkips: 0])
 CONTENT
         end
         stage
