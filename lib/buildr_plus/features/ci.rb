@@ -26,6 +26,12 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
     attr_writer :additional_commit_actions
 
+    def pre_import_actions
+      @pre_import_actions ||= []
+    end
+
+    attr_writer :pre_import_actions
+
     def additional_import_actions
       @additional_import_actions ||= []
     end
@@ -96,10 +102,32 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         if BuildrPlus::FeatureManager.activated?(:dbt)
           import_actions = []
+          database_drops = []
           import_actions << 'ci:import:setup'
+          if BuildrPlus::FeatureManager.activated?(:dbt)
+            Dbt.database_keys.each do |database_key|
+              database = Dbt.database_for_key(database_key)
+              next unless database.enable_rake_integration? || database.packaged? || database.managed?
+              next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
+              next if database.key == :default
+
+              prefix = Dbt::Config.default_database?(database_key) ? '' : ":#{database_key}"
+
+              module_group = BuildrPlus::Dbt.non_standalone_database_module_groups[database.key]
+
+              create = "dbt#{prefix}:#{module_group ? "#{database.packaged? ? '' : "#{module_group}:"}up#{!database.packaged? ? '' : ":#{module_group}"}" : 'create'}"
+              drop = "dbt#{prefix}:#{module_group ? "#{database.packaged? ? '' : "#{module_group}:"}down#{!database.packaged? ? '' : ":#{module_group}"}" : 'drop'}"
+
+              import_actions << create
+              database_drops << drop
+            end
+          end
+
+          import_actions.concat(BuildrPlus::Ci.pre_import_actions)
           import_actions.concat(%w(dbt:create_by_import dbt:verify_constraints))
           import_actions.concat(BuildrPlus::Ci.additional_import_actions)
           import_actions << 'dbt:drop'
+          import_actions.concat(database_drops.reverse)
 
           desc 'Test the import process'
           project.task ':ci:import' => import_actions
