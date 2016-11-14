@@ -35,6 +35,7 @@ BuildrPlus::FeatureManager.activate_features([
                                                :gitattributes,
                                                :artifact_assets,
                                                :ci,
+                                               :gems,
                                                :config
                                              ])
 
