@@ -66,6 +66,7 @@ CONTENT
     end
 
     def process_gemfile(apply_fix)
+      return unless manage_gemfile?
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/Gemfile"
       if File.exist?(filename)
