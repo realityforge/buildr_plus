@@ -154,10 +154,15 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
             prefix = Dbt::Config.default_database?(database_key) ? '' : ":#{database_key}"
 
-            commit_actions << "dbt#{prefix}:create"
-            pull_request_actions << "dbt#{prefix}:create"
-            package_actions << "dbt#{prefix}:create"
-            database_drops << "dbt#{prefix}:drop"
+            module_group = BuildrPlus::Dbt.non_standalone_database_module_groups[database.key]
+
+            create = "dbt#{prefix}:#{module_group ? "#{module_group}:up" : 'create'}"
+            drop = "dbt#{prefix}:#{module_group ? "#{module_group}:down" : 'drop'}"
+
+            commit_actions << create
+            pull_request_actions << create
+            package_actions << create
+            database_drops << drop
           end
         end
 
@@ -211,6 +216,8 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           commit_actions << 'rptman:ssrs:delete'
           pull_request_actions << 'rptman:ssrs:delete'
         end
+
+        database_drops = database_drops.reverse
 
         commit_actions.concat(database_drops)
         pull_request_actions.concat(database_drops)

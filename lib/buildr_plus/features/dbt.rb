@@ -24,6 +24,12 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
       self.manual_testing_only_databases.any? { |d| d.to_s == database_key.to_s }
     end
 
+    # Any databases that are not able to be standalone databases should
+    # register module_group to use instead during build process
+    def non_standalone_database_module_groups
+      @non_standalone_database_module_groups ||= {}
+    end
+
     attr_writer :library
 
     # Is the db jar created meant to be a library jar?
