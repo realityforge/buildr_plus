@@ -14,6 +14,26 @@
 
 BuildrPlus::FeatureManager.feature(:gems) do |f|
   f.enhance(:Config) do
+    class GemDefinition
+      def initialize(name, version, options)
+        @name, @version, @options = name, version, options
+      end
+
+      attr_reader :name
+      attr_reader :version
+      attr_reader :options
+
+      def <=>(other)
+        name <=> other.name
+      end
+
+      def to_s
+        version_spec = version.nil? ? '' : ", '= #{version}'"
+        options_spec = options.nil? ? '' : ", #{options.collect { |k, v| "#{k.inspect} => #{v.inspect}" }.join(', ')}"
+        "gem '#{name}'#{version_spec}#{options_spec}"
+      end
+    end
+
     attr_writer :gemfile_needs_update
 
     def gemfile_needs_update?
@@ -26,43 +46,59 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
       @manage_gemfile.nil? ? !BuildrPlus::FeatureManager.activated?(:rails) : !!@manage_gemfile
     end
 
+    def gem(gems, name, version = nil, options = nil)
+      gems[name.to_s] = GemDefinition.new(name, version, options)
+    end
+
+    def additional_gem(name, version = nil, options = nil)
+      additional_gems[name.to_s] = GemDefinition.new(name, version, options)
+    end
+
+    def additional_gems
+      @additional_gems ||= {}
+    end
+
     def generate_gemfile_content
-      content = <<CONTENT
-# DO NOT EDIT: File is auto-generated
-source 'https://rubygems.org'
 
-gem 'buildr', '= 1.5.0'
-gem 'braid', '= 1.0.3'
+      gems = {}
 
-# Rspec required for buildr
-gem 'rspec-expectations',   '= 2.14.3'
-gem 'rspec-mocks',          '= 2.14.3'
-gem 'rspec-core',           '= 2.14.5'
-gem 'rspec',                '= 2.14.1'
+      gem(gems, 'buildr', '1.5.0')
+      gem(gems, 'braid', '1.0.3')
+      # Rspec required for buildr
+      gem(gems, 'rspec-expectations', '2.14.3')
+      gem(gems, 'rspec-mocks', '2.14.3')
+      gem(gems, 'rspec-core', '2.14.5')
+      gem(gems, 'rspec', '2.14.1')
 
-gem 'buildr_plus', '= 1.0.0', :path => 'vendor/tools/buildr_plus'
-CONTENT
+      gem(gems, 'buildr_plus', '1.0.0', :path => 'vendor/tools/buildr_plus')
+
       if BuildrPlus::FeatureManager.activated?(:dbt)
-        content += "gem 'dbt', '= 0.10.0.dev', :path => 'vendor/tools/dbt'\n"
-        content += "gem 'maruku'\n"
+        gem(gems, 'dbt', '0.10.0.dev', :path => 'vendor/tools/dbt')
+        gem(gems, 'maruku')
       end
       if BuildrPlus::FeatureManager.activated?(:domgen)
-        content += "gem 'domgen', '= 0.19.0.dev', :path => 'vendor/tools/domgen'\n"
+        gem(gems, 'domgen', '0.19.0.dev', :path => 'vendor/tools/domgen')
       end
       if BuildrPlus::FeatureManager.activated?(:rptman)
-        content += "gem 'rptman', '= 0.5', :path => 'vendor/tools/rptman'\n"
+        gem(gems, 'rptman', '0.5', :path => 'vendor/tools/rptman')
       end
       if BuildrPlus::FeatureManager.activated?(:redfish)
-        content += "gem 'redfish', '= 0.2.2.dev', :path => 'vendor/tools/redfish'\n"
+        gem(gems, 'redfish', '0.2.2.dev', :path => 'vendor/tools/redfish')
       end
       if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.tiny_tds_defined?
-        content += "gem 'tiny_tds', '= 1.0.5'\n"
+        gem(gems, 'tiny_tds', '1.0.5')
       end
       if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.pg_defined?
-        content += "gem 'pg', '= 0.15.1'\n"
+        gem(gems, 'pg', '0.18.1')
       end
 
-      content
+      gems.merge!(additional_gems)
+
+      header = <<CONTENT
+# DO NOT EDIT: File is auto-generated
+source 'https://rubygems.org'
+CONTENT
+      header + gems.values.sort.join("\n") + "\n"
     end
 
     def process_gemfile(apply_fix)
