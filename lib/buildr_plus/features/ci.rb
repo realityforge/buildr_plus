@@ -156,8 +156,8 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
             module_group = BuildrPlus::Dbt.non_standalone_database_module_groups[database.key]
 
-            create = "dbt#{prefix}:#{module_group ? "#{module_group}:up" : 'create'}"
-            drop = "dbt#{prefix}:#{module_group ? "#{module_group}:down" : 'drop'}"
+            create = "dbt#{prefix}:#{module_group ? "#{database.packaged? ? '' : "#{module_group}:"}up#{!database.packaged? ? '' : ":#{module_group}"}" : 'create'}"
+            drop = "dbt#{prefix}:#{module_group ? "#{database.packaged? ? '' : "#{module_group}:"}down#{!database.packaged? ? '' : ":#{module_group}"}" : 'drop'}"
 
             commit_actions << create
             pull_request_actions << create
