@@ -16,18 +16,14 @@ BuildrPlus::FeatureManager.feature(:repositories) do |f|
   f.enhance(:ProjectExtension) do
     first_time do
       Buildr.repositories.remote.unshift(ENV['DOWNLOAD_REPO']) if ENV['DOWNLOAD_REPO']
-      if BuildrPlus::FeatureManager.activated?(:github)
-        Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/public')
-        Buildr.repositories.remote.unshift('http://repo1.maven.org/maven2')
-        Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/oss')
-        if BuildrPlus::FeatureManager.activated?(:geolatte)
-          Buildr.repositories.remote.unshift('http://download.osgeo.org/webdav/geotools')
-        end
-      else
-        Buildr.repositories.remote.unshift('http://repo.ffm.vic.gov.au/repository/ffm')
-        if BuildrPlus::FeatureManager.activated?(:geolatte)
-          Buildr.repositories.remote.unshift('http://repo.ffm.vic.gov.au/repository/osgeo')
-        end
+      Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/public')
+      Buildr.repositories.remote.unshift('http://repo1.maven.org/maven2')
+      Buildr.repositories.remote.unshift('https://stocksoftware.artifactoryonline.com/stocksoftware/oss')
+      if BuildrPlus::FeatureManager.activated?(:geolatte)
+        Buildr.repositories.remote.unshift('http://download.osgeo.org/webdav/geotools')
+      end
+      unless BuildrPlus::FeatureManager.activated?(:github)
+        Buildr.repositories.remote.unshift('http://prddocker01.ffm.vic.gov.au:8081/repository/ffm')
       end
     end
   end
