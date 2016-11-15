@@ -118,7 +118,6 @@ CONTENT
               out.write content
             end
             FileUtils.rm_rf "#{filename}.lock"
-            puts "bundler install --gemfile=#{filename}"
             sh "bundler install --gemfile=#{filename}"
           else
             puts 'Non-normalized Gemfile'
