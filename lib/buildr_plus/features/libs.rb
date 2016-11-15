@@ -125,11 +125,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_appcache_client
-      %w(org.realityforge.gwt.appcache:gwt-appcache-client:jar:1.0.8 org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.8)
+      %w(org.realityforge.gwt.appcache:gwt-appcache-client:jar:1.0.9 org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.9)
     end
 
     def gwt_appcache_server
-      %w(org.realityforge.gwt.appcache:gwt-appcache-server:jar:1.0.8)
+      %w(org.realityforge.gwt.appcache:gwt-appcache-server:jar:1.0.9)
     end
 
     # The appcache code required to exist on gwt path during compilation
