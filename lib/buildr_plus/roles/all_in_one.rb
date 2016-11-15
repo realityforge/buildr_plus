@@ -150,7 +150,7 @@ BuildrPlus::Roles.role(:all_in_one) do
   war_module_names = [project.iml.name]
   jpa_module_names = BuildrPlus::FeatureManager.activated?(:db) ? [project.iml.name] : []
   ejb_module_names =
-    BuildrPlus::FeatureManager.activated?(:db) || BuildrPlus::FeatureManager.activated?(:ee) ? [project.iml.name] : []
+    BuildrPlus::FeatureManager.activated?(:db) || BuildrPlus::FeatureManager.activated?(:ejb) ? [project.iml.name] : []
 
   ipr.add_exploded_war_artifact(project,
                                 :dependencies => dependencies,
