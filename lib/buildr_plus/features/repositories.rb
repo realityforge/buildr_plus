@@ -23,7 +23,7 @@ BuildrPlus::FeatureManager.feature(:repositories) do |f|
         Buildr.repositories.remote.unshift('http://download.osgeo.org/webdav/geotools')
       end
       unless BuildrPlus::FeatureManager.activated?(:github)
-        Buildr.repositories.remote.unshift('http://repo.ffm.vic.gov.au/repository/ffm')
+        Buildr.repositories.remote.unshift('http://prddocker01.ffm.vic.gov.au:8081/repository/ffm')
       end
     end
   end
