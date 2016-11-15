@@ -248,8 +248,8 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         end
 
         if BuildrPlus::FeatureManager.activated?(:whitespace)
-          commit_actions << 'ws:check'
-          pull_request_actions << 'ws:check'
+          commit_actions << 'whitespace:check'
+          pull_request_actions << 'whitespace:check'
         end
         if BuildrPlus::FeatureManager.activated?(:gitignore)
           commit_actions << 'gitignore:check'

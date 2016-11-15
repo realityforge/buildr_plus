@@ -119,35 +119,35 @@ BuildrPlus::FeatureManager.feature(:whitespace) do |f|
 
   f.enhance(:ProjectExtension) do
     desc 'Check whitespace has been normalized.'
-    task 'ws:check_whitespace' do
+    task 'whitespace:check_whitespace' do
       BuildrPlus::Whitespace.process_whitespace_files(false)
       if BuildrPlus::Whitespace.whitespace_needs_update?
-        raise 'Whitespace has not been normalized. Please run "buildr ws:fix_whitespace" and commit changes.'
+        raise 'Whitespace has not been normalized. Please run "buildr whitespace:fix_whitespace" and commit changes.'
       end
     end
 
     desc 'Normalize whitespace.'
-    task 'ws:fix_whitespace' do
+    task 'whitespace:fix_whitespace' do
       BuildrPlus::Whitespace.process_whitespace_files(true)
     end
 
     desc 'Check whitespace has been normalized for dos files.'
-    task 'ws:check_dos_whitespace' do
+    task 'whitespace:check_dos_whitespace' do
       BuildrPlus::Whitespace.process_dos_whitespace_files(false)
       if BuildrPlus::Whitespace.whitespace_needs_update?
-        raise 'Whitespace has not been normalized in dos files. Please run "buildr ws:fix_dos_whitespace" and commit changes.'
+        raise 'Whitespace has not been normalized in dos files. Please run "buildr whitespace:fix_dos_whitespace" and commit changes.'
       end
     end
 
     desc 'Normalize whitespace.'
-    task 'ws:fix_dos_whitespace' do
+    task 'whitespace:fix_dos_whitespace' do
       BuildrPlus::Whitespace.process_dos_whitespace_files(true)
     end
 
     desc 'Check all whitespace is normalized.'
-    task 'ws:check' => %w(ws:check_whitespace ws:check_dos_whitespace)
+    task 'whitespace:check' => %w(whitespace:check_whitespace whitespace:check_dos_whitespace)
 
     desc 'Check all whitespace is fixed.'
-    task 'ws:fix' => %w(ws:fix_whitespace ws:fix_dos_whitespace)
+    task 'whitespace:fix' => %w(whitespace:fix_whitespace whitespace:fix_dos_whitespace)
   end
 end
