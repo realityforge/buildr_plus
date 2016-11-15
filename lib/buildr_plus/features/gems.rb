@@ -89,7 +89,7 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
         gem(gems, 'tiny_tds', '1.0.5')
       end
       if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.pg_defined?
-        gem(gems, 'pg', '0.18.1')
+        gem(gems, 'pg', '0.19.0')
       end
 
       gems.merge!(additional_gems)
