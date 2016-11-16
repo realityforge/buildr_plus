@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:braid) do |f|
   f.enhance(:ProjectExtension) do
     desc 'Check braids align with filesystem.'
-    task 'braids:check' do
+    task 'braid:check' do
       require 'braid'
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/#{Braid::CONFIG_FILE}"
