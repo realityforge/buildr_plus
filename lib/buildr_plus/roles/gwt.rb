@@ -54,5 +54,5 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
 
   check package(:jar), 'should contain generated source files' do
     it.should contain("#{p.group_as_path}/client/ioc/#{p.name_as_class}GwtRpcServicesModule.class")
-  end if BuildrPlus::Domgen.enforce_package_name?
+  end if BuildrPlus::Domgen.enforce_package_name? && BuildrPlus::FeatureManager.activated?(:domgen)
 end
