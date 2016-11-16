@@ -16,7 +16,7 @@ BuildrPlus::Roles.role(:model_qa) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = []
     if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:jpa_dao_test, :jpa_test_orm_xml, :jpa_test_persistence_xml]
+      generators << [:jpa_dao_test, :jpa_application_orm_xml, :jpa_application_persistence_xml, :jpa_test_orm_xml, :jpa_test_persistence_xml]
     end
 
     generators += project.additional_domgen_generators
