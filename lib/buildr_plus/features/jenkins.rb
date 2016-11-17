@@ -431,13 +431,13 @@ CONTENT
     emailext body: "<p>Check console output at <a href=\\"${env.BUILD_URL}\\">${env.BUILD_URL}</a> to view the results.</p>",
              mimeType: 'text/html',
              replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
-             subject: "\\ud83d\\udc4d ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - SUCCESS",
+             subject: "\\ud83d\\udc4d ${env.JOB_NAME.replaceAll('%2F','/')} - \#${env.BUILD_NUMBER} - SUCCESS",
              to: "${env.BUILD_NOTIFICATION_EMAIL}"
   }
 
   if (currentBuild.result != 'SUCCESS') {
     emailBody = """
-<title>${env.JOB_NAME} - \#${env.BUILD_NUMBER} - ${currentBuild.result}</title>
+<title>${env.JOB_NAME.replaceAll('%2F','/')} - \#${env.BUILD_NUMBER} - ${currentBuild.result}</title>
 <BODY>
     <div style="font:normal normal 100% Georgia, Serif; background: #ffffff; border: dotted 1px #666; margin: 2px; content: 2px; padding: 2px;">
       <table style="width: 100%">
@@ -452,7 +452,7 @@ CONTENT
         </tr>
         <tr>
           <th align="right"><b>Job</b></th>
-          <td>${env.JOB_NAME}</td>
+          <td>${env.JOB_NAME.replaceAll('%2F','/')}</td>
         </tr>
         <tr>
           <td align="right"><b>Build Number</b></td>
@@ -489,7 +489,7 @@ CONTENT
     emailext body: emailBody,
              mimeType: 'text/html',
              replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
-             subject: "\\ud83d\\udca3 ${env.JOB_NAME} - \#${env.BUILD_NUMBER} - FAILED",
+             subject: "\\ud83d\\udca3 ${env.JOB_NAME.replaceAll('%2F','/')} - \#${env.BUILD_NUMBER} - FAILED",
              to: "${env.BUILD_NOTIFICATION_EMAIL}"
   }
 CONTENT
