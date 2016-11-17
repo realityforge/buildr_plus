@@ -512,7 +512,7 @@ CONTENT
       end
 
       result = <<CONTENT
-docker.image('stocksoftware/build:#{java_version}_#{ruby_version}').inside("--name '${env.JOB_NAME.replaceAll(/[\\/-]/, '_')}_${env.BUILD_NUMBER}'") {
+docker.image('stocksoftware/build:#{java_version}_#{ruby_version}').inside("--name '${env.JOB_NAME.replaceAll(/[\\\\/-]/, '_').replaceAll('%2F','_')}_${env.BUILD_NUMBER}'") {
 #{c}}
 CONTENT
       result
