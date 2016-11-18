@@ -35,7 +35,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
     attr_writer :docker_domain
 
     def docker_domain?
-      @docker_domain.nil? ? true : @docker_domain
+      @docker_domain.nil? ? BuildrPlus::FeatureManager.activated?(:docker) : @docker_domain
     end
 
     def customize_docker_domain(&block)
