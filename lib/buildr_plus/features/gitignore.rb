@@ -13,6 +13,10 @@
 #
 BuildrPlus::FeatureManager.feature(:gitignore) do |f|
   f.enhance(:Config) do
+    def additional_gitignores
+      @additional_gitignores ||= []
+    end
+
     attr_writer :gitignore_needs_update
 
     def gitignore_needs_update?
@@ -23,25 +27,9 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/.gitignore"
       if File.exist?(filename)
-        content = IO.read(filename)
+        original_content = IO.read(filename)
 
-        original_content = content.dup
-
-        # Remove ignores that should not be present
-        (global_ignores + invalid_ignores).each do |v|
-          content = content.gsub(v, '')
-        end
-
-        # Transform known bad patterns to good patterns
-        normalizing_transforms.each_pair do |pattern, replacement|
-          content = content.gsub(pattern, replacement)
-        end
-
-        # Ignores known to be required
-        content += "\n" + gitignores.collect { |v| "#{v}" }.join("\n")
-
-        # Normalize new lines, order libs and strip duplicates
-        content = content.split("\n").collect { |f| f.strip }.select { |f| f.size > 0 }.sort.uniq.join("\n") + "\n"
+        content = "# DO NOT EDIT: File is auto-generated\n" + gitignores.sort.uniq.collect { |v| "#{v}" }.join("\n") + "\n"
 
         if content != original_content
           BuildrPlus::Gitignore.gitignore_needs_update = true
@@ -59,50 +47,8 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
 
     private
 
-    def global_ignores
-      %w(*~ .DS_Store .DS_Store? ._* .Spotlight-V100 .Trashes ehthumbs.db Thumbs.db)
-    end
-
-    def invalid_ignores
-      invalid = [
-        '/_reports',
-        '/config/local.sh', # No longer needed post redfish
-        '/Gemfile.lock', 'Gemfile.lock', # We require lock files due to periodic instability of rubygems
-        '/.idea', '.idea/', '.idea', # IDEA in directory format
-        '/attlassian-ide-plugin.xml', # Old IDEA plugin config
-        '/.project', '/.classpath', # Eclipse project files
-        /^.*\.rdl\.data$/, # Report ignores will be re-added
-        /^.*\.bat$/, # No windows development so remove ignores for local bat scripts
-        /^#.*$/, # Remove Comments as they will be less relevant when file is resorted
-        /^\n/ # Remove blank lines
-      ]
-
-      unless BuildrPlus::FeatureManager.activated?(:dbt)
-        invalid << '/*.ids'
-      end
-
-      unless BuildrPlus::FeatureManager.activated?(:rails)
-        invalid << '/.generators'
-        invalid << '.generators'
-      end
-
-      invalid
-    end
-
-    def normalizing_transforms
-      {
-        /^(.*[\/])?generated[\/]?$/ => '**/generated',
-        /^(.*[\/])?generated[\/].*$/ => '**/generated',
-        /^\/?tmp([\/].*)?$/ => '/tmp',
-        /^.*\*.iml/ => '*.iml',
-        /^.*\*.ipr/ => '/*.ipr',
-        /^.*\*.iws/ => '/*.iws',
-        /^.*\*.ids/ => '/*.ids'
-      }
-    end
-
     def gitignores
-      gitignores = []
+      gitignores = additional_gitignores.dup
 
       base_directory = File.expand_path(File.dirname(Buildr.application.buildfile.to_s))
 
