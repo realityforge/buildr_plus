@@ -12,7 +12,9 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
+BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
+  f.suggested_features << :docker
+
   f.enhance(:Config) do
     attr_writer :local_domain
 
@@ -33,7 +35,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
     attr_writer :docker_domain
 
     def docker_domain?
-      @docker_domain.nil? ? true : @docker_domain
+      @docker_domain.nil? ? BuildrPlus::FeatureManager.activated?(:docker) : @docker_domain
     end
 
     def customize_docker_domain(&block)
@@ -229,7 +231,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:docker, :config]) do |f|
           Redfish::Config.default_domain_key = 'local'
         end
 
-        if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?('docker')
+        if BuildrPlus::Redfish.docker_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?('docker')
           Redfish.domain('docker', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_docker(domain, :features => BuildrPlus::Redfish.features)
             RedfishPlus.deploy_application(domain, buildr_project.name, '/', "{{file:#{buildr_project.name}}}")

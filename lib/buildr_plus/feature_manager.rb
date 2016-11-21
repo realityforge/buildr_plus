@@ -17,10 +17,12 @@ module BuildrPlus #nodoc
   class Feature < BaseElement
     attr_reader :key
     attr_reader :required_features
+    attr_reader :suggested_features
 
     def initialize(key, required_features, options = {}, &block)
       @key = key
       @required_features = required_features
+      @suggested_features = []
 
       module_name = ::BuildrPlus::Naming.pascal_case(key)
       ::BuildrPlus.class_eval "module #{module_name}\n end"
@@ -117,6 +119,9 @@ module BuildrPlus #nodoc
         feature = feature_by_name(feature_key)
         return if feature.activated?
         feature.required_features.each do |required_feature_key|
+          activate_feature(required_feature_key)
+        end
+        feature.suggested_features.each do |required_feature_key|
           activate_feature(required_feature_key)
         end
         feature.activate
