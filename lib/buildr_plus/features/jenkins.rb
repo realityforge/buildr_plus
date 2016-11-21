@@ -292,7 +292,12 @@ if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
       root_project.projects.each do |p|
         p.packages.each do |pkg|
           spec = pkg.to_hash
-          dependencies << "#{spec[:group]}:#{spec[:id]}:#{spec[:type]}"
+          group = spec[:group]
+          dependencies << "#{group}:#{spec[:id]}:#{spec[:type]}"
+          if BuildrPlus::Db.is_multi_database_project?
+            group2 = BuildrPlus::Db.pgsql? ? group.to_s[0...-3] : "#{group}.pg"
+            dependencies << "#{group2}:#{spec[:id]}:#{spec[:type]}"
+          end
         end
       end
 
