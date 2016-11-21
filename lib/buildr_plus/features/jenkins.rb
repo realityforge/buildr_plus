@@ -21,6 +21,12 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       @auto_deploy.nil? ? (BuildrPlus::Artifacts.war? || (BuildrPlus::Artifacts.db? && !BuildrPlus::Dbt.library?)) : !!@auto_deploy
     end
 
+    attr_writer :auto_zim
+
+    def auto_zim?
+      @auto_zim.nil? ? (BuildrPlus::Artifacts.model? || BuildrPlus::Dbt.library? || BuildrPlus::Artifacts.gwt? || BuildrPlus::Artifacts.replicant_client? || BuildrPlus::Artifacts.replicant_ee_client? || BuildrPlus::Artifacts.db? || BuildrPlus::Artifacts.war?) : !!@auto_zim
+    end
+
     attr_writer :deployment_environment
 
     def deployment_environment
@@ -235,6 +241,10 @@ CONTENT
         content += deploy_stage(root_project)
       end
 
+      if BuildrPlus::Jenkins.auto_zim?
+        content += zim_stage(root_project)
+      end
+
       docker_content = inside_docker_image(content)
 
       docker_content += <<CONTENT
@@ -275,6 +285,27 @@ if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
 #{content}
 }
       DEPLOY_STEP
+    end
+
+    def zim_stage(root_project)
+      dependencies = []
+      root_project.projects.each do |p|
+        p.packages.each do |pkg|
+          spec = pkg.to_hash
+          dependencies << "#{spec[:group]}:#{spec[:id]}:#{spec[:type]}"
+        end
+      end
+
+      dependencies = dependencies.uniq.sort.join(',')
+
+      content = stage('zim') do
+        "  build job: 'zim/upgrade_dependency', parameters: [string(name: 'DEPENDENCIES', value: '#{dependencies}'), string(name: 'VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
+      end
+      <<-ZIM_STEP
+if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
+#{content}
+}
+      ZIM_STEP
     end
 
     def commit_stage(root_project)
