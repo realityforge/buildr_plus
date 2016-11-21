@@ -126,7 +126,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << "/#{::Buildr::Util.relative_path(File.expand_path(SSRS::Config.reports_dir), base_directory)}/**/*.rdl.data"
       end
 
-      if BuildrPlus::FeatureManager.activated?(:redfish)
+      if BuildrPlus::Artifacts.war?
         gitignores << '/artifacts'
       end
 
