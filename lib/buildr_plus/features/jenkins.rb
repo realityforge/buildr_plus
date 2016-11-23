@@ -292,16 +292,17 @@ if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
       root_project.projects.each do |p|
         p.packages.each do |pkg|
           spec = pkg.to_hash
-          group = spec[:group]
-          dependencies << "#{group}:#{spec[:id]}:#{spec[:type]}"
-          if BuildrPlus::Db.is_multi_database_project?
-            group2 = BuildrPlus::Db.pgsql? ? group.to_s[0...-3] : "#{group}.pg"
-            dependencies << "#{group2}:#{spec[:id]}:#{spec[:type]}"
+          group = spec[:group].to_s.gsub(/\.pg$/,'')
+          if BuildrPlus::Db.pg_defined?
+            dependencies << "#{group}.pg:#{spec[:id]}:#{spec[:type]}"
+          end
+          if BuildrPlus::Db.tiny_tds_defined?
+            dependencies << "#{group}:#{spec[:id]}:#{spec[:type]}"
           end
         end
       end
 
-      dependencies = dependencies.uniq.sort.join(',')
+      dependencies = dependencies.sort.uniq.join(',')
 
       content = stage('zim') do
         "  build job: 'zim/upgrade_dependency', parameters: [string(name: 'DEPENDENCIES', value: '#{dependencies}'), string(name: 'VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
