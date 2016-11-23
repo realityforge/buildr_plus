@@ -299,6 +299,9 @@ if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
           if BuildrPlus::Db.tiny_tds_defined?
             dependencies << "#{group}:#{spec[:id]}:#{spec[:type]}"
           end
+          if !BuildrPlus::Db.pg_defined? && !BuildrPlus::Db.tiny_tds_defined?
+            dependencies << "#{group}:#{spec[:id]}:#{spec[:type]}"
+          end
         end
       end
 
