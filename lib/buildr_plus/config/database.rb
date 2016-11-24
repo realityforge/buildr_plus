@@ -51,8 +51,6 @@ module BuildrPlus #nodoc
 
       attr_accessor :instance
 
-      attr_writer :delete_backup_history
-
       attr_accessor :restore_name
       attr_accessor :backup_name
       attr_accessor :backup_location
@@ -61,8 +59,30 @@ module BuildrPlus #nodoc
         !@delete_backup_history.nil?
       end
 
+      attr_writer :delete_backup_history
+
       def delete_backup_history?
         @delete_backup_history.nil? ? true : !!@delete_backup_history
+      end
+
+      def reindex_on_import_set?
+        !@reindex_on_import.nil?
+      end
+
+      attr_writer :reindex_on_import
+
+      def reindex_on_import?
+        @reindex_on_import.nil? ? true : !!@reindex_on_import
+      end
+
+      def shrink_on_import_set?
+        !@shrink_on_import.nil?
+      end
+
+      attr_writer :shrink_on_import
+
+      def shrink_on_import?
+        @shrink_on_import.nil? ? true : !!@shrink_on_import
       end
 
       def to_h
@@ -71,6 +91,9 @@ module BuildrPlus #nodoc
         data['restore_name'] = self.restore_name if self.restore_name
         data['backup_name'] = self.backup_name if self.backup_name
         data['backup_location'] = self.backup_location if self.backup_location
+        data['reindex_on_import'] = self.reindex_on_import? if self.reindex_on_import_set?
+        data['shrink_on_import'] = self.shrink_on_import? if self.shrink_on_import_set?
+        data['delete_backup_history'] = self.delete_backup_history? if self.delete_backup_history_set?
         super.merge(data)
       end
     end
