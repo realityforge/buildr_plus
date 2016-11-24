@@ -167,18 +167,13 @@ CONTENT
 CONTENT
     end
 
-    def prepare_content(include_artifacts, include_checkout = true)
+    def prepare_content(include_artifacts)
       stage('Prepare') do
         content = <<-CONTENT
   env.BUILD_NUMBER = "${env.BUILD_NUMBER}"
   env.GEM_HOME = '/home/buildbot/.gems'
   env.GEM_PATH = '/home/buildbot/.gems'
   env.PATH = "#{is_old_jruby? ? '' : '/home/buildbot/.gems/bin:'}/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:${sh(script: 'echo $PATH', returnStdout: true).trim()}"
-        CONTENT
-        if include_checkout
-          content += "  checkout scm\n"
-        end
-        content += <<-CONTENT
   sh 'git reset --hard'
   sh 'git clean -ffdx'
   env.PRODUCT_VERSION = sh(script: 'echo $BUILD_NUMBER-`git rev-parse --short HEAD`', returnStdout: true).trim()
@@ -207,7 +202,7 @@ CONTENT
     end
 
     def main_content(root_project)
-      content = prepare_content(true, false)
+      content = prepare_content(true)
 
       content += commit_stage(root_project)
 
