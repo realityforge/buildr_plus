@@ -15,7 +15,7 @@ BuildrPlus::FeatureManager.feature(:dev_checks) do |f|
   f.enhance(:ProjectExtension) do
 
     desc 'Run pre-commit tests and open the code quality reports.'
-    task 'dev:checks' => %w(ci:commit dev:open-reports)
+    task 'dev:checks' => %w(checks:check ci:commit dev:open-reports)
 
     desc 'Open any code quality reports that have been generated.'
     task 'dev:open-reports' do
