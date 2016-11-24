@@ -48,7 +48,7 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
     attr_writer :replicant_ee_client
 
     def replicant_ee_client?
-      replicant_client? && @replicant_ee_client.nil? ? replicant_client? : !!@replicant_ee_client
+      replicant_client? && (@replicant_ee_client.nil? ? true : !!@replicant_ee_client)
     end
 
     attr_writer :db
