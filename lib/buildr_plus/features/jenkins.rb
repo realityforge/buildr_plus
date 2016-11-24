@@ -24,7 +24,7 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
     attr_writer :auto_zim
 
     def auto_zim?
-      @auto_zim.nil? ? (BuildrPlus::Artifacts.model? || BuildrPlus::Dbt.library? || BuildrPlus::Artifacts.gwt? || BuildrPlus::Artifacts.replicant_client? || BuildrPlus::Artifacts.replicant_ee_client? || BuildrPlus::Artifacts.db? || BuildrPlus::Artifacts.war?) : !!@auto_zim
+      @auto_zim.nil? ? BuildrPlus::Dbt.library? : !!@auto_zim
     end
 
     attr_writer :deployment_environment
