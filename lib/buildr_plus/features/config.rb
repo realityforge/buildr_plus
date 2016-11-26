@@ -299,7 +299,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
             database.restore_name = short_name unless database.restore_name
             database.backup_name = short_name unless database.backup_name
             database.backup_location = environment_var('DB_BACKUPS_LOCATION') unless database.backup_location
-            database.delete_backup_history = environment_var('DB_SERVER_DELETE_BACKUP_HISTORY', 'true') unless database.delete_backup_history_set?
+            database.delete_backup_history = (environment_var('DB_SERVER_DELETE_BACKUP_HISTORY', 'true') == 'true') unless database.delete_backup_history_set?
             unless database.instance
               instance = environment_var('DB_SERVER_INSTANCE', '')
               database.instance = instance unless instance == ''
