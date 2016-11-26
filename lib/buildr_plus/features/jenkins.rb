@@ -289,7 +289,7 @@ if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
 
     def zim_stage(root_project)
       dependencies = []
-      root_project.projects.each do |p|
+      ([root_project] + root_project.projects).each do |p|
         p.packages.each do |pkg|
           spec = pkg.to_hash
           group = spec[:group].to_s.gsub(/\.pg$/,'')
