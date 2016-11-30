@@ -22,5 +22,5 @@ Gem::Specification.new do |s|
   s.require_paths      = %w(lib)
 
   s.has_rdoc           = false
-  s.rdoc_options       = %w(--line-numbers --inline-source --title domgen)
+  s.rdoc_options       = %w(--line-numbers --inline-source --title buildr_plus)
 end
