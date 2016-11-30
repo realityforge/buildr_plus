@@ -14,7 +14,7 @@
 
 module BuildrPlus #nodoc
   module Config #nodoc
-    class ApplicationConfig < BuildrPlus::BaseElement
+    class ApplicationConfig < Reality::BaseElement
       def initialize(options = {}, &block)
         @environments = {}
 

@@ -14,7 +14,7 @@
 
 module BuildrPlus #nodoc
   module Config #nodoc
-    class KeycloakConfig < BuildrPlus::BaseElement
+    class KeycloakConfig < Reality::BaseElement
       attr_accessor :base_url
       attr_accessor :public_key
       attr_accessor :admin_username

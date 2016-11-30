@@ -14,7 +14,7 @@
 
 module BuildrPlus #nodoc
   module Config #nodoc
-    class EnvironmentConfig < BuildrPlus::BaseElement
+    class EnvironmentConfig < Reality::BaseElement
       def initialize(key, options = {}, &block)
         options = options.dup
 

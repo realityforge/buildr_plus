@@ -17,7 +17,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
     # The role applied if there is only one project defined and that project has no role
     attr_accessor :default_role
 
-    class RoleDescription < BuildrPlus::BaseElement
+    class RoleDescription < Reality::BaseElement
       def initialize(name, options = {}, &block)
         @name = name
         super(options, &block)
@@ -52,7 +52,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
       end
     end
 
-    class ProjectDescription < BuildrPlus::BaseElement
+    class ProjectDescription < Reality::BaseElement
       def initialize(name, options = {}, &block)
         @name = name
         super(options, &block)

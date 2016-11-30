@@ -13,34 +13,5 @@
 #
 
 module BuildrPlus #nodoc
-  Logger = ::Logger.new(STDOUT)
-  Logger.level = ::Logger::WARN
-  Logger.datetime_format = ''
-
-  def self.warn(message)
-    Logger.warn(message)
-  end
-
-  def self.error(message)
-    Logger.error(message)
-    raise message
-  end
-
-  class BaseElement
-    def initialize(options = {})
-      self.options = options
-      yield self if block_given?
-    end
-
-    def options=(options)
-      options.each_pair do |k, v|
-        keys = k.to_s.split('.')
-        target = self
-        keys[0, keys.length - 1].each do |target_accessor_key|
-          target = target.send target_accessor_key.to_sym
-        end
-        target.send "#{keys.last}=", v
-      end
-    end
-  end
+  Reality::Logging.configure(BuildrPlus, ::Logger::WARN)
 end

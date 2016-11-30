@@ -13,7 +13,7 @@
 #
 
 module BuildrPlus::Gitattributes
-  class Rule < BuildrPlus::BaseElement
+  class Rule < Reality::BaseElement
     def initialize(pattern, options = {})
       @pattern = pattern
       super(options)

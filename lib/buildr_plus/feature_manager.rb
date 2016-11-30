@@ -14,7 +14,7 @@
 
 module BuildrPlus #nodoc
 
-  class Feature < BaseElement
+  class Feature < Reality::BaseElement
     attr_reader :key
     attr_reader :required_features
     attr_reader :suggested_features

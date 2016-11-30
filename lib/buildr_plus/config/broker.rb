@@ -14,7 +14,7 @@
 
 module BuildrPlus #nodoc
   module Config #nodoc
-    class BrokerConfig < BuildrPlus::BaseElement
+    class BrokerConfig < Reality::BaseElement
       attr_accessor :prefix
       attr_accessor :host
       attr_accessor :port

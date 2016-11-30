@@ -14,7 +14,7 @@
 
 module BuildrPlus #nodoc
   module Config #nodoc
-    class DatabaseConfig < BuildrPlus::BaseElement
+    class DatabaseConfig < Reality::BaseElement
       attr_reader :key
       attr_accessor :database
       attr_accessor :host

@@ -14,7 +14,7 @@
 
 module BuildrPlus #nodoc
   module Config #nodoc
-    class SsrsConfig < BuildrPlus::BaseElement
+    class SsrsConfig < Reality::BaseElement
       attr_accessor :report_target
       attr_accessor :domain
       attr_accessor :admin_username
