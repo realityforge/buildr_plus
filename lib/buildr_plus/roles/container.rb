@@ -115,7 +115,7 @@ BuildrPlus::Roles.role(:container) do
     if local_packaged_apps.size > 0
       only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
       ipr.add_glassfish_configuration(project,
-                                      :configuration_name => "#{BuildrPlus::Naming.pascal_case(project.name)} Only - GlassFish 4.1.1.162",
+                                      :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 4.1.1.162",
                                       :server_name => 'GlassFish 4.1.1.162',
                                       :exploded => [project.name],
                                       :packaged => only_packaged_apps)
@@ -125,8 +125,8 @@ BuildrPlus::Roles.role(:container) do
       gwt_modules = p.determine_top_level_gwt_modules('Dev')
       gwt_modules.each do |gwt_module|
         short_name = gwt_module.gsub(/.*\.([^.]+)Dev$/, '\1')
-        path = short_name.gsub(/^#{BuildrPlus::Naming.pascal_case(project.name)}/, '')
-        path = "#{BuildrPlus::Naming.underscore(path)}.html" if path.size > 0
+        path = short_name.gsub(/^#{Reality::Naming.pascal_case(project.name)}/, '')
+        path = "#{Reality::Naming.underscore(path)}.html" if path.size > 0
         ipr.add_gwt_configuration(p,
                                   :gwt_module => gwt_module,
                                   :vm_parameters => '-Xmx3G',

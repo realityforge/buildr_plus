@@ -41,7 +41,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def domain_environment_var(domain, key, default_value = nil)
-      domain_name = Redfish::Naming.uppercase_constantize(domain.name)
+      domain_name = Reality::Naming.uppercase_constantize(domain.name)
       scope = self.app_scope
       code = self.env_code
 
@@ -227,8 +227,8 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         BuildrPlus::Keycloak.client_types.each do |client_type|
           name = buildr_project.name
-          constant_prefix = BuildrPlus::Naming.uppercase_constantize(name)
-          prefix = "#{name == client_type ? '' : "#{constant_prefix}_"}#{BuildrPlus::Naming.uppercase_constantize(client_type)}"
+          constant_prefix = Reality::Naming.uppercase_constantize(name)
+          prefix = "#{name == client_type ? '' : "#{constant_prefix}_"}#{Reality::Naming.uppercase_constantize(client_type)}"
 
           environment.setting("#{prefix}_KEYCLOAK_REALM", environment.keycloak.realm) unless environment.setting?("#{prefix}_KEYCLOAK_REALM")
           environment.setting("#{prefix}_KEYCLOAK_REALM_PUBLIC_KEY", environment.keycloak.public_key) unless environment.setting?("#{prefix}_KEYCLOAK_REALM_PUBLIC_KEY")
@@ -284,7 +284,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
             end
           end unless dbt_imports
 
-          short_name = BuildrPlus::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
+          short_name = Reality::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
           database.database = "#{BuildrPlus::Config.db_scope}#{short_name}_#{self.env_code(environment.key)}" unless database.database
           database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
           database.host = environment_var('DB_SERVER_HOST') unless database.host
@@ -339,7 +339,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
       if environment.ssrs.prefix.nil?
         buildr_project = get_buildr_project
-        short_name = BuildrPlus::Naming.uppercase_constantize(buildr_project.root_project.name)
+        short_name = Reality::Naming.uppercase_constantize(buildr_project.root_project.name)
         environment.ssrs.prefix = "/Auto/#{user || 'NOBODY'}#{scope.nil? ? '' : "_#{scope}"}/#{self.env_code}/#{short_name}"
       end
 

@@ -15,7 +15,7 @@
 class Buildr::Project
 
   def name_as_class
-    BuildrPlus::Naming.pascal_case(project.name)
+    Reality::Naming.pascal_case(project.name)
   end
 
   def base_group

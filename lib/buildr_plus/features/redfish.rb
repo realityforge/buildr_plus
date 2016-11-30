@@ -97,7 +97,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
     def build_property_set(domain, environment)
       properties = {}
 
-      constant_prefix = BuildrPlus::Naming.uppercase_constantize(domain.name)
+      constant_prefix = Reality::Naming.uppercase_constantize(domain.name)
 
       if environment.broker?
         properties['OPENMQ_HOST'] = as_ip(environment.broker.host.to_s)
@@ -119,7 +119,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         prefixes.each do |prefix|
           components = []
           components << prefix if prefix
-          components << BuildrPlus::Naming.uppercase_constantize(database.key) unless database.key.to_s == 'default'
+          components << Reality::Naming.uppercase_constantize(database.key) unless database.key.to_s == 'default'
           db_prefix = components.join('_')
           properties["#{db_prefix}_DB_HOST"] = as_ip(database.host.to_s)
           properties["#{db_prefix}_DB_PORT"] = database.port.to_s

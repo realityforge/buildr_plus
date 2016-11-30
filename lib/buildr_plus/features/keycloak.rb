@@ -47,7 +47,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     end
 
     def client_name_for(client_type)
-      client_name_overrides[client_type] || "#{BuildrPlus::Config.app_scope}#{BuildrPlus::Config.app_scope.nil? ? '' : '_'}#{BuildrPlus::Config.user || 'NOBODY'}_#{default_client_type?(client_type) ? '' : "#{BuildrPlus::Naming.uppercase_constantize(default_client_type)}_"}#{BuildrPlus::Naming.uppercase_constantize(client_type.to_s)}_#{BuildrPlus::Config.env_code}"
+      client_name_overrides[client_type] || "#{BuildrPlus::Config.app_scope}#{BuildrPlus::Config.app_scope.nil? ? '' : '_'}#{BuildrPlus::Config.user || 'NOBODY'}_#{default_client_type?(client_type) ? '' : "#{Reality::Naming.uppercase_constantize(default_client_type)}_"}#{Reality::Naming.uppercase_constantize(client_type.to_s)}_#{BuildrPlus::Config.env_code}"
     end
 
     def root_project
@@ -68,7 +68,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           a.invoke
 
           name = buildr_project.name
-          cname = BuildrPlus::Naming.uppercase_constantize(name)
+          cname = Reality::Naming.uppercase_constantize(name)
 
           args = []
           args << '-jar'
@@ -80,7 +80,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << "--admin-username=#{BuildrPlus::Config.environment_config.keycloak.admin_username}" if BuildrPlus::Config.environment_config.keycloak.admin_username
           args << "--admin-password=#{BuildrPlus::Config.environment_config.keycloak.admin_password}"
           BuildrPlus::Keycloak.client_types.each do |client_type|
-            args << "-e#{name == client_type ? '' : "#{cname}_"}#{BuildrPlus::Naming.uppercase_constantize(client_type)}_NAME=#{BuildrPlus::Keycloak.client_name_for(client_type)}"
+            args << "-e#{name == client_type ? '' : "#{cname}_"}#{Reality::Naming.uppercase_constantize(client_type)}_NAME=#{BuildrPlus::Keycloak.client_name_for(client_type)}"
           end
           args << "-e#{cname}_ORIGIN=http://127.0.0.1:8080"
           args << "-e#{cname}_URL=http://127.0.0.1:8080/#{name}"

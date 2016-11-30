@@ -80,9 +80,9 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
             next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
             if Dbt::Config.default_database?(database_key)
-              ::SSRS::Config.define_datasource(BuildrPlus::Naming.uppercase_constantize(project.name.to_s))
+              ::SSRS::Config.define_datasource(Reality::Naming.uppercase_constantize(project.name.to_s))
             else
-              ::SSRS::Config.define_datasource(BuildrPlus::Naming.uppercase_constantize(database_key.to_s), database_key.to_s)
+              ::SSRS::Config.define_datasource(Reality::Naming.uppercase_constantize(database_key.to_s), database_key.to_s)
             end
           end
         end

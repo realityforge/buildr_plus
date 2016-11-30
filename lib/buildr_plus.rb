@@ -29,9 +29,9 @@ STDOUT.sync=true
 require 'yaml'
 require 'resolv'
 require 'socket'
+require 'reality/naming'
 
 require 'buildr_plus/core'
-require 'buildr_plus/naming'
 require 'buildr_plus/extension_registry'
 require 'buildr_plus/feature_manager'
 require 'buildr_plus/util'

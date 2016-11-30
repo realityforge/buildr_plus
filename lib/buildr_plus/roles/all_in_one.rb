@@ -175,7 +175,7 @@ BuildrPlus::Roles.role(:all_in_one) do
   if local_packaged_apps.size > 0
     only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
     ipr.add_glassfish_configuration(project,
-                                    :configuration_name => "#{BuildrPlus::Naming.pascal_case(project.name)} Only - GlassFish 4.1.1.162",
+                                    :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 4.1.1.162",
                                     :server_name => 'GlassFish 4.1.1.162',
                                     :exploded => [project.name],
                                     :packaged => only_packaged_apps)
