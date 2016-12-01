@@ -91,7 +91,7 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
       if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.pg_defined?
         gem(gems, 'pg', '0.19.0')
       end
-      if BuildrPlus::Util.is_resgen_gem_present?
+      if BuildrPlus::FeatureManager.activated?(:resgen)
         gem(gems, 'resgen', '1.0.0', :path => 'vendor/tools/resgen')
       end
 

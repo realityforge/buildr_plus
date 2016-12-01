@@ -46,3 +46,4 @@ BuildrPlus::FeatureManager.activate_feature(:rptman) if BuildrPlus::Util.is_rptm
 BuildrPlus::FeatureManager.activate_feature(:sass) if BuildrPlus::Util.is_sass_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:redfish) if BuildrPlus::Util.is_redfish_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:braid) if BuildrPlus::Util.is_braid_gem_present?
+BuildrPlus::FeatureManager.activate_feature(:resgen) if BuildrPlus::Util.is_resgen_gem_present?
