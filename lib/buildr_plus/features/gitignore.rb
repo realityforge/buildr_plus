@@ -56,7 +56,10 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       gitignores << '*.iml'
       gitignores << '/*.ipr'
       gitignores << '/*.iws'
-      gitignores << '/*.ids' if BuildrPlus::FeatureManager.activated?(:dbt)
+      if BuildrPlus::FeatureManager.activated?(:dbt)
+        gitignores << '/*.ids'
+        gitignores << '/.ideaDataSources'
+      end
 
       gitignores << '/config/database.yml' if BuildrPlus::FeatureManager.activated?(:dbt)
 
