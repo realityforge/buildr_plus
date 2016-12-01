@@ -17,13 +17,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
     # The role applied if there is only one project defined and that project has no role
     attr_accessor :default_role
 
-    class RoleDescription < Reality::BaseElement
-      def initialize(name, options = {}, &block)
-        @name = name
-        super(options, &block)
-      end
-
-      attr_reader :name
+    class RoleDescription < Reality.base_element(:name => true)
       attr_writer :requires
 
       def requires
@@ -52,13 +46,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
       end
     end
 
-    class ProjectDescription < Reality::BaseElement
-      def initialize(name, options = {}, &block)
-        @name = name
-        super(options, &block)
-      end
-
-      attr_reader :name
+    class ProjectDescription < Reality.base_element(:name => true)
       attr_accessor :description
       attr_accessor :parent
       attr_writer :template
