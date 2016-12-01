@@ -49,6 +49,7 @@ BuildrPlus::FeatureManager.feature(:whitespace) do |f|
       files = BuildrPlus::Whitespace.collect_files(extensions, filenames)
 
       files.each do |filename|
+        next unless File.exist?(filename)
         content = File.read(filename)
         original_content = content.dup
         content = clean_whitespace(filename, content)
