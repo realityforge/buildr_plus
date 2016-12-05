@@ -178,9 +178,6 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                   raise "Domgen repository #{r.name} declares keycloak clients #{domgen_clients.inspect} while buildr is aware of #{clients.inspect}"
                 end
               end
-              if BuildrPlus::FeatureManager.activated?(:appcache) && BuildrPlus::FeatureManager.activated?(:role_library)
-                raise "Can not enable the BuildrPlus 'appcache' feature for libraries"
-              end
 
               if r.imit? && r.imit.support_ee_client? && !BuildrPlus::Artifacts.replicant_ee_client?
                 raise "Domgen repository #{r.name} declares repository.imit.support_ee_client = true while in BuildrPlus BuildrPlus::Artifacts.replicant_ee_client? is false"
