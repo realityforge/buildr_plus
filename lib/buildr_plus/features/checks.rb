@@ -27,6 +27,9 @@ BuildrPlus::FeatureManager.feature(:checks) do |f|
       if BuildrPlus::FeatureManager.activated?(:appcache) && BuildrPlus::FeatureManager.activated?(:role_library)
         raise "Can not enable the BuildrPlus 'appcache' feature for libraries"
       end
+      if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter) && BuildrPlus::FeatureManager.activated?(:role_library)
+        raise "Can not enable the BuildrPlus 'gwt_cache_filter' feature for libraries"
+      end
     end
 
     desc 'Apply basic fixes on formats of local files'
