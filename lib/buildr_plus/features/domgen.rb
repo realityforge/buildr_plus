@@ -143,6 +143,18 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 end
               end
 
+              unless BuildrPlus::FeatureManager.activated?(:timerstatus)
+                r.data_modules.select{|data_module| data_module.ejb?}.each do |data_module|
+                  data_module.services.select{|service| service.ejb?}.each do |service|
+                    service.methods.select{|method| method.ejb?}.each do |method|
+                      if method.schedule?
+                        raise "Buildr project does not define 'timerstatus' feature but domgen defines method '#{method.qualified_name}' that defines a schedule."
+                      end
+                    end
+                  end
+                end
+              end
+
               if r.application? && r.application.db_deployable? && BuildrPlus::Dbt.library?
                 raise "Domgen declared 'repository.application.db_deployable = true' but buildr configured 'BuildrPlus::Dbt.library = true'."
               end
