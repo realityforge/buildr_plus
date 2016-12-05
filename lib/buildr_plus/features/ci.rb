@@ -247,27 +247,9 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           end
         end
 
-        if BuildrPlus::FeatureManager.activated?(:whitespace)
-          commit_actions << 'whitespace:check'
-          pull_request_actions << 'whitespace:check'
-        end
-        if BuildrPlus::FeatureManager.activated?(:gitignore)
-          commit_actions << 'gitignore:check'
-          pull_request_actions << 'gitignore:check'
-        end
-        if BuildrPlus::FeatureManager.activated?(:gitattributes)
-          commit_actions << 'gitattributes:check'
-          pull_request_actions << 'gitattributes:check'
-        end
-
-        if BuildrPlus::FeatureManager.activated?(:oss)
-          commit_actions << 'oss:check'
-          pull_request_actions << 'oss:check'
-        end
-
-        if BuildrPlus::FeatureManager.activated?(:travis)
-          commit_actions << 'travis:check'
-          pull_request_actions << 'travis:check'
+        if BuildrPlus::FeatureManager.activated?(:checks)
+          commit_actions << 'checks:check'
+          pull_request_actions << 'checks:check'
         end
 
         # Always run check and make sure file system state matches jenkins feature state
