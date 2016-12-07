@@ -32,7 +32,7 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
     generators = [:gwt_client_bundle]
     generators += project.additional_resgen_generators
     Resgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
-      t.filter = Resgen::Filters.include_catalog(:Gwt)
+      t.filter = Resgen::Filters.include_catalog_below(project._(:source, :main))
     end
   end
 
