@@ -28,6 +28,14 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
     end
   end
 
+  if BuildrPlus::FeatureManager.activated?(:resgen)
+    generators = [:gwt_client_bundle]
+    generators += project.additional_resgen_generators
+    Resgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
+      t.filter = Resgen::Filters.include_catalog(:Gwt)
+    end
+  end
+
   compile.with BuildrPlus::Libs.findbugs_provided, BuildrPlus::Libs.gwt_gin
   compile.with BuildrPlus::Libs.gwt_datatypes
   compile.with BuildrPlus::Libs.keycloak_gwt if BuildrPlus::FeatureManager.activated?(:keycloak)
