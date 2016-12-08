@@ -25,6 +25,14 @@ BuildrPlus::Roles.role(:gwt_qa_support, :requires => [:gwt]) do
     end
   end
 
+  if BuildrPlus::FeatureManager.activated?(:resgen)
+    generators = [:gwt_main_qa_support]
+    generators += project.additional_resgen_generators
+    Resgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
+      t.filter = Resgen::Filters.include_catalog_below(BuildrPlus::Roles.buildr_project_with_role(:gwt)._(:source, :main))
+    end
+  end
+
   compile.with BuildrPlus::Libs.guiceyloops_gwt
   compile.with BuildrPlus::Libs.replicant_client_qa_support if BuildrPlus::FeatureManager.activated?(:replicant)
 
