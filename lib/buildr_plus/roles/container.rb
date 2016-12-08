@@ -44,7 +44,7 @@ BuildrPlus::Roles.role(:container) do
   end
 
   if BuildrPlus::FeatureManager.activated?(:db)
-    default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}"
+    default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}" unless BuildrPlus::FeatureManager.activated?(:gwt)
 
     if BuildrPlus::FeatureManager.activated?(:dbt)
       BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
