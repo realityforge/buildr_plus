@@ -169,33 +169,14 @@ CONTENT
 
     def prepare_content(include_artifacts, include_checkout = true)
       stage('Prepare') do
-        content = <<-CONTENT
-  env.BUILD_NUMBER = "${env.BUILD_NUMBER}"
-  env.GEM_HOME = '/home/buildbot/.gems'
-  env.GEM_PATH = '/home/buildbot/.gems'
-  env.PATH = "#{is_old_jruby? ? '' : '/home/buildbot/.gems/bin:'}/home/buildbot/.rbenv/bin:/home/buildbot/.rbenv/shims:${sh(script: 'echo $PATH', returnStdout: true).trim()}"
-        CONTENT
-        if include_checkout
-          content += "  checkout scm\n"
-        end
+        content = include_checkout ? "  checkout scm\n" : ''
         content += <<-CONTENT
   sh 'git reset --hard'
   sh 'git clean -ffdx'
+  env.BUILD_NUMBER = "${env.BUILD_NUMBER}"
   env.PRODUCT_VERSION = sh(script: 'echo $BUILD_NUMBER-`git rev-parse --short HEAD`', returnStdout: true).trim()
   sh 'echo "gem: --no-ri --no-rdoc" > ~/.gemrc'
-        CONTENT
-        if is_old_jruby?
-          content += <<-CONTENT
-  retry(8) { sh 'rbenv exec gem install jruby-openssl --version 0.8.2; rbenv rehash' }
-  retry(8) { sh 'rbenv exec gem install bundler --version 1.3.1; rbenv rehash' }
-          CONTENT
-        else
-          content += <<-CONTENT
-  retry(8) { sh 'gem install bundler; rbenv rehash' }
-          CONTENT
-        end
-        content += <<CONTENT
-  retry(8) { sh '#{is_old_jruby? ? 'rbenv exec ' : ''}bundle install --deployment; rbenv rehash' }
+  retry(8) { sh '#{is_old_jruby? ? 'rbenv exec ' : ''}bundle install; rbenv rehash' }
 CONTENT
         if include_artifacts
           content += <<CONTENT
