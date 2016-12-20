@@ -97,10 +97,12 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
               define client_type.to_s do
                 project.no_iml
 
-                package(:json).enhance do |t|
-                  project.task(':domgen:all').invoke
-                  mkdir_p File.dirname(t.to_s)
-                  cp "generated/domgen/#{buildr_project.root_project.name}/main/etc/keycloak/#{client_type}.json", t.to_s
+                [:json, :json_sources].each do |type|
+                  package(type).enhance do |t|
+                    project.task(':domgen:all').invoke
+                    mkdir_p File.dirname(t.to_s)
+                    cp "generated/domgen/#{buildr_project.root_project.name}/main/etc/keycloak/#{client_type}.json", t.to_s
+                  end
                 end
               end
             end
@@ -113,6 +115,14 @@ end
 
 class Buildr::Project
   def package_as_json(file_name)
+    file(file_name)
+  end
+
+  def package_as_json_sources_spec(spec)
+    spec.merge(:type => :json, :classifier => :sources)
+  end
+
+  def package_as_json_sources(file_name)
     file(file_name)
   end
 end
