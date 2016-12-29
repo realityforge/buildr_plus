@@ -150,7 +150,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def rest_criteria
-      %w(org.realityforge.rest.criteria:rest-criteria:jar:0.9.3 org.antlr:antlr4-runtime:jar:4.3 org.antlr:antlr4-annotations:jar:4.3) + self.field_filter
+      %w(org.realityforge.rest.criteria:rest-criteria:jar:0.9.4 org.antlr:antlr4-runtime:jar:4.3 org.antlr:antlr4-annotations:jar:4.3) + self.field_filter
     end
 
     def commons_logging
