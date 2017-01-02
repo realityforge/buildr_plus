@@ -25,5 +25,5 @@ Gem::Specification.new do |s|
   s.rdoc_options       = %w(--line-numbers --inline-source --title buildr_plus)
 
   s.add_dependency 'reality-core', '>= 1.6.0'
-  s.add_dependency 'reality-naming', '>= 1.6.0'
+  s.add_dependency 'reality-naming', '>= 1.8.0'
 end
