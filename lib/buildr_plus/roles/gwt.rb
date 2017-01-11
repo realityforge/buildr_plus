@@ -38,9 +38,6 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_shared)
 
-  test.with BuildrPlus::Libs.mockito
-  test.with BuildrPlus::Libs.replicant_client_qa_support if BuildrPlus::FeatureManager.activated?(:replicant)
-
   package(:jar)
   package(:sources)
 
