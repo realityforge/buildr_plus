@@ -33,7 +33,7 @@ BuildrPlus::Roles.role(:integration_tests) do
   test.enhance(artifacts(BuildrPlus::Libs.glassfish_embedded))
   test.enhance([war_package])
 
-  test.with BuildrPlus::Libs.db_drivers
+  test.with BuildrPlus::Deps.integration_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.test, :integration_qa_support)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :soap_client)

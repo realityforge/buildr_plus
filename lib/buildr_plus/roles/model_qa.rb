@@ -28,14 +28,8 @@ BuildrPlus::Roles.role(:model_qa) do
 
   project.publish = false
 
-  BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
+  BuildrPlus::Roles.merge_projects_with_role(project.test, :model)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
 
-  test.with BuildrPlus::Libs.ee_provided
-
-  # Our JPA beans are occasionally generated with eclipselink specific artifacts
-  test.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:db)
-  test.with BuildrPlus::Libs.guiceyloops
   test.with BuildrPlus::Deps.model_qa_support_deps
-  test.with BuildrPlus::Libs.db_drivers
 end

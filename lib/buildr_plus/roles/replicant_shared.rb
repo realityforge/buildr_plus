@@ -23,9 +23,7 @@ BuildrPlus::Roles.role(:replicant_shared, :requires => [:replicant]) do
     Domgen::Build.define_generate_task(generators, :buildr_project => project)
   end
 
-  compile.with BuildrPlus::Libs.findbugs_provided
-  compile.with BuildrPlus::Libs.replicant_client_common
-  compile.with BuildrPlus::Libs.javax_inject
+  compile.with BuildrPlus::Deps.gwt_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
 

@@ -59,15 +59,9 @@ BuildrPlus::Roles.role(:all_in_one) do
     end
   end
 
-  compile.with BuildrPlus::Libs.ee_provided
-  compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:soap) || BuildrPlus::FeatureManager.activated?(:db)
-
   compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
-  compile.with BuildrPlus::Deps.model_deps
   compile.with BuildrPlus::Deps.server_deps
 
-  test.with BuildrPlus::Libs.guiceyloops,
-            BuildrPlus::Libs.db_drivers
   test.with BuildrPlus::Deps.model_qa_support_deps
 
   package(:war).tap do |war|

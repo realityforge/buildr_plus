@@ -42,10 +42,6 @@ BuildrPlus::Roles.role(:model) do
   project.publish = BuildrPlus::Artifacts.model?
 
   compile.using :javac
-  compile.with BuildrPlus::Libs.ee_provided
-
-  # Our JPA beans are occasionally generated with eclipselink specific artifacts
-  compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:db)
 
   compile.with BuildrPlus::Deps.model_deps
 

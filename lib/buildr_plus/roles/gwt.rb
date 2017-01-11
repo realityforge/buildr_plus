@@ -36,11 +36,7 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
     end
   end
 
-  compile.with BuildrPlus::Libs.findbugs_provided, BuildrPlus::Libs.gwt_gin
-  compile.with BuildrPlus::Libs.gwt_datatypes
-  compile.with BuildrPlus::Libs.keycloak_gwt if BuildrPlus::FeatureManager.activated?(:keycloak)
-
-  compile.with BuildrPlus::Libs.replicant_gwt_client if BuildrPlus::FeatureManager.activated?(:replicant)
+  compile.with BuildrPlus::Deps.gwt_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_shared)

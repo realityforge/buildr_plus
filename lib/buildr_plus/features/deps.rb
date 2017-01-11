@@ -15,8 +15,49 @@
 BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
   f.enhance(:Config) do
 
+    def replicant_shared_deps
+      dependencies = []
+
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_common)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_inject)
+
+      dependencies.flatten
+    end
+
+    def gwt_deps
+      dependencies = []
+
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_gin)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_datatypes)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
+
+      if BuildrPlus::FeatureManager.activated?(:replicant)
+        dependencies << replicant_shared_deps
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client)
+      end
+
+      dependencies.flatten
+    end
+
+    def gwt_qa_support_deps
+      dependencies = []
+
+      dependencies << gwt_deps
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_qa_support) if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      dependencies.flatten
+    end
+
     def model_deps
       dependencies = []
+
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.ee_provided)
+
+      # Our JPA beans are occasionally generated with eclipselink specific artifacts
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded) if BuildrPlus::FeatureManager.activated?(:db)
 
       if BuildrPlus::FeatureManager.activated?(:geolatte)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom)
@@ -33,6 +74,9 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def model_qa_support_deps
       dependencies = []
 
+      dependencies << model_deps
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops])
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.db_drivers]) if BuildrPlus::FeatureManager.activated?(:db)
       dependencies << Buildr.artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Mail.mail_qa, BuildrPlus::Libs.mustache, BuildrPlus::Libs.greenmail]) if BuildrPlus::FeatureManager.activated?(:mail)
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
@@ -40,9 +84,28 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
+    def integration_qa_support_deps
+      dependencies = []
+
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.glassfish_embedded])
+      dependencies << model_qa_support_deps
+
+      dependencies.flatten
+    end
+
+    def integration_deps
+      dependencies = []
+
+      dependencies << integration_qa_support_deps
+
+      dependencies.flatten
+    end
+
     def server_deps
       dependencies = []
 
+      dependencies << model_deps
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded) if BuildrPlus::FeatureManager.activated?(:soap)
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_cache_filter]) if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
       dependencies << Buildr.artifacts([BuildrPlus::Timerstatus.timerstatus, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:timerstatus)
       dependencies << Buildr.artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Libs.mustache]) if BuildrPlus::FeatureManager.activated?(:mail)

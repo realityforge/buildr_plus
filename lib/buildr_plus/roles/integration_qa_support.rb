@@ -25,7 +25,7 @@ BuildrPlus::Roles.role(:integration_qa_support) do
 
   project.publish = false
 
-  compile.with BuildrPlus::Libs.glassfish_embedded
+  compile.with BuildrPlus::Deps.integration_qa_support_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model_qa_support)
 

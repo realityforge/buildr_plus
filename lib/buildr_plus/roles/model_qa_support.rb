@@ -28,7 +28,6 @@ BuildrPlus::Roles.role(:model_qa_support) do
 
   project.publish = BuildrPlus::Artifacts.model?
 
-  compile.with BuildrPlus::Libs.guiceyloops
   compile.with BuildrPlus::Deps.model_qa_support_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
