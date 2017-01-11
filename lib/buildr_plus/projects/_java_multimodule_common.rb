@@ -45,7 +45,7 @@ if File.exist?("#{base_directory}/model-qa")
   BuildrPlus::Roles.project('model-qa', :roles => [:model_qa], :parent => :container, :template => true, :description => 'Model Tests')
 end
 
-if File.exist?("#{base_directory}/gwt")
+if File.exist?("#{base_directory}/gwt") || File.exist?("#{base_directory}/gwt-qa-support") || File.exist?("#{base_directory}/gwt-qa")
   BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :template => true, :description => 'GWT Library')
   BuildrPlus::Roles.project('gwt-qa-support', :roles => [:gwt_qa_support], :parent => :container, :template => true, :description => 'GWT Test Infrastructure')
   if File.exist?("#{base_directory}/gwt-qa")

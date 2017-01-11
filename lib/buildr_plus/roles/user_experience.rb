@@ -12,16 +12,15 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:user_experience, :requires => [:role_gwt, :gwt]) do
+BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:gwt_client_event, :gwt_client_app, :gwt_client_gwt_modules]
-    generators += [:keycloak_gwt_app] if BuildrPlus::FeatureManager.activated?(:keycloak)
-    generators += project.additional_domgen_generators
+    generators = BuildrPlus::Deps.user_experience_generators + project.additional_domgen_generators
+    generators += BuildrPlus::Deps.gwt_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt)
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
         artifact_type != :message || artifact.any_non_standard_types?
-      end
+      end if BuildrPlus::FeatureManager.activated?(:role_gwt)
     end
   end
 
@@ -35,6 +34,7 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:role_gwt, :gwt]) do
 
   project.publish = false
 
+  compile.with BuildrPlus::Deps.gwt_deps unless BuildrPlus::FeatureManager.activated?(:role_gwt)
   compile.with BuildrPlus::Deps.user_experience_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
