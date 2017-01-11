@@ -15,6 +15,19 @@
 BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
   f.enhance(:Config) do
 
+    def gwt_generators
+      generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :auto_bean, :gwt_client_module, :gwt_client_gwt_model_module]
+      generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
+      generators += [:imit_client_entity_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators.flatten
+    end
+
+    def user_experience_generators
+      generators = [:gwt_client_event, :gwt_client_app, :gwt_client_gwt_modules]
+      generators += [:keycloak_gwt_app] if BuildrPlus::FeatureManager.activated?(:keycloak)
+      generators.flatten
+    end
+
     def replicant_shared_deps
       dependencies = []
 
