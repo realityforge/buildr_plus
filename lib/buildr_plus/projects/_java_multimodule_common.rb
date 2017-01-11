@@ -34,7 +34,7 @@ if File.exist?("#{base_directory}/shared")
   BuildrPlus::Roles.project('shared', :roles => [:shared], :parent => :container, :template => true, :description => 'Shared Components')
 end
 
-if File.exist?("#{base_directory}/model") || File.exist?("#{base_directory}/model-qa-support") || BuildrPlus::FeatureManager.activated?(:domgen)
+if File.exist?("#{base_directory}/model") || File.exist?("#{base_directory}/model-qa-support")
   BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
   if BuildrPlus::FeatureManager.activated?(:sync) && !BuildrPlus::Sync.standalone?
     BuildrPlus::Roles.project('sync_model', :roles => [:sync_model], :parent => :container, :template => true, :description => 'Shared Model used to write External synchronization services')
