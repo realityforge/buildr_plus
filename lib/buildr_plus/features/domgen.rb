@@ -147,7 +147,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 r.data_modules.select{|data_module| data_module.ejb?}.each do |data_module|
                   data_module.services.select{|service| service.ejb?}.each do |service|
                     service.methods.select{|method| method.ejb?}.each do |method|
-                      if method.schedule?
+                      if method.ejb.schedule?
                         raise "Buildr project does not define 'timerstatus' feature but domgen defines method '#{method.qualified_name}' that defines a schedule."
                       end
                     end
