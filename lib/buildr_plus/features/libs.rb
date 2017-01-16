@@ -80,16 +80,20 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       self.jackson_core + self.jackson_databind + self.jackson_annotations
     end
 
+    def jsinterop
+      %w(com.google.jsinterop:jsinterop-annotations:jar:1.0.1 com.google.jsinterop:jsinterop-annotations:jar:sources:1.0.1)
+    end
+
     def gwt_user
-      %w(com.google.gwt:gwt-user:jar:2.7.0)
+      %w(com.google.gwt:gwt-user:jar:2.8.0 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end
 
     def gwt_servlet
-      %w(com.google.gwt:gwt-servlet:jar:2.7.0)
+      %w(com.google.gwt:gwt-servlet:jar:2.8.0)
     end
 
     def gwt_dev
-      'com.google.gwt:gwt-dev:jar:2.7.0'
+      'com.google.gwt:gwt-dev:jar:2.8.0'
     end
 
     def javax_inject
