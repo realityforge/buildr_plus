@@ -434,7 +434,7 @@ currentBuild.result = 'SUCCESS'
 #{content}
 } catch (exception) {
    currentBuild.result = "FAILURE"
-   err = exception;
+   err = exception
 } finally {
 #{update_status ? "  step([$class: 'GitHubCommitNotifier', resultOnFailure: 'FAILURE'])" : ''}
 #{handler_content}
