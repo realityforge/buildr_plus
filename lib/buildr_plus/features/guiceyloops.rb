@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:guiceyloops) do |f|
   f.enhance(:Config) do
     def integration_test_java_args
-      %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M -XX:PermSize=500M -XX:MaxPermSize=500M)
+      %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M)
     end
 
     def glassfish_spec_list

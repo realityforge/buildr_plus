@@ -69,7 +69,6 @@ BuildrPlus::Roles.role(:all_in_one_library) do
   default_testng_args = []
   default_testng_args << '-ea'
   default_testng_args << '-Xmx2024M'
-  default_testng_args << '-XX:MaxPermSize=364M'
 
   if BuildrPlus::FeatureManager.activated?(:db)
     default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}" unless BuildrPlus::FeatureManager.activated?(:gwt)

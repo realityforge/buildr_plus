@@ -32,7 +32,6 @@ BuildrPlus::Roles.role(:container) do
   default_testng_args = []
   default_testng_args << '-ea'
   default_testng_args << '-Xmx2024M'
-  default_testng_args << '-XX:MaxPermSize=364M'
 
   if BuildrPlus::Roles.project_with_role?(:integration_tests)
     server_project = project(BuildrPlus::Roles.project_with_role(:server).name)
@@ -129,7 +128,7 @@ BuildrPlus::Roles.role(:container) do
         path = "#{Reality::Naming.underscore(path)}.html" if path.size > 0
         ipr.add_gwt_configuration(p,
                                   :gwt_module => gwt_module,
-                                  :vm_parameters => '-Xmx3G -XX:MaxPermSize=512m',
+                                  :vm_parameters => '-Xmx3G',
                                   :shell_parameters => "-port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:generated, 'gwt-export')}/",
                                   :launch_page => "http://127.0.0.1:8080/#{p.root_project.name}/#{path}")
       end
