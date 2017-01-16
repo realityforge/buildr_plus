@@ -235,6 +235,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           Redfish.domain('docker', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_docker(domain, :features => BuildrPlus::Redfish.features)
             RedfishPlus.deploy_application(domain, buildr_project.name, '/', "{{file:#{buildr_project.name}}}")
+            domain.base_image_name = "stocksoftware/redfish:jdk#{BuildrPlus::Java.version}"
             BuildrPlus::Redfish.docker_domain_customizations.each do |customization|
               customization.call(domain)
             end
