@@ -24,7 +24,7 @@ BuildrPlus::FeatureManager.feature(:travis => [:oss]) do |f|
 # DO NOT EDIT: File is auto-generated
 language: ruby
 jdk:
-  - oraclejdk7
+  - oraclejdk#{BuildrPlus::Java.version}
 sudo: #{docker_active ? 'required' : 'false'}
 rvm:
   - #{rv}
