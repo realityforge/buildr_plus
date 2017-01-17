@@ -118,6 +118,7 @@ module Buildr
       first_time do
         desc 'Run C22 to GSS converter. Set css files via environment variable CSS_FILES'
         task('css2gss') do
+          raise 'Please specify css files or directory via variable CSS_FILES' unless ENV['CSS_FILES']
           Buildr::GWT.gwt_css2gss(ENV['CSS_FILES'].to_s.split(' '))
         end
       end
