@@ -79,7 +79,7 @@ BuildrPlus::Roles.role(:server) do
     war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
     # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
     war.libs << BuildrPlus::Deps.findbugs_provided
-    war.libs << BuildrPlus::Deps.model_deps
+    war.libs << BuildrPlus::Deps.model_compile_deps
     war.libs << BuildrPlus::Deps.server_deps
     BuildrPlus::Roles.buildr_projects_with_role(:shared).each do |dep|
       war.libs << dep.package(:jar)

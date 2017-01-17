@@ -28,30 +28,49 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
-    def replicant_shared_deps
+    def replicant_shared_provided_deps
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_common)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_inject)
 
       dependencies.flatten
     end
 
-    def gwt_deps
+    def replicant_shared_complie_deps
+      dependencies = []
+
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_common)
+
+      dependencies.flatten
+    end
+
+    def replicant_shared_deps
+      replicant_shared_provided_deps + replicant_shared_complie_deps
+    end
+
+    def gwt_provided_deps
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
+      dependencies << replicant_shared_provided_deps if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      dependencies.flatten
+    end
+
+    def gwt_compile_deps
+      dependencies = []
+
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_gin)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_datatypes)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
-
-      if BuildrPlus::FeatureManager.activated?(:replicant)
-        dependencies << replicant_shared_deps
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client)
-      end
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client) if BuildrPlus::FeatureManager.activated?(:replicant)
 
       dependencies.flatten
+    end
+
+    def gwt_deps
+      gwt_provided_deps + gwt_compile_deps
     end
 
     def gwt_qa_support_deps
@@ -64,13 +83,19 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
-    def model_deps
+    def model_provided_deps
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.ee_provided)
 
       # Our JPA beans are occasionally generated with eclipselink specific artifacts
       dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded) if BuildrPlus::FeatureManager.activated?(:db)
+
+      dependencies.flatten
+    end
+
+    def model_compile_deps
+      dependencies = []
 
       if BuildrPlus::FeatureManager.activated?(:geolatte)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom)
@@ -82,6 +107,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_gwt_support]) if BuildrPlus::FeatureManager.activated?(:jackson)
 
       dependencies.flatten
+    end
+
+    def model_deps
+      model_provided_deps + model_compile_deps
     end
 
     def model_qa_support_deps
@@ -114,11 +143,19 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
-    def server_deps
+    def server_provided_deps
       dependencies = []
 
-      dependencies << model_deps
+      dependencies << model_provided_deps
       dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded) if BuildrPlus::FeatureManager.activated?(:soap)
+
+      dependencies.flatten
+    end
+
+    def server_compile_deps
+      dependencies = []
+
+      dependencies << model_compile_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_cache_filter]) if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
       dependencies << Buildr.artifacts([BuildrPlus::Timerstatus.timerstatus, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:timerstatus)
       dependencies << Buildr.artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Libs.mustache]) if BuildrPlus::FeatureManager.activated?(:mail)
@@ -131,6 +168,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.proxy_servlet) if BuildrPlus::FeatureManager.activated?(:keycloak) && BuildrPlus::FeatureManager.activated?(:gwt)
 
       dependencies.flatten
+    end
+
+    def server_deps
+      server_provided_deps + server_compile_deps
     end
 
     def user_experience_deps

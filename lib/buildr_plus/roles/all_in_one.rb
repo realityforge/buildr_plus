@@ -69,8 +69,8 @@ BuildrPlus::Roles.role(:all_in_one) do
     war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
     # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
     war.libs << BuildrPlus::Deps.findbugs_provided
-    war.libs << BuildrPlus::Deps.model_deps
-    war.libs << BuildrPlus::Deps.server_deps
+    war.libs << BuildrPlus::Deps.model_compile_deps
+    war.libs << BuildrPlus::Deps.server_compile_deps
     war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)
     if BuildrPlus::FeatureManager.activated?(:sass)
       project.sass_paths.each do |sass_path|
@@ -137,8 +137,8 @@ BuildrPlus::Roles.role(:all_in_one) do
   dependencies << Object.const_get(:PACKAGED_DEPS) if Object.const_defined?(:PACKAGED_DEPS)
   # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
   dependencies << BuildrPlus::Deps.findbugs_provided
-  dependencies << BuildrPlus::Deps.model_deps
-  dependencies << BuildrPlus::Deps.server_deps
+  dependencies << BuildrPlus::Deps.model_compile_deps
+  dependencies << BuildrPlus::Deps.server_compile_deps
 
   war_module_names = [project.iml.name]
   jpa_module_names = BuildrPlus::FeatureManager.activated?(:db) ? [project.iml.name] : []
