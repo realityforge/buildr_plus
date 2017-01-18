@@ -243,6 +243,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         if BuildrPlus::FeatureManager.activated?(:replicant)
           r.subpackage_rule('server.net', "#{g}.shared.net")
           r.subpackage_rule('server.service', "#{g}.server.net")
+          r.subpackage_rule('server.service', 'org.realityforge.replicant.server.transport.ReplicantSession', :rule_type => :class)
           r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessage', :rule_type => :class)
           r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessageSet', :rule_type => :class)
 
