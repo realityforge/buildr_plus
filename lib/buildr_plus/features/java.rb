@@ -19,7 +19,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     end
 
     def version
-      @version || 7
+      @version || 8
     end
   end
   f.enhance(:ProjectExtension) do
