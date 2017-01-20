@@ -5,6 +5,8 @@
   "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <suppressions>
+  <suppress files=".+\.(?:png|gif|jpg|jpeg)$" checks=".*"/>
+
   <!-- No import control configured so suppress all warnings around imports -->
   <suppress checks="ImportControl" files=".*\.java"/>
 

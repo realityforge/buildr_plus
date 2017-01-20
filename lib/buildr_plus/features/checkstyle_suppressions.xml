@@ -5,6 +5,8 @@
   "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <suppressions>
+  <suppress files=".+\.(?:png|gif|jpg|jpeg)$" checks=".*"/>
+
   <!-- Turn off all checks for generated code. -->
   <suppress checks="." files="(.*[\\/])?generated[\\/].*\.java"/>
 
