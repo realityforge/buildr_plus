@@ -54,6 +54,23 @@ module Buildr
               commons-io:commons-io:jar:2.4
               com.ibm.icu:icu4j:jar:50.1.1
               tapestry:tapestry:jar:4.0.2
+
+              javax.annotation:javax.annotation-api:jar:1.2
+              javax.servlet:javax.servlet-api:jar:3.1.0
+              org.eclipse.jetty:jetty-annotations:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-continuation:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-http:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-io:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-jndi:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-plus:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-security:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-server:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-servlet:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-servlets:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-util:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-webapp:jar:9.2.14.v20151106
+              org.eclipse.jetty:jetty-xml:jar:9.2.14.v20151106
+              org.eclipse.jetty.toolchain:jetty-schemas:jar:3.1.M0
           ) + validation_deps
         else
           raise "Unknown GWT version #{v}"
