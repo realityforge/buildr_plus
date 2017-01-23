@@ -201,7 +201,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         pull_request_actions.concat(BuildrPlus::Ci.additional_pull_request_actions)
 
-        if BuildrPlus::FeatureManager.activated?(:redfish)
+        if BuildrPlus::FeatureManager.activated?(:redfish) && BuildrPlus::FeatureManager.activated?(:docker)
           if BuildrPlus::FeatureManager.activated?(:jms)
             package_actions << 'openmq:start'
           end
