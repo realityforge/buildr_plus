@@ -129,7 +129,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         package_actions = %w(ci:setup)
         package_no_test_actions = %w(ci:no_test_setup)
 
-        if BuildrPlus::FeatureManager.activated?(:redfish)
+        if BuildrPlus::FeatureManager.activated?(:redfish) && BuildrPlus::FeatureManager.activated?(:docker)
           Redfish.domains.each do |domain|
             next unless domain.enable_rake_integration?
             next unless domain.dockerize?
@@ -236,7 +236,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           package_no_test_actions << 'ci:upload'
         end
 
-        if BuildrPlus::FeatureManager.activated?(:redfish)
+        if BuildrPlus::FeatureManager.activated?(:redfish) && BuildrPlus::FeatureManager.activated?(:docker)
           Redfish.domains.each do |domain|
             next unless domain.enable_rake_integration?
             next unless domain.dockerize?
