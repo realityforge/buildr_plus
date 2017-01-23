@@ -143,7 +143,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 end
               end
 
-              unless BuildrPlus::FeatureManager.activated?(:timerstatus)
+              unless BuildrPlus::FeatureManager.activated?(:timerstatus) || BuildrPlus::FeatureManager.activated?(:role_library)
                 r.data_modules.select{|data_module| data_module.ejb?}.each do |data_module|
                   data_module.services.select{|service| service.ejb?}.each do |service|
                     service.methods.select{|method| method.ejb?}.each do |method|
