@@ -183,6 +183,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       r.rule('javax.faces.bean', :disallow => true)
 
       r.rule('java.util')
+      r.subpackage_rule('server', 'java.nio.charset.StandardCharsets', :rule_type => :class)
 
       if BuildrPlus::FeatureManager.activated?(:appconfig)
         r.rule("#{g}.shared.#{project.name_as_class}FeatureFlags", :rule_type => :class)
