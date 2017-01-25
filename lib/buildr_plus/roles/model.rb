@@ -14,26 +14,7 @@
 
 BuildrPlus::Roles.role(:model) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:ee_data_types]
-    if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:jpa_model, :jpa_ejb_dao, :jpa_template_persistence_xml, :jpa_template_orm_xml]
-
-      generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
-
-      generators << [:imit_server_entity_listener] if BuildrPlus::FeatureManager.activated?(:replicant)
-    end
-
-    generators << [:jaxb_marshalling_tests, :xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
-
-    generators << [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
-
-    if BuildrPlus::Roles.buildr_projects_with_role(:shared).size == 0
-      generators << [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
-      generators << [:syncrecord_datasources] if BuildrPlus::FeatureManager.activated?(:syncrecord)
-    end
-
-    generators += project.additional_domgen_generators
-
+    generators = BuildrPlus::Deps.model_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
       t.filter = project.domgen_filter
     end

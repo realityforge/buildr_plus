@@ -14,12 +14,7 @@
 
 BuildrPlus::Roles.role(:model_qa_support) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = []
-    generators << [:jpa_main_qa, :jpa_main_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
-    generators << [:ejb_main_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
-    generators << [:imit_server_main_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-    generators += project.additional_domgen_generators
+    generators = BuildrPlus::Deps.model_qa_support_main_generators + project.additional_domgen_generators
 
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
       t.filter = project.domgen_filter
