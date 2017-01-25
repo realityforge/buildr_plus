@@ -71,8 +71,7 @@ BuildrPlus::Roles.role(:server) do
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
 
-  test.with BuildrPlus::Libs.db_drivers
-  test.with artifacts([BuildrPlus::Syncrecord.syncrecord_server_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
+  test.with BuildrPlus::Deps.server_test_deps
 
   package(:war).tap do |war|
     war.libs.clear

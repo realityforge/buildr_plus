@@ -170,6 +170,15 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
+    def server_test_deps
+      dependencies = []
+
+      dependencies << self.model_qa_support_deps
+      dependencies << Buildr.artifacts(BuildrPlus::Syncrecord.syncrecord_server_qa) if BuildrPlus::FeatureManager.activated?(:syncrecord)
+
+      dependencies.flatten
+    end
+
     def server_deps
       server_provided_deps + server_compile_deps
     end
