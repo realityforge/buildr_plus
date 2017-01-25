@@ -17,9 +17,7 @@ BuildrPlus::Roles.role(:replicant_shared, :requires => [:replicant]) do
   project.publish = BuildrPlus::Artifacts.replicant_client?
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = []
-    generators += [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt_module]
-    generators += project.additional_domgen_generators
+    generators = BuildrPlus::Deps.replicant_shared_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project)
   end
 
