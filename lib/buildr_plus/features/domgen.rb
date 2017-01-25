@@ -202,6 +202,14 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
               elsif r.robots? && !BuildrPlus::Artifacts.war?
                 raise "Domgen repository #{r.name} should disable robots facet as BuildrPlus BuildrPlus::Artifacts.war? is false"
               end
+
+              if r.jpa?
+                if r.jpa.include_default_unit? && !Dbt.database_for_key?(:default)
+                  raise "Domgen repository #{r.name} includes a default jpa persistence unit but there is no Dbt database with key :default"
+                elsif !r.jpa.include_default_unit? && Dbt.database_for_key?(:default)
+                  raise "Domgen repository #{r.name} does not include a default jpa persistence unit but there is a Dbt database with key :default"
+                end
+              end
             end
           end
         end
