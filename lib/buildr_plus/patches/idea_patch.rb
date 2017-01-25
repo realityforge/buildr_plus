@@ -15,6 +15,32 @@
 
 module Buildr #:nodoc:
   module IntellijIdea #:nodoc:
+    class IdeaModule
+      def module_root_component
+        options = {'inherit-compiler-output' => 'false'}
+        options['LANGUAGE_LEVEL'] = "JDK_#{jdk_version.gsub(/\./, '_')}" unless jdk_version == buildr_project.root_project.compile.options.source
+        create_component('NewModuleRootManager', options ) do |xml|
+          generate_compile_output(xml)
+          generate_content(xml) unless skip_content?
+          generate_initial_order_entries(xml)
+          project_dependencies = []
+
+
+          self.main_dependency_details.each do |dependency_path, export, source_path|
+            next unless export
+            generate_lib(xml, dependency_path, export, source_path, project_dependencies)
+          end
+
+          self.test_dependency_details.each do |dependency_path, export, source_path|
+            next if export
+            generate_lib(xml, dependency_path, export, source_path, project_dependencies)
+          end
+
+          xml.orderEntryProperties
+        end
+      end
+    end
+
     class IdeaProject
       def add_glassfish_remote_configuration(project, options = {})
         artifact_name = options[:name] || project.iml.id
