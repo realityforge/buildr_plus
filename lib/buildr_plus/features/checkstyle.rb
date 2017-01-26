@@ -184,6 +184,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
       r.rule('java.util')
       r.subpackage_rule('server', 'java.nio.charset.StandardCharsets', :rule_type => :class)
+      r.subpackage_rule('server', 'java.time')
 
       if BuildrPlus::FeatureManager.activated?(:appconfig)
         r.rule("#{g}.shared.#{project.name_as_class}FeatureFlags", :rule_type => :class)
