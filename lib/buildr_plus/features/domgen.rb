@@ -145,9 +145,9 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
               end
 
               unless BuildrPlus::FeatureManager.activated?(:timerstatus) || BuildrPlus::FeatureManager.activated?(:role_library)
-                r.data_modules.select{|data_module| data_module.ejb?}.each do |data_module|
-                  data_module.services.select{|service| service.ejb?}.each do |service|
-                    service.methods.select{|method| method.ejb?}.each do |method|
+                r.data_modules.select { |data_module| data_module.ejb? }.each do |data_module|
+                  data_module.services.select { |service| service.ejb? }.each do |service|
+                    service.methods.select { |method| method.ejb? }.each do |method|
                       if method.ejb.schedule?
                         raise "Buildr project does not define 'timerstatus' feature but domgen defines method '#{method.qualified_name}' that defines a schedule."
                       end
@@ -185,7 +185,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 end
               end
               if BuildrPlus::FeatureManager.activated?(:keycloak)
-                domgen_clients = r.keycloak.clients.collect{|client| client.key.to_s}.sort.uniq
+                domgen_clients = r.keycloak.clients.collect { |client| client.key.to_s }.sort.uniq
                 clients = BuildrPlus::Keycloak.client_types.sort.uniq
                 if clients != domgen_clients
                   raise "Domgen repository #{r.name} declares keycloak clients #{domgen_clients.inspect} while buildr is aware of #{clients.inspect}"
