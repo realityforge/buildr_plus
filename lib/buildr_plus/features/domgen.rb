@@ -122,6 +122,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
           if BuildrPlus::Domgen.enforce_postload_constraints?
             facet_mapping =
               {
+                :jackson => :jackson,
                 :keycloak => :keycloak,
                 :jms => :jms,
                 :mail => :mail,
