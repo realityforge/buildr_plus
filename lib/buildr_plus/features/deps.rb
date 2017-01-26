@@ -40,6 +40,14 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
+    def model_only_generators
+      generators = []
+
+      generators << [:ee_model_beans_xml]
+
+      generators.flatten
+    end
+
     def model_qa_support_main_generators
       generators = []
       generators << [:jpa_main_qa, :jpa_main_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
