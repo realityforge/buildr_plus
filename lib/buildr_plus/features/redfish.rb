@@ -211,7 +211,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
             domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
             BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)
           end
-          if BuildrPlus::FeatureManager.activated?(:domgen) && !BuildrPlus::FeatureManager.activated?(:rails)
+          if BuildrPlus::FeatureManager.activated?(:domgen)
             file = buildr_project._("generated/domgen/#{buildr_project.name}/main/etc/#{buildr_project.name_as_class}.redfish.fragment.json")
             domain.pre_artifacts << file
             buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])

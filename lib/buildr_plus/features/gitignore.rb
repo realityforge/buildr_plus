@@ -86,23 +86,8 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       gitignores << '/target'
       gitignores << '/tmp'
 
-      if BuildrPlus::FeatureManager.activated?(:rails)
-        gitignores << '/config/config.properties' if File.exist?("#{base_directory}/config/config.example.properties")
-        gitignores << '/.rakeTasks'
-        gitignores << '/.generators'
-        gitignores << '/log'
-        gitignores << '/vendor/jars'
-      end
-
       if BuildrPlus::FeatureManager.activated?(:domgen) || BuildrPlus::FeatureManager.activated?(:checkstyle)
         gitignores << '**/generated'
-      end
-
-      if BuildrPlus::FeatureManager.activated?(:calendar_date_select)
-        gitignores << '/public/blank_iframe.html'
-        gitignores << '/public/images/calendar_date_select'
-        gitignores << '/public/javascripts/calendar_date_select'
-        gitignores << '/public/stylesheets/calendar_date_select'
       end
 
       if BuildrPlus::FeatureManager.activated?(:sass)

@@ -45,10 +45,6 @@ module BuildrPlus
         is_gem_present?('rptman','SSRS')
       end
 
-      def is_itest_gem_present?
-        is_gem_present?('itest','ITest')
-      end
-
       def is_sass_gem_present?
         is_gem_present?('sass','Sass')
       end
@@ -59,10 +55,6 @@ module BuildrPlus
 
       def is_resgen_gem_present?
         is_gem_present?('resgen','Resgen')
-      end
-
-      def is_calendar_date_select_gem_present?
-        is_gem_present?('calendar_date_select/calendar_date_select','CalendarDateSelect')
       end
 
       def subprojects(project)

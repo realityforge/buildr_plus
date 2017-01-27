@@ -117,22 +117,6 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
     def output_aux_confgs!(config = application_config)
       emit_database_yml(config)
-
-      buildr_project = get_buildr_project.root_project
-
-      if BuildrPlus::FeatureManager.activated?(:rails) &&
-        BuildrPlus::FeatureManager.activated?(:redfish) &&
-        Redfish.domain_by_key?(buildr_project.name)
-
-        domain = Redfish.domain_by_key(buildr_project.name)
-
-        buildr_project.task(':domgen:all' => ['rails:config:generate']) if BuildrPlus::FeatureManager.activated?(:domgen)
-
-        buildr_project.task(':rails:config:generate' => ["#{domain.task_prefix}:setup_env_vars"]) do
-          # Also need to populate rails configuration
-          emit_rails_configuration(domain)
-        end
-      end
     end
 
     private

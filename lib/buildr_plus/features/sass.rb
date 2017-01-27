@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:sass) do |f|
   f.enhance(:Config) do
     def default_sass_paths
-      BuildrPlus::FeatureManager.activated?(:rails) ? %w(public/stylesheets/sass) : %w(src/main/webapp/sass)
+      %w(src/main/webapp/sass)
     end
 
     def target_css_files(project)
@@ -35,12 +35,8 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
     end
 
     def to_target_file(source_dir, sass_file)
-      if BuildrPlus::FeatureManager.activated?(:rails)
-        sass_file.gsub(/\.s[ac]ss$/, '.css').gsub(/\/s[ac]ss\//, '/')
-      else
-        target_dir = _(:generated, :sass, :main, :webapp)
-        "#{target_dir}/css/#{Buildr::Util.relative_path(sass_file, source_dir)[0...-5]}.css"
-      end
+      target_dir = _(:generated, :sass, :main, :webapp)
+      "#{target_dir}/css/#{Buildr::Util.relative_path(sass_file, source_dir)[0...-5]}.css"
     end
 
     first_time do
@@ -69,26 +65,10 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
       end
 
       project.clean do
-        if BuildrPlus::FeatureManager.activated?(:rails)
-          project.sass_paths.select { |sass_path| File.directory?(sass_path) }.each do |sass_path|
-            Dir["#{sass_path}/**/[^_]*.s[ac]ss"].each do |sass_file|
-              FileUtils.rm_f project.to_target_file(sass_path, sass_file)
-            end
-          end
-        else
-          FileUtils.rm_rf project._(:generated, :sass, :main, :webapp)
-        end
+        FileUtils.rm_rf project._(:generated, :sass, :main, :webapp)
       end
 
       project.assets.enhance([t.name])
-
-      unless BuildrPlus::FeatureManager.activated?(:rails)
-        webapp_dir = project._(:generated, :sass, :main, :webapp)
-
-        project.assets.paths << file(webapp_dir => [t.name]) do
-          mkdir_p webapp_dir
-        end
-      end
 
       desc 'Precompile all assets'
       project.task(':assets:precompile' => t.name)

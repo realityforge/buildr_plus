@@ -169,13 +169,8 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
         invalid_patterns << '*.rdl'
       end
 
-      if BuildrPlus::FeatureManager.activated?(:rails)
-        add(gitattributes, text_rule('*.rhtml'))
-        add(gitattributes, text_rule('*.haml'))
-      else
-        invalid_patterns << '*.rhtml'
-        invalid_patterns << '*.haml'
-      end
+      invalid_patterns << '*.rhtml'
+      invalid_patterns << '*.haml'
 
       if BuildrPlus::FeatureManager.activated?(:domgen)
         add(gitattributes, text_rule('*.erb'))
@@ -211,7 +206,7 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
         invalid_patterns << '*.jsp'
       end
 
-      if BuildrPlus::FeatureManager.activated?(:java) || BuildrPlus::FeatureManager.activated?(:rails)
+      if BuildrPlus::FeatureManager.activated?(:java)
         add(gitattributes, text_rule('*.properties'))
         add(gitattributes, rule('*.jar', :binary => true))
       else

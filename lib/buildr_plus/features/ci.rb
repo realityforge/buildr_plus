@@ -62,10 +62,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           Dbt::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:dbt)
           SSRS::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:rptman)
           BuildrPlus::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:config)
-          ::RAILS_ENV = ENV['RAILS_ENV'] = 'test' if BuildrPlus::FeatureManager.activated?(:rails)
         end
-
-        project.task ':ci:common_setup' => %w(db:driver:download) if BuildrPlus::FeatureManager.activated?(:rails)
 
         project.task ':ci:test_configure' do
           if BuildrPlus::FeatureManager.activated?(:dbt)
@@ -177,11 +174,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         if BuildrPlus::FeatureManager.activated?(:rptman) && ENV['RPTMAN'] != 'no'
           commit_actions << 'rptman:ssrs:upload'
           pull_request_actions << 'rptman:ssrs:upload'
-        end
-
-        if BuildrPlus::FeatureManager.activated?(:rails)
-          package_actions << 'assets:copy_plugin_assets'
-          package_no_test_actions << 'assets:copy_plugin_assets'
         end
 
         project.task ':ci:source_code_analysis'

@@ -43,7 +43,7 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
     attr_writer :manage_gemfile
 
     def manage_gemfile?
-      @manage_gemfile.nil? ? !BuildrPlus::FeatureManager.activated?(:rails) : !!@manage_gemfile
+      @manage_gemfile.nil? ? true : !!@manage_gemfile
     end
 
     def gem(gems, name, version = nil, options = nil)

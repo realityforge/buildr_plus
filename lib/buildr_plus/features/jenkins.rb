@@ -405,11 +405,7 @@ CONTENT
     end
 
     def bundle_command(command)
-      rbenv_command("bundle exec #{command}")
-    end
-
-    def rbenv_command(command)
-      "#{is_old_jruby? ? 'rbenv exec ' : ''}#{command}"
+      "bundle exec #{command}"
     end
 
     def inside_node(content)
