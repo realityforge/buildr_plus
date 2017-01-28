@@ -24,7 +24,13 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
     attr_writer :library
 
     def library?
-      @library.nil? ? false : !!@library
+      if @library.nil?
+        @library = BuildrPlus::FeatureManager.activated?(:role_soap_client) ||
+          BuildrPlus::FeatureManager.activated?(:role_gwt) ||
+          BuildrPlus::FeatureManager.activated?(:role_library) ||
+          BuildrPlus::FeatureManager.activated?(:role_replicant_ee_client)
+      end
+      !!@library
     end
 
     attr_writer :model
