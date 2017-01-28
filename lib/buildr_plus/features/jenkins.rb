@@ -523,7 +523,7 @@ CONTENT
 
     def inside_docker_image(content)
       java_version = BuildrPlus::Java.version == 7 ? 'java-7.80.15' : 'java-8.92.14'
-      ruby_version = "#{BuildrPlus::Ruby.ruby_version =~ /jruby/ ? '' : 'ruby-'}#{BuildrPlus::Ruby.ruby_version}"
+      ruby_version = "ruby-#{BuildrPlus::Ruby.ruby_version}"
 
       c = content
       if BuildrPlus::FeatureManager.activated?(:docker)
