@@ -148,7 +148,7 @@ CONTENT
     def jenkinsfile_content
       hash_bang(inside_node(<<CONTENT))
     env.AUTO_MERGE_TARGET_BRANCH = kinjen.extract_auto_merge_target( this )
-    if ( null != env.AUTO_MERGE_TARGET_BRANCH )
+    if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
     {
       kinjen.prepare_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
     }
@@ -203,7 +203,7 @@ CONTENT
       {
 CONTENT
       docker_content += <<CONTENT
-        if ( null != env.AUTO_MERGE_TARGET_BRANCH )
+        if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
         {
           kinjen.complete_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
         }
