@@ -13,7 +13,7 @@
 #
 
 # Enable this feature if the code is tested using jenkins
-BuildrPlus::FeatureManager.feature(:jenkins) do |f|
+BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
   f.enhance(:Config) do
     attr_writer :auto_deploy
 
@@ -90,7 +90,6 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       "  sh '#{docker ? docker_setup : ''}#{buildr_command(buildr_task, options)}'#{suffix}"
     end
 
-
     def skip_stage_list
       @skip_stages ||= []
     end
@@ -112,25 +111,15 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
     end
 
     def standard_build_scripts
-      scripts =
-        {
-          'Jenkinsfile' => jenkinsfile_content,
-          '.jenkins/main.groovy' => main_content(Buildr.projects[0].root_project),
-        }
+      scripts = { 'Jenkinsfile' => jenkinsfile_content }
       scripts['.jenkins/publish.groovy'] = publish_content(self.publish_task_type == :oss) unless self.publish_task_type == :none
       scripts.merge!(additional_tasks)
       scripts
     end
 
     def publish_content(oss)
-      pre_script = <<PRE
-export DOWNLOAD_REPO=${env.UPLOAD_REPO}
-export UPLOAD_REPO=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_REPO}
-export UPLOAD_USER=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_USER}
-export UPLOAD_PASSWORD=${env.EXTERNAL_#{oss ? 'OSS_' : ''}UPLOAD_PASSWORD}
-export PUBLISH_VERSION=${PUBLISH_VERSION}
-PRE
-      buildr_task_content('Publish', 'ci:publish', :pre_script => pre_script, :xvfb => false, :docker => false)
+      content = "#{prepare_content(false)}\n        kinjen.publish_stage( this#{oss ? ", 'OSS_'" : ''} )"
+      task_content(content, options)
     end
 
     def buildr_task_content(label, task, options = {})
@@ -146,49 +135,33 @@ PRE
   sh #{quote}#{pre_script}#{separator}#{docker ? docker_setup : ''}#{buildr_command(task, options)}#{quote}
   }
 CONTENT
+
+      task_content(content, options)
+    end
+
+    def task_content(content, options = {})
       inner_content = inside_docker_image(content)
       email = options[:email].nil? ? true : !!options[:email]
-      outer_content = email ? inside_try_catch(inner_content, standard_exception_handling, false) : inner_content
-      hash_bang(inside_node(outer_content))
+      hash_bang(inside_node(inside_try_catch(inner_content, false, email)))
     end
 
     def jenkinsfile_content
       hash_bang(inside_node(<<CONTENT))
-  checkout scm
-  if (env.BRANCH_NAME ==~ /^AM_.*/) {
-    env.LOCAL_GIT_COMMIT = sh(script: 'git rev-parse HEAD', returnStdout: true).trim()
-    env.LOCAL_MASTER_GIT_COMMIT = sh(script: 'git show-ref --hash refs/remotes/origin/master', returnStdout: true).trim()
-    echo "Automerge branch ${env.BRANCH_NAME} detected. Merging master."
-    sh("git config --global user.email \\"${env.BUILD_NOTIFICATION_EMAIL}\\"")
-    sh('git config --global user.name "Build Tool"')
-    sh('git merge origin/master')
-  }
-  load '.jenkins/main.groovy'
+    env.AUTO_MERGE_TARGET_BRANCH = kinjen.extract_auto_merge_target( this )
+    if ( null != env.AUTO_MERGE_TARGET_BRANCH )
+    {
+      kinjen.prepare_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
+    }
+#{main_content(Buildr.projects[0].root_project)}
 CONTENT
     end
 
-    def prepare_content(include_artifacts, include_checkout = true)
-      stage('Prepare') do
-        content = include_checkout ? "  checkout scm\n" : ''
-        content += <<-CONTENT
-  sh 'git reset --hard'
-  sh 'git clean -ffdx'
-  env.BUILD_NUMBER = "${env.BUILD_NUMBER}"
-  env.PRODUCT_VERSION = sh(script: 'echo $BUILD_NUMBER-`git rev-parse --short HEAD`', returnStdout: true).trim()
-  sh 'echo "gem: --no-ri --no-rdoc" > ~/.gemrc'
-  retry(8) { sh '#{is_old_jruby? ? 'rbenv exec ' : ''}bundle install; rbenv rehash' }
-CONTENT
-        if include_artifacts
-          content += <<CONTENT
-  retry(8) { sh '#{is_old_jruby? ? 'rbenv exec ' : ''}bundle exec buildr artifacts' }
-CONTENT
-        end
-        content
-      end
+    def prepare_content(include_artifacts)
+      "        kinjen.prepare_stage( this#{include_artifacts ? '' : ', buildr: false'} )\n"
     end
 
     def main_content(root_project)
-      content = prepare_content(true, false)
+      content = prepare_content(true)
 
       content += commit_stage(root_project)
 
@@ -223,62 +196,56 @@ CONTENT
         end
       end
 
-      if BuildrPlus::Jenkins.auto_deploy?
-        content += deploy_stage(root_project)
-      end
-
-      if BuildrPlus::Jenkins.auto_zim?
-        content += zim_stage(root_project)
-      end
-
       docker_content = inside_docker_image(content)
 
       docker_content += <<CONTENT
-  if (env.BRANCH_NAME ==~ /^AM_.*/ && currentBuild.result == 'SUCCESS') {
-    withCredentials([[$class: 'UsernamePasswordMultiBinding', credentialsId: 'stock-hudson', usernameVariable: 'GIT_USERNAME', passwordVariable: 'GIT_PASSWORD']]) {
-      sh "echo \\"machine github.com login ${GIT_USERNAME} password ${GIT_PASSWORD}\\" > ~/.netrc"
-      sh("git fetch --prune")
-      env.LATEST_REMOTE_MASTER_GIT_COMMIT = sh(script: 'git show-ref --hash refs/remotes/origin/master', returnStdout: true).trim()
-      env.LATEST_REMOTE_GIT_COMMIT = sh(script: "git show-ref --hash refs/remotes/origin/${env.BRANCH_NAME}", returnStdout: true).trim()
-      if (env.LOCAL_MASTER_GIT_COMMIT != env.LATEST_REMOTE_MASTER_GIT_COMMIT) {
-        if (env.LOCAL_GIT_COMMIT == env.LATEST_REMOTE_GIT_COMMIT)
-        {
-          echo('Merging changes from master to kick off another build cycle.')
-          sh('git merge origin/master')
-          echo('Changes merged.')
-          sh("git push origin HEAD:${env.BRANCH_NAME}")
-          sh("git checkout ${env.LOCAL_GIT_COMMIT}")
-        }
-      } else {
-        echo "Pushing automerge branch ${env.BRANCH_NAME}."
-        sh("git push origin HEAD:master")
-        if (env.LOCAL_GIT_COMMIT == env.LATEST_REMOTE_GIT_COMMIT) {
-          sh("git push origin :${env.BRANCH_NAME}")
-        }
-      }
-    }
-  }
+      if ( currentBuild.result == 'SUCCESS' )
+      {
 CONTENT
-      hash_bang(inside_try_catch(docker_content, standard_exception_handling, true))
+      docker_content += <<CONTENT
+        if ( null != env.AUTO_MERGE_TARGET_BRANCH )
+        {
+          kinjen.complete_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
+        }
+CONTENT
+      if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
+        docker_content += <<-CONTENT
+        if ( env.BRANCH_NAME == 'master' )
+        {
+        CONTENT
+      end
+      if BuildrPlus::Jenkins.auto_deploy?
+        docker_content += deploy_stage(root_project)
+      end
+
+      if BuildrPlus::Jenkins.auto_zim?
+        docker_content += zim_stage(root_project)
+      end
+      if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
+        docker_content += <<-CONTENT
+        }
+        CONTENT
+      end
+      docker_content += <<CONTENT
+      }
+CONTENT
+
+      inside_try_catch(docker_content, true, true)
     end
 
     def deploy_stage(root_project)
-      content = stage('Deploy') do
-        "  build job: '#{root_project.name}/deploy-to-#{deployment_environment}', parameters: [string(name: 'PRODUCT_ENVIRONMENT', value: '#{deployment_environment}'), string(name: 'PRODUCT_NAME', value: '#{root_project.name}'), string(name: 'PRODUCT_VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
-      end
       <<-DEPLOY_STEP
-if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
-#{content}
-}
+          kinjen.deploy_stage( this, '#{root_project.name}' )
       DEPLOY_STEP
     end
 
     def zim_stage(root_project)
+      return '' if skip_stage?('Zim')
       dependencies = []
       ([root_project] + root_project.projects).each do |p|
         p.packages.each do |pkg|
           spec = pkg.to_hash
-          group = spec[:group].to_s.gsub(/\.pg$/,'')
+          group = spec[:group].to_s.gsub(/\.pg$/, '')
           if BuildrPlus::Db.pg_defined?
             dependencies << "#{group}.pg:#{spec[:id]}:#{spec[:type]}"
           end
@@ -293,97 +260,43 @@ if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
 
       dependencies = dependencies.sort.uniq.join(',')
 
-      content = stage('zim') do
-        "  build job: 'zim/upgrade_dependency', parameters: [string(name: 'DEPENDENCIES', value: '#{dependencies}'), string(name: 'VERSION', value: \"${env.PRODUCT_VERSION}\")], wait: false"
-      end
       <<-ZIM_STEP
-if (env.BRANCH_NAME == 'master' && currentBuild.result == 'SUCCESS') {
-#{content}
-}
+          kinjen.zim_stage( this, '#{dependencies}' )
       ZIM_STEP
     end
 
     def commit_stage(root_project)
-      stage('Commit') do
-        stage = "  sh \"#{docker_setup}#{buildr_command('ci:commit')}\"\n"
-
-        analysis = false
-        if BuildrPlus::FeatureManager.activated?(:checkstyle)
-          analysis = true
-          stage += <<CONTENT
-  step([$class: 'hudson.plugins.checkstyle.CheckStylePublisher', pattern: 'reports/#{root_project.name}/checkstyle/checkstyle.xml', unstableTotalAll: '1', failedTotalAll: '1'])
-  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/checkstyle', reportFiles: 'checkstyle.html', reportName: 'Checkstyle issues'])
-CONTENT
-        end
-        if BuildrPlus::FeatureManager.activated?(:findbugs)
-          analysis = true
-          stage += <<CONTENT
-  step([$class: 'FindBugsPublisher', pattern: 'reports/#{root_project.name}/findbugs/findbugs.xml', unstableTotalAll: '1', failedTotalAll: '1', isRankActivated: true, canComputeNew: true, shouldDetectModules: false, useDeltaValues: false, canRunOnFailed: false, thresholdLimit: 'low'])
-  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/findbugs', reportFiles: 'findbugs.html', reportName: 'Findbugs issues'])
-CONTENT
-        end
-        if BuildrPlus::FeatureManager.activated?(:pmd)
-          analysis = true
-          stage += <<CONTENT
-  step([$class: 'PmdPublisher', pattern: 'reports/#{root_project.name}/pmd/pmd.xml', unstableTotalAll: '1', failedTotalAll: '1'])
-  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/pmd/', reportFiles: 'pmd.html', reportName: 'PMD Issues'])
-CONTENT
-        end
-        if BuildrPlus::FeatureManager.activated?(:jdepend)
-          analysis = true
-          stage += <<CONTENT
-  publishHTML(target: [allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'reports/#{root_project.name}/jdepend', reportFiles: 'jdepend.html', reportName: 'JDepend Report'])
-CONTENT
-        end
-        if analysis
-          stage += <<CONTENT
-  step([$class: 'AnalysisPublisher', unstableTotalAll: '1', failedTotalAll: '1'])
-CONTENT
-        end
-
-          stage += <<CONTENT
-  if ( currentBuild.result != 'SUCCESS' ) {
-    error("Build failed commit stage")
-  }
-CONTENT
-
-        stage
-      end
+      return '' if skip_stage?('Commit')
+      options = {}
+      options[:checkstyle] = true if BuildrPlus::FeatureManager.activated?(:checkstyle)
+      options[:findbugs] = true if BuildrPlus::FeatureManager.activated?(:findbugs)
+      options[:pmd] = true if BuildrPlus::FeatureManager.activated?(:pmd)
+      options[:jdepend] = true if BuildrPlus::FeatureManager.activated?(:jdepend)
+      option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
+      "        kinjen.commit_stage( this, '#{root_project.name}'#{option_string} )\n"
     end
 
     def import_stage
-      stage('DB Import') do
-        "  sh \"#{docker_setup}#{buildr_command('ci:import')}\"\n"
-      end
+      return '' if skip_stage?('DB Import')
+      "        kinjen.import_stage( this )\n"
     end
 
-    def import_variant_stage(import_variant)
-      stage("DB #{import_variant} Import") do
-        "  sh \"#{docker_setup}#{buildr_command("ci:import:#{import_variant}")}\"\n"
-      end
+    def import_variant_stage(variant)
+      return '' if skip_stage?("DB #{variant} Import")
+      "        kinjen.import_variant_stage( this, '#{variant}' )\n"
     end
 
     def package_pg_stage
-      stage('Package Pg') do
-        "  sh \"#{docker_setup}#{buildr_command('clean')}; export DB_TYPE=pg; #{buildr_command('ci:package_no_test')}\"\n"
-      end
+      return '' if skip_stage?('Pg Package')
+      "        kinjen.pg_package_stage( this )\n"
     end
 
     def package_stage
-      stage('Package') do
-        stage = "  sh \"#{is_old_jruby? ? 'TZ=Australia/Melbourne ' : ''}#{docker_setup}#{buildr_command('ci:package')}\"\n"
-        if BuildrPlus::FeatureManager.activated?(:rails)
-          stage += <<CONTENT
-  step([$class: 'JUnitResultArchiver', testResults: 'reports/**/TEST-*.xml'])
-CONTENT
-        end
-        if BuildrPlus::FeatureManager.activated?(:testng)
-          stage += <<CONTENT
-  step([$class: 'hudson.plugins.testng.Publisher', reportFilenamePattern: 'reports/*/testng/testng-results.xml', failureOnFailedTestConfig: true, unstableFails: 0, unstableSkips: 0])
-CONTENT
-        end
-        stage
-      end
+      return '' if skip_stage?('Package')
+      options = {}
+      options[:testng] = true if BuildrPlus::FeatureManager.activated?(:findbugs)
+      option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
+      "        kinjen.package_stage( this#{option_string} )\n"
     end
 
     def docker_setup
@@ -411,109 +324,18 @@ CONTENT
     def inside_node(content)
       <<CONTENT
 timestamps {
-node {
-#{content}
-}
-}
-CONTENT
-    end
-
-    def inside_try_catch(content, handler_content, update_status)
-      <<CONTENT
-def err = null
-
-try {
-
-currentBuild.result = 'SUCCESS'
-#{update_status ? "step([$class: 'GitHubSetCommitStatusBuilder'])" : ''}
-
-#{content}
-} catch (exception) {
-   currentBuild.result = "FAILURE"
-   err = exception
-} finally {
-#{update_status ? "  step([$class: 'GitHubCommitNotifier', resultOnFailure: 'FAILURE'])" : ''}
-#{handler_content}
-   if (err) {
-     throw err
-   }
+  node {
+    checkout scm
+    kinjen = load 'vendor/tools/kinjen/lib/kinjen.groovy'
+#{content}  }
 }
 CONTENT
     end
 
-    def is_old_jruby?
-      BuildrPlus::Ruby.ruby_version =~ /jruby/
-    end
-
-    def standard_exception_handling
+    def inside_try_catch(content, update_status, send_email)
       <<CONTENT
-  if (currentBuild.result == 'SUCCESS' && currentBuild.rawBuild.previousBuild != null && currentBuild.rawBuild.previousBuild.result.toString() != 'SUCCESS') {
-    echo "Emailing SUCCESS notification to ${env.BUILD_NOTIFICATION_EMAIL}"
-
-    emailext body: "<p>Check console output at <a href=\\"${env.BUILD_URL}\\">${env.BUILD_URL}</a> to view the results.</p>",
-             mimeType: 'text/html',
-             replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
-             subject: "\\ud83d\\udc4d ${env.JOB_NAME.replaceAll('%2F','/')} - \#${env.BUILD_NUMBER} - SUCCESS",
-             to: "${env.BUILD_NOTIFICATION_EMAIL}"
-  }
-
-  if (currentBuild.result != 'SUCCESS') {
-    emailBody = """
-<title>${env.JOB_NAME.replaceAll('%2F','/')} - \#${env.BUILD_NUMBER} - ${currentBuild.result}</title>
-<BODY>
-    <div style="font:normal normal 100% Georgia, Serif; background: #ffffff; border: dotted 1px #666; margin: 2px; content: 2px; padding: 2px;">
-      <table style="width: 100%">
-        <tr style="background-color:#f0f0f0;">
-          <th colspan=2 valign="center"><b style="font-size: 200%;">BUILD ${currentBuild.result}</b></th>
-        </tr>
-        <tr>
-          <th align="right"><b>Build URL</b></th>
-          <td>
-            <a href="${env.BUILD_URL}">${env.BUILD_URL}</a>
-          </td>
-        </tr>
-        <tr>
-          <th align="right"><b>Job</b></th>
-          <td>${env.JOB_NAME.replaceAll('%2F','/')}</td>
-        </tr>
-        <tr>
-          <td align="right"><b>Build Number</b></td>
-          <td>${env.BUILD_NUMBER}</td>
-        </tr>
-        <tr>
-          <td align="right"><b>Branch</b></td>
-          <td>${env.BRANCH_NAME}</td>
-        </tr>
- """
-    if (null != env.CHANGE_ID) {
-      emailBody += """
-       <tr>
-          <td align="right"><b>Change</b></td>
-          <td><a href="${env.CHANGE_URL}">${env.CHANGE_ID} - ${env.CHANGE_TITLE}</a></td>
-        </tr>
-"""
-        }
-
-        emailBody += """
-      </table>
-    </div>
-
-    <div style="background: lightyellow; border: dotted 1px #666; margin: 2px; content: 2px; padding: 2px;">
-"""
-    for (String line : currentBuild.rawBuild.getLog(1000)) {
-      emailBody += "${line}<br/>"
-    }
-    emailBody += """
-    </div>
-</BODY>
-"""
-    echo "Emailing FAILED notification to ${env.BUILD_NOTIFICATION_EMAIL}"
-    emailext body: emailBody,
-             mimeType: 'text/html',
-             replyTo: "${env.BUILD_NOTIFICATION_EMAIL}",
-             subject: "\\ud83d\\udca3 ${env.JOB_NAME.replaceAll('%2F','/')} - \#${env.BUILD_NUMBER} - FAILED",
-             to: "${env.BUILD_NOTIFICATION_EMAIL}"
-  }
+    kinjen.guard_build( this#{update_status ? '' : ', notify_github: false' }#{send_email ? '' : ', email: false'} ) {
+#{content}    }
 CONTENT
     end
 
@@ -534,8 +356,9 @@ CONTENT
       end
 
       result = <<CONTENT
-docker.image('stocksoftware/build:#{java_version}_#{ruby_version}').inside("--name '${env.JOB_NAME.replaceAll(/[\\\\/-]/, '_').replaceAll('%2F','_')}_${env.BUILD_NUMBER}'") {
-#{c}}
+      kinjen.run_in_container( this, 'stocksoftware/build:#{java_version}_#{ruby_version}' ) {
+#{c}
+      }
 CONTENT
       result
     end
