@@ -71,39 +71,50 @@ BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
     end
 
     def add_pre_package_buildr_stage(label, buildr_task, options = {})
-      pre_package_stages[label] = buildr_stage_content(buildr_task, options)
+      self.pre_package_stages << buildr_stage_content(label, buildr_task, options)
     end
 
     def add_post_package_buildr_stage(label, buildr_task, options = {})
-      post_package_stages[label] = buildr_stage_content(buildr_task, options)
+      self.post_package_stages << buildr_stage_content(label, buildr_task, options)
     end
 
     def add_post_import_buildr_stage(label, buildr_task, options = {})
-      post_import_stages[label] = buildr_stage_content(buildr_task, options)
+      self.post_import_stages << buildr_stage_content(label, buildr_task, options)
+    end
+
+    def pre_package_stages
+      @pre_package_stages ||= []
+    end
+
+    def post_package_stages
+      @post_package_stages ||= []
+    end
+
+    def post_import_stages
+      @post_import_stages ||= []
+    end
+
+    def import_variant_stage(variant)
+      return '' if skip_stage?("DB #{variant} Import")
+      "        kinjen.import_variant_stage( this, '#{variant}' )\n"
     end
 
     private
 
-    def buildr_stage_content(buildr_task, options = {})
+    def buildr_stage_content(label, buildr_task, options = {})
       docker = options[:docker].nil? ? true : !!options[:docker]
       suffix = options[:additional_steps].nil? ? '' : "\n  #{options[:additional_steps]}"
-      "  sh '#{docker ? docker_setup : ''}#{buildr_command(buildr_task, options)}'#{suffix}"
+
+      <<-CONTENT
+        stage('#{label}')
+        {
+          sh '#{docker ? docker_setup : ''}#{buildr_command(buildr_task, options)}'#{suffix}
+        }
+      CONTENT
     end
 
     def skip_stage_list
       @skip_stages ||= []
-    end
-
-    def pre_package_stages
-      @pre_package_stages ||= {}
-    end
-
-    def post_package_stages
-      @post_package_stages ||= {}
-    end
-
-    def post_import_stages
-      @post_import_stages ||= {}
     end
 
     def additional_tasks
@@ -165,10 +176,8 @@ CONTENT
 
       content += commit_stage(root_project)
 
-      pre_package_stages.each do |label, stage_content|
-        content += stage(label) do
-          stage_content
-        end
+      pre_package_stages.each do |stage_content|
+        content += stage_content
       end
 
       content += package_stage
@@ -177,10 +186,8 @@ CONTENT
         content += package_pg_stage
       end
 
-      post_package_stages.each do |label, stage_content|
-        content += stage(label) do
-          stage_content
-        end
+      post_package_stages.each do |stage_content|
+        content += stage_content
       end
 
       if BuildrPlus::FeatureManager.activated?(:dbt) &&
@@ -190,10 +197,8 @@ CONTENT
         content += import_stage
       end
 
-      post_import_stages.each do |label, stage_content|
-        content += stage(label) do
-          stage_content
-        end
+      post_import_stages.each do |stage_content|
+        content += stage_content
       end
 
       docker_content = inside_docker_image(content)
@@ -281,11 +286,6 @@ CONTENT
       "        kinjen.import_stage( this )\n"
     end
 
-    def import_variant_stage(variant)
-      return '' if skip_stage?("DB #{variant} Import")
-      "        kinjen.import_variant_stage( this, '#{variant}' )\n"
-    end
-
     def package_pg_stage
       return '' if skip_stage?('Pg Package')
       "        kinjen.pg_package_stage( this )\n"
@@ -301,15 +301,6 @@ CONTENT
 
     def docker_setup
       BuildrPlus::FeatureManager.activated?(:docker) ? 'export DOCKER_HOST=${env.DOCKER_HOST}; export DOCKER_TLS_VERIFY=${env.DOCKER_TLS_VERIFY}; ' : ''
-    end
-
-    def stage(name)
-      return '' if skip_stage?(name)
-      <<CONTENT
-  stage('#{name}'){
-#{yield}
-  }
-CONTENT
     end
 
     def buildr_command(args, options = {})
