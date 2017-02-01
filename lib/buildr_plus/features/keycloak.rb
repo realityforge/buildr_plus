@@ -23,7 +23,6 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     end
 
     def client_types
-
       client_types = []
       client_types += self.additional_client_types
       if BuildrPlus::FeatureManager.activated?(:role_user_experience)
