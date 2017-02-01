@@ -142,7 +142,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_cache_filter
-      %w(org.realityforge.gwt.cache-filter:gwt-cache-filter:jar:0.6)
+      %w(org.realityforge.gwt.cache-filter:gwt-cache-filter:jar:0.7)
     end
 
     def simple_session_filter
