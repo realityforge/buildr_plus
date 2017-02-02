@@ -168,7 +168,7 @@ CONTENT
     end
 
     def prepare_content(include_artifacts)
-      "        kinjen.prepare_stage( this#{include_artifacts ? '' : ', buildr: false'} )\n"
+      "        kinjen.prepare_stage( this#{include_artifacts ? '' : ', [buildr: false]'} )\n"
     end
 
     def main_content(root_project)
@@ -324,8 +324,12 @@ CONTENT
     end
 
     def inside_try_catch(content, update_status, send_email)
+      options = {}
+      options[:notify_github] = false unless update_status
+      options[:email] = false unless send_email
+      option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
       <<CONTENT
-    kinjen.guard_build( this#{update_status ? '' : ', notify_github: false' }#{send_email ? '' : ', email: false'} ) {
+    kinjen.guard_build( this#{option_string} ) {
 #{content}    }
 CONTENT
     end
