@@ -103,11 +103,10 @@ BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
 
     def buildr_stage_content(label, buildr_task, options = {})
       docker = options[:docker].nil? ? true : !!options[:docker]
-      suffix = options[:additional_steps].nil? ? '' : "\n  #{options[:additional_steps]}"
+      suffix = options[:additional_steps].nil? ? '' : "\n          #{options[:additional_steps]}"
 
       <<-CONTENT
-        stage('#{label}')
-        {
+        stage('#{label}') {
           sh '#{docker ? docker_setup : ''}#{buildr_command(buildr_task, options)}'#{suffix}
         }
       CONTENT
@@ -142,9 +141,9 @@ BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
       docker = options[:docker].nil? ? false : !!options[:docker]
       content = <<CONTENT
 #{prepare_content(artifacts)}
-  stage('#{label}') {
-  sh #{quote}#{pre_script}#{separator}#{docker ? docker_setup : ''}#{buildr_command(task, options)}#{quote}
-  }
+        stage('#{label}') {
+          sh #{quote}#{pre_script}#{separator}#{docker ? docker_setup : ''}#{buildr_command(task, options)}#{quote}
+        }
 CONTENT
 
       task_content(content, options)
