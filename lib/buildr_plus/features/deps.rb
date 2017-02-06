@@ -100,7 +100,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:appcache] if BuildrPlus::FeatureManager.activated?(:appcache)
       generators << [:mail_mail_queue, :mail_test_module] if BuildrPlus::FeatureManager.activated?(:mail)
       generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
-      generators << [:keycloak_filter] if BuildrPlus::FeatureManager.activated?(:keycloak)
+      generators << [:keycloak_filter, :keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators << [:timerstatus_filter] if BuildrPlus::FeatureManager.activated?(:timerstatus)
 
       generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
