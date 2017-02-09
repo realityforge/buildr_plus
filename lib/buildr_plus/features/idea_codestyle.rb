@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
   f.enhance(:Config) do
     def default_codestyle
-      'au.com.stocksoftware.idea.codestyle:idea-codestyle:xml:1.4'
+      'au.com.stocksoftware.idea.codestyle:idea-codestyle:xml:1.5'
     end
 
     def codestyle
