@@ -33,7 +33,7 @@ BuildrPlus::Roles.role(:library) do
 
     generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
-    generators << [:jms] if BuildrPlus::FeatureManager.activated?(:jms)
+    generators << [:jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
     generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
     generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
 

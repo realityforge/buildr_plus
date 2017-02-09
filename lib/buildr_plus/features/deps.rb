@@ -32,6 +32,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       end
 
       generators << [:jaxb_marshalling_tests, :xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
+      generators << [:jms_model] if BuildrPlus::FeatureManager.activated?(:jms)
 
       generators << [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
 
@@ -95,7 +96,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
-      generators << [:jms] if BuildrPlus::FeatureManager.activated?(:jms)
+      generators << [:jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
       generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
       generators << [:appcache] if BuildrPlus::FeatureManager.activated?(:appcache)
       generators << [:mail_mail_queue, :mail_test_module] if BuildrPlus::FeatureManager.activated?(:mail)
