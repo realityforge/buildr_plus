@@ -38,12 +38,16 @@ BuildrPlus::Roles.role(:integration_tests) do
   BuildrPlus::Roles.merge_projects_with_role(project.test, :integration_qa_support)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :soap_client)
 
-  test.using :java_args => BuildrPlus::Guiceyloops.integration_test_java_args,
-             :properties =>
-               {
-                 'embedded.glassfish.artifacts' => BuildrPlus::Guiceyloops.glassfish_spec_list,
-                 'war.filename' => war_package.to_s,
-               }
+  properties = {
+    'embedded.glassfish.artifacts' => BuildrPlus::Guiceyloops.glassfish_spec_list,
+    'war.filename' => war_package.to_s,
+  }
+  BuildrPlus::Integration.additional_applications_to_deploy.each do |key, artifact|
+    properties["#{key}.war.filename"] = Buildr.artifact(artifact).to_s
+    test.enhance([Buildr.artifact(artifact)])
+  end
+
+  test.using :java_args => BuildrPlus::Guiceyloops.integration_test_java_args, :properties => properties
 
   package(:jar)
   package(:sources)

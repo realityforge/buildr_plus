@@ -40,6 +40,9 @@ BuildrPlus::Roles.role(:container) do
 
     default_testng_args << "-Dembedded.glassfish.artifacts=#{BuildrPlus::Guiceyloops.glassfish_spec_list}"
     default_testng_args << "-Dwar.dir=#{war_dir}"
+    BuildrPlus::Integration.additional_applications_to_deploy.each do |key, artifact|
+      default_testng_args << "-D#{key}.war.filename=#{Buildr.artifact(artifact).to_s}"
+    end
   end
 
   if BuildrPlus::FeatureManager.activated?(:db)
