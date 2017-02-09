@@ -242,6 +242,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(aopalliance:aopalliance:jar:1.0 com.google.inject:guice:jar:3.0 com.google.inject.extensions:guice-assistedinject:jar:3.0)
     end
 
+    def awaitility
+      %w(org.awaitility:awaitility:jar:2.0.0)
+    end
+
     def testng
       %w(org.testng:testng:jar:6.8)
     end

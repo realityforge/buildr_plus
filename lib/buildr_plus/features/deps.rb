@@ -238,6 +238,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << Buildr.artifacts([BuildrPlus::Libs.glassfish_embedded])
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility) if BuildrPlus::FeatureManager.activated?(:jms)
       dependencies << model_qa_support_deps
 
       dependencies.flatten
