@@ -36,6 +36,7 @@ BuildrPlus::Roles.role(:library) do
     generators << [:jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
     generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
     generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
+    generators << [:keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
     generators += project.additional_domgen_generators
 
