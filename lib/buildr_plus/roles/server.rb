@@ -22,13 +22,12 @@ BuildrPlus::Roles.role(:server) do
 
   project.publish = true
 
-  compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
   compile.with BuildrPlus::Deps.server_deps
+  compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
+  test.with BuildrPlus::Deps.server_test_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
-
-  test.with BuildrPlus::Deps.server_test_deps
 
   package(:war).tap do |war|
     war.libs.clear

@@ -59,8 +59,8 @@ BuildrPlus::Roles.role(:all_in_one) do
     end
   end
 
-  compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
   compile.with BuildrPlus::Deps.server_deps
+  compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
 
   test.with BuildrPlus::Deps.model_qa_support_deps
 

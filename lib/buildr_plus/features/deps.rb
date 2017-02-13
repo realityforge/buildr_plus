@@ -225,8 +225,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def model_qa_support_deps
       dependencies = []
 
-      dependencies << model_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops])
+      dependencies << model_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.db_drivers]) if BuildrPlus::FeatureManager.activated?(:db)
       dependencies << Buildr.artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Mail.mail_qa, BuildrPlus::Libs.mustache, BuildrPlus::Libs.greenmail]) if BuildrPlus::FeatureManager.activated?(:mail)
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)

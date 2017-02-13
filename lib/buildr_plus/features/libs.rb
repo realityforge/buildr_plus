@@ -255,7 +255,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops
-      self.glassfish_embedded + self.guiceyloops_gwt
+      self.guiceyloops_gwt + self.glassfish_embedded
     end
 
     def guiceyloops_lib
