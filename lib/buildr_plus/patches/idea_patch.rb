@@ -17,6 +17,12 @@ module Buildr #:nodoc:
   module IntellijIdea #:nodoc:
     class IdeaModule
       def module_root_component
+        guiceyloops = Buildr.artifact(BuildrPlus::Libs.guiceyloops_lib)
+        if self.test_dependencies.any? { |d| d.to_s == guiceyloops.to_s }
+          self.test_dependencies.delete(guiceyloops)
+          self.test_dependencies.insert(0, guiceyloops)
+        end
+
         options = { 'inherit-compiler-output' => 'false' }
         options['LANGUAGE_LEVEL'] = "JDK_#{jdk_version.gsub(/\./, '_')}" unless jdk_version == buildr_project.root_project.compile.options.source
         create_component('NewModuleRootManager', options) do |xml|
