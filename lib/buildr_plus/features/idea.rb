@@ -34,6 +34,15 @@ BuildrPlus::FeatureManager.feature(:idea) do |f|
           end
         end
       end
+      if project.iml?
+        guiceyloops = Buildr.artifact(BuildrPlus::Libs.guiceyloops_lib)
+
+        # Guiceyloops has to appear first as it occludes javax.jms annotation
+        if project.iml.test_dependencies.any?{|d| d.to_s == guiceyloops.to_s}
+          project.iml.test_dependencies.delete(guiceyloops)
+          project.iml.test_dependencies.unshift(guiceyloops)
+        end
+      end
     end
   end
 end
