@@ -22,12 +22,8 @@ BuildrPlus::Roles.role(:server) do
 
   project.publish = true
 
-  # Our soap services use annotation for validation that is metro specific
-  compile.with BuildrPlus::Libs.glassfish_embedded if BuildrPlus::FeatureManager.activated?(:soap)
-
   compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
   compile.with BuildrPlus::Deps.server_deps
-  compile.with BuildrPlus::Libs.ee_provided unless BuildrPlus::FeatureManager.activated?(:role_model)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
