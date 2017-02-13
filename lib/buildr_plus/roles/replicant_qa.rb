@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:replicant_qa, :requires => [:role_replicant_qa_support]) do
+BuildrPlus::Roles.role(:replicant_qa) do
 
   project.publish = false
 
