@@ -33,6 +33,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators << [:jaxb_marshalling_tests, :xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:jms_model] if BuildrPlus::FeatureManager.activated?(:jms)
+      generators << [:jws_shared] if BuildrPlus::FeatureManager.activated?(:soap)
 
       generators << [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
 
