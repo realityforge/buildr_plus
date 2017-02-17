@@ -141,8 +141,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def integration_qa_support_generators
       generators = [:ee_integration]
       generators << [:jpa_application_orm_xml, :jpa_application_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
-      generators += self.model_generators
-      generators += self.model_qa_support_test_generators
+      generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
+      generators += self.model_qa_support_test_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
       generators.flatten
     end
 
