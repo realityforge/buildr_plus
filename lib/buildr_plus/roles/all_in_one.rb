@@ -16,39 +16,12 @@ BuildrPlus::Roles.role(:all_in_one) do
   project.publish = true
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:ee_data_types, :ee_beans_xml]
-    generators << [:ee_web_xml] if BuildrPlus::Artifacts.war?
+    generators = BuildrPlus::Deps.server_generators + project.additional_domgen_generators
     if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:jpa, :jpa_test_orm_xml, :jpa_test_persistence_xml]
       generators << [:jpa_test_qa, :jpa_test_qa_external, :jpa_ejb_dao, :jpa_dao_test] if BuildrPlus::FeatureManager.activated?(:ejb)
       generators << [:imit_server_entity_listener, :imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
     end
-
-    generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
-    generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-    if BuildrPlus::FeatureManager.activated?(:sync)
-      if BuildrPlus::Sync.standalone?
-        generators << [:sync_ejb]
-      else
-        generators << [:sync_core_ejb]
-      end
-    end
-
-    generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ejb_test_qa_external, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
-
-    generators << [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
-
-    generators << [:jaxb_marshalling_tests, :xml_xsd_resources, :xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
-    generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
-
-    generators << [:jms_model, :jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
-    generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
-    generators << [:mail_mail_queue, :mail_test_module] if BuildrPlus::FeatureManager.activated?(:mail)
-    generators << [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
-    generators << [:syncrecord_datasources, :syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
-    generators << [:keycloak_filter, :keycloak_auth_service, :keycloak_auth_service_qa, :keycloak_client_config, :keycloak_client_definitions] if BuildrPlus::FeatureManager.activated?(:keycloak)
-    generators << [:timerstatus_filter] if BuildrPlus::FeatureManager.activated?(:timerstatus)
 
     generators << [:ee_redfish] if BuildrPlus::FeatureManager.activated?(:redfish)
 
