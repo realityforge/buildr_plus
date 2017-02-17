@@ -14,10 +14,7 @@
 
 BuildrPlus::Roles.role(:integration_qa_support) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:ee_integration]
-    generators << [:jpa_application_orm_xml, :jpa_application_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
-    generators += project.additional_domgen_generators
-
+    generators = BuildrPlus::Deps.integration_qa_support_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
       t.filter = project.domgen_filter
     end

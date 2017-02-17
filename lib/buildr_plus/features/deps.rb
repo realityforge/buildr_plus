@@ -138,6 +138,14 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
+    def integration_qa_support_generators
+      generators = [:ee_integration]
+      generators << [:jpa_application_orm_xml, :jpa_application_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
+      generators += self.model_generators
+      generators += self.model_qa_support_test_generators
+      generators.flatten
+    end
+
     def replicant_shared_provided_deps
       dependencies = []
 
