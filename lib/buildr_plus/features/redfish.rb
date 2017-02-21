@@ -62,7 +62,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         @features = []
         @features << :jms if BuildrPlus::FeatureManager.activated?(:jms)
         @features << :jdbc if BuildrPlus::FeatureManager.activated?(:db)
-        @features << :mail if BuildrPlus::FeatureManager.activated?(:mail)
       end
       @features
     end
@@ -221,7 +220,10 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
         if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?('local')
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
-            RedfishPlus.setup_for_local_development(domain, :features => BuildrPlus::Redfish.features)
+            RedfishPlus.setup_for_local_development(domain)
+            if BuildrPlus::FeatureManager.activated?(:mail)
+              RedfishPlus.configure_local_mail_port(domain)
+            end
             BuildrPlus::Redfish.local_domain_customizations.each do |customization|
               customization.call(domain)
             end
