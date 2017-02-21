@@ -340,9 +340,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       if BuildrPlus::FeatureManager.activated?(:jms) && BuildrPlus::FeatureManager.activated?(:docker)
         BuildrPlus::Jms.link_container_to_configuration(BuildrPlus::Config.get_buildr_project, environment)
       end
-      if !BuildrPlus::FeatureManager.activated?(:jms) && environment.broker?
-        raise "Broker defined in application configuration but BuildrPlus facet 'jms' not enabled"
-      elsif BuildrPlus::FeatureManager.activated?(:jms) && !environment.broker? && !check_only
+      if !environment.broker? && !check_only
         host = BuildrPlus::Config.environment_var('OPENMQ_HOST', 'localhost')
         port = BuildrPlus::Config.environment_var('OPENMQ_PORT', 7676)
         username = BuildrPlus::Config.environment_var('OPENMQ_ADMIN_USERNAME', 'admin')
