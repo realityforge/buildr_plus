@@ -23,6 +23,8 @@ module Buildr #:nodoc:
           self.test_dependencies.insert(0, guiceyloops)
         end
 
+        # TODO: The followin has been merged into buildr 1.5.0+. Determine if above code is needed.
+
         options = { 'inherit-compiler-output' => 'false' }
         options['LANGUAGE_LEVEL'] = "JDK_#{jdk_version.gsub(/\./, '_')}" unless jdk_version == buildr_project.root_project.compile.options.source
         create_component('NewModuleRootManager', options) do |xml|
@@ -61,6 +63,7 @@ module Buildr #:nodoc:
 
     class IdeaProject
       def add_glassfish_remote_configuration(project, options = {})
+        raise 'Addon patched in the latest version of Buildr' unless Buildr::VERSION.to_s == '1.5.0'
         artifact_name = options[:name] || project.iml.id
         version = options[:version] || '4.1.0'
         server_name = options[:server_name] || "GlassFish #{version}"
