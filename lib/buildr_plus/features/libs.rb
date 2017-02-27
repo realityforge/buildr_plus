@@ -178,6 +178,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         self.commons_logging + self.commons_codec
     end
 
+    def failsafe
+      %w(net.jodah:failsafe:jar:1.0.3)
+    end
+
     def keycloak_gwt
       %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.1)
     end
