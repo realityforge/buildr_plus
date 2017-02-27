@@ -17,7 +17,7 @@ BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_share
   project.publish = BuildrPlus::Artifacts.replicant_ee_client?
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:imit_client_entity_ee, :ee_data_types, :ee_exceptions, :jws_type_converter]
+    generators = [:imit_client_entity_ee, :ee_data_types, :ee_exceptions, :jws_type_converter, :ee_cdi_qualifier]
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
