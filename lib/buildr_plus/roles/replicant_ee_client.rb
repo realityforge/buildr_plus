@@ -17,7 +17,7 @@ BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_share
   project.publish = BuildrPlus::Artifacts.replicant_ee_client?
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = [:imit_client_entity_ee, :ee_data_types, :ee_exceptions, :jws_type_converter, :ee_cdi_qualifier]
+    generators = [:imit_client_entity_ee, :ee_data_types, :ee_exceptions, :jws_type_converter, :ee_cdi_qualifier, :ee_messages]
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
@@ -25,6 +25,8 @@ BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_share
           (artifact == artifact.data_module.repository.exception_by_name(artifact.data_module.repository.imit.invalid_session_exception))
         elsif artifact_type == :struct || artifact_type == :enumeration
           artifact.imit? && artifact.imit.part_of_filter?
+        elsif artifact_type == :message
+          artifact.imit? && artifact.imit.subscription_message?
         else
           true
         end
