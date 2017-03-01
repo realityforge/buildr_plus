@@ -18,7 +18,13 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
     generators = BuildrPlus::Deps.user_experience_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
-        artifact_type != :message || artifact.any_non_standard_types?
+        # Non message
+        artifact_type != :message ||
+          # Or message has non standard types
+          (artifact.any_non_standard_types? &&
+          # And message is not replication subscription message
+          !(artifact.imit? && artifact.imit.subscription_message?) )
+
       end if BuildrPlus::FeatureManager.activated?(:role_gwt)
     end
   end
