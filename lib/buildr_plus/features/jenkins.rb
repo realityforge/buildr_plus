@@ -200,46 +200,45 @@ CONTENT
         content += stage_content
       end
 
-      docker_content = inside_docker_image(content)
+      content = inside_try_catch(inside_docker_image(content), true, true)
 
-      docker_content += <<CONTENT
-      if ( currentBuild.result == 'SUCCESS' )
-      {
+      content += <<CONTENT
+    if ( currentBuild.result == 'SUCCESS' )
+    {
 CONTENT
-      docker_content += <<CONTENT
-        if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
-        {
-          kinjen.complete_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
-        }
+      content += <<CONTENT
+      if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
+      {
+        kinjen.complete_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
+      }
 CONTENT
       if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
-        docker_content += <<-CONTENT
-        if ( env.BRANCH_NAME == 'master' )
-        {
+        content += <<-CONTENT
+      if ( env.BRANCH_NAME == 'master' )
+      {
         CONTENT
       end
       if BuildrPlus::Jenkins.auto_deploy?
-        docker_content += deploy_stage(root_project)
+        content += deploy_stage(root_project)
       end
 
       if BuildrPlus::Jenkins.auto_zim?
-        docker_content += zim_stage(root_project)
+        content += zim_stage(root_project)
       end
       if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
-        docker_content += <<-CONTENT
-        }
+        content += <<-CONTENT
+      }
         CONTENT
       end
-      docker_content += <<CONTENT
-      }
+      content += <<CONTENT
+    }
 CONTENT
 
-      inside_try_catch(docker_content, true, true)
     end
 
     def deploy_stage(root_project)
       <<-DEPLOY_STEP
-          kinjen.deploy_stage( this, '#{root_project.name}' )
+        kinjen.deploy_stage( this, '#{root_project.name}' )
       DEPLOY_STEP
     end
 
@@ -265,7 +264,7 @@ CONTENT
       dependencies = dependencies.sort.uniq.join(',')
 
       <<-ZIM_STEP
-          kinjen.zim_stage( this, '#{dependencies}' )
+        kinjen.zim_stage( this, '#{dependencies}' )
       ZIM_STEP
     end
 
