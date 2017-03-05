@@ -41,6 +41,7 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
 
   compile.with BuildrPlus::Deps.gwt_deps unless BuildrPlus::FeatureManager.activated?(:role_gwt)
   compile.with BuildrPlus::Deps.user_experience_deps
+  test.with BuildrPlus::Deps.gwt_qa_support_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :gwt_qa_support)
