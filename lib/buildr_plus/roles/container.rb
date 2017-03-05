@@ -33,6 +33,8 @@ BuildrPlus::Roles.role(:container) do
   default_testng_args << '-ea'
   default_testng_args << '-Xmx2024M'
 
+  default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.powermock_javaagent).to_s}" if BuildrPlus::FeatureManager.activated?(:powermock)
+
   if BuildrPlus::Roles.project_with_role?(:integration_tests)
     server_project = project(BuildrPlus::Roles.project_with_role(:server).name)
     war_package = server_project.package(:war)

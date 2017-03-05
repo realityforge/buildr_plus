@@ -64,6 +64,30 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.mockito:mockito-all:jar:1.10.19)
     end
 
+    def powermock_version
+      '1.6.6'
+    end
+
+    def powermock_javaagent
+      "org.powermock:powermock-module-javaagent:jar:#{powermock_version}"
+    end
+
+    def powermock
+      %W(
+        org.powermock:powermock-core:jar:#{powermock_version}
+        org.powermock:powermock-reflect:jar:#{powermock_version}
+        org.objenesis:objenesis:jar:2.5.1
+        org.powermock:powermock-module-testng-common:jar:#{powermock_version}
+        org.powermock:powermock-module-testng:jar:#{powermock_version}
+        org.powermock:powermock-api-mockito:jar:#{powermock_version}
+        org.powermock:powermock-api-mockito-common:jar:#{powermock_version}
+        org.powermock:powermock-api-support:jar:#{powermock_version}
+        org.javassist:javassist:jar:3.21.0-GA
+        org.powermock:powermock-module-testng-agent:jar:#{powermock_version}
+        #{powermock_javaagent}
+      )
+    end
+
     def jackson_annotations
       %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.5.4)
     end
