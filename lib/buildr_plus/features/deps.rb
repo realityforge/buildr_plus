@@ -195,6 +195,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << gwt_deps
+      dependencies << BuildrPlus::Libs.powermock if BuildrPlus::FeatureManager.activated?(:powermock)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_qa_support) if BuildrPlus::FeatureManager.activated?(:replicant)
 
