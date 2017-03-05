@@ -70,8 +70,6 @@ BuildrPlus::Roles.role(:all_in_one_library) do
   default_testng_args << '-ea'
   default_testng_args << '-Xmx2024M'
 
-  default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.powermock_javaagent).to_s}" if BuildrPlus::FeatureManager.activated?(:powermock)
-
   if BuildrPlus::FeatureManager.activated?(:db)
     default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}" unless BuildrPlus::FeatureManager.activated?(:gwt)
 
