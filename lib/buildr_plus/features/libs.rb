@@ -275,7 +275,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def testng
-      %w(org.testng:testng:jar:6.8)
+      %w(org.testng:testng:jar:6.11)
     end
 
     def jndikit
