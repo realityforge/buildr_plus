@@ -14,6 +14,15 @@
 
 BuildrPlus::Roles.role(:replicant_qa) do
 
+  if BuildrPlus::FeatureManager.activated?(:domgen)
+    generators = []
+    generators += [:imit_client_test_qa, :imit_client_test_dao_aggregate_test]  if BuildrPlus::FeatureManager.activated?(:replicant)
+    generators += project.additional_domgen_generators
+    Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
+      t.filter = project.domgen_filter
+    end
+  end
+
   project.publish = false
 
   BuildrPlus::Roles.merge_projects_with_role(project.test, :replicant_shared)

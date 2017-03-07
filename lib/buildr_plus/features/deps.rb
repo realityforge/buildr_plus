@@ -115,7 +115,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators = []
 
       generators << [:ce_data_types]
-      generators << [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt_module] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators << [:imit_shared, :imit_client_dao, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt_module] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       generators.flatten
     end
@@ -123,7 +123,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_generators
       generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :auto_bean, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
-      generators += [:imit_client_entity_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators += [:imit_client_entity_gwt, :imit_client_dao_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       generators += self.replicant_shared_generators unless BuildrPlus::FeatureManager.activated?(:role_replicant_shared)
       generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
