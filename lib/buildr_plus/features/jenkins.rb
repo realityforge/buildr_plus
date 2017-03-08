@@ -149,19 +149,28 @@ CONTENT
       task_content(content, options)
     end
 
+    def config_git
+      "      kinjen.config_git( this )\n"
+    end
+
     def task_content(content, options = {})
-      inner_content = inside_docker_image(content)
       email = options[:email].nil? ? true : !!options[:email]
-      hash_bang(inside_node(inside_try_catch(inner_content, false, email)))
+      hash_bang(inside_node(inside_docker_image(config_git + inside_try_catch(content, false, email))))
+    end
+
+    def automerge_prelude
+      <<CONTENT
+        env.AUTO_MERGE_TARGET_BRANCH = kinjen.extract_auto_merge_target( this )
+        if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
+        {
+          kinjen.prepare_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
+        }
+CONTENT
+
     end
 
     def jenkinsfile_content
       hash_bang(inside_node(<<CONTENT))
-    env.AUTO_MERGE_TARGET_BRANCH = kinjen.extract_auto_merge_target( this )
-    if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
-    {
-      kinjen.prepare_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
-    }
 #{main_content(Buildr.projects[0].root_project)}
 CONTENT
     end
@@ -171,7 +180,9 @@ CONTENT
     end
 
     def main_content(root_project)
-      content = prepare_content(true)
+      content = automerge_prelude
+
+      content += prepare_content(true)
 
       content += commit_stage(root_project)
 
@@ -200,22 +211,22 @@ CONTENT
         content += stage_content
       end
 
-      content = inside_try_catch(inside_docker_image(content), true, true)
+      content = inside_try_catch(content, true, true)
 
       content += <<CONTENT
-    if ( currentBuild.result == 'SUCCESS' )
-    {
+      if ( currentBuild.result == 'SUCCESS' )
+      {
 CONTENT
       content += <<CONTENT
-      if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
-      {
-        kinjen.complete_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
-      }
+        if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
+        {
+          kinjen.complete_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
+        }
 CONTENT
       if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
         content += <<-CONTENT
-      if ( env.BRANCH_NAME == 'master' )
-      {
+        if ( env.BRANCH_NAME == 'master' )
+        {
         CONTENT
       end
       if BuildrPlus::Jenkins.auto_deploy?
@@ -227,18 +238,18 @@ CONTENT
       end
       if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
         content += <<-CONTENT
-      }
+        }
         CONTENT
       end
       content += <<CONTENT
-    }
+      }
 CONTENT
-
+      inside_docker_image(config_git + content)
     end
 
     def deploy_stage(root_project)
       <<-DEPLOY_STEP
-        kinjen.deploy_stage( this, '#{root_project.name}' )
+          kinjen.deploy_stage( this, '#{root_project.name}' )
       DEPLOY_STEP
     end
 
@@ -264,7 +275,7 @@ CONTENT
       dependencies = dependencies.sort.uniq.join(',')
 
       <<-ZIM_STEP
-        kinjen.zim_stage( this, '#{dependencies}' )
+          kinjen.zim_stage( this, '#{dependencies}' )
       ZIM_STEP
     end
 
@@ -316,7 +327,6 @@ timestamps {
   node {
     checkout scm
     kinjen = load 'vendor/tools/kinjen/lib/kinjen.groovy'
-    kinjen.config_git( this )
 #{content}  }
 }
 CONTENT
@@ -328,8 +338,8 @@ CONTENT
       options[:email] = false unless send_email
       option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
       <<CONTENT
-    kinjen.guard_build( this#{option_string} ) {
-#{content}    }
+      kinjen.guard_build( this#{option_string} ) {
+#{content}      }
 CONTENT
     end
 
@@ -350,9 +360,9 @@ CONTENT
       end
 
       result = <<CONTENT
-      kinjen.run_in_container( this, 'stocksoftware/build:#{java_version}_#{ruby_version}' ) {
+    kinjen.run_in_container( this, 'stocksoftware/build:#{java_version}_#{ruby_version}' ) {
 #{c}
-      }
+    }
 CONTENT
       result
     end
