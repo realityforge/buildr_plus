@@ -316,6 +316,7 @@ timestamps {
   node {
     checkout scm
     kinjen = load 'vendor/tools/kinjen/lib/kinjen.groovy'
+    kinjen.config_git( this )
 #{content}  }
 }
 CONTENT
