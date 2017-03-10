@@ -20,7 +20,7 @@ BuildrPlus::Roles.role(:server) do
         if artifact_type == :message && (artifact.imit? && artifact.imit.subscription_message?)
           false
         elsif project.domgen_filter
-          project.domgen_filter(artifact_type, artifact)
+          project.domgen_filter.call(artifact_type, artifact)
         else
           true
         end
