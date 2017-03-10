@@ -181,6 +181,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       r.rule('edu.umd.cs.findbugs.annotations.SuppressFBWarnings', :rule_type => :class)
       r.rule('edu.umd.cs.findbugs.annotations.SuppressWarnings', :rule_type => :class, :disallow => true)
       r.rule('javax.faces.bean', :disallow => true)
+      r.rule('org.hamcrest', :disallow => true)
 
       r.rule('java.util')
       r.subpackage_rule('server', 'java.nio.charset.StandardCharsets', :rule_type => :class)
