@@ -155,18 +155,22 @@ CONTENT
 
     def task_content(content, options = {})
       email = options[:email].nil? ? true : !!options[:email]
-      hash_bang(inside_node(inside_docker_image(config_git + inside_try_catch(content, false, email))))
+      hash_bang(inside_node(inside_docker_image(config_git + inside_try_catch(content, false, email, false))))
     end
 
     def automerge_prelude
       <<CONTENT
-        env.AUTO_MERGE_TARGET_BRANCH = kinjen.extract_auto_merge_target( this )
+      env.AUTO_MERGE_TARGET_BRANCH = kinjen.extract_auto_merge_target( this )
+CONTENT
+    end
+
+    def automerge_prepare
+      <<CONTENT
         if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
         {
           kinjen.prepare_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
         }
 CONTENT
-
     end
 
     def jenkinsfile_content
@@ -180,7 +184,7 @@ CONTENT
     end
 
     def main_content(root_project)
-      content = automerge_prelude
+      content = automerge_prepare
 
       content += prepare_content(true)
 
@@ -211,7 +215,7 @@ CONTENT
         content += stage_content
       end
 
-      content = inside_try_catch(content, true, true)
+      content = automerge_prelude + inside_try_catch(content, true, true, true)
 
       content += <<CONTENT
       if ( currentBuild.result == 'SUCCESS' )
@@ -332,10 +336,11 @@ timestamps {
 CONTENT
     end
 
-    def inside_try_catch(content, update_status, send_email)
+    def inside_try_catch(content, update_status, send_email, auto_merge)
       options = {}
       options[:notify_github] = false unless update_status
       options[:email] = false unless send_email
+      options[:lock_name] = 'env.AUTO_MERGE_TARGET_BRANCH' if auto_merge
       option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
       <<CONTENT
       kinjen.guard_build( this#{option_string} ) {
