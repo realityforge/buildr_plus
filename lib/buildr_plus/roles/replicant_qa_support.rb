@@ -27,7 +27,7 @@ BuildrPlus::Roles.role(:replicant_qa_support, :requires => [:role_replicant_shar
 
   compile.with BuildrPlus::Libs.replicant_client_qa_support
 
-  BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_shared)
 
   package(:jar)
   package(:sources)
