@@ -202,6 +202,17 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
+    def replicant_ee_qa_support_deps
+      dependencies = []
+
+      dependencies << gwt_deps
+      dependencies << BuildrPlus::Libs.replicant_client_qa_support
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_qa_support)
+
+      dependencies.flatten
+    end
+
     def model_provided_deps
       dependencies = []
 

@@ -28,6 +28,7 @@ end
 
 if File.exist?("#{base_directory}/replicant-ee-client")
   BuildrPlus::Roles.project('replicant-ee-client', :roles => [:replicant_ee_client], :parent => :container, :template => true, :description => 'Shared EE Client')
+  BuildrPlus::Roles.project('replicant-ee-qa-support', :roles => [:replicant_ee_qa_support], :parent => :container, :template => true, :description => 'EE client test infrastructure')
 end
 
 if File.exist?("#{base_directory}/shared")

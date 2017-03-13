@@ -131,6 +131,7 @@ require 'buildr_plus/roles/replicant_shared'
 require 'buildr_plus/roles/replicant_qa_support'
 require 'buildr_plus/roles/replicant_qa'
 require 'buildr_plus/roles/replicant_ee_client'
+require 'buildr_plus/roles/replicant_ee_qa_support'
 
 require 'buildr_plus/config/application'
 require 'buildr_plus/config/environment'
