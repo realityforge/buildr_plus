@@ -176,6 +176,12 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 raise "Domgen declared 'repository.application.service_library = false' but buildr is configured as a library."
               end
 
+              if r.application? && r.application.remote_references_included? && !BuildrPlus::FeatureManager.activated?(:remote_references)
+                raise "Domgen declared 'repository.application.remote_references_included = true' but buildr has not activated the 'remote_references' feature."
+              elsif r.application? && !r.application.remote_references_included? && BuildrPlus::FeatureManager.activated?(:remote_references)
+                raise "Domgen declared 'repository.application.remote_references_included = false' but buildr has activated the 'remote_references' feature."
+              end
+
               facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
                 if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
                   raise "BuildrPlus feature '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."
