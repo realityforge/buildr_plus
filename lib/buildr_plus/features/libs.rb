@@ -277,8 +277,12 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.awaitility:awaitility:jar:2.0.0)
     end
 
+    def testng_version
+      '6.11'
+    end
+
     def testng
-      %w(org.testng:testng:jar:6.11)
+      %W(org.testng:testng:jar:#{testng_version})
     end
 
     def jndikit
