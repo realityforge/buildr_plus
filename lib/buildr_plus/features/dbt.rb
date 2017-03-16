@@ -92,7 +92,7 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
           sql = "SELECT name FROM sys.databases WHERE name LIKE '#{BuildrPlus::Config.user || 'NOBODY'}_%'"
           puts 'Owned databases:'
           puts '========================================'
-          Dbt.runtime.query(database, sql).each do |v|
+          Dbt.runtime.query_in_control_database(database, sql).each do |v|
             puts v['name']
           end
           puts '========================================'
@@ -101,7 +101,7 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
         desc 'Remove all owned databases'
         task 'dbt:remove_owned_databases' => ["#{database.task_prefix}:load_config"] do
           sql = "SELECT name FROM sys.databases WHERE name LIKE '#{BuildrPlus::Config.user || 'NOBODY'}_%'"
-          Dbt.runtime.query(database, sql).each do |v|
+          Dbt.runtime.query_in_control_database(database, sql).each do |v|
             name = v['name']
             puts "Dropping database #{name}"
             begin
