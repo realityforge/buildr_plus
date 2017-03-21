@@ -89,6 +89,13 @@ CONTENT
 CONTENT
       end
 
+      if BuildrPlus::Docker.push_image?
+        content += <<CONTENT
+before_script:
+  docker login -e="$DOCKER_EMAIL" -u="$DOCKER_USERNAME" -p="$DOCKER_PASSWORD";
+CONTENT
+      end
+
       content += <<CONTENT
 script: buildr ci:pull_request
 git:

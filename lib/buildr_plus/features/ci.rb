@@ -232,6 +232,9 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           Redfish.domains.each do |domain|
             next unless domain.enable_rake_integration?
             next unless domain.dockerize?
+            if BuildrPlus::Docker.push_image?
+              pull_request_actions << "#{domain.task_prefix}:tag_and_push"
+            end
             taskname = "#{domain.task_prefix}:docker:rm"
             pull_request_actions << taskname
             package_actions << taskname

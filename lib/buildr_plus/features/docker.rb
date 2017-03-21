@@ -12,6 +12,23 @@
 # limitations under the License.
 #
 BuildrPlus::FeatureManager.feature(:docker) do |f|
+  f.enhance(:Config) do
+    attr_writer :push_image
+
+    def push_image?
+      @push_image.nil? ? false : @push_image
+    end
+
+    def organisation=(organisation)
+      @organisation = organisation
+      self.push_image = true
+    end
+
+    def organisation
+      @organisation.nil? ? 'stocksoftware' : @organisation
+    end
+  end
+
   f.enhance(:ProjectExtension) do
     first_time do
       desc 'Delete all dangling images'
