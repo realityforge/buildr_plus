@@ -52,7 +52,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       prefix_map[database_key.to_s] = prefixes
     end
 
-
     def database_config_prefix_map
       (@database_config_prefix_map ||= {})
     end
@@ -182,43 +181,43 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
   f.enhance(:ProjectExtension) do
     first_time do
       require 'redfish'
+      require 'redfish_plus'
     end
 
     before_define do |buildr_project|
       if buildr_project.ipr?
-        if Redfish.domain_by_key?(buildr_project.name)
-          domain = Redfish.domain_by_key(buildr_project.name)
-          domain.complete = false
-          if BuildrPlus::FeatureManager.activated?(:db)
-            if BuildrPlus::Db.mssql?
-              library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])
-              RedfishPlus.add_library_from_path(domain, 'jtds', library.to_s, true)
+        Redfish.domain(buildr_project.name) unless Redfish.domain_by_key?(buildr_project.name)
+        domain = Redfish.domain_by_key(buildr_project.name)
+        domain.complete = false
+        if BuildrPlus::FeatureManager.activated?(:db)
+          if BuildrPlus::Db.mssql?
+            library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])
+            RedfishPlus.add_library_from_path(domain, 'jtds', library.to_s, true)
+            buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
+          end
+          if BuildrPlus::Db.pgsql?
+            library = ::Buildr.artifact(BuildrPlus::Libs.postgresql[0])
+            RedfishPlus.add_library_from_path(domain, 'postgresql', library.to_s, true)
+            buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
+            if BuildrPlus::FeatureManager.activated?(:geolatte)
+              library = ::Buildr.artifact(BuildrPlus::Libs.postgis[0])
+              RedfishPlus.add_library_from_path(domain, 'postgis', library.to_s, true)
               buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
             end
-            if BuildrPlus::Db.pgsql?
-              library = ::Buildr.artifact(BuildrPlus::Libs.postgresql[0])
-              RedfishPlus.add_library_from_path(domain, 'postgresql', library.to_s, true)
-              buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
-              if BuildrPlus::FeatureManager.activated?(:geolatte)
-                library = ::Buildr.artifact(BuildrPlus::Libs.postgis[0])
-                RedfishPlus.add_library_from_path(domain, 'postgis', library.to_s, true)
-                buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
-              end
-            end
-          end
-          if BuildrPlus::FeatureManager.activated?(:timerstatus)
-            domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
-            BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)
-          end
-          if BuildrPlus::FeatureManager.activated?(:domgen)
-            file = buildr_project._("generated/domgen/#{buildr_project.name}/main/etc/#{buildr_project.name_as_class}.redfish.fragment.json")
-            domain.pre_artifacts << file
-            buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
-            buildr_project.file(file => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
           end
         end
+        if BuildrPlus::FeatureManager.activated?(:timerstatus)
+          domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
+          BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)
+        end
+        if BuildrPlus::FeatureManager.activated?(:domgen)
+          file = buildr_project._("generated/domgen/#{buildr_project.name}/main/etc/#{buildr_project.name_as_class}.redfish.fragment.json")
+          domain.pre_artifacts << file
+          buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
+          buildr_project.file(file => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
+        end
 
-        if BuildrPlus::Redfish.local_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?('local')
+        if BuildrPlus::Redfish.local_domain? && !Redfish.domain_by_key?('local')
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_local_development(domain)
             if BuildrPlus::FeatureManager.activated?(:mail)
@@ -231,7 +230,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           Redfish::Config.default_domain_key = 'local'
         end
 
-        if BuildrPlus::Redfish.docker_domain? && Redfish.domain_by_key?(buildr_project.name) && !Redfish.domain_by_key?('docker')
+        if BuildrPlus::Redfish.docker_domain? && !Redfish.domain_by_key?('docker')
           Redfish.domain('docker', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_docker(domain, :features => BuildrPlus::Redfish.features)
             RedfishPlus.deploy_application(domain, buildr_project.name, '/', "{{file:#{buildr_project.name}}}")
