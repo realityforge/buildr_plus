@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-expected_versions = %w(1.4.25 1.5.0)
+expected_versions = %w(1.5.1)
 unless expected_versions.include?(Buildr::VERSION.to_s)
   raise "buildr_plus expected one of the Buildr versions #{expected_versions.join(', ')} but actual version is #{Buildr::VERSION}"
 end
@@ -39,7 +39,6 @@ require 'buildr_plus/util'
 
 # Patches that should always be applied
 require 'buildr_plus/patches/group_project_patch'
-require 'buildr_plus/patches/idea_patch'
 
 require 'buildr_plus/features/appcache'
 require 'buildr_plus/features/appconfig'
