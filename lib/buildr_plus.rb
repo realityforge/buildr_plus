@@ -38,6 +38,7 @@ require 'buildr_plus/feature_manager'
 require 'buildr_plus/util'
 
 # Patches that should always be applied
+require 'buildr_plus/patches/custom_pom'
 require 'buildr_plus/patches/group_project_patch'
 
 require 'buildr_plus/features/appcache'
