@@ -219,7 +219,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
         if BuildrPlus::Redfish.local_domain? && !Redfish.domain_by_key?('local')
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
-            RedfishPlus.setup_for_local_development(domain)
+            RedfishPlus.setup_for_local_development(domain, :features => BuildrPlus::Redfish.features)
             if BuildrPlus::FeatureManager.activated?(:mail)
               RedfishPlus.configure_local_mail_port(domain)
             end
