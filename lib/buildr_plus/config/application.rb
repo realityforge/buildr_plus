@@ -59,12 +59,13 @@ module BuildrPlus #nodoc
           environment.databases.each do |database|
             key = database.key.to_s == 'default' ? environment.key.to_s : "#{database.key}_#{environment.key}"
             results[key] = {}
+            results[key]['driver'] = database.is_a?(MssqlDatabaseConfig) ? 'sql_server' : 'postgres'
             results[key]['host'] = database.host
             results[key]['port'] = database.port
             results[key]['database'] = database.database
             results[key]['username'] = database.admin_username
             results[key]['password'] = database.admin_password
-            if BuildrPlus::Db.mssql?
+            if database.is_a?(MssqlDatabaseConfig)
               results[key]['force_drop'] = true
               results[key]['timeout'] = 10000 unless jruby
               results[key]['backup_name'] = database.backup_name if database.backup_name
@@ -76,12 +77,13 @@ module BuildrPlus #nodoc
               import_key = database.key.to_s == 'default' ? 'import' : "#{database.key}_import"
               unless results[import_key]
                 results[import_key] = {}
+                results[key]['driver'] = database.is_a?(MssqlDatabaseConfig) ? 'sql_server' : 'postgres'
                 results[import_key]['host'] = database.host
                 results[import_key]['port'] = database.port
                 results[import_key]['database'] = database.import_from
                 results[import_key]['username'] = database.admin_username
                 results[import_key]['password'] = database.admin_password
-                if BuildrPlus::Db.mssql?
+                if database.is_a?(MssqlDatabaseConfig)
                   results[import_key]['force_drop'] = true
                   results[import_key]['timeout'] = 10000 unless jruby
                 end
@@ -93,12 +95,13 @@ module BuildrPlus #nodoc
             if environment.key.to_s == 'test'
               key = database.key.to_s == 'default' ? 'import_test' : "#{database.key}_import_test"
               results[key] = {}
+              results[key]['driver'] = database.is_a?(MssqlDatabaseConfig) ? 'sql_server' : 'postgres'
               results[key]['host'] = database.host
               results[key]['port'] = database.port
               results[key]['database'] = database.key.to_s == 'default' ? database.database : (database.import_from || database.database)
               results[key]['username'] = database.admin_username
               results[key]['password'] = database.admin_password
-              if BuildrPlus::Db.mssql?
+              if database.is_a?(MssqlDatabaseConfig)
                 results[key]['force_drop'] = true
                 results[key]['timeout'] = 10000 unless jruby
                 results[key]['backup_name'] = database.backup_name if database.backup_name
