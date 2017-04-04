@@ -86,7 +86,9 @@ module BuildrPlus #nodoc
       end
 
       def to_h
-        data = {'delete_backup_history' => self.delete_backup_history?}
+        data = {}
+        data['driver'] = 'sql_server'
+        data['delete_backup_history'] = self.delete_backup_history?
         data['instance'] = self.instance if self.instance
         data['restore_name'] = self.restore_name if self.restore_name
         data['backup_name'] = self.backup_name if self.backup_name
@@ -101,6 +103,12 @@ module BuildrPlus #nodoc
     class PostgresDatabaseConfig < DatabaseConfig
       def port
         @port || 5432
+      end
+
+      def to_h
+        data = {}
+        data['driver'] = 'postgres'
+        super.merge(data)
       end
     end
   end
