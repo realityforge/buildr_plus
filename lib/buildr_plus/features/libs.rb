@@ -237,6 +237,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       ) + self.keycloak_core + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
     end
 
+    def simple_keycloak_service
+      %w(org.realityforge.keycloak.sks:simple-keycloak-service:jar:0.1)
+    end
+
     def replicant_version
       '0.5.79'
     end
