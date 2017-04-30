@@ -136,7 +136,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_webpoller
-      %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.3)
+      %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.5)
     end
 
     def gwt_datatypes
