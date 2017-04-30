@@ -302,7 +302,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops_lib
-      'org.realityforge.guiceyloops:guiceyloops:jar:0.88'
+      'org.realityforge.guiceyloops:guiceyloops:jar:0.90'
     end
 
     def guiceyloops_gwt
