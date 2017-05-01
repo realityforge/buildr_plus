@@ -69,7 +69,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def server_generators
-      generators = [:ee_beans_xml]
+      generators = [:ee_beans_xml, :ee_messages, :ee_messages_qa]
 
       generators << [:ee_web_xml] if BuildrPlus::Artifacts.war?
       if BuildrPlus::FeatureManager.activated?(:db)
@@ -93,7 +93,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         end
       end
 
-      generators << [:ee_messages, :ee_messages_qa, :ee_exceptions, :ejb_service_facades, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
+      generators << [:ee_exceptions, :ejb_service_facades, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
       generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
@@ -104,6 +104,37 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators << [:keycloak_filter, :keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators << [:timerstatus_filter] if BuildrPlus::FeatureManager.activated?(:timerstatus)
+
+      generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
+      generators += self.model_qa_support_test_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
+
+      generators.flatten
+    end
+
+    def library_generators
+      generators = [:ee_messages, :ee_messages_qa]
+      if BuildrPlus::FeatureManager.activated?(:db)
+        generators << [:jpa_dao_test, :jpa_test_orm_xml, :jpa_test_persistence_xml]
+        generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
+      end
+
+      generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
+      generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      if BuildrPlus::FeatureManager.activated?(:sync)
+        if BuildrPlus::Sync.standalone?
+          generators << [:sync_ejb]
+        else
+          generators << [:sync_core_ejb]
+        end
+      end
+
+      generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
+
+      generators << [:jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
+      generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
+      generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
+      generators << [:keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
       generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
       generators += self.model_qa_support_test_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)

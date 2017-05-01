@@ -14,32 +14,7 @@
 
 BuildrPlus::Roles.role(:library) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = []
-    if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:jpa_dao_test, :jpa_test_orm_xml, :jpa_test_persistence_xml]
-      generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
-    end
-
-    generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
-    generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-    if BuildrPlus::FeatureManager.activated?(:sync)
-      if BuildrPlus::Sync.standalone?
-        generators << [:sync_ejb]
-      else
-        generators << [:sync_core_ejb]
-      end
-    end
-
-    generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
-
-    generators << [:jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
-    generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
-    generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
-    generators << [:keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
-
-    generators += project.additional_domgen_generators
-
+    generators = BuildrPlus::Deps.library_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
       t.filter = project.domgen_filter
     end
