@@ -242,7 +242,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '0.5.80'
+      '0.5.81'
     end
 
     def replicant_shared
