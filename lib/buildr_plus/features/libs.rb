@@ -173,7 +173,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def simple_session_filter
-      %w(org.realityforge.ssf:simple-session-filter:jar:0.7)
+      %w(org.realityforge.ssf:simple-session-filter:jar:0.9)
     end
 
     def field_filter
@@ -242,11 +242,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '0.5.78'
+      '0.5.79'
     end
 
     def replicant_shared
       %W(org.realityforge.replicant:replicant-shared:jar:#{replicant_version})
+    end
+
+    def replicant_shared_ee
+      %W(org.realityforge.replicant:replicant-shared-ee:jar:#{replicant_version})
     end
 
     def replicant_client_common
@@ -258,7 +262,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_ee_client
-      %W(org.realityforge.replicant:replicant-client-ee:jar:#{replicant_version}) + self.replicant_client_common
+      %W(org.realityforge.replicant:replicant-client-ee:jar:#{replicant_version}) + self.replicant_client_common + self.replicant_shared_ee
     end
 
     def replicant_gwt_client
@@ -266,7 +270,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_server
-      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.replicant_shared + self.simple_session_filter + self.gwt_rpc + self.field_filter
+      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.replicant_shared + self.simple_session_filter + self.gwt_rpc + self.field_filter + self.replicant_shared_ee
     end
 
     def gwt_rpc
