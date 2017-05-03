@@ -128,7 +128,13 @@ BuildrPlus::Roles.role(:container) do
       gwt_modules.each do |gwt_module|
         short_name = gwt_module.gsub(/.*\.([^.]+)Dev$/, '\1')
         path = short_name.gsub(/^#{Reality::Naming.pascal_case(project.name)}/, '')
-        path = "#{Reality::Naming.underscore(path)}.html" if path.size > 0
+        if path.size > 0
+          server_project = project(BuildrPlus::Roles.project_with_role(:server).name)
+          %w(html jsp).each do |extension|
+            candidate = "#{Reality::Naming.underscore(path)}.#{extension}"
+            path = candidate if File.exist?(server_project._(:source, :main, :webapp_local, candidate))
+          end
+        end
         ipr.add_gwt_configuration(p,
                                   :gwt_module => gwt_module,
                                   :vm_parameters => '-Xmx3G',
