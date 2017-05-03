@@ -14,6 +14,14 @@
 
 BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
   f.enhance(:Config) do
+    def customize_domain(&block)
+      (@domain_customizations ||= []) << block
+    end
+
+    def domain_customizations
+      (@domain_customizations ||= []).dup
+    end
+
     attr_writer :local_domain
 
     def local_domain?
@@ -189,6 +197,9 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         Redfish.domain(buildr_project.name) unless Redfish.domain_by_key?(buildr_project.name)
         domain = Redfish.domain_by_key(buildr_project.name)
         domain.complete = false
+        BuildrPlus::Redfish.domain_customizations.each do |customization|
+          customization.call(domain)
+        end
         if BuildrPlus::FeatureManager.activated?(:db)
           if BuildrPlus::Db.mssql?
             library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])
