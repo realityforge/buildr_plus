@@ -21,6 +21,7 @@ require 'buildr/top_level_generate_dir'
 
 BuildrPlus::FeatureManager.activate_features([
                                                :checks,
+                                               :assets,
                                                :repositories,
                                                :artifacts,
                                                :idea,
