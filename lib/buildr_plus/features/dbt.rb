@@ -83,6 +83,9 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
       if BuildrPlus::FeatureManager.activated?(:timerstatus)
         Dbt.add_artifact_based_database(:timers, BuildrPlus::Libs.glassfish_timers_db[0])
       end
+      if BuildrPlus::FeatureManager.activated?(:iris_audit)
+        Dbt.add_artifact_based_database(:audit, :iris_audit_db)
+      end
 
       if BuildrPlus::Db.mssql? && Dbt.repository.database_for_key?(:default) && BuildrPlus::FeatureManager.activated?(:config)
         database = Dbt.repository.database_for_key(:default)

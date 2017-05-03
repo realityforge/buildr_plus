@@ -104,6 +104,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators << [:keycloak_filter, :keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators << [:timerstatus_filter] if BuildrPlus::FeatureManager.activated?(:timerstatus)
+      generators << [:iris_audit_jee_resources] if BuildrPlus::FeatureManager.activated?(:iris_audit)
 
       generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
       generators += self.model_qa_support_test_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
@@ -214,6 +215,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_datatypes)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client) if BuildrPlus::FeatureManager.activated?(:replicant)
+      dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
 
       dependencies.flatten
     end
@@ -229,6 +231,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << BuildrPlus::Libs.powermock if BuildrPlus::FeatureManager.activated?(:powermock)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_qa_support) if BuildrPlus::FeatureManager.activated?(:replicant)
+      dependencies << Buildr.artifacts([:iris_audit_gwt_qa_support]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
 
       dependencies.flatten
     end
@@ -331,6 +334,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service) if BuildrPlus::FeatureManager.activated?(:keycloak) && BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.proxy_servlet) if BuildrPlus::FeatureManager.activated?(:keycloak) && BuildrPlus::FeatureManager.activated?(:gwt)
+      dependencies << Buildr.artifacts(:iris_audit_server) if BuildrPlus::FeatureManager.activated?(:iris_audit)
 
       dependencies.flatten
     end
@@ -351,9 +355,19 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def user_experience_deps
       dependencies = []
 
+      dependencies << gwt_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_appcache_client, BuildrPlus::Libs.gwt_appcache_server]) if BuildrPlus::FeatureManager.activated?(:appcache)
 
       dependencies.flatten
     end
+
+    def user_experience_test_deps
+      dependencies = []
+
+      dependencies << gwt_qa_support_deps
+
+      dependencies.flatten
+    end
+
   end
 end
