@@ -55,6 +55,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
         default_value
     end
 
+    def env(key, default_value = nil)
+      environment_var(key, default_value) || BuildrPlus.error("Unable to locate expected environment variable #{key}")
+    end
+
     def environment_var(key, default_value = nil)
       scope = self.app_scope
       code = self.env_code
