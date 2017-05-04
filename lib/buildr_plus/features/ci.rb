@@ -126,6 +126,11 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         package_actions = %w(ci:setup)
         package_no_test_actions = %w(ci:no_test_setup)
 
+        if BuildrPlus::FeatureManager.activated?(:checks)
+          commit_actions << 'checks:check'
+          pull_request_actions << 'checks:check'
+        end
+
         if BuildrPlus::FeatureManager.activated?(:redfish) && BuildrPlus::FeatureManager.activated?(:docker)
           Redfish.domains.each do |domain|
             next unless domain.enable_rake_integration?
@@ -237,11 +242,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
             package_actions << taskname
             package_no_test_actions << taskname
           end
-        end
-
-        if BuildrPlus::FeatureManager.activated?(:checks)
-          commit_actions << 'checks:check'
-          pull_request_actions << 'checks:check'
         end
 
         # Always run check and make sure file system state matches jenkins feature state
