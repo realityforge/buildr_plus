@@ -12,4 +12,4 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:iris_audit)
+BuildrPlus::FeatureManager.feature(:iris_audit => [:keycloak])
