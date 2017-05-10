@@ -152,7 +152,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_mmvp
-      %w(org.realityforge.gwt.mmvp:gwt-mmvp:jar:0.6)
+      %w(org.realityforge.gwt.mmvp:gwt-mmvp:jar:0.7)
     end
 
     def gwt_lognice
