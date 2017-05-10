@@ -131,6 +131,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(com.google.gwt.inject:gin:jar:2.1.2) + self.javax_inject + self.guice + self.gwt_user
     end
 
+    def gwt_gin_extensions
+      %w(org.realityforge.gwt.gin:gwt-gin-extensions:jar:0.1)
+    end
+
     def gwt_property_source
       %w(org.realityforge.gwt.property-source:gwt-property-source:jar:0.2)
     end

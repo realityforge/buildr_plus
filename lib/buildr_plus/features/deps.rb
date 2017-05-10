@@ -212,6 +212,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_gin)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_gin_extensions)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_datatypes)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client) if BuildrPlus::FeatureManager.activated?(:replicant)
