@@ -23,7 +23,7 @@ BuildrPlus::FeatureManager.feature(:resgen) do |f|
       require 'resgen'
 
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      candidate_file = File.expand_path("#{base_directory}/#{Resgen::Build::DEFAULT_RESOURCES_FILENAME}")
+      candidate_file = File.expand_path("#{base_directory}/resources.rb")
 
       Resgen::Build.define_load_task if ::File.exist?(candidate_file)
 
