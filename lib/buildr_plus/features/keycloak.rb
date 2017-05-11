@@ -28,7 +28,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       if BuildrPlus::FeatureManager.activated?(:role_user_experience)
         # api client is for gwt_rpc, default_client_type is for UX
         client_types += [default_client_type, 'api']
-      elsif BuildrPlus::Artifacts.library?
+      elsif BuildrPlus::FeatureManager.activated?(:role_library)
         # Do nothing. Libraries integrate with their host application
       else
         # default_client_type is for api as there is no UX client
