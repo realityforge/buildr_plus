@@ -13,6 +13,8 @@
 # License for the specific language governing permissions and limitations under
 # the License.
 
+raise 'Addon patched in the latest version of Buildr' unless Buildr::VERSION.to_s == '1.5.2'
+
 module Buildr
   module GWT
     class << self
