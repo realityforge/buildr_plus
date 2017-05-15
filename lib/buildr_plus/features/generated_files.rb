@@ -29,27 +29,6 @@ BuildrPlus::FeatureManager.feature(:generated_files) do |f|
       BuildrPlus::GeneratedFiles.check_generated_files('*.rb', /^# DO NOT EDIT\: File is auto-generated$/)
       BuildrPlus::GeneratedFiles.check_generated_files('*.yaml', /^# DO NOT EDIT\: File is auto-generated$/)
       BuildrPlus::GeneratedFiles.check_generated_files('*.yml', /^# DO NOT EDIT\: File is auto-generated$/, %(.travis.yml))
-      #
-      # # `git ls-files '*.java' | grep -v vendor/`.split("\n").select { |file| File.file?(file) }.each do |file|
-      # #   if IO.read(file) =~ /^\/\* DO NOT EDIT\: File is auto-generated \*\/$/
-      # #     raise "The file #{file} has a comment indicating it is generated but it is checked into the source tree."
-      # #   end
-      # # end
-      # # `git ls-files '*.xml' | grep -v vendor/`.split("\n").select { |file| File.file?(file) }.each do |file|
-      # #   if IO.read(file) =~ /^<!-- DO NOT EDIT\: File is auto-generated -->$/
-      # #     raise "The file #{file} has a comment indicating it is generated but it is checked into the source tree."
-      # #   end
-      # # end
-      # `git ls-files '*.rb' | grep -v vendor/`.split("\n").select { |file| File.file?(file) }.each do |file|
-      #   if IO.read(file) =~ /^# DO NOT EDIT\: File is auto-generated$/
-      #     raise "The file #{file} has a comment indicating it is generated but it is checked into the source tree."
-      #   end
-      # end
-      # `git ls-files '*.yaml' | grep -v vendor/`.split("\n").select { |file| File.file?(file) }.each do |file|
-      #   if IO.read(file) =~ /^# DO NOT EDIT\: File is auto-generated$/
-      #     raise "The file #{file} has a comment indicating it is generated but it is checked into the source tree."
-      #   end
-      # end
     end
   end
 end
