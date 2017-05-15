@@ -79,6 +79,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators << [:robots] if BuildrPlus::Artifacts.war?
       generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
+      generators << [:berk_service_impl] if BuildrPlus::FeatureManager.activated?(:berk)
       generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       if BuildrPlus::FeatureManager.activated?(:keycloak)
@@ -217,6 +218,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client) if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
+      dependencies << Buildr.artifacts(:berk_gwt) if BuildrPlus::FeatureManager.activated?(:berk)
 
       dependencies.flatten
     end
@@ -233,6 +235,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_qa_support) if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts([:iris_audit_gwt_qa_support]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
+      dependencies << Buildr.artifacts(:berk_gwt_qa_support) if BuildrPlus::FeatureManager.activated?(:berk)
 
       dependencies.flatten
     end
@@ -336,6 +339,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.proxy_servlet) if BuildrPlus::FeatureManager.activated?(:keycloak) && BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts(:iris_audit_server) if BuildrPlus::FeatureManager.activated?(:iris_audit)
+      dependencies << Buildr.artifacts(:berk_server) if BuildrPlus::FeatureManager.activated?(:berk)
 
       dependencies.flatten
     end

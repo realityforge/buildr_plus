@@ -124,6 +124,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
               {
                 :iris_audit => :iris_audit,
                 :jackson => :jackson,
+                :berk => :berk,
                 :keycloak => :keycloak,
                 :jms => :jms,
                 :mail => :mail,
