@@ -339,7 +339,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.proxy_servlet) if BuildrPlus::FeatureManager.activated?(:keycloak) && BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts(:iris_audit_server) if BuildrPlus::FeatureManager.activated?(:iris_audit)
-      dependencies << Buildr.artifacts(:berk_server) if BuildrPlus::FeatureManager.activated?(:berk)
+      dependencies << Buildr.artifacts([:berk_model, :berk_server]) if BuildrPlus::FeatureManager.activated?(:berk)
 
       dependencies.flatten
     end
@@ -349,6 +349,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       dependencies << self.model_qa_support_deps
       dependencies << Buildr.artifacts(BuildrPlus::Syncrecord.syncrecord_server_qa) if BuildrPlus::FeatureManager.activated?(:syncrecord)
+      dependencies << Buildr.artifacts([:berk_model_qa_support]) if BuildrPlus::FeatureManager.activated?(:berk)
 
       dependencies.flatten
     end
