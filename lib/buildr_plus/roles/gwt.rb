@@ -31,7 +31,7 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
   end
 
   if BuildrPlus::FeatureManager.activated?(:resgen)
-    generators = [:gwt_abstract_uibinder_component, :gwt_client_bundle]
+    generators = [:mvp_abstract_uibinder_component, :gwt_abstract_uibinder_component, :gwt_client_bundle]
     generators += project.additional_resgen_generators
     Resgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Resgen::Filters.include_catalog_below(project._(:source, :main))
