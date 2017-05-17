@@ -105,7 +105,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators << [:keycloak_filter, :keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators << [:timerstatus_filter] if BuildrPlus::FeatureManager.activated?(:timerstatus)
-      generators << [:iris_audit_jee_resources] if BuildrPlus::FeatureManager.activated?(:iris_audit)
+      generators << [:iris_audit_server] if BuildrPlus::FeatureManager.activated?(:iris_audit)
 
       generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
       generators += self.model_qa_support_test_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
