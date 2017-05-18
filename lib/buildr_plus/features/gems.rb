@@ -29,7 +29,7 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
 
       def to_s
         version_spec = version.nil? ? '' : ", '= #{version}'"
-        options_spec = options.nil? ? '' : ", #{options.collect { |k, v| "#{k.inspect} => #{v.inspect}" }.join(', ')}"
+        options_spec = options.nil? ? '' : ", #{options.collect { |k, v| "#{k.inspect} => #{v.inspect.gsub('"',"'")}" }.join(', ')}"
         "gem '#{name}'#{version_spec}#{options_spec}"
       end
     end
