@@ -121,22 +121,20 @@ XML
   class Parser
     def self.merge_existing_import_control_file(project)
       filename = project.checkstyle.import_control_file
-      if File.exist?(filename)
-        content = IO.read(filename)
-        doc = REXML::Document.new(content, :attribute_quote => :quote)
-        name = doc.root.attributes['pkg']
-        root = project.import_rules
-        base =
-          if name == root.name
-            root
-          elsif name =~ /^#{Regexp.escape(root.name)}\./
-            root.subpackage(name[root.name.length + 1, name.length])
-          else
-            raise "Unable to merge checkstyle import rules at #{filename} with base #{name} into rules with base at #{root.name}"
-          end
+      content = IO.read(filename)
+      doc = REXML::Document.new(content, :attribute_quote => :quote)
+      name = doc.root.attributes['pkg']
+      root = project.import_rules
+      base =
+        if name == root.name
+          root
+        elsif name =~ /^#{Regexp.escape(root.name)}\./
+          root.subpackage(name[root.name.length + 1, name.length])
+        else
+          raise "Unable to merge checkstyle import rules at #{filename} with base #{name} into rules with base at #{root.name}"
+        end
 
-        parse_package_elements(base, doc.root.elements)
-      end
+      parse_package_elements(base, doc.root.elements)
     end
 
     def self.parse_package_elements(subpackage, elements)
@@ -174,10 +172,11 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
     attr_accessor :additional_project_names
 
-    def setup_checkstyle_import_rules(project)
+    def setup_checkstyle_import_rules(project, allow_any_imports)
       r = project.import_rules
       g = project.group_as_package
       c = project.name_as_class
+      r.rule('.*', :regex => true, :rule_type => :class) if allow_any_imports
       r.rule('edu.umd.cs.findbugs.annotations.SuppressFBWarnings', :rule_type => :class)
       r.rule('edu.umd.cs.findbugs.annotations.SuppressWarnings', :rule_type => :class, :disallow => true)
       r.rule('javax.faces.bean', :disallow => true)
@@ -380,14 +379,9 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         project.checkstyle.config_directory = project._('etc/checkstyle')
         project.checkstyle.configuration_artifact = BuildrPlus::Checkstyle.checkstyle_rules
 
-        import_control_present = File.exist?(project.checkstyle.import_control_file)
-
         unless File.exist?(project.checkstyle.suppressions_file)
-          dir = File.expand_path(File.dirname(__FILE__))
           project.checkstyle.suppressions_file =
-            import_control_present ?
-              "#{dir}/checkstyle_suppressions.xml" :
-              "#{dir}/checkstyle_suppressions_no_import_control.xml"
+            "#{File.expand_path(File.dirname(__FILE__))}/checkstyle_suppressions.xml"
         end
 
         checkstyle_import_rules = project._(:target, :generated, 'checkstyle/import-control.xml')
@@ -407,18 +401,15 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           FileUtils.rm_rf project._(:target, :generated, 'checkstyle')
         end
 
-        if import_control_present
-          project.checkstyle.properties['checkstyle.import-control.file'] = checkstyle_import_rules
-        else
-          project.checkstyle.properties['checkstyle.import-control.file'] = ''
-        end
+        project.checkstyle.properties['checkstyle.import-control.file'] = checkstyle_import_rules
       end
     end
 
     after_define do |project|
       if project.ipr?
-        BuildrPlus::Checkstyle.setup_checkstyle_import_rules(project)
-        BuildrPlus::Checkstyle::Parser.merge_existing_import_control_file(project)
+        import_control_present = File.exist?(project.checkstyle.import_control_file)
+        BuildrPlus::Checkstyle.setup_checkstyle_import_rules(project, !import_control_present)
+        BuildrPlus::Checkstyle::Parser.merge_existing_import_control_file(project) if import_control_present
 
         project.checkstyle.additional_project_names =
           BuildrPlus::Findbugs.additional_project_names || BuildrPlus::Util.subprojects(project)
