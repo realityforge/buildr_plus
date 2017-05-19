@@ -203,6 +203,10 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('client.ioc', 'com.google.inject')
         r.subpackage_rule('client.ioc', 'com.google.gwt.inject.client')
 
+        if BuildrPlus::FeatureManager.activated?(:berk)
+          r.subpackage_rule('client', 'iris.berk.server.data_type.EnvironmentSettingDTO', :rule_type => :class, :disallow => true)
+        end
+
         if BuildrPlus::FeatureManager.activated?(:replicant)
           r.subpackage_rule('client', 'org.realityforge.replicant.shared')
           r.subpackage_rule('client', 'org.realityforge.replicant.client')
