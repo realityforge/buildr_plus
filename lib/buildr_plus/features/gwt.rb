@@ -62,8 +62,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson]) do |f|
 
   f.enhance(:ProjectExtension) do
     first_time do
-      #require 'buildr/gwt'
-      require 'buildr_plus/patches/gwt_patch'
+      require 'buildr/gwt'
     end
 
     def top_level_gwt_modules
