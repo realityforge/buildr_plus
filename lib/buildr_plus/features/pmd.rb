@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:pmd) do |f|
   f.enhance(:Config) do
     def default_pmd_rules
-      'au.com.stocksoftware.pmd:pmd:xml:1.2'
+      'au.com.stocksoftware.pmd:pmd:xml:1.4'
     end
 
     def pmd_rules
@@ -30,6 +30,28 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
   f.enhance(:ProjectExtension) do
     first_time do
       require 'buildr/pmd'
+      Buildr::Pmd.instance_eval do
+        class << self
+          # The specs for requirements
+          def dependencies
+            %w(
+              net.sourceforge.pmd:pmd-core:jar:5.6.1
+              net.sourceforge.pmd:pmd-java:jar:5.6.1
+              net.sourceforge.pmd:pmd-java8:jar:5.6.1
+              net.sourceforge.pmd:pmd-javascript:jar:5.6.1
+              net.sourceforge.pmd:pmd-ruby:jar:5.6.1
+              jaxen:jaxen:jar:1.1.6
+              commons-io:commons-io:jar:2.4
+              com.beust:jcommander:jar:1.48
+              org.ow2.asm:asm:jar:5.0.4
+              com.google.code.gson:gson:jar:2.5
+              net.java.dev.javacc:javacc:jar:5.0
+              net.sourceforge.saxon:saxon:jar:9.1.0.8
+              org.apache.commons:commons-lang3:jar:3.4
+              )
+          end
+        end
+      end
     end
 
     before_define do |project|
