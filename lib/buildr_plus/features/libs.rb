@@ -218,7 +218,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_domgen_support
-      %w(org.realityforge.keycloak.domgen:keycloak-domgen-support:jar:1.3)
+      %w(org.realityforge.keycloak.domgen:keycloak-domgen-support:jar:1.4)
     end
 
     def jboss_logging
