@@ -14,11 +14,7 @@
 
 BuildrPlus::Roles.role(:library_qa_support) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = []
-    generators << [:jpa_test_orm_xml, :jpa_test_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
-    generators << [:ejb_test_qa] if BuildrPlus::FeatureManager.activated?(:ejb)
-    generators += project.additional_domgen_generators
-
+    generators = BuildrPlus::Deps.library_qa_support_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
       t.filter = project.domgen_filter
     end

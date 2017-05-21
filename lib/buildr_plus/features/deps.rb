@@ -144,6 +144,14 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
+    def library_qa_support_generators
+      generators = []
+      generators << [:jpa_test_orm_xml, :jpa_test_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
+      generators << [:ee_messages_qa, :ejb_test_qa, :ejb_test_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
+
+      generators.flatten
+    end
+
     def replicant_shared_generators
       generators = []
 
