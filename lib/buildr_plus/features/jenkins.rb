@@ -128,7 +128,7 @@ BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
     end
 
     def publish_content(oss)
-      content = "#{prepare_content(false)}\n        kinjen.publish_stage( this#{oss ? ", 'OSS_'" : ''} )"
+      content = "#{prepare_content(false)}\n        kinjen.publish_stage( this#{oss ? ", 'OSS_'" : ''} )\n"
       task_content(content, options)
     end
 
