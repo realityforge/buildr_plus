@@ -279,8 +279,10 @@ CONTENT
 
       dependencies = dependencies.sort.uniq.join(',')
 
+      name = root_project.group.to_s.gsub(/\.pg$/, '')
+
       <<-ZIM_STEP
-          kinjen.zim_stage( this, '#{dependencies}' )
+          kinjen.zim_stage( this, '#{name}', '#{dependencies}' )
       ZIM_STEP
     end
 
