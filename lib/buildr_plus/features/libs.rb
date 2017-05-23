@@ -221,6 +221,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.keycloak.domgen:keycloak-domgen-support:jar:1.4)
     end
 
+    def keycloak_authfilter
+      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:0.1)
+    end
+
     def jboss_logging
       %w(org.jboss.logging:jboss-logging:jar:3.3.0.Final)
     end
