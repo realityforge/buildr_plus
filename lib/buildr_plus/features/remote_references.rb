@@ -12,4 +12,34 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:remote_references)
+module BuildrPlus::RemoteReferences
+  class Datasource < Reality::BaseElement
+    def initialize(name, options = {})
+      @name = name
+      super(options)
+    end
+
+    attr_reader :name
+  end
+end
+
+
+BuildrPlus::FeatureManager.feature(:remote_references) do |f|
+  f.enhance(:Config) do
+
+    def remote_datasource(name, options = {})
+      BuildrPlus.error("Remote datasource #{name} already defined.") if remote_datasource_map[name.to_s]
+      remote_datasource_map[name.to_s] = BuildrPlus::RemoteReferences::Datasource.new(name, options)
+    end
+
+    def remote_datasources
+      remote_datasource_map.values
+    end
+
+    protected
+
+    def remote_datasource_map
+      @remote_datasource_map ||= {}
+    end
+  end
+end

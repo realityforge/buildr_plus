@@ -184,6 +184,19 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 raise "Domgen declared 'repository.application.remote_references_included = false' but buildr has activated the 'remote_references' feature."
               end
 
+              if BuildrPlus::FeatureManager.activated?(:remote_references) && r.imit?
+                BuildrPlus::RemoteReferences.remote_datasources.each do |remote_datasource|
+                  unless r.imit.remote_datasource_by_name?(remote_datasource.name)
+                    BuildrPlus.error("BuildrPlus remote datasource '#{remote_datasource.name}' not declared in imit.remote_datasources")
+                  end
+                end
+                r.imit.remote_datasources.each do |datasource|
+                  unless BuildrPlus::RemoteReferences.remote_datasources.any?{|d|d.name.to_s == datasource.name.to_s}
+                    BuildrPlus.error("Domgen imit.remote_datasource '#{datasource.name}' not declared in BuildrPlus")
+                  end
+                end
+              end
+
               facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
                 if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
                   raise "BuildrPlus feature '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."

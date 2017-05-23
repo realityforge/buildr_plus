@@ -219,6 +219,12 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           populate_keycloak_client_settings(environment, client_type, true)
         end
       end
+      if BuildrPlus::FeatureManager.activated?(:remote_references)
+        BuildrPlus::RemoteReferences.remote_datasources.each do |remote_datasource|
+          key = "#{Reality::Naming.uppercase_constantize(root_project.name)}_REPLICANT_CLIENT_#{Reality::Naming.uppercase_constantize(remote_datasource.name)}_URL"
+          environment.setting(key, "http://127.0.0.1:8080/#{Reality::Naming.underscore(remote_datasource.name)}") unless environment.setting?(key)
+        end
+      end
     end
 
     def populate_keycloak_client_settings(environment, client_type, external)
