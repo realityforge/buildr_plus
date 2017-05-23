@@ -349,6 +349,9 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         if BuildrPlus::FeatureManager.activated?(:gwt)
           dependencies << Buildr.artifacts(BuildrPlus::Libs.proxy_servlet)
         end
+        if BuildrPlus::FeatureManager.activated?(:remote_references)
+          dependencies << Buildr.artifacts([BuildrPlus::Libs.keycloak_authfilter])
+        end
       end
       dependencies << Buildr.artifacts(:iris_audit_server) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts([:berk_model, :berk_server]) if BuildrPlus::FeatureManager.activated?(:berk)
