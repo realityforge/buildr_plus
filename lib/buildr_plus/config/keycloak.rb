@@ -19,6 +19,8 @@ module BuildrPlus #nodoc
       attr_accessor :public_key
       attr_accessor :admin_username
       attr_accessor :admin_password
+      attr_accessor :service_username
+      attr_accessor :service_password
       attr_accessor :realm
 
       def to_h
@@ -29,6 +31,8 @@ module BuildrPlus #nodoc
           'realm' => self.realm || '',
         }
         config['admin_username'] = self.admin_username if self.admin_username
+        config['service_username'] = self.service_username if self.service_username
+        config['service_password'] = self.service_password if self.service_password
         config
       end
     end
