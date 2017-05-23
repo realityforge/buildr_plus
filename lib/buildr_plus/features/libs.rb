@@ -53,7 +53,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def glassfish_embedded
-      %w(fish.payara.extras:payara-embedded-all:jar:4.1.2.172)
+      %w(fish.payara.extras:payara-embedded-all:jar:4.1.2.172 fish.payara.api:payara-api:jar:4.1.2.172)
     end
 
     def eclipselink
