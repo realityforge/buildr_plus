@@ -21,7 +21,7 @@ BuildrPlus::Roles.role(:replicant_shared, :requires => [:replicant]) do
     Domgen::Build.define_generate_task(generators, :buildr_project => project)
   end
 
-  compile.with BuildrPlus::Deps.gwt_deps
+  compile.with BuildrPlus::Deps.replicant_shared_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
 

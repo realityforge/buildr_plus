@@ -259,6 +259,27 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
+    def replicant_ee_client_deps
+      dependencies = []
+
+      dependencies << replicant_shared_deps
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.ee_provided)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_ee_client)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_authfilter) if BuildrPlus::FeatureManager.activated?(:keycloak)
+
+      dependencies.flatten
+    end
+
+    def replicant_ee_client_test_deps
+      dependencies = []
+
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.mockito)
+
+      dependencies.flatten
+    end
+
     def model_provided_deps
       dependencies = []
 
