@@ -25,7 +25,7 @@ BuildrPlus::Roles.role(:all_in_one_library) do
     end
 
     generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
-    generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+    generators << [:imit_shared, :imit_server_service, :imit_server_qa, :imit_server_ee_client] if BuildrPlus::FeatureManager.activated?(:replicant)
 
     if BuildrPlus::FeatureManager.activated?(:sync)
       if BuildrPlus::Sync.standalone?
