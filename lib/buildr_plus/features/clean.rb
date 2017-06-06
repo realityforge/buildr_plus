@@ -20,6 +20,7 @@ BuildrPlus::FeatureManager.feature(:clean) do |f|
         desc 'Purge all artifacts. Including those used by IDEA.'
         project.task(':real_clean' => %(clean)) do
           FileUtils.rm_rf project._('artifacts')
+          FileUtils.rm_rf project._('tmp/gwt')
         end
       end
     end

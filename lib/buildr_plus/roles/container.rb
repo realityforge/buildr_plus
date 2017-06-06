@@ -137,7 +137,7 @@ BuildrPlus::Roles.role(:container) do
         end
         ipr.add_gwt_configuration(p,
                                   :gwt_module => gwt_module,
-                                  :vm_parameters => '-Xmx3G',
+                                  :vm_parameters => "-Xmx3G -Djava.io.tmpdir=#{_('tmp/gwt')}",
                                   :shell_parameters => "-port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:generated, 'gwt-export')}/",
                                   :launch_page => "http://127.0.0.1:8080/#{p.root_project.name}/#{path}")
       end
