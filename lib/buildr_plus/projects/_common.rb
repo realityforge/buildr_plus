@@ -20,6 +20,7 @@ require 'buildr/git_auto_version'
 require 'buildr/top_level_generate_dir'
 
 BuildrPlus::FeatureManager.activate_features([
+                                               :clean,
                                                :checks,
                                                :assets,
                                                :repositories,
