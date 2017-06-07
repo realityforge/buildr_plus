@@ -265,7 +265,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << replicant_shared_deps
       dependencies << Buildr.artifacts(BuildrPlus::Libs.ee_provided)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_ee_client)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_authfilter) if BuildrPlus::FeatureManager.activated?(:keycloak)
 
