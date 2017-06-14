@@ -51,7 +51,9 @@ BuildrPlus::Roles.role(:all_in_one) do
         war.exclude project._(sass_path)
       end
     end
-    war.include assets.to_s, :as => '.' if BuildrPlus::FeatureManager.activated?(:gwt) || BuildrPlus::FeatureManager.activated?(:less) || BuildrPlus::FeatureManager.activated?(:sass)
+    project.assets.paths.each do |asset_dir|
+      war.include asset_dir, :as => '.'
+    end
   end
 
   check package(:war), 'should contain generated gwt artifacts' do

@@ -69,6 +69,7 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
       end
 
       project.assets.enhance([t.name])
+      project.assets.paths << project._(:generated, :sass, :main, :webapp)
 
       desc 'Precompile all assets'
       project.task(':assets:precompile' => t.name)
