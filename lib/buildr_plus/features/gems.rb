@@ -95,6 +95,9 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
         gem(gems, 'resgen', '1.0.0', :path => 'vendor/tools/resgen')
         gem(gems, 'nokogiri', '1.7.2')
       end
+      if BuildrPlus::FeatureManager.activated?(:sass)
+        gem(gems, 'sass', '3.4.24')
+      end
 
       gems.merge!(additional_gems)
 
