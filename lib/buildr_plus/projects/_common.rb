@@ -46,7 +46,6 @@ BuildrPlus::FeatureManager.activate_feature(:dbt) if BuildrPlus::Util.is_dbt_gem
 BuildrPlus::FeatureManager.activate_feature(:dialect_mapping) if BuildrPlus::FeatureManager.activated?(:dbt)
 BuildrPlus::FeatureManager.activate_feature(:domgen) if BuildrPlus::Util.is_domgen_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:rptman) if BuildrPlus::Util.is_rptman_gem_present?
-BuildrPlus::FeatureManager.activate_feature(:sass) if BuildrPlus::Util.is_sass_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:redfish) if BuildrPlus::Util.is_redfish_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:braid) if BuildrPlus::Util.is_braid_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:resgen) if BuildrPlus::Util.is_resgen_gem_present?
