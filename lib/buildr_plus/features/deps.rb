@@ -385,6 +385,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << self.model_qa_support_deps
       dependencies << Buildr.artifacts(BuildrPlus::Syncrecord.syncrecord_server_qa) if BuildrPlus::FeatureManager.activated?(:syncrecord)
       dependencies << Buildr.artifacts([:berk_model_qa_support]) if BuildrPlus::FeatureManager.activated?(:berk)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility)
 
       dependencies.flatten
     end
