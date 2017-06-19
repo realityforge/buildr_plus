@@ -54,8 +54,4 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
   BuildrPlus::Gwt.define_gwt_task(project, ".#{p.name_as_class}") if BuildrPlus::Artifacts.library?
 
   BuildrPlus::Gwt.define_gwt_idea_facet(project)
-
-  check package(:jar), 'should contain generated source files' do
-    it.should contain("#{p.group_as_path}/client/ioc/#{p.name_as_class}GwtRpcServicesModule.class")
-  end if BuildrPlus::Domgen.enforce_package_name? && BuildrPlus::FeatureManager.activated?(:domgen)
 end
