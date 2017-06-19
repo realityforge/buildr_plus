@@ -356,7 +356,7 @@ CONTENT
     end
 
     def inside_docker_image(content)
-      java_version = BuildrPlus::Java.version == 7 ? 'java-7.80.15' : 'java-8.121.13'
+      java_version = BuildrPlus::Java.version == 7 ? 'java-7.80.15' : 'java-8.131.11'
       ruby_version = "ruby-#{BuildrPlus::Ruby.ruby_version}"
 
       c = content
