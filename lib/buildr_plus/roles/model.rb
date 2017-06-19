@@ -32,12 +32,6 @@ BuildrPlus::Roles.role(:model) do
   package(:sources)
 
   if BuildrPlus::FeatureManager.activated?(:db)
-
-    check package(:jar), 'should contain resources and generated classes' do
-      it.should_not contain('META-INF/orm.xml')
-      it.should_not contain('META-INF/persistence.xml')
-    end
-
     iml.add_jpa_facet
     iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   end

@@ -135,6 +135,7 @@ BuildrPlus::Roles.role(:container) do
             path = candidate if File.exist?(server_project._(:source, :main, :webapp_local, candidate))
           end
         end
+        iml.excluded_directories << project._('tmp/gwt')
         ipr.add_gwt_configuration(p,
                                   :gwt_module => gwt_module,
                                   :vm_parameters => "-Xmx3G -Djava.io.tmpdir=#{_('tmp/gwt')}",

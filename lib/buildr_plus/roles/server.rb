@@ -59,23 +59,6 @@ BuildrPlus::Roles.role(:server) do
     war.include assets.to_s, :as => '.' if BuildrPlus::FeatureManager.activated?(:gwt) || BuildrPlus::FeatureManager.activated?(:less) || BuildrPlus::FeatureManager.activated?(:sass)
   end
 
-  check package(:war), 'should contain generated gwt artifacts' do
-    it.should contain("#{project.root_project.name}/#{project.root_project.name}.nocache.js")
-  end if BuildrPlus::FeatureManager.activated?(:gwt) && BuildrPlus::FeatureManager.activated?(:role_user_experience)
-  check package(:war), 'should contain web.xml' do
-    it.should contain('WEB-INF/web.xml')
-  end
-  check package(:war), 'should contain orm.xml and persistence.xml' do
-    it.should contain('WEB-INF/classes/META-INF/orm.xml')
-    it.should contain('WEB-INF/classes/META-INF/persistence.xml')
-  end if BuildrPlus::FeatureManager.activated?(:db)
-  check package(:war), 'should not contain less files' do
-    it.should_not contain('**/*.less')
-  end if BuildrPlus::FeatureManager.activated?(:less)
-  check package(:war), 'should not contain sass files' do
-    it.should_not contain('**/*.sass')
-  end if BuildrPlus::FeatureManager.activated?(:sass)
-
   project.iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
