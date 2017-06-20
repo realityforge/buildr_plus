@@ -254,7 +254,7 @@ CONTENT
 
     def deploy_stage(root_project)
       <<-DEPLOY_STEP
-          kinjen.deploy_stage( this, '#{root_project.name}' )
+          kinjen.deploy_stage( this, '#{root_project.name}', '#{deployment_environment}' )
       DEPLOY_STEP
     end
 
