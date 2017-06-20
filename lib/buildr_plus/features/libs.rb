@@ -214,7 +214,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_authfilter
-      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:0.1)
+      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:0.2)
     end
 
     def jboss_logging
