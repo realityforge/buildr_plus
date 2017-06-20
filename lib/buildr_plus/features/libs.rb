@@ -135,10 +135,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.gwt.gin:gwt-gin-extensions:jar:0.1)
     end
 
-    def gwt_property_source
-      %w(org.realityforge.gwt.property-source:gwt-property-source:jar:0.2)
-    end
-
     def gwt_webpoller
       %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.5)
     end
@@ -218,7 +214,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_authfilter
-      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:0.1)
+      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:0.2)
     end
 
     def jboss_logging
@@ -246,7 +242,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '0.5.87'
+      '0.5.88'
     end
 
     def replicant_shared
@@ -270,7 +266,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_gwt_client
-      %W(org.realityforge.replicant:replicant-client-gwt:jar:#{replicant_version}) + self.replicant_client_common + self.gwt_property_source
+      %W(org.realityforge.replicant:replicant-client-gwt:jar:#{replicant_version}) + self.replicant_client_common
     end
 
     def replicant_server
