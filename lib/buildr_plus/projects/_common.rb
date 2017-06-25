@@ -49,3 +49,4 @@ BuildrPlus::FeatureManager.activate_feature(:rptman) if BuildrPlus::Util.is_rptm
 BuildrPlus::FeatureManager.activate_feature(:redfish) if BuildrPlus::Util.is_redfish_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:braid) if BuildrPlus::Util.is_braid_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:resgen) if BuildrPlus::Util.is_resgen_gem_present?
+BuildrPlus::FeatureManager.activate_feature(:node) if File.exist?("#{File.dirname(::Buildr.application.buildfile.to_s)}/.node-version")
