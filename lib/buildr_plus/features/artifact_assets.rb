@@ -21,6 +21,7 @@ BuildrPlus::FeatureManager.feature(:artifact_assets) do |f|
           target = project.root_project._(:artifacts, project.root_project.name)
           mkdir_p target
           project.assets.paths.each do |asset|
+            next if asset.to_s =~ /generated\/gwt\// && BuildrPlus::FeatureManager.activated?(:gwt)
             file(asset.to_s).invoke
             cp_r Dir["#{asset}/./*"], "#{target}/"
           end

@@ -76,8 +76,6 @@ BuildrPlus::Roles.role(:server) do
 
   project.assets.paths.each do |path|
     next if path.to_s =~ /generated\/gwt\// && BuildrPlus::FeatureManager.activated?(:gwt)
-    next if path.to_s =~ /generated\/less\// && BuildrPlus::FeatureManager.activated?(:less)
-    next if path.to_s =~ /generated\/sass\// && BuildrPlus::FeatureManager.activated?(:sass)
     webroots[path.to_s] = '/'
   end
 
