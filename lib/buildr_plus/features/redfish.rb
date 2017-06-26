@@ -28,6 +28,12 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       @local_domain.nil? ? true : @local_domain
     end
 
+    attr_writer :local_domain_update_only
+
+    def local_domain_update_only?
+      @local_domain_update_only.nil? ? false : @local_domain_update_only
+    end
+
     def customize_local_domain(&block)
       raise 'Attempting to customize local domain when local domain disabled' unless local_domain?
       (@local_domain_customizations ||= []) << block
@@ -231,6 +237,9 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         if BuildrPlus::Redfish.local_domain? && !Redfish.domain_by_key?('local')
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_local_development(domain, :features => BuildrPlus::Redfish.features)
+            if BuildrPlus::Redfish.local_domain_update_only?
+              domain.complete = false
+            end
             if BuildrPlus::FeatureManager.activated?(:mail)
               RedfishPlus.configure_local_mail_port(domain)
             end
