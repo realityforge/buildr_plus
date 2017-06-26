@@ -56,6 +56,19 @@ install:
   - gem install bundler
   - bundle install
 CONTENT
+      if BuildrPlus::FeatureManager.activated?(:node)
+        nv = BuildrPlus::Node.node_version
+        content += <<CONTENT
+  - nvm install v#{nv}
+  - nvm use v#{nv}
+CONTENT
+        if BuildrPlus::Node.root_package_json_present?
+          content += <<CONTENT
+  - npm install -g yarn
+  - yarn install
+CONTENT
+        end
+      end
 
       if BuildrPlus::Db.is_multi_database_project? || BuildrPlus::Db.pg_defined?
         content += <<CONTENT
