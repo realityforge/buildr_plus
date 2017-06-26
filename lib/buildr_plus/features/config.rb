@@ -302,31 +302,33 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
             end
           end unless dbt_imports
 
+          is_sql_server = database.is_a?(BuildrPlus::Config::MssqlDatabaseConfig)
           short_name = Reality::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
           database.database = "#{BuildrPlus::Config.db_scope}#{short_name}_#{self.env_code(environment.key)}" unless database.database
           database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
-          database.host = environment_var('DB_SERVER_HOST') unless database.host
+          type_prefix = is_sql_server ? 'MS' : 'PG'
+          database.host = environment_var("#{type_prefix}_DB_SERVER_HOST") unless database.host
           unless database.port_set?
-            port = environment_var('DB_SERVER_PORT', database.port)
+            port = environment_var("#{type_prefix}_DB_SERVER_PORT", database.port)
             database.port = port.to_i if port
           end
-          database.admin_username = environment_var('DB_SERVER_USERNAME') unless database.admin_username
-          database.admin_password = environment_var('DB_SERVER_PASSWORD') unless database.admin_password
+          database.admin_username = environment_var("#{type_prefix}_DB_SERVER_USERNAME") unless database.admin_username
+          database.admin_password = environment_var("#{type_prefix}_DB_SERVER_PASSWORD") unless database.admin_password
 
-          if database.is_a?(BuildrPlus::Config::MssqlDatabaseConfig)
+          if is_sql_server
             database.restore_name = short_name unless database.restore_name
             database.backup_name = short_name unless database.backup_name
-            database.backup_location = environment_var('DB_BACKUPS_LOCATION') unless database.backup_location
-            database.delete_backup_history = (environment_var('DB_SERVER_DELETE_BACKUP_HISTORY', 'true') == 'true') unless database.delete_backup_history_set?
+            database.backup_location = environment_var("#{type_prefix}_DB_BACKUPS_LOCATION") unless database.backup_location
+            database.delete_backup_history = (environment_var("#{type_prefix}_DB_SERVER_DELETE_BACKUP_HISTORY", 'true') == 'true') unless database.delete_backup_history_set?
             unless database.instance
-              instance = environment_var('DB_SERVER_INSTANCE', '')
+              instance = environment_var("#{type_prefix}_DB_SERVER_INSTANCE", '')
               database.instance = instance unless instance == ''
             end
           end
 
-          raise "Configuration for database key #{database.key} is missing host attribute and can not be derived from environment variable DB_SERVER_HOST" unless database.host
-          raise "Configuration for database key #{database.key} is missing admin_username attribute and can not be derived from environment variable DB_SERVER_USERNAME" unless database.admin_username
-          raise "Configuration for database key #{database.key} is missing admin_password attribute and can not be derived from environment variable DB_SERVER_PASSWORD" unless database.admin_password
+          raise "Configuration for database key #{database.key} is missing host attribute and can not be derived from environment variable #{type_prefix}_DB_SERVER_HOST" unless database.host
+          raise "Configuration for database key #{database.key} is missing admin_username attribute and can not be derived from environment variable #{type_prefix}_DB_SERVER_USERNAME" unless database.admin_username
+          raise "Configuration for database key #{database.key} is missing admin_password attribute and can not be derived from environment variable #{type_prefix}_DB_SERVER_PASSWORD" unless database.admin_password
           raise "Configuration for database key #{database.key} specifies import_from but dbt defines no import for database" if database.import_from && !dbt_imports
         end
       end
