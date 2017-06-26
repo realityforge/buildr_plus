@@ -128,7 +128,7 @@ BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
     end
 
     def publish_content(oss)
-      content = "#{prepare_content(false)}\n        kinjen.publish_stage( this#{oss ? ", 'OSS_'" : ''} )\n"
+      content = "#{prepare_content(:exclude_artifacts => true)}\n        kinjen.publish_stage( this#{oss ? ", 'OSS_'" : ''} )\n"
       task_content(content, options)
     end
 
@@ -141,7 +141,7 @@ BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
       docker = options[:docker].nil? ? false : !!options[:docker]
       suffix = options[:additional_steps].nil? ? '' : "\n          #{options[:additional_steps]}"
       content = <<CONTENT
-#{prepare_content(artifacts)}
+#{prepare_content(:exclude_artifacts => !artifacts)}
         stage('#{label}') {
           sh #{quote}#{pre_script}#{separator}#{docker ? docker_setup : ''}#{buildr_command(task, options)}#{quote}#{suffix}
         }
@@ -180,14 +180,19 @@ CONTENT
 CONTENT
     end
 
-    def prepare_content(include_artifacts)
-      "        kinjen.prepare_stage( this#{include_artifacts ? '' : ', [buildr: false]'} )\n"
+    def prepare_content(options = {})
+      params = {}
+      params['buildr'] = 'false' if options[:exclude_artifacts]
+      params['node'] = 'true' if options[:include_node]
+      params['yarn'] = 'false' if options[:include_node] && options[:exclude_yarn]
+      "        kinjen.prepare_stage( this#{params.empty? ? '' : ", [#{params.collect{|k,v| "#{k}: #{v}"}.join(', ')}]"} )\n"
     end
 
     def main_content(root_project)
       content = automerge_prepare
 
-      content += prepare_content(true)
+      content += prepare_content(:include_node => BuildrPlus::FeatureManager.activated?(:node),
+                                 :exclude_yarn => !BuildrPlus::Node.root_package_json_present?)
 
       content += commit_stage(root_project)
 
