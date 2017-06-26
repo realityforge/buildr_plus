@@ -1,5 +1,6 @@
 def define_lessc_task(project, options = {})
   params = {
+    :js => false,
     :strict_math => true,
     :optimize => true,
     :strict_units => true,
@@ -19,18 +20,23 @@ def define_lessc_task(project, options = {})
     desc 'Preprocess Less files'
     compile_task = project.task('lessc' => [files]) do
       command = []
+      command << 'yarn'
+      command << 'run'
       command << 'lessc'
-      command << '--no-js'
+      command << '--'
+      command << '--no-js' unless params[:js]
       command << "--strict-math=#{!!params[:strict_math] ? 'on' : 'off'}"
       command << "--strict-units=#{!!params[:strict_units] ? 'on' : 'off'}"
 
       if params[:optimize]
-        command << '--clean-css="--s0"'
+        command << '--compress'
+        command << '--clean-css'
       end
+
+      target_subdir = params[:target_subdir].nil? ? '' : "#{params[:target_subdir]}/"
 
       puts 'Compiling Less'
       files.each do |f|
-        target_subdir = params[:target_subdir].nil? ? '' : "#{params[:target_subdir]}/"
         sh "#{command.join(' ')} #{f} #{target_dir}/#{target_subdir}#{Buildr::Util.relative_path(f, source_dir)[0...-5]}.css"
       end
       touch target_dir
