@@ -203,6 +203,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         Redfish.domain(buildr_project.name) unless Redfish.domain_by_key?(buildr_project.name)
         domain = Redfish.domain_by_key(buildr_project.name)
         domain.complete = false
+        domain.local = false
         BuildrPlus::Redfish.domain_customizations.each do |customization|
           customization.call(domain)
         end
