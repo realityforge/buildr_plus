@@ -234,6 +234,11 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           environment.setting(key, "http://127.0.0.1:8080/#{Reality::Naming.underscore(remote_datasource.name)}") unless environment.setting?(key)
         end
       end
+      if BuildrPlus::FeatureManager.activated?(:gwt)
+        prefix = "#{Reality::Naming.uppercase_constantize(root_project.name)}_CODE_SERVER_"
+        environment.setting("#{prefix}HOST", 'localhost')
+        environment.setting("#{prefix}PORT", '8889')
+      end
     end
 
     def populate_keycloak_remote_datasource_settings(environment, remote_datasource)
