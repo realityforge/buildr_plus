@@ -237,7 +237,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
         if BuildrPlus::Redfish.local_domain? && !Redfish.domain_by_key?('local')
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
-            RedfishPlus.setup_for_local_development(domain, :features => BuildrPlus::Redfish.features)
+            RedfishPlus.setup_for_local_development(domain, :features => [:jms, :jdbc])
             if BuildrPlus::Redfish.local_domain_update_only?
               domain.complete = false
             end
