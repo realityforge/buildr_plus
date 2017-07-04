@@ -76,8 +76,12 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
     def app_scope
       return ENV['APP_SCOPE'] if ENV['APP_SCOPE']
-      return "#{ENV['JOB_NAME']}_#{ENV['BUILD_NUMBER']}".gsub(/[\/-]/, '_') if ENV['JOB_NAME']
+      return ENV['GIT_SHORT_HASH'] if running_in_jenkins?
       nil
+    end
+
+    def running_in_jenkins?
+      !!ENV['JOB_NAME']
     end
 
     def env_code(environment = self.environment)
@@ -99,7 +103,11 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def db_scope
-      "#{user || 'NOBODY'}#{self.app_scope.nil? ? '' : "_#{self.app_scope}"}_"
+      if running_in_jenkins?
+        "#{self.app_scope}_"
+      else
+        "#{user || 'NOBODY'}#{self.app_scope.nil? ? '' : "_#{self.app_scope}"}_"
+      end
     end
 
     def load_application_config!
