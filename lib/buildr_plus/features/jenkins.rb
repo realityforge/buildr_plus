@@ -361,9 +361,6 @@ CONTENT
     end
 
     def inside_docker_image(content)
-      java_version = BuildrPlus::Java.version == 7 ? 'java-7.80.15' : 'java-8.131.11'
-      ruby_version = "ruby-#{BuildrPlus::Ruby.ruby_version}"
-
       c = content
       if BuildrPlus::FeatureManager.activated?(:docker)
         c = <<CONTENT
@@ -373,7 +370,7 @@ CONTENT
       end
 
       result = <<CONTENT
-    kinjen.run_in_container( this, 'stocksoftware/build:#{java_version}_#{ruby_version}' ) {
+    kinjen.run_in_container( this, 'stocksoftware/build' ) {
 #{c}
     }
 CONTENT
