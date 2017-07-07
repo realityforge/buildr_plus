@@ -224,7 +224,7 @@ CONTENT
       content = automerge_prelude + inside_try_catch(content, true, true, true)
 
       content += <<CONTENT
-      if ( currentBuild.result == 'SUCCESS' )
+      if ( currentBuild.result == 'SUCCESS' && env.SKIP_DOWNSTREAM != 'true' )
       {
 CONTENT
       content += <<CONTENT
@@ -235,7 +235,7 @@ CONTENT
 CONTENT
       if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
         content += <<-CONTENT
-        if ( env.BRANCH_NAME == 'master' )
+        if ( env.BRANCH_NAME == 'master' || ( env.AUTO_MERGE_TARGET_BRANCH == 'master' && env.AUTO_MERGE_COMPLETE == 'true' ) )
         {
         CONTENT
       end
@@ -248,7 +248,12 @@ CONTENT
       end
       if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
         content += <<-CONTENT
+          kinjen.complete_downstream_actions( this )
         }
+        CONTENT
+      else
+        content += <<-CONTENT
+        kinjen.complete_downstream_actions( this )
         CONTENT
       end
       content += <<CONTENT
