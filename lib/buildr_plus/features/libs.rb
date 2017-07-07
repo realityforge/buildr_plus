@@ -44,12 +44,16 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.geolatte.jpa:geolatte-geom-jpa:jar:0.2)
     end
 
+    def jetbrains_annotations
+      %w(org.jetbrains:annotations:jar:15.0)
+    end
+
     def findbugs_provided
       %w(com.google.code.findbugs:jsr305:jar:3.0.0 com.google.code.findbugs:annotations:jar:3.0.0)
     end
 
     def ee_provided
-      %w(javax:javaee-api:jar:7.0) + self.findbugs_provided
+      %w(javax:javaee-api:jar:7.0) + self.findbugs_provided + self.jetbrains_annotations
     end
 
     def glassfish_embedded

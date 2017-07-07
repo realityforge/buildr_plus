@@ -82,8 +82,9 @@ BuildrPlus::Roles.role(:container) do
 
     dependencies = [server_project, model_project, shared_project].compact
     dependencies << Object.const_get(:PACKAGED_DEPS) if Object.const_defined?(:PACKAGED_DEPS)
-    # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+    # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
     dependencies << BuildrPlus::Deps.findbugs_provided
+    dependencies << BuildrPlus::Deps.jetbrains_annotations
     dependencies << BuildrPlus::Deps.model_compile_deps
     dependencies << BuildrPlus::Deps.server_compile_deps
 
