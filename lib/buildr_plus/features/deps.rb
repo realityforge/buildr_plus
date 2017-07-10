@@ -61,9 +61,9 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
     def model_qa_support_test_generators
       generators = []
-      generators << [:jpa_main_qa, :jpa_main_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:ejb_main_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
-      generators << [:imit_server_main_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators << [:jpa_test_qa, :jpa_test_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
+      generators << [:ejb_test_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
+      generators << [:imit_server_test_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       generators.flatten
     end
@@ -183,7 +183,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators = [:ee_integration]
       generators << [:jpa_application_orm_xml, :jpa_application_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
       generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
-      generators += self.model_qa_support_test_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
+      generators += self.model_qa_support_main_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
       generators.flatten
     end
 
