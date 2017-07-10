@@ -68,6 +68,8 @@ module BuildrPlus #nodoc
             if database.is_a?(MssqlDatabaseConfig)
               results[key]['force_drop'] = true
               results[key]['timeout'] = 10000 unless jruby
+              results[key]['reindex_on_import'] = database.reindex_on_import? if database.reindex_on_import_set?
+              results[key]['shrink_on_import'] = database.shrink_on_import? if database.shrink_on_import_set?
               results[key]['backup_name'] = database.backup_name if database.backup_name
               results[key]['restore_name'] = database.restore_name if database.restore_name
               results[key]['backup_location'] = database.backup_location if database.backup_location
@@ -104,12 +106,12 @@ module BuildrPlus #nodoc
               if database.is_a?(MssqlDatabaseConfig)
                 results[key]['force_drop'] = true
                 results[key]['timeout'] = 10000 unless jruby
+                results[key]['reindex_on_import'] = database.reindex_on_import? if database.reindex_on_import_set?
+                results[key]['shrink_on_import'] = database.shrink_on_import? if database.shrink_on_import_set?
                 results[key]['backup_name'] = database.backup_name if database.backup_name
                 results[key]['restore_name'] = database.restore_name if database.restore_name
                 results[key]['backup_location'] = database.backup_location if database.backup_location
                 results[key]['delete_backup_history'] = database.delete_backup_history? if database.delete_backup_history_set?
-                results[key]['reindex_on_import'] = database.reindex_on_import? if database.reindex_on_import_set?
-                results[key]['shrink_on_import'] = database.shrink_on_import? if database.shrink_on_import_set?
               end
             end
           end
