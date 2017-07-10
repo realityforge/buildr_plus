@@ -223,20 +223,13 @@ CONTENT
 
       content = automerge_prelude + inside_try_catch(content, true, true, true)
 
-      content += <<CONTENT
-      if ( currentBuild.result == 'SUCCESS' && env.SKIP_DOWNSTREAM != 'true' )
-      {
-CONTENT
-      content += <<CONTENT
-        if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
-        {
-          kinjen.complete_auto_merge( this, env.AUTO_MERGE_TARGET_BRANCH )
-        }
-CONTENT
       if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
         content += <<-CONTENT
-        if ( env.BRANCH_NAME == 'master' || ( env.AUTO_MERGE_TARGET_BRANCH == 'master' && env.AUTO_MERGE_COMPLETE == 'true' ) )
-        {
+      kinjen.complete_build( this ) {
+        CONTENT
+      else
+        content += <<-CONTENT
+      kinjen.complete_build( this )
         CONTENT
       end
       if BuildrPlus::Jenkins.auto_deploy?
@@ -248,23 +241,15 @@ CONTENT
       end
       if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
         content += <<-CONTENT
-          kinjen.complete_downstream_actions( this )
-        }
-        CONTENT
-      else
-        content += <<-CONTENT
-        kinjen.complete_downstream_actions( this )
+      }
         CONTENT
       end
-      content += <<CONTENT
-      }
-CONTENT
       inside_docker_image(config_git + content)
     end
 
     def deploy_stage(root_project)
       <<-DEPLOY_STEP
-          kinjen.deploy_stage( this, '#{root_project.name}', '#{deployment_environment}' )
+        kinjen.deploy_stage( this, '#{root_project.name}', '#{deployment_environment}' )
       DEPLOY_STEP
     end
 
@@ -292,7 +277,7 @@ CONTENT
       name = root_project.group.to_s.gsub(/\.pg$/, '')
 
       <<-ZIM_STEP
-          kinjen.zim_stage( this, '#{name}', '#{dependencies}' )
+        kinjen.zim_stage( this, '#{name}', '#{dependencies}' )
       ZIM_STEP
     end
 
