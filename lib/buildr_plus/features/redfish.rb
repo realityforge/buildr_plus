@@ -149,14 +149,14 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       return name if ENV['CONFIG_ALLOW_HOSTNAME'] == 'true'
 
       # First collect all the entries from local resolve.conf
-      addresses = Resolv.getaddresses(name).select { |a| valid_v4?(a) }.collect { |a| a == '127.0.0.1' ? host_ip : a }
+      addresses = Resolv.getaddresses(name).select {|a| valid_v4?(a)}.collect {|a| a == '127.0.0.1' ? host_ip : a}
 
       # Then use configured DNS server if any
 
       if ENV['DOCKER_DNS']
         addresses += Resolv::DNS.new(:nameserver => [ENV['DOCKER_DNS']]).
           getaddresses(name).
-          collect { |a| a.address.unpack('CCCC').join('.') }
+          collect {|a| a.address.unpack('CCCC').join('.')}
       end
 
       return addresses[0] unless addresses.empty?
@@ -176,7 +176,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
       # Old versions of jruby do not support this method on Socket
       if Socket.respond_to?(:ip_address_list)
-        address_list = Socket.ip_address_list.select { |a| a.ipv4? && a.inspect_sockaddr != '127.0.0.1' }.collect { |a| a.inspect_sockaddr }
+        address_list = Socket.ip_address_list.select {|a| a.ipv4? && a.inspect_sockaddr != '127.0.0.1'}.collect {|a| a.inspect_sockaddr}
 
         return address_list[0] unless address_list.empty?
       end
@@ -186,7 +186,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
     def valid_v4?(addr)
       if /\A(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\Z/ =~ addr
-        return $~.captures.all? { |i| i.to_i < 256 }
+        return $~.captures.all? {|i| i.to_i < 256}
       end
       return false
     end
@@ -302,7 +302,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           end
         end
 
-        unless BuildrPlus::Util.subprojects(buildr_project).any? { |p| p == "#{buildr_project.name}:domains" }
+        unless BuildrPlus::Util.subprojects(buildr_project).any? {|p| p == "#{buildr_project.name}:domains"}
           buildr_project.instance_eval do
             desc 'Redfish Domain Definitions'
             define 'domains' do
