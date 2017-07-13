@@ -23,7 +23,7 @@ BuildrPlus::Roles.role(:all_in_one) do
       generators << [:imit_server_entity_listener, :imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
     end
 
-    generators << [:ee_redfish] if BuildrPlus::FeatureManager.activated?(:redfish)
+    generators << [:redfish_fragment] if BuildrPlus::FeatureManager.activated?(:redfish)
     generators << [:keycloak_client_config] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
     generators += project.additional_domgen_generators
