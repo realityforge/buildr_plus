@@ -122,6 +122,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
           if BuildrPlus::Domgen.enforce_postload_constraints?
             facet_mapping =
               {
+                :redfish => :redfish,
                 :iris_audit => :iris_audit,
                 :jackson => :jackson,
                 :berk => :berk,
