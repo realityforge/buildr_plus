@@ -116,6 +116,14 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         properties['OPENMQ_ADMIN_PASSWORD'] = environment.broker.admin_password.to_s
         properties["#{constant_prefix}_BROKER_USERNAME"] = environment.broker.admin_username.to_s
         properties["#{constant_prefix}_BROKER_PASSWORD"] = environment.broker.admin_password.to_s
+        domain.environment_vars.keys.each do |key|
+          if (key =~ /_BROKER_USERNAME$/) && !properties.include?(key)
+            properties[key] = environment.broker.admin_username.to_s
+          elsif (key =~ /_BROKER_PASSWORD$/) && !properties.include?(key)
+            properties[key] = environment.broker.admin_password.to_s
+          end
+        end
+
       end
 
       if BuildrPlus::FeatureManager.activated?(:mail)
