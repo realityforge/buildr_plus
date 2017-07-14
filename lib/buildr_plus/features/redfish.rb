@@ -139,6 +139,14 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         end
       end
 
+      domain.environment_vars.keys.each do |key|
+        if (key =~ /_PUBLIC_HOST_URL$/ || key =~ /_INTERNAL_HOST_URL$/) && !properties.include?(key)
+          properties[key] = 'http://127.0.0.1:8080'
+        elsif (key =~ /^(.*)_PUBLIC_URL$/ || key =~ /^(.*)_INTERNAL_URL$/) && !properties.include?(key)
+          properties[key] = "http://127.0.0.1:8080/#{Reality::Naming.underscore($1)}"
+        end
+      end
+
       properties.merge!(environment.settings)
 
       properties
