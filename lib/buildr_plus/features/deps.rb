@@ -156,6 +156,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators = []
 
       generators << [:ce_data_types]
+      generators << [:gwt_client_config] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:imit_shared, :imit_client_dao, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt_module] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       generators.flatten
