@@ -156,7 +156,8 @@ CONTENT
 
     def task_content(content, options = {})
       email = options[:email].nil? ? true : !!options[:email]
-      hash_bang(inside_node(inside_docker_image(config_git + inside_try_catch(content, false, email, false))))
+      force_rebuild = options[:force_rebuild].nil? ? false : !!options[:force_rebuild]
+      hash_bang(inside_node(inside_docker_image(config_git + inside_try_catch(content, false, email, false, force_rebuild))))
     end
 
     def automerge_prelude
@@ -334,10 +335,11 @@ timestamps {
 CONTENT
     end
 
-    def inside_try_catch(content, update_status, send_email, auto_merge)
+    def inside_try_catch(content, update_status, send_email, auto_merge, force_rebuild=false)
       options = {}
       options[:notify_github] = false unless update_status
       options[:email] = false unless send_email
+      options[:force_rebuild] = true unless !force_rebuild
       options[:lock_name] = 'env.AUTO_MERGE_TARGET_BRANCH' if auto_merge
       option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
       <<CONTENT
