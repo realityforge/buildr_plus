@@ -129,7 +129,7 @@ BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
 
     def publish_content(oss)
       content = "#{prepare_content(:exclude_artifacts => true)}\n        kinjen.publish_stage( this#{oss ? ", 'OSS_'" : ''} )\n"
-      task_content(content, :force_rebuild => true)
+      task_content(content, :always_run => true)
     end
 
     def buildr_task_content(label, task, options = {})
@@ -156,8 +156,8 @@ CONTENT
 
     def task_content(content, options = {})
       email = options[:email].nil? ? true : !!options[:email]
-      force_rebuild = options[:force_rebuild].nil? ? false : !!options[:force_rebuild]
-      hash_bang(inside_node(inside_docker_image(config_git + inside_try_catch(content, false, email, false, force_rebuild))))
+      always_run = options[:always_run].nil? ? false : !!options[:always_run]
+      hash_bang(inside_node(inside_docker_image(config_git + inside_try_catch(content, false, email, false, always_run))))
     end
 
     def automerge_prelude
@@ -335,11 +335,11 @@ timestamps {
 CONTENT
     end
 
-    def inside_try_catch(content, update_status, send_email, auto_merge, force_rebuild)
+    def inside_try_catch(content, update_status, send_email, auto_merge, always_run)
       options = {}
       options[:notify_github] = false unless update_status
       options[:email] = false unless send_email
-      options[:force_rebuild] = true if force_rebuild
+      options[:always_run] = true if always_run
       options[:lock_name] = 'env.AUTO_MERGE_TARGET_BRANCH' if auto_merge
       option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
       <<CONTENT
