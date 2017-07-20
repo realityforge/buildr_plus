@@ -129,7 +129,7 @@ BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
 
     def publish_content(oss)
       content = "#{prepare_content(:exclude_artifacts => true)}\n        kinjen.publish_stage( this#{oss ? ", 'OSS_'" : ''} )\n"
-      task_content(content, options)
+      task_content(content, :force_rebuild => true)
     end
 
     def buildr_task_content(label, task, options = {})
@@ -222,7 +222,7 @@ CONTENT
         content += stage_content
       end
 
-      content = automerge_prelude + inside_try_catch(content, true, true, true)
+      content = automerge_prelude + inside_try_catch(content, true, true, true, false)
 
       if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
         content += <<-CONTENT
@@ -335,11 +335,11 @@ timestamps {
 CONTENT
     end
 
-    def inside_try_catch(content, update_status, send_email, auto_merge, force_rebuild=false)
+    def inside_try_catch(content, update_status, send_email, auto_merge, force_rebuild)
       options = {}
       options[:notify_github] = false unless update_status
       options[:email] = false unless send_email
-      options[:force_rebuild] = true unless !force_rebuild
+      options[:force_rebuild] = true if force_rebuild
       options[:lock_name] = 'env.AUTO_MERGE_TARGET_BRANCH' if auto_merge
       option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
       <<CONTENT
