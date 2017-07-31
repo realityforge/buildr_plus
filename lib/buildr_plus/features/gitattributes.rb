@@ -164,7 +164,7 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
         add(gitattributes, text_rule('*.less'))
       end
 
-      if BuildrPlus::FeatureManager.activated?(:less)
+      if BuildrPlus::FeatureManager.activated?(:db)
         add(gitattributes, text_rule('*.sql'))
       end
 
