@@ -24,14 +24,16 @@ module BuildrPlus::Gitattributes
     attr_accessor :text
     attr_accessor :binary
     attr_accessor :crlf
+    attr_accessor :eofnl
     attr_accessor :flags
 
     def to_s
       text = self.text.nil? ? '' : " #{!!self.text ? '' : '-'}text"
       crlf = self.crlf.nil? ? '' : " #{!!self.crlf ? '' : '-'}crlf"
       binary = self.binary.nil? ? '' : " #{!!self.binary ? '' : '-'}binary"
+      eofnl = self.eofnl.nil? ? '' : " #{!!self.eofnl ? '' : '-'}eofnl"
 
-      "#{pattern}#{text}#{crlf}#{binary}#{self.flags}\n"
+      "#{pattern}#{text}#{crlf}#{binary}#{eofnl}#{self.flags}\n"
     end
 
     def <=>(other)
@@ -148,7 +150,7 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:rptman)
-        add(gitattributes, rule('*.rdl', :text => false, :crlf => true))
+        add(gitattributes, rule('*.rdl', :text => true, :crlf => true, :eofnl => false))
       end
 
       if BuildrPlus::FeatureManager.activated?(:domgen)
