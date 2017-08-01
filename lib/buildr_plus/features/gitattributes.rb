@@ -23,17 +23,18 @@ module BuildrPlus::Gitattributes
 
     attr_accessor :text
     attr_accessor :binary
-    attr_accessor :crlf
+    attr_accessor :eol
     attr_accessor :eofnl
     attr_accessor :flags
 
     def to_s
       text = self.text.nil? ? '' : " #{!!self.text ? '' : '-'}text"
-      crlf = self.crlf.nil? ? '' : " #{!!self.crlf ? '' : '-'}crlf"
+      eol = self.eol.nil? ? '' : " eol=#{self.eol}"
       binary = self.binary.nil? ? '' : " #{!!self.binary ? '' : '-'}binary"
       eofnl = self.eofnl.nil? ? '' : " #{!!self.eofnl ? '' : '-'}eofnl"
+      flags = self.flags.nil? ? '' : " #{self.flags}"
 
-      "#{pattern}#{text}#{crlf}#{binary}#{eofnl}#{self.flags}\n"
+      "#{pattern}#{text}#{eol}#{binary}#{eofnl}#{flags}\n"
     end
 
     def <=>(other)
@@ -55,7 +56,11 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
     end
 
     def text_rule(pattern, options = {})
-      rule(pattern, {:text => true, :crlf => false, :binary => false}.merge(options))
+      rule(pattern, {:text => true, :eol => 'lf'}.merge(options))
+    end
+
+    def dos_text_rule(pattern, options = {})
+      rule(pattern, {:text => true, :eol => 'crlf'}.merge(options))
     end
 
     def binary_rule(pattern, options = {})
@@ -164,7 +169,7 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:rptman)
-        add(gitattributes, rule('*.rdl', :text => true, :crlf => true, :eofnl => false))
+        add(gitattributes, dos_text_rule('*.rdl', :eofnl => false))
       end
 
       if BuildrPlus::FeatureManager.activated?(:domgen)
@@ -204,8 +209,8 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
       end
 
       # Shell scripts
-      add(gitattributes, rule('*.cmd', :crlf => true, :text => true))
-      add(gitattributes, rule('*.bat', :crlf => true, :text => true))
+      add(gitattributes, dos_text_rule('*.cmd'))
+      add(gitattributes, dos_text_rule('*.bat'))
       add(gitattributes, text_rule('*.sh'))
 
       # Native development files
