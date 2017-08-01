@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:gwt => [:jackson]) do |f|
+BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
   f.enhance(:Config) do
     def gwtc_java_args
       %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M)

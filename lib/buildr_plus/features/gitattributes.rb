@@ -119,7 +119,7 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
       add(gitattributes, text_rule('*.rdoc'))
       add(gitattributes, text_rule('*.html'))
       add(gitattributes, text_rule('*.xhtml'))
-      add(gitattributes, text_rule('*.css'))
+      add(gitattributes, text_rule('*.css', :flags => 'encoding=UTF8'))
       add(gitattributes, text_rule('*.js'))
       add(gitattributes, binary_rule('*.jpg'))
       add(gitattributes, binary_rule('*.jpeg'))
@@ -143,6 +143,20 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
       add(gitattributes, text_rule('Rakefile'))
       add(gitattributes, text_rule('rakefile'))
       add(gitattributes, text_rule('*.rake'))
+
+      if BuildrPlus::FeatureManager.activated?(:graphql)
+        add(gitattributes, text_rule('*.graphql'))
+      end
+
+      if BuildrPlus::FeatureManager.activated?(:javascript)
+        add(gitattributes, text_rule('*.ts'))
+        add(gitattributes, text_rule('*.tsx'))
+      end
+
+      if BuildrPlus::FeatureManager.activated?(:typescript)
+        add(gitattributes, text_rule('*.ts'))
+        add(gitattributes, text_rule('*.tsx'))
+      end
 
       if BuildrPlus::FeatureManager.activated?(:jenkins)
         add(gitattributes, text_rule('Jenkinsfile'))
