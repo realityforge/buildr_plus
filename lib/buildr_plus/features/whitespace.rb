@@ -12,18 +12,6 @@
 # limitations under the License.
 #
 BuildrPlus::FeatureManager.feature(:whitespace) do |f|
-  f.enhance(:Config) do
-    def process_whitespace_files(apply_fix)
-      output = `bundle exec zapwhite#{apply_fix ? '' : ' --check-only'}`
-      puts output
-      if '' != output && !apply_fix
-        return false
-      else
-        return true
-      end
-    end
-  end
-
   f.enhance(:ProjectExtension) do
     desc 'Check all whitespace is normalized.'
     task 'whitespace:check' do
