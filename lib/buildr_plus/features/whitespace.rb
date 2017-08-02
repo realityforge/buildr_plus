@@ -16,7 +16,7 @@ BuildrPlus::FeatureManager.feature(:whitespace) do |f|
     desc 'Check all whitespace is normalized.'
     task 'whitespace:check' do
       output = `bundle exec zapwhite -d #{File.dirname(Buildr.application.buildfile.to_s)} --check-only`
-      unless output.empty?
+      unless $?.exitstatus != 0
         puts output
         raise 'Whitespace has not been normalized. Please run "buildr whitespace:fix" and commit changes.'
       end
