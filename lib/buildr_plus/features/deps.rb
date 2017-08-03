@@ -180,6 +180,11 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
+    def integration_qa_shared_generators
+      generators = [:ee_integration_provisioner]
+      generators.flatten
+    end
+
     def integration_qa_support_generators
       generators = [:ee_integration]
       generators << [:jpa_application_orm_xml, :jpa_application_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
@@ -322,6 +327,15 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
       dependencies << Buildr.artifacts([BuildrPlus::Libs.replicant_client_qa_support]) if BuildrPlus::FeatureManager.activated?(:remote_references)
+
+      dependencies.flatten
+    end
+
+    def integration_qa_shared_deps
+      dependencies = []
+
+      dependencies << model_qa_support_deps
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.glassfish_embedded])
 
       dependencies.flatten
     end

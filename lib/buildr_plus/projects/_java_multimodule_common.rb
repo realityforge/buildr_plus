@@ -59,7 +59,8 @@ if BuildrPlus::FeatureManager.activated?(:soap) || File.exist?("#{base_directory
   BuildrPlus::Roles.project('soap-qa-support', :roles => [:soap_qa_support], :parent => :container, :template => true, :description => 'SOAP Test Infrastructure')
 end
 
-if File.exist?("#{base_directory}/integration-qa-support")
+if File.exist?("#{base_directory}/integration-qa-support") || File.exist?("#{base_directory}/integration-qa-shared")
+  BuildrPlus::Roles.project('integration-qa-shared', :roles => [:integration_qa_shared], :parent => :container, :template => true, :description => 'Integration Test Infrastructure shared with external projects')
   BuildrPlus::Roles.project('integration-qa-support', :roles => [:integration_qa_support], :parent => :container, :template => true, :description => 'Integration Test Infrastructure')
   BuildrPlus::Roles.project('integration-tests', :roles => [:integration_tests], :parent => :container, :template => true, :description => 'Integration Tests')
 end

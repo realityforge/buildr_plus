@@ -25,6 +25,7 @@ BuildrPlus::Roles.role(:integration_qa_support) do
   compile.with BuildrPlus::Deps.integration_qa_support_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model_qa_support)
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :integration_qa_shared)
 
   package(:jar)
   package(:sources)
