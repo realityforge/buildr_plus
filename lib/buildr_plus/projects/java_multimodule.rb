@@ -25,8 +25,4 @@ if File.exist?("#{base_directory}/user-experience")
   BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter]) unless BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
 end
 
-if File.exist?("#{base_directory}/selenium-tests")
-  BuildrPlus::Roles.project('selenium-tests', :roles => [:selenium_tests], :parent => :container, :template => true, :description => 'Selenium Tests')
-end
-
 require 'buildr_plus/projects/_activate'
