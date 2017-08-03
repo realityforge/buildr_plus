@@ -344,6 +344,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << model_qa_support_deps
+      dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_rest_client, BuildrPlus::Syncrecord.syncrecord_server_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
       dependencies << Buildr.artifacts([BuildrPlus::Libs.glassfish_embedded])
       dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility) if BuildrPlus::FeatureManager.activated?(:jms)
 
