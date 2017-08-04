@@ -124,17 +124,19 @@ BuildrPlus::Roles.role(:all_in_one) do
                                          :server_name => 'GlassFish 4.1.2.172',
                                          :exploded => [project.name],
                                          :packaged => remote_packaged_apps)
-  ipr.add_glassfish_configuration(project,
-                                  :server_name => 'GlassFish 4.1.2.172',
-                                  :exploded => [project.name],
-                                  :packaged => local_packaged_apps)
-
-  if local_packaged_apps.size > 0
-    only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
+  unless BuildrPlus::Redfish.local_domain_update_only?
     ipr.add_glassfish_configuration(project,
-                                    :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 4.1.2.172",
                                     :server_name => 'GlassFish 4.1.2.172',
                                     :exploded => [project.name],
-                                    :packaged => only_packaged_apps)
+                                    :packaged => local_packaged_apps)
+
+    if local_packaged_apps.size > 0
+      only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
+      ipr.add_glassfish_configuration(project,
+                                      :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 4.1.2.172",
+                                      :server_name => 'GlassFish 4.1.2.172',
+                                      :exploded => [project.name],
+                                      :packaged => only_packaged_apps)
+    end
   end
 end
