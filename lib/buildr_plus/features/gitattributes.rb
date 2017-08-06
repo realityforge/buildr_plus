@@ -74,23 +74,21 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
     def process_gitattributes_file(apply_fix)
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/.gitattributes"
-      if File.exist?(filename)
-        content = IO.read(filename)
+      content = File.exist?(filename) ? IO.read(filename) : ''
 
-        original_content = content.dup
+      original_content = content.dup
 
-        content = build_gitattributes
+      content = build_gitattributes
 
-        if content != original_content
-          BuildrPlus::Gitattributes.gitattributes_needs_update = true
-          if apply_fix
-            puts 'Fixing: .gitattributes'
-            File.open(filename, 'wb') do |out|
-              out.write content
-            end
-          else
-            puts 'Non-normalized .gitattributes'
+      if content != original_content
+        BuildrPlus::Gitattributes.gitattributes_needs_update = true
+        if apply_fix
+          puts 'Fixing: .gitattributes'
+          File.open(filename, 'wb') do |out|
+            out.write content
           end
+        else
+          puts 'Non-normalized .gitattributes'
         end
       end
     end
@@ -222,7 +220,7 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
         add(gitattributes, r)
       end
 
-      "# DO NOT EDIT: File is auto-generated\n" + gitattributes.values.collect { |r| r.to_s }.sort.uniq.join
+      "# DO NOT EDIT: File is auto-generated\n" + gitattributes.values.collect {|r| r.to_s}.sort.uniq.join
     end
   end
 
