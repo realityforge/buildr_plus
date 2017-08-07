@@ -62,7 +62,7 @@ if File.exist?("#{base_directory}/gwt") || File.exist?("#{base_directory}/gwt-qa
   end
 end
 
-if BuildrPlus::FeatureManager.activated?(:soap) || File.exist?("#{base_directory}/replicant-ee-client")
+if BuildrPlus::FeatureManager.activated?(:soap)
   BuildrPlus::Roles.project('soap-client', :roles => [:soap_client], :parent => :container, :template => true, :description => 'SOAP Client API')
   BuildrPlus::Roles.project('soap-qa-support', :roles => [:soap_qa_support], :parent => :container, :template => true, :description => 'SOAP Test Infrastructure')
 end

@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_shared, :soap]) do
+BuildrPlus::Roles.role(:replicant_ee_client, :requires => [:role_replicant_shared]) do
 
   project.publish = BuildrPlus::Artifacts.replicant_ee_client?
 
