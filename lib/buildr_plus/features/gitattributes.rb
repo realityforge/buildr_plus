@@ -16,6 +16,7 @@ module BuildrPlus::Gitattributes
   class Rule < Reality::BaseElement
     def initialize(pattern, options = {})
       @pattern = pattern
+      @priority = 1
       super(options)
     end
 
@@ -26,6 +27,7 @@ module BuildrPlus::Gitattributes
     attr_accessor :eol
     attr_accessor :eofnl
     attr_accessor :flags
+    attr_accessor :priority
 
     def to_s
       text = self.text.nil? ? '' : " #{!!self.text ? '' : '-'}text"
@@ -38,7 +40,12 @@ module BuildrPlus::Gitattributes
     end
 
     def <=>(other)
-      to_s <=> other.to_s
+      order = self.priority <=> other.priority
+      if 0 != order
+        order
+      else
+        to_s <=> other.to_s
+      end
     end
   end
 end
@@ -56,15 +63,15 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
     end
 
     def text_rule(pattern, options = {})
-      rule(pattern, {:text => true, :eol => 'lf'}.merge(options))
+      rule(pattern, { :text => true, :eol => 'lf' }.merge(options))
     end
 
     def dos_text_rule(pattern, options = {})
-      rule(pattern, {:text => true, :eol => 'crlf'}.merge(options))
+      rule(pattern, { :text => true, :eol => 'crlf' }.merge(options))
     end
 
     def binary_rule(pattern, options = {})
-      rule(pattern, {:binary => true}.merge(options))
+      rule(pattern, { :binary => true }.merge(options))
     end
 
     def additional_rules
@@ -220,7 +227,7 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
         add(gitattributes, r)
       end
 
-      "# DO NOT EDIT: File is auto-generated\n" + gitattributes.values.collect {|r| r.to_s}.sort.uniq.join
+      "# DO NOT EDIT: File is auto-generated\n" + gitattributes.values.sort.collect {|r| r.to_s}.uniq.join
     end
   end
 
