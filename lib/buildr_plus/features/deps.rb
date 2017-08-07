@@ -383,11 +383,9 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service)
+        dependencies << Buildr.artifacts([BuildrPlus::Libs.keycloak_authfilter])
         if BuildrPlus::FeatureManager.activated?(:gwt)
           dependencies << Buildr.artifacts(BuildrPlus::Libs.proxy_servlet)
-        end
-        if BuildrPlus::FeatureManager.activated?(:remote_references)
-          dependencies << Buildr.artifacts([BuildrPlus::Libs.keycloak_authfilter])
         end
       end
       dependencies << Buildr.artifacts(:iris_audit_server) if BuildrPlus::FeatureManager.activated?(:iris_audit)
