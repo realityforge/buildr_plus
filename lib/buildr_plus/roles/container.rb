@@ -63,6 +63,15 @@ BuildrPlus::Roles.role(:container) do
     end
   end
 
+  if BuildrPlus::FeatureManager.activated?(:db)
+    environment = BuildrPlus::Config.application_config.environment_by_key(:test)
+    default_testng_args << "-Dkeycloak.server-url=#{environment.keycloak.base_url}"
+    default_testng_args << "-Dkeycloak.public-key=#{environment.keycloak.public_key}"
+    default_testng_args << "-Dkeycloak.realm=#{environment.keycloak.realm}"
+    default_testng_args << "-Dkeycloak.service_username=#{environment.keycloak.service_username}"
+    default_testng_args << "-Dkeycloak.service_password=#{environment.keycloak.service_password}"
+  end
+
   default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
 
   ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))

@@ -48,6 +48,14 @@ BuildrPlus::Roles.role(:integration_tests) do
     properties["#{key}.war.filename"] = Buildr.artifact(artifact).to_s
     test.enhance([Buildr.artifact(artifact)])
   end
+  if BuildrPlus::FeatureManager.activated?(:db)
+    environment = BuildrPlus::Config.application_config.environment_by_key(:test)
+    properties['keycloak.server-url'] = environment.keycloak.base_url
+    properties['keycloak.public-key'] = environment.keycloak.public_key
+    properties['keycloak.realm'] = environment.keycloak.realm
+    properties['keycloak.service_username'] = environment.keycloak.service_username
+    properties['keycloak.service_password'] = environment.keycloak.service_password
+  end
 
   test.using :java_args => BuildrPlus::Guiceyloops.integration_test_java_args, :properties => properties
 
