@@ -32,6 +32,7 @@ BuildrPlus::Roles.role(:sync_model, :requires => [:sync]) do
 
   compile.with artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter])
   compile.with artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client])
+  compile.with Buildr.artifacts([BuildrPlus::Libs.keycloak_authfilter]) if BuildrPlus::FeatureManager.activated?(:keycloak)
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
 
