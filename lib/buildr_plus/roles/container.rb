@@ -63,7 +63,7 @@ BuildrPlus::Roles.role(:container) do
     end
   end
 
-  if BuildrPlus::FeatureManager.activated?(:db)
+  if BuildrPlus::FeatureManager.activated?(:keycloak)
     environment = BuildrPlus::Config.application_config.environment_by_key(:test)
     default_testng_args << "-Dkeycloak.server-url=#{environment.keycloak.base_url}"
     default_testng_args << "-Dkeycloak.public-key=#{environment.keycloak.public_key}"
