@@ -128,7 +128,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
             cp_r a.to_s, "#{base_dir}/#{client.client_type}.json"
           end
 
-          a = Buildr.artifact('org.realityforge.keycloak.converger:keycloak-converger:jar:1.3')
+          a = Buildr.artifact(BuildrPlus::Libs.keycloak_converger)
           a.invoke
 
           args = []
@@ -160,7 +160,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           base_dir = buildr_project._('generated/keycloak_to_delete')
           mkdir_p base_dir
 
-          a = Buildr.artifact('org.realityforge.keycloak.converger:keycloak-converger:jar:1.6')
+          a = Buildr.artifact(BuildrPlus::Libs.keycloak_converger)
           a.invoke
 
           args = []
