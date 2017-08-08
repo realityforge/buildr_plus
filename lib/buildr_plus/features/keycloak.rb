@@ -160,7 +160,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           base_dir = buildr_project._('generated/keycloak_to_delete')
           mkdir_p base_dir
 
-          a = Buildr.artifact('org.realityforge.keycloak.converger:keycloak-converger:jar:1.5')
+          a = Buildr.artifact('org.realityforge.keycloak.converger:keycloak-converger:jar:1.6')
           a.invoke
 
           args = []
