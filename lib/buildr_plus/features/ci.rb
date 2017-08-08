@@ -181,6 +181,10 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           pull_request_actions << 'rptman:ssrs:upload'
         end
 
+        if BuildrPlus::FeatureManager.activated?(:keycloak)
+          package_actions << 'keycloak:create'
+        end
+
         project.task ':ci:source_code_analysis'
 
         commit_actions << 'ci:source_code_analysis'
@@ -215,6 +219,10 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           if BuildrPlus::FeatureManager.activated?(:jms)
             package_actions << 'openmq:stop'
           end
+        end
+
+        if BuildrPlus::FeatureManager.activated?(:keycloak)
+          package_actions << 'keycloak:destroy'
         end
 
         if BuildrPlus::FeatureManager.activated?(:rptman) && ENV['RPTMAN'] != 'no'

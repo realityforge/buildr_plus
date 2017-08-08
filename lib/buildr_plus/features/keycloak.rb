@@ -155,6 +155,30 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           Java::Commands.java(args)
         end
 
+        desc 'Remove uploaded keycloak client definitions from realm'
+        buildr_project.task ':keycloak:destroy' do
+          base_dir = buildr_project._('generated/keycloak_to_delete')
+          mkdir_p base_dir
+
+          a = Buildr.artifact('org.realityforge.keycloak.converger:keycloak-converger:jar:1.5')
+          a.invoke
+
+          args = []
+          args << '-jar'
+          args << a.to_s
+          args << '-v'
+          args << '-d' << base_dir
+          args << "--server-url=#{BuildrPlus::Config.environment_config.keycloak.base_url}"
+          args << "--realm-name=#{BuildrPlus::Config.environment_config.keycloak.realm}"
+          args << "--admin-username=#{BuildrPlus::Config.environment_config.keycloak.admin_username}" if BuildrPlus::Config.environment_config.keycloak.admin_username
+          args << "--admin-password=#{BuildrPlus::Config.environment_config.keycloak.admin_password}"
+          BuildrPlus::Keycloak.clients.each do |client|
+            args << '--delete-client' << client.name
+          end
+
+          Java::Commands.java(args)
+        end
+
         buildr_project.instance_eval do
           desc 'Keycloak Client Definitions'
           define 'keycloak-clients' do
