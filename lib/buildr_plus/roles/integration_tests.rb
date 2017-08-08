@@ -48,7 +48,7 @@ BuildrPlus::Roles.role(:integration_tests) do
     properties["#{key}.war.filename"] = Buildr.artifact(artifact).to_s
     test.enhance([Buildr.artifact(artifact)])
   end
-  if BuildrPlus::FeatureManager.activated?(:db)
+  if BuildrPlus::FeatureManager.activated?(:keycloak)
     environment = BuildrPlus::Config.application_config.environment_by_key(:test)
     properties['keycloak.server-url'] = environment.keycloak.base_url
     properties['keycloak.public-key'] = environment.keycloak.public_key
