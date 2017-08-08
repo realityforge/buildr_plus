@@ -32,7 +32,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     attr_writer :environment
 
     def environment
-      @environment || 'development'
+      @environment || ENV['BUILD_ENV'] || 'development'
     end
 
     def environment_config
