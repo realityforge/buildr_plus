@@ -12,57 +12,64 @@
 # limitations under the License.
 #
 
+module BuildrPlus::Keycloak
+  class KeycloakClient < Reality::BaseElement
+    def initialize(client_type, options = {})
+      @client_type = client_type
+      @artifact = nil
+      super(options)
+    end
+
+    attr_reader :client_type
+
+    # Buildr application representing keycloak configuration
+    attr_accessor :artifact
+
+    attr_writer :application
+
+    # The application that this client belongs to.
+    # Defaults to client_type if an external client and application not specified
+    def application
+      @application || (external? ? self.client_type : nil)
+    end
+
+    def external?
+      !@artifact.nil?
+    end
+
+    def default?
+      BuildrPlus::Keycloak.root_project.name == self.client_type
+    end
+
+    attr_writer :name
+
+    def name(environment = BuildrPlus::Config.environment)
+      @name || "#{BuildrPlus::Config.app_scope}#{BuildrPlus::Config.app_scope.nil? ? '' : '_'}#{BuildrPlus::Config.user || 'NOBODY'}_#{self.default? || self.external? ? '' : "#{Reality::Naming.uppercase_constantize(BuildrPlus::Keycloak.root_project.name)}_"}#{Reality::Naming.uppercase_constantize(self.client_type.to_s)}_#{BuildrPlus::Config.env_code(environment)}"
+    end
+
+    attr_writer :auth_client_type
+
+    def auth_client_type
+      @auth_client_type || self.client_type
+    end
+
+    # Return the client that is responsible for the initial authentication process for this client
+    def auth_client
+      BuildrPlus::Keycloak.client_by_client_type(self.auth_client_type)
+    end
+
+    def config_prefix
+      prefix =
+        (self.external? || self.default?) ?
+          '' :
+          "#{Reality::Naming.uppercase_constantize(BuildrPlus::Keycloak.root_project.name)}_"
+      "#{prefix}#{Reality::Naming.uppercase_constantize(self.client_type)}"
+    end
+  end
+end
+
 BuildrPlus::FeatureManager.feature(:keycloak) do |f|
   f.enhance(:Config) do
-    def default_client_type
-      root_project.name
-    end
-
-    def default_client_type?(client_type)
-      default_client_type == client_type
-    end
-
-    def client_types
-      client_types = []
-      client_types += self.additional_client_types
-      if BuildrPlus::FeatureManager.activated?(:role_user_experience)
-        # api client is for gwt_rpc, default_client_type is for UX
-        client_types += [default_client_type, 'api']
-      elsif BuildrPlus::FeatureManager.activated?(:role_library)
-        # Do nothing. Libraries integrate with their host application
-      else
-        # default_client_type is for api as there is no UX client
-        client_types += [default_client_type]
-      end
-      client_types
-    end
-
-    attr_writer :additional_client_types
-
-    def additional_client_types
-      @additional_client_types ||= []
-    end
-
-    def external_client_types
-      @external_client_types ||= {}
-    end
-
-    def add_external_client_type(key, artifact)
-      external_client_types[key.to_s] = artifact
-    end
-
-    def external_applications
-      @external_applications ||= []
-    end
-
-    def client_name_overrides
-      @client_name_overrides ||= {}
-    end
-
-    def client_name_for(client_type, external, environment = self.environment)
-      client_name_overrides[client_type] || "#{BuildrPlus::Config.app_scope}#{BuildrPlus::Config.app_scope.nil? ? '' : '_'}#{BuildrPlus::Config.user || 'NOBODY'}_#{(default_client_type?(client_type) || external) ? '' : "#{Reality::Naming.uppercase_constantize(default_client_type)}_"}#{Reality::Naming.uppercase_constantize(client_type.to_s)}_#{BuildrPlus::Config.env_code(environment)}"
-    end
-
     def root_project
       if Buildr.application.current_scope.size > 0
         return Buildr.project(Buildr.application.current_scope.join(':')).root_project rescue nil
@@ -70,20 +77,39 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       Buildr.projects.first.root_project
     end
 
-    def keycloak_config_prefix(client_type, external)
-      prefix = ''
-      unless external
-        name = root_project.name
-        prefix = name == client_type ? '' : "#{Reality::Naming.uppercase_constantize(name)}_"
-      end
-      "#{prefix}#{Reality::Naming.uppercase_constantize(client_type)}"
+    def client_by_client_type(client_type)
+      self.clients_map[client_type.to_s] || (raise "Unable to locate client with client_type '#{client_type.name}'")
+    end
+
+    def client(client_type, options = {})
+      raise "Attempting to redefine client_type #{client_type}" if self.clients_map[client_type.to_s]
+      client = BuildrPlus::Keycloak::KeycloakClient.new(client_type, options)
+      self.clients_map[client_type.to_s] = client
+      client
+    end
+
+    def clients
+      clients_map.values
+    end
+
+    def clients_map
+      @clients ||= {}
     end
   end
 
   f.enhance(:ProjectExtension) do
+    before_define do |buildr_project|
+      if buildr_project.ipr?
+        # Libraries integrate with their host application so we can exclude them
+        unless BuildrPlus::FeatureManager.activated?(:role_library)
+          BuildrPlus::Keycloak.client(buildr_project.root_project.name)
+          BuildrPlus::Keycloak.client('api') if BuildrPlus::FeatureManager.activated?(:role_user_experience)
+        end
+      end
+    end
+
     after_define do |buildr_project|
       if buildr_project.ipr?
-
         desc 'Upload keycloak client definition to realm'
         buildr_project.task ':keycloak:create' do
           name = buildr_project.name
@@ -96,10 +122,10 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           file.invoke
           cp_r Dir["#{file}/*"], base_dir
 
-          BuildrPlus::Keycloak.external_client_types.each do |client_type, artifact|
-            a = Buildr.artifact(artifact)
+          BuildrPlus::Keycloak.clients.select {|c| c.external?}.each do |client|
+            a = Buildr.artifact(client.artifact)
             a.invoke
-            cp_r a.to_s, "#{base_dir}/#{client_type}.json"
+            cp_r a.to_s, "#{base_dir}/#{client.client_type}.json"
           end
 
           a = Buildr.artifact('org.realityforge.keycloak.converger:keycloak-converger:jar:1.3')
@@ -114,16 +140,13 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << "--realm-name=#{BuildrPlus::Config.environment_config.keycloak.realm}"
           args << "--admin-username=#{BuildrPlus::Config.environment_config.keycloak.admin_username}" if BuildrPlus::Config.environment_config.keycloak.admin_username
           args << "--admin-password=#{BuildrPlus::Config.environment_config.keycloak.admin_password}"
-          BuildrPlus::Keycloak.client_types.each do |client_type|
-            args << "-e#{BuildrPlus::Keycloak.keycloak_config_prefix(client_type, false)}_NAME=#{BuildrPlus::Keycloak.client_name_for(client_type, false)}"
-          end
-          BuildrPlus::Keycloak.external_client_types.keys.each do |client_type|
-            args << "-e#{BuildrPlus::Keycloak.keycloak_config_prefix(client_type, true)}_NAME=#{BuildrPlus::Keycloak.client_name_for(client_type, true)}"
+          BuildrPlus::Keycloak.clients.each do |client|
+            args << "-e#{client.config_prefix}_NAME=#{client.name}"
           end
           args << "-e#{cname}_ORIGIN=http://127.0.0.1:8080"
           args << "-e#{cname}_URL=http://127.0.0.1:8080/#{name}"
 
-          BuildrPlus::Keycloak.external_applications.each do |app|
+          BuildrPlus::Keycloak.clients.collect {|c| c.application}.compact.sort.uniq.each do |app|
             cname = Reality::Naming.uppercase_constantize(app)
             args << "-e#{cname}_ORIGIN=http://127.0.0.1:8080"
             args << "-e#{cname}_URL=http://127.0.0.1:8080/#{app}"
@@ -136,16 +159,16 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           desc 'Keycloak Client Definitions'
           define 'keycloak-clients' do
             project.no_iml
-            BuildrPlus::Keycloak.client_types.each do |client_type|
-              desc "Keycloak #{client_type} Client Definition"
-              define client_type.to_s do
+            BuildrPlus::Keycloak.clients.select {|c| !c.external?}.each do |client|
+              desc "Keycloak #{client.client_type} Client Definition"
+              define client.client_type.to_s do
                 project.no_iml
 
                 [:json, :json_sources].each do |type|
                   package(type).enhance do |t|
                     project.task(':domgen:all').invoke
                     mkdir_p File.dirname(t.to_s)
-                    cp "generated/domgen/#{buildr_project.root_project.name}/main/etc/keycloak/#{client_type}.json", t.to_s
+                    cp "generated/domgen/#{buildr_project.root_project.name}/main/etc/keycloak/#{client.client_type}.json", t.to_s
                   end
                 end
               end

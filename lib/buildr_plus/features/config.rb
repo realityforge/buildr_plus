@@ -220,11 +220,8 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
     def populate_settings(environment)
       if BuildrPlus::FeatureManager.activated?(:keycloak)
-        BuildrPlus::Keycloak.client_types.each do |client_type|
-          populate_keycloak_client_settings(environment, client_type, false)
-        end
-        BuildrPlus::Keycloak.external_client_types.keys.each do |client_type|
-          populate_keycloak_client_settings(environment, client_type, true)
+        BuildrPlus::Keycloak.clients.each do |client|
+          populate_keycloak_client_settings(environment, client)
         end
         BuildrPlus::RemoteReferences.remote_datasources.each do |remote_datasource|
           populate_keycloak_remote_datasource_settings(environment, remote_datasource)
@@ -256,17 +253,17 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
       # Assume that by default the remote data source uses same keycloak realm but uses this
       # apps client as the remote app is often configured with a bearer only client
-      environment.setting("#{prefix}CLIENT", BuildrPlus::Keycloak.client_name_for(root_project.name, false)) unless environment.setting?("#{prefix}CLIENT")
+      environment.setting("#{prefix}CLIENT", BuildrPlus::Keycloak.client_by_client_type(root_project.name).name) unless environment.setting?("#{prefix}CLIENT")
       environment.setting("#{prefix}USERNAME", environment.keycloak.service_username) unless environment.setting?("#{prefix}USERNAME")
       environment.setting("#{prefix}PASSWORD", environment.keycloak.service_password) unless environment.setting?("#{prefix}PASSWORD")
     end
 
-    def populate_keycloak_client_settings(environment, client_type, external)
-      prefix = BuildrPlus::Keycloak.keycloak_config_prefix(client_type, external)
+    def populate_keycloak_client_settings(environment, client)
+      prefix = client.config_prefix
       environment.setting("#{prefix}_KEYCLOAK_REALM", environment.keycloak.realm) unless environment.setting?("#{prefix}_KEYCLOAK_REALM")
       environment.setting("#{prefix}_KEYCLOAK_REALM_PUBLIC_KEY", environment.keycloak.public_key) unless environment.setting?("#{prefix}_KEYCLOAK_REALM_PUBLIC_KEY")
       environment.setting("#{prefix}_KEYCLOAK_AUTH_SERVER_URL", environment.keycloak.base_url) unless environment.setting?("#{prefix}_KEYCLOAK_AUTH_SERVER_URL")
-      environment.setting("#{prefix}_KEYCLOAK_CLIENT_NAME", BuildrPlus::Keycloak.client_name_for(client_type, external)) unless environment.setting?("#{prefix}_KEYCLOAK_CLIENT_NAME")
+      environment.setting("#{prefix}_KEYCLOAK_CLIENT_NAME", client.name) unless environment.setting?("#{prefix}_KEYCLOAK_CLIENT_NAME")
     end
 
     def populate_volume_configuration(environment)

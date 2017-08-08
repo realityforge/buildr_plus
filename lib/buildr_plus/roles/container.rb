@@ -70,6 +70,9 @@ BuildrPlus::Roles.role(:container) do
     default_testng_args << "-Dkeycloak.realm=#{environment.keycloak.realm}"
     default_testng_args << "-Dkeycloak.service_username=#{environment.keycloak.service_username}"
     default_testng_args << "-Dkeycloak.service_password=#{environment.keycloak.service_password}"
+    BuildrPlus::Keycloak.clients.each do |client|
+      default_testng_args << "-D#{client.client_type}.keycloak.client=#{client.auth_client.name('test')}"
+    end
   end
 
   default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
