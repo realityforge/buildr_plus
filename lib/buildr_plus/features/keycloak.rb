@@ -13,6 +13,23 @@
 #
 
 module BuildrPlus::Keycloak
+  class KeycloakRemoteClient < Reality::BaseElement
+    def initialize(client_type, options = {})
+      @client_type = client_type
+      super(options)
+    end
+
+    attr_reader :client_type
+    attr_accessor :application
+
+    def redfish_config_prefix
+      client = BuildrPlus::Keycloak.client_by_client_type(self.client_type)
+      prefix = "#{Reality::Naming.uppercase_constantize(self.application || BuildrPlus::Keycloak.root_project.name)}_"
+      suffix = client.default? ? '' : "_#{Reality::Naming.uppercase_constantize(client.client_type)}"
+      "#{prefix}KEYCLOAK_REMOTE_CLIENT#{suffix}"
+    end
+  end
+
   class KeycloakClient < Reality::BaseElement
     def initialize(client_type, options = {})
       @client_type = client_type
@@ -65,6 +82,16 @@ module BuildrPlus::Keycloak
           "#{Reality::Naming.uppercase_constantize(BuildrPlus::Keycloak.root_project.name)}_"
       "#{prefix}#{Reality::Naming.uppercase_constantize(self.client_type)}"
     end
+
+    def redfish_config_prefix
+      prefix = "#{Reality::Naming.uppercase_constantize(self.external? ? self.application : BuildrPlus::Keycloak.root_project.name)}_"
+      suffix = self.default? ? '' : "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
+      "#{prefix}KEYCLOAK_CLIENT#{suffix}"
+    end
+
+    def old_redfish_config_prefix
+      config_prefix
+    end
   end
 end
 
@@ -75,6 +102,25 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
         return Buildr.project(Buildr.application.current_scope.join(':')).root_project rescue nil
       end
       Buildr.projects.first.root_project
+    end
+
+    def remote_client_by_client_type(client_type)
+      self.remote_clients_map[client_type.to_s] || (raise "Unable to locate remote_client with client_type '#{client_type}'")
+    end
+
+    def remote_client(client_type, options = {})
+      raise "Attempting to redefine remote_client #{client_type}" if self.remote_clients_map[client_type.to_s]
+      remote_client = BuildrPlus::Keycloak::KeycloakRemoteClient.new(client_type, options)
+      self.remote_clients_map[client_type.to_s] = remote_client
+      remote_client
+    end
+
+    def remote_clients
+      remote_clients_map.values
+    end
+
+    def remote_clients_map
+      @remote_clients ||= {}
     end
 
     def client_by_client_type(client_type)
