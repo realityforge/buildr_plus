@@ -188,6 +188,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def integration_qa_support_generators
       generators = [:ee_integration]
       generators << [:jpa_application_orm_xml, :jpa_application_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
+      generators << [:keycloak_main_integration_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
       generators += self.model_qa_support_main_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
       generators.flatten
@@ -347,7 +348,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_rest_client, BuildrPlus::Syncrecord.syncrecord_server_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
       dependencies << Buildr.artifacts([BuildrPlus::Libs.glassfish_embedded])
       dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility) if BuildrPlus::FeatureManager.activated?(:jms)
-
+      if BuildrPlus::FeatureManager.activated?(:keycloak)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
+        dependencies << Buildr.artifacts([BuildrPlus::Libs.keycloak_authfilter])
+      end
       dependencies.flatten
     end
 
