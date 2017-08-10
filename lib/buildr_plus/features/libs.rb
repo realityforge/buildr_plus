@@ -188,6 +188,37 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.rest.field_filter:rest-field-filter:jar:0.4)
     end
 
+    def graphql_java
+      %w(com.graphql-java:graphql-java:jar:3.0.0) + BuildrPlus::Libs.slf4j + BuildrPlus::Libs.antlr4_runtime
+    end
+
+    def graphql_java_tools
+      %w(
+        com.esotericsoftware:reflectasm:jar:1.11.3
+        com.google.guava:guava:jar:21.0
+        com.graphql-java:graphql-java-tools:jar:3.2.1
+        org.jetbrains.kotlin:kotlin-reflect:jar:1.1.1
+        org.jetbrains.kotlin:kotlin-stdlib:jar:1.1.1
+        org.jetbrains.kotlin:kotlin-stdlib:jar:1.1.3-2
+        org.ow2.asm:asm:jar:5.0.4
+        ru.vyarus:generics-resolver:jar:2.0.1
+      ) + self.graphql_java +
+        self.jackson_annotations +
+        self.jackson_core +
+        self.jackson_databind +
+        self.jackson_datatype_jdk8 +
+        self.jackson_module_kotlin +
+      self.jetbrains_annotations
+    end
+
+    def graphql_java_servlet
+      %w(
+        com.graphql-java:graphql-java-servlet:jar:4.0.0
+        commons-fileupload:commons-fileupload:jar:1.3.3
+        commons-io:commons-io:jar:2.5
+      ) + self.graphql_java_tools
+    end
+
     def antlr4_runtime
       %w(org.antlr:antlr4-runtime:jar:4.5.1)
     end
