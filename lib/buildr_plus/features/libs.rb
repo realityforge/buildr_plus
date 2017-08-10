@@ -91,7 +91,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.powermock:powermock-api-support:jar:#{powermock_version}
         org.javassist:javassist:jar:3.21.0-GA
         org.powermock:powermock-module-testng-agent:jar:#{powermock_version}
-        #{powermock_javaagent}
+      #{powermock_javaagent}
       ) + self.objenesis
     end
 
