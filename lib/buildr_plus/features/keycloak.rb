@@ -129,7 +129,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
 
     def client(client_type, options = {})
       raise "Attempting to redefine client_type #{client_type}" if self.clients_map[client_type.to_s]
-      client = BuildrPlus::Keycloak::KeycloakClient.new(client_type, options)
+      client = BuildrPlus::Keycloak::KeycloakClient.new(client_type.to_s, options)
       self.clients_map[client_type.to_s] = client
       client
     end
