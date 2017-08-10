@@ -96,15 +96,23 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jackson_annotations
-      %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.5.4)
+      %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.8.8)
     end
 
     def jackson_core
-      %w(com.fasterxml.jackson.core:jackson-core:jar:2.5.4)
+      %w(com.fasterxml.jackson.core:jackson-core:jar:2.8.8)
     end
 
     def jackson_databind
-      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.5.4)
+      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.8.8)
+    end
+
+    def jackson_datatype_jdk8
+      %w(com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.8.8)
+    end
+
+    def jackson_module_kotlin
+      %w(com.fasterxml.jackson.module:jackson-module-kotlin:jar:2.8.8)
     end
 
     def jackson_gwt_support
