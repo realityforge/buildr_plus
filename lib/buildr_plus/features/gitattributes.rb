@@ -156,6 +156,7 @@ BuildrPlus::FeatureManager.feature(:gitattributes) do |f|
 
       if BuildrPlus::FeatureManager.activated?(:graphql)
         add(gitattributes, text_rule('*.graphql'))
+        add(gitattributes, text_rule('*.graphqls'))
       end
 
       if BuildrPlus::FeatureManager.activated?(:javascript)
