@@ -77,6 +77,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
       end
 
+      generators << [:graphql_schema, :graphql_resolvers, :graphql_endpoint] if BuildrPlus::FeatureManager.activated?(:graphql)
       generators << [:robots] if BuildrPlus::Artifacts.war?
       generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:berk_service_impl, :berk_qa_support] if BuildrPlus::FeatureManager.activated?(:berk)
@@ -384,6 +385,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_appcache_server) if BuildrPlus::FeatureManager.activated?(:appcache)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_servlet) if BuildrPlus::FeatureManager.activated?(:graphql)
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service)
