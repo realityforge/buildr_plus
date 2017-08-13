@@ -31,7 +31,6 @@ BuildrPlus::Roles.role(:server) do
   project.publish = true
 
   compile.with BuildrPlus::Deps.server_deps
-  compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
   test.with BuildrPlus::Deps.server_test_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
@@ -39,7 +38,6 @@ BuildrPlus::Roles.role(:server) do
 
   package(:war).tap do |war|
     war.libs.clear
-    war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
     # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
     war.libs << BuildrPlus::Deps.findbugs_provided
     war.libs << BuildrPlus::Deps.jetbrains_annotations

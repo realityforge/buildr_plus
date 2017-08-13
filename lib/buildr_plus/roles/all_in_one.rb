@@ -34,14 +34,12 @@ BuildrPlus::Roles.role(:all_in_one) do
   end
 
   compile.with BuildrPlus::Deps.server_deps
-  compile.with artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
 
   test.with BuildrPlus::Deps.model_qa_support_deps
 
   package(:war).tap do |war|
     war.libs.clear
-    war.libs << artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
-    # Findbugs+jetbrains  libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+    # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
     war.libs << BuildrPlus::Deps.findbugs_provided
     war.libs << BuildrPlus::Deps.jetbrains_annotations
     war.libs << BuildrPlus::Deps.server_compile_deps
@@ -97,9 +95,9 @@ BuildrPlus::Roles.role(:all_in_one) do
   ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))
 
   dependencies = [project]
-  dependencies << Object.const_get(:PACKAGED_DEPS) if Object.const_defined?(:PACKAGED_DEPS)
-  # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+  # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
   dependencies << BuildrPlus::Deps.findbugs_provided
+  dependencies << BuildrPlus::Deps.jetbrains_annotations
   dependencies << BuildrPlus::Deps.server_compile_deps
 
   war_module_names = [project.iml.name]

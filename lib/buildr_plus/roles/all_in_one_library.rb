@@ -55,7 +55,6 @@ BuildrPlus::Roles.role(:all_in_one_library) do
     end
   end
 
-  compile.with artifacts(Object.const_get(:LIBRARY_DEPS)) if Object.const_defined?(:LIBRARY_DEPS)
   compile.with BuildrPlus::Deps.server_deps
 
   test.with BuildrPlus::Deps.model_qa_support_deps
