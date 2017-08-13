@@ -97,7 +97,6 @@ BuildrPlus::Roles.role(:container) do
     # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
     dependencies << BuildrPlus::Deps.findbugs_provided
     dependencies << BuildrPlus::Deps.jetbrains_annotations
-    dependencies << BuildrPlus::Deps.model_compile_deps
     dependencies << BuildrPlus::Deps.server_compile_deps
 
     war_module_names = [server_project.iml.name]

@@ -44,7 +44,6 @@ BuildrPlus::Roles.role(:all_in_one) do
     # Findbugs+jetbrains  libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
     war.libs << BuildrPlus::Deps.findbugs_provided
     war.libs << BuildrPlus::Deps.jetbrains_annotations
-    war.libs << BuildrPlus::Deps.model_compile_deps
     war.libs << BuildrPlus::Deps.server_compile_deps
     war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)
     if BuildrPlus::FeatureManager.activated?(:sass)
@@ -101,7 +100,6 @@ BuildrPlus::Roles.role(:all_in_one) do
   dependencies << Object.const_get(:PACKAGED_DEPS) if Object.const_defined?(:PACKAGED_DEPS)
   # Findbugs libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
   dependencies << BuildrPlus::Deps.findbugs_provided
-  dependencies << BuildrPlus::Deps.model_compile_deps
   dependencies << BuildrPlus::Deps.server_compile_deps
 
   war_module_names = [project.iml.name]
