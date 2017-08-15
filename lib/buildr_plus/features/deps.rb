@@ -77,7 +77,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
       end
 
-      generators << [:graphql_schema, :graphql_resolvers, :graphql_endpoint] if BuildrPlus::FeatureManager.activated?(:graphql)
+      generators << [:graphql_resolvers, :graphql_endpoint] if BuildrPlus::FeatureManager.activated?(:graphql)
       generators << [:robots] if BuildrPlus::Artifacts.war?
       generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:berk_service_impl, :berk_qa_support] if BuildrPlus::FeatureManager.activated?(:berk)
