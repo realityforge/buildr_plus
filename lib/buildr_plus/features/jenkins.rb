@@ -13,7 +13,7 @@
 #
 
 # Enable this feature if the code is tested using jenkins
-BuildrPlus::FeatureManager.feature(:jenkins => [:kinjen]) do |f|
+BuildrPlus::FeatureManager.feature(:jenkins) do |f|
   f.enhance(:Config) do
     attr_writer :auto_deploy
 
