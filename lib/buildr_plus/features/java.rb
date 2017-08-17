@@ -30,6 +30,8 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     end
 
     after_define do |project|
+      project.test.options[:properties].merge!('user.timezone' => 'Australia/Melbourne')
+
       t = project.task 'java:check' do
         (project.test.compile.sources + project.compile.sources).each do |src|
           Dir.glob("#{src}/**/*").select { |f| File.directory? f }.each do |d|
