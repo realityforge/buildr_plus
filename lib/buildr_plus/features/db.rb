@@ -79,4 +79,13 @@ BuildrPlus::FeatureManager.feature(:db) do |f|
       (is_multi_database_project? && pgsql?(dbt_type)) ? '.pg' : ''
     end
   end
+
+  f.enhance(:ProjectExtension) do
+    after_define do |project|
+      if project.ipr?
+        project.ipr.mssql_dialect_mapping if BuildrPlus::Db.mssql?
+        project.ipr.postgres_dialect_mapping if BuildrPlus::Db.pgsql?
+      end
+    end
+  end
 end
