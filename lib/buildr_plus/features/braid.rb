@@ -31,8 +31,15 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
       unless config.mirrors.include?('vendor/tools/buildr_plus')
         raise "Braid entry does not exists for path 'vendor/tools/buildr_plus' as expected."
       end
-      %w(domgen dbt rptman redfish resgen kinjen).each do |feature|
-        path = "vendor/tools/#{feature}"
+      {
+        'domgen' => 'domgen',
+        'dbt' => 'dbt',
+        'rptman' => 'rptman',
+        'redfish' => 'redfish',
+        'resgen' => 'resgen',
+        'kinjen' => 'jenkins'
+      }.each_pair do |path, feature|
+        path = "vendor/tools/#{path}"
         if BuildrPlus::FeatureManager.activated?(feature) && !config.mirrors.include?(path)
           raise "Braid entry does not exists for path '#{path}' despite buildr_plus feature '#{feature}' being enabled."
         end
