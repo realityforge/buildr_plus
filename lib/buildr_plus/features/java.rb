@@ -24,6 +24,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
   end
   f.enhance(:ProjectExtension) do
     before_define do |project|
+      project.compile.options.lint = 'all'
       project.compile.options.source = "1.#{BuildrPlus::Java.version}"
       project.compile.options.target = "1.#{BuildrPlus::Java.version}"
     end
