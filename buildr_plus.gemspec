@@ -26,5 +26,5 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'reality-core', '>= 1.8.0'
   s.add_dependency 'reality-naming', '>= 1.9.0'
-  s.add_dependency 'zapwhite', '= 2.5.0'
+  s.add_dependency 'zapwhite', '= 2.7.0'
 end
