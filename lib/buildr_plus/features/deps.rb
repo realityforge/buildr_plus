@@ -385,7 +385,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_appcache_server) if BuildrPlus::FeatureManager.activated?(:appcache)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_servlet) if BuildrPlus::FeatureManager.activated?(:graphql)
+      if BuildrPlus::FeatureManager.activated?(:graphql)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_servlet)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_domgen_support)
+      end
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service)
