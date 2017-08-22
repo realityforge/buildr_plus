@@ -26,10 +26,8 @@ BuildrPlus::FeatureManager.feature(:graphiql => [:graphql]) do |f|
         end
         generate_index(directory)
       rescue => e
-        puts e.message
-        puts e.backtrace.join("\n")
         FileUtils.rm_rf assets_dir
-        X
+        raise e
       end
     end
 
