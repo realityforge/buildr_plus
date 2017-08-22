@@ -28,6 +28,16 @@ BuildrPlus::Roles.role(:server) do
     end
   end
 
+  if BuildrPlus::FeatureManager.activated?(:graphiql)
+    assets_dir = _(:generated, 'graphiql/src/webapp')
+    f = file(assets_dir) do
+      BuildrPlus::Graphiql.setup_graphiql(assets_dir)
+    end
+    task(':domgen:all' => [f])
+    project.assets.paths << assets_dir
+    project.assets.enhance([f])
+  end
+
   project.publish = true
 
   compile.with BuildrPlus::Deps.server_deps

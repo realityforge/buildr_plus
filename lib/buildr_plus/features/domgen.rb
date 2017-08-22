@@ -122,6 +122,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
           if BuildrPlus::Domgen.enforce_postload_constraints?
             facet_mapping =
               {
+                :graphql => :graphql,
                 :redfish => :redfish,
                 :iris_audit => :iris_audit,
                 :jackson => :jackson,
@@ -200,11 +201,16 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
 
               facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
                 if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
-                  raise "BuildrPlus feature '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not."
+                  BuildrPlus.error("BuildrPlus feature '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not.")
                 end
                 if !BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && r.facet_enabled?(domgen_facet)
-                  raise "Domgen facet '#{domgen_facet}' requires that buildrPlus feature '#{buildr_plus_facet}' is enabled but it is not."
+                  BuildrPlus.error("Domgen facet '#{domgen_facet}' requires that buildrPlus feature '#{buildr_plus_facet}' is enabled but it is not.")
                 end
+              end
+              if BuildrPlus::FeatureManager.activated?(:graphiql) && !r.graphql.graphiql?
+                BuildrPlus.error("BuildrPlus feature 'graphiql' requires that domgen setting repository.graphql.graphiql = true.")
+              elsif !BuildrPlus::FeatureManager.activated?(:graphiql) && r.graphql.graphiql?
+                BuildrPlus.error("Domgen setting repository.graphql.graphiql = true requires BuildrPlus feature 'graphiql' to be enabled.")
               end
               if BuildrPlus::FeatureManager.activated?(:keycloak)
                 domgen_clients = r.keycloak.clients.collect { |client| client.key.to_s }.sort.uniq
