@@ -209,7 +209,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
               end
               if BuildrPlus::FeatureManager.activated?(:graphiql) && !r.graphql.graphiql?
                 BuildrPlus.error("BuildrPlus feature 'graphiql' requires that domgen setting repository.graphql.graphiql = true.")
-              elsif !BuildrPlus::FeatureManager.activated?(:graphiql) && r.graphql.graphiql?
+              elsif !BuildrPlus::FeatureManager.activated?(:graphiql) && r.graphql? && r.graphql.graphiql?
                 BuildrPlus.error("Domgen setting repository.graphql.graphiql = true requires BuildrPlus feature 'graphiql' to be enabled.")
               end
               if BuildrPlus::FeatureManager.activated?(:keycloak)
