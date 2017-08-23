@@ -26,7 +26,8 @@ BuildrPlus::FeatureManager.feature(:graphiql => [:graphql, :gwt_cache_filter]) d
           FileUtils.cp artifact.to_s, target_file
           sh("gzip -9 -k -f #{target_file}")
         end
-        generate_index(directory)
+        filename = generate_index(directory)
+        sh("gzip -9 -k -f #{filename}")
       rescue => e
         FileUtils.rm_rf assets_dir
         raise e
@@ -51,7 +52,8 @@ BuildrPlus::FeatureManager.feature(:graphiql => [:graphql, :gwt_cache_filter]) d
     end
 
     def generate_index(directory)
-      IO.write("#{directory}/index.html", <<CONTENT)
+      filename = "#{directory}/index.html"
+      IO.write(filename, <<CONTENT)
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,8 +105,8 @@ BuildrPlus::FeatureManager.feature(:graphiql => [:graphql, :gwt_cache_filter]) d
 </body>
 </html>
 CONTENT
+      filename
     end
-
   end
 end
 
