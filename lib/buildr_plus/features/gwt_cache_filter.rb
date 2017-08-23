@@ -12,4 +12,4 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:gwt_cache_filter => [:gwt])
+BuildrPlus::FeatureManager.feature(:gwt_cache_filter)

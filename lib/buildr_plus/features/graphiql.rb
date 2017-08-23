@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:graphiql => [:graphql]) do |f|
+BuildrPlus::FeatureManager.feature(:graphiql => [:graphql, :gwt_cache_filter]) do |f|
   f.enhance(:Config) do
     def setup_graphiql(assets_dir)
       directory = "#{assets_dir}/graphiql"
