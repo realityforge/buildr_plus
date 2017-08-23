@@ -22,7 +22,9 @@ BuildrPlus::FeatureManager.feature(:graphiql => [:graphql]) do |f|
           artifact = Buildr.artifact(key)
           Buildr.download(artifact => url)
           artifact.invoke
-          FileUtils.cp artifact.to_s, "#{directory}/#{spec_to_filename(artifact)}"
+          target_file = "#{directory}/#{spec_to_filename(artifact)}"
+          FileUtils.cp artifact.to_s, target_file
+          sh("gzip -9 -k -f #{target_file}")
         end
         generate_index(directory)
       rescue => e
