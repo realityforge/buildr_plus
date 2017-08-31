@@ -29,7 +29,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       if File.exist?(filename)
         original_content = IO.read(filename)
 
-        content = "# DO NOT EDIT: File is auto-generated\n" + gitignores.sort.uniq.collect { |v| "#{v}" }.join("\n") + "\n"
+        content = "# DO NOT EDIT: File is auto-generated\n" + gitignores.sort.uniq.collect {|v| "#{v}"}.join("\n") + "\n"
 
         if content != original_content
           BuildrPlus::Gitignore.gitignore_needs_update = true
@@ -88,7 +88,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       gitignores << '/target'
       gitignores << '/tmp'
 
-      if BuildrPlus::FeatureManager.activated?(:domgen) || BuildrPlus::FeatureManager.activated?(:checkstyle)
+      if BuildrPlus::FeatureManager.activated?(:domgen) || BuildrPlus::FeatureManager.activated?(:checkstyle) || BuildrPlus::FeatureManager.activated?(:config)
         gitignores << '**/generated'
       end
 
