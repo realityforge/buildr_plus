@@ -17,9 +17,7 @@ BuildrPlus::Roles.role(:replicant_qa_support, :requires => [:role_replicant_shar
   project.publish = BuildrPlus::Artifacts.replicant_client?
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = []
-    generators += [:imit_client_main_qa_external]  if BuildrPlus::FeatureManager.activated?(:replicant)
-    generators += project.additional_domgen_generators
+    generators = BuildrPlus::Deps.replicant_qa_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = project.domgen_filter
     end

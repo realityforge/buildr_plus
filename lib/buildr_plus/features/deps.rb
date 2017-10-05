@@ -163,6 +163,22 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
+    def replicant_qa_generators
+      generators = []
+
+      generators += [:imit_client_main_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators.flatten
+    end
+
+    def replicant_qa_test_generators
+      generators = []
+
+      generators += [:imit_client_test_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators.flatten
+    end
+
     def gwt_generators
       generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :auto_bean, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
@@ -174,10 +190,32 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
+    def gwt_qa_generators
+      generators = [:gwt_rpc_module]
+      generators += [:gwt_client_main_jso_qa_support]
+      generators += [:imit_client_main_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators += self.replicant_qa_generators unless BuildrPlus::FeatureManager.activated?(:role_replicant_qa)
+
+      generators.flatten
+    end
+
+    def gwt_qa_test_generators
+      generators = [:gwt_rpc_test_module]
+      generators += [:gwt_client_test_jso_qa_support]
+      generators += [:imit_client_test_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators += self.replicant_qa_test_generators unless BuildrPlus::FeatureManager.activated?(:role_replicant_qa)
+
+      generators.flatten
+    end
+
     def user_experience_generators
       generators = [:gwt_client_event, :gwt_client_app, :gwt_client_gwt_modules, :gwt_client_test_ux_qa_support]
       generators += [:keycloak_gwt_app] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += self.gwt_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt)
+      generators += self.gwt_qa_test_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt_qa)
+
       generators.flatten
     end
 
