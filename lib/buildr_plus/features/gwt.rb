@@ -36,7 +36,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
       end
 
       dependencies = project.compile.dependencies + [project.compile.target] + extra_deps
-      unless ENV['GWT'] == 'no'
+      if ENV['GWT'].nil? || ENV['GWT'] == project.name
         project.gwt(project.determine_top_level_gwt_modules(suffix),
                     {:java_args => BuildrPlus::Gwt.gwtc_java_args, :dependencies => dependencies}.merge(options))
       end
