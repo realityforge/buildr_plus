@@ -119,8 +119,28 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       self.jackson_core + self.jackson_databind + self.jackson_annotations
     end
 
+    def braincheck
+      %w(org.realityforge.braincheck:braincheck:jar:gwt:1.0.0)
+    end
+
     def jsinterop
       %w(com.google.jsinterop:jsinterop-annotations:jar:1.0.1 com.google.jsinterop:jsinterop-annotations:jar:sources:1.0.1)
+    end
+
+    def jsinterop_base
+      %w(com.google.jsinterop:base:jar:1.0.0-beta-1 com.google.jsinterop:base:jar:sources:1.0.0-beta-1) + self.jsinterop
+    end
+
+    def elemental2_core
+      %w(com.google.elemental2:elemental2-core:jar:1.0.0-beta-1) + self.jsinterop_base
+    end
+
+    def elemental2_dom
+      %w(com.google.elemental2:elemental2-dom:jar:1.0.0-beta-1) + self.elemental2_core
+    end
+
+    def elemental2_promise
+      %w(com.google.elemental2:elemental2-promise:jar:1.0.0-beta-1) + self.elemental2_core
     end
 
     def gwt_user
@@ -208,7 +228,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         self.jackson_databind +
         self.jackson_datatype_jdk8 +
         self.jackson_module_kotlin +
-      self.jetbrains_annotations
+        self.jetbrains_annotations
     end
 
     def graphql_java_servlet
