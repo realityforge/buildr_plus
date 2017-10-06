@@ -14,6 +14,12 @@
 
 BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
   f.enhance(:Config) do
+    attr_writer :enable_gwt_js_exports
+
+    def enable_gwt_js_exports?
+      @enable_gwt_js_exports.nil? ? false : !!@enable_gwt_js_exports
+    end
+
     def gwtc_java_args
       %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M)
     end
@@ -38,7 +44,11 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
       dependencies = project.compile.dependencies + [project.compile.target] + extra_deps
       if ENV['GWT'].nil? || ENV['GWT'] == project.name
         project.gwt(project.determine_top_level_gwt_modules(suffix),
-                    {:java_args => BuildrPlus::Gwt.gwtc_java_args, :dependencies => dependencies}.merge(options))
+                    {
+                      :java_args => BuildrPlus::Gwt.gwtc_java_args,
+                      :dependencies => dependencies,
+                     :js_exports => BuildrPlus::Gwt.enable_gwt_js_exports?
+                    }.merge(options))
       end
     end
 
@@ -62,7 +72,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
 
   f.enhance(:ProjectExtension) do
     first_time do
-      require 'buildr/gwt'
+      require 'buildr_plus/patches/gwt_patched'
     end
 
     def top_level_gwt_modules
@@ -97,7 +107,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
     def gwt_modules
       unless @gwt_modules
         @gwt_modules =
-          (project.iml.main_generated_resource_directories + project.resources.sources).uniq.collect do |path|
+          (project.iml.main_generated_source_directories + project.compile.sources + project.iml.main_generated_resource_directories + project.resources.sources).uniq.collect do |path|
             Dir["#{path}/**/*.gwt.xml"].collect do |gwt_module|
               length = path.to_s.length
               gwt_module[length + 1, gwt_module.length - length - 9].gsub('/', '.')
