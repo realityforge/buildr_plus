@@ -258,7 +258,9 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_provided_deps
       dependencies = []
 
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_inject)
       dependencies << replicant_shared_provided_deps if BuildrPlus::FeatureManager.activated?(:replicant)
 
       dependencies.flatten
