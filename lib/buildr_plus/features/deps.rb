@@ -332,7 +332,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.ee_provided)
 
       # Our JPA beans are occasionally generated with eclipselink specific artifacts
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded) if BuildrPlus::FeatureManager.activated?(:db)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded) if BuildrPlus::FeatureManager.activated?(:db) || BuildrPlus::FeatureManager.activated?(:jackson)
 
       dependencies.flatten
     end
