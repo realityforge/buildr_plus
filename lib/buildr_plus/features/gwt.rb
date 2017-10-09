@@ -73,6 +73,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
   f.enhance(:ProjectExtension) do
     first_time do
       require 'buildr_plus/patches/gwt_patched'
+      require 'buildr_plus/patches/idea_gwt_patched'
     end
 
     def top_level_gwt_modules
