@@ -104,6 +104,12 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       Buildr.projects.first.root_project
     end
 
+    attr_writer :include_api_client
+
+    def include_api_client?
+      @include_api_client.nil? ? BuildrPlus::FeatureManager.activated?(:role_user_experience) : !!@include_api_client
+    end
+
     def remote_client_by_client_type(client_type)
       self.remote_clients_map[client_type.to_s] || (raise "Unable to locate remote_client with client_type '#{client_type}'")
     end
@@ -149,7 +155,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
         # Libraries integrate with their host application so we can exclude them
         unless BuildrPlus::FeatureManager.activated?(:role_library)
           BuildrPlus::Keycloak.client(buildr_project.root_project.name)
-          BuildrPlus::Keycloak.client('api') if BuildrPlus::FeatureManager.activated?(:role_user_experience)
+          BuildrPlus::Keycloak.client('api') if BuildrPlus::Keycloak.include_api_client?
         end
       end
     end

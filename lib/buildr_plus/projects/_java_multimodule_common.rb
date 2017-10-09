@@ -36,7 +36,7 @@ if File.exist?("#{base_directory}/shared")
 end
 
 require_model = false
-if File.exist?("#{base_directory}/integration-qa-support") || File.exist?("#{base_directory}/integration-qa-shared")
+if File.exist?("#{base_directory}/integration-qa-support") || File.exist?("#{base_directory}/integration-qa-shared") || File.exist?("#{base_directory}/integration-tests")
   require_model = true
   BuildrPlus::Roles.project('integration-qa-shared', :roles => [:integration_qa_shared], :parent => :container, :template => true, :description => 'Integration Test Infrastructure shared with external projects')
   BuildrPlus::Roles.project('integration-qa-support', :roles => [:integration_qa_support], :parent => :container, :template => true, :description => 'Integration Test Infrastructure')
