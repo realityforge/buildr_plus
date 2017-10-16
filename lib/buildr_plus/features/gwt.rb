@@ -32,7 +32,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
       end
     end
 
-    def define_gwt_task(project, suffix = '', options = {})
+    def deps_for_gwt_compile(project)
       # Unfortunately buildr does not gracefully handle resource directories not being present
       # when project processed so we collect extra dependencies by looking at the generated directories
       extra_deps = project.iml.main_generated_resource_directories.flatten.compact.collect do |a|
@@ -41,7 +41,11 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
         a.is_a?(String) ? file(a) : a
       end
 
-      dependencies = project.compile.dependencies + [project.compile.target] + extra_deps
+      project.compile.dependencies + [project.compile.target] + extra_deps
+    end
+
+    def define_gwt_task(project, suffix = '', options = {})
+      dependencies = deps_for_gwt_compile(project)
       if ENV['GWT'].nil? || ENV['GWT'] == project.name
         project.gwt(project.determine_top_level_gwt_modules(suffix),
                     {
