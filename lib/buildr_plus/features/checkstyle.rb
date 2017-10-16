@@ -161,7 +161,7 @@ end
 BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
   f.enhance(:Config) do
     def default_checkstyle_rules
-      'au.com.stocksoftware.checkstyle:checkstyle:xml:1.13'
+      'au.com.stocksoftware.checkstyle:checkstyle:xml:1.14'
     end
 
     def checkstyle_rules
