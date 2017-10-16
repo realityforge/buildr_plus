@@ -84,6 +84,31 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
       @top_level_gwt_modules ||= []
     end
 
+    #
+    # Used when you want to co-evolve two gwt libraries, one of which is in a different
+    # project. If this was not available then you would be forced to restart superdev mode
+    # each time the dependency was updated which can be painful.
+    #
+    # Add something like this into user-experience to achieve it.
+    #
+    # expand_dependency(Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client).select{|a|a.group == 'org.realityforge.replicant'})
+    #
+    def expand_dependency(artifacts)
+      artifacts = Buildr.artifacts([artifacts])
+      artifacts.each do |artifact|
+        key = artifact.group + '_' + artifact.id
+        target_directory = _(:generated, 'deps', key)
+        t = task(target_directory => [artifact]) do
+          rm_rf target_directory
+          unzip(target_directory => artifact).target.invoke
+        end
+        project.iml.main_generated_source_directories << target_directory
+        project.compile.from(target_directory)
+        project.compile.dependencies.delete(artifact)
+        task(':domgen:all').enhance([t.name])
+      end
+    end
+
     # Determine any top level modules.
     # If none specified then derive one based on root projects name and group
     def determine_top_level_gwt_modules(suffix)
