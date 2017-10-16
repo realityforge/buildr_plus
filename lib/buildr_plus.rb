@@ -42,6 +42,7 @@ require 'buildr_plus/patches/group_project_patch'
 
 require 'buildr_plus/features/appcache'
 require 'buildr_plus/features/appconfig'
+require 'buildr_plus/features/arez'
 require 'buildr_plus/features/artifact_assets'
 require 'buildr_plus/features/artifacts'
 require 'buildr_plus/features/assets'

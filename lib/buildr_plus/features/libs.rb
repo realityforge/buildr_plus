@@ -123,8 +123,16 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.anodoc:anodoc:jar:1.0.0)
     end
 
+    def braincheck_version
+      '1.2.0'
+    end
+
     def braincheck
-      %w(org.realityforge.braincheck:braincheck:jar:gwt:1.2.0)
+      %W(org.realityforge.braincheck:braincheck:jar:#{braincheck_version}) + self.anodoc
+    end
+
+    def braincheck_gwt
+      %W(org.realityforge.braincheck:braincheck:jar:gwt:#{braincheck_version}) + self.anodoc
     end
 
     def jsinterop
@@ -322,8 +330,34 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.keycloak.sks:simple-keycloak-service:jar:0.1)
     end
 
+    def arez_version
+      '0.13'
+    end
+
+    def arez
+      %W(
+        org.realityforge.arez:arez-annotations:jar:#{arez_version}
+        org.realityforge.arez:arez-core:jar:#{arez_version}
+        org.realityforge.arez:arez-processor:jar:#{arez_version}
+        org.realityforge.arez:arez-extras:jar:#{arez_version}
+      ) + self.braincheck
+    end
+
+    def arez_gwt
+      %W(
+        org.realityforge.arez:arez-annotations:jar:gwt:#{arez_version}
+        org.realityforge.arez:arez-core:jar:gwt:#{arez_version}
+        org.realityforge.arez:arez-processor:jar:#{arez_version}
+        org.realityforge.arez:arez-extras:jar:gwt:#{arez_version}
+      ) + self.braincheck_gwt
+    end
+
+    def arez_browser_gwt
+      %W(org.realityforge.arez:arez-browser-extras:jar:gwt:#{arez_version})
+    end
+
     def replicant_version
-      '0.5.91'
+      'X'
     end
 
     def replicant_shared

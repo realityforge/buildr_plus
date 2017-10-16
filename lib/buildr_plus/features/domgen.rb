@@ -95,7 +95,11 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       candidate_file = File.expand_path("#{base_directory}/architecture.rb")
 
-      Domgen::Build.define_load_task if ::File.exist?(candidate_file)
+      if ::File.exist?(candidate_file)
+        Domgen::Build.define_load_task do |t|
+          t.verbose = 'true' == ENV['DEBUG_DOMGEN']
+        end
+      end
 
       Domgen::Build.define_generate_xmi_task
 
@@ -107,7 +111,9 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
         if BuildrPlus::FeatureManager.activated?(:appconfig)
           generators << (BuildrPlus::Db.mssql? ? :appconfig_mssql : :appconfig_pgsql)
         end
-        Domgen::Build.define_generate_task(generators, :key => :sql, :target_dir => BuildrPlus::Domgen.database_target_dir)
+        Domgen::Build.define_generate_task(generators, :key => :sql, :target_dir => BuildrPlus::Domgen.database_target_dir) do |t|
+          t.verbose  = 'true' == ENV['DEBUG_DOMGEN']
+        end
 
         database = Dbt.repository.database_for_key(:default)
         default_search_dirs = %W(#{BuildrPlus::Domgen.database_target_dir} database) + BuildrPlus::Domgen.dialect_specific_database_paths
@@ -122,6 +128,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
           if BuildrPlus::Domgen.enforce_postload_constraints?
             facet_mapping =
               {
+                :arez => :arez,
                 :graphql => :graphql,
                 :redfish => :redfish,
                 :iris_audit => :iris_audit,
