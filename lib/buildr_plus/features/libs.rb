@@ -119,6 +119,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       self.jackson_core + self.jackson_databind + self.jackson_annotations
     end
 
+    def anodoc
+      %w(org.realityforge.anodoc:anodoc:jar:1.0.0)
+    end
+
     def braincheck
       %w(org.realityforge.braincheck:braincheck:jar:gwt:1.2.0)
     end
