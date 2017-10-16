@@ -22,10 +22,13 @@ module BuildrPlus::Keycloak
     attr_reader :client_type
     attr_accessor :application
 
+    def default?
+      self.client_type == self.application
+    end
+
     def redfish_config_prefix
-      client = BuildrPlus::Keycloak.client_by_client_type(self.client_type)
       prefix = "#{Reality::Naming.uppercase_constantize(self.application || BuildrPlus::Keycloak.root_project.name)}_"
-      suffix = client.default? ? '' : "_#{Reality::Naming.uppercase_constantize(client.client_type)}"
+      suffix = self.default? ? '' : "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
       "#{prefix}KEYCLOAK_REMOTE_CLIENT#{suffix}"
     end
   end
@@ -85,7 +88,10 @@ module BuildrPlus::Keycloak
 
     def redfish_config_prefix
       prefix = "#{Reality::Naming.uppercase_constantize(self.external? ? self.application : BuildrPlus::Keycloak.root_project.name)}_"
-      suffix = self.default? ? '' : "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
+      suffix =
+        ((!self.external? && self.default?) || (self.external? && self.application == self.client_type)) ?
+          '' :
+          "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
       "#{prefix}KEYCLOAK_CLIENT#{suffix}"
     end
 
