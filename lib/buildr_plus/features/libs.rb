@@ -330,6 +330,14 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.keycloak.sks:simple-keycloak-service:jar:0.1)
     end
 
+    def guava
+      %w(com.google.guava:guava:jar:21.0)
+    end
+
+    def javapoet
+      %w(com.squareup:javapoet:jar:1.7.0) + self.guava
+    end
+
     def arez_version
       '0.13'
     end
@@ -340,7 +348,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.realityforge.arez:arez-core:jar:#{arez_version}
         org.realityforge.arez:arez-processor:jar:#{arez_version}
         org.realityforge.arez:arez-extras:jar:#{arez_version}
-      ) + self.braincheck
+      ) + self.braincheck + self.javapoet
     end
 
     def arez_gwt
@@ -349,7 +357,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.realityforge.arez:arez-core:jar:gwt:#{arez_version}
         org.realityforge.arez:arez-processor:jar:#{arez_version}
         org.realityforge.arez:arez-extras:jar:gwt:#{arez_version}
-      ) + self.braincheck_gwt
+      ) + self.braincheck_gwt + self.javapoet
     end
 
     def arez_browser_gwt
