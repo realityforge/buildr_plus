@@ -16,7 +16,6 @@ BuildrPlus::Roles.role(:replicant_qa) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = []
-    generators += [:arez_client_test_qa, :arez_client_test_dao_aggregate_test]  if BuildrPlus::FeatureManager.activated?(:arez)
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = project.domgen_filter

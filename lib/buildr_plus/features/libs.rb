@@ -339,13 +339,14 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.14b'
+      '0.15b'
     end
 
     def arez
       %W(
         org.realityforge.arez:arez-annotations:jar:#{arez_version}
         org.realityforge.arez:arez-core:jar:#{arez_version}
+        org.realityforge.arez:arez-component:jar:#{arez_version}
         org.realityforge.arez:arez-processor:jar:#{arez_version}
         org.realityforge.arez:arez-extras:jar:#{arez_version}
       ) + self.braincheck + self.javapoet
@@ -355,6 +356,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(
         org.realityforge.arez:arez-annotations:jar:gwt:#{arez_version}
         org.realityforge.arez:arez-core:jar:gwt:#{arez_version}
+        org.realityforge.arez:arez-component:jar:gwt:#{arez_version}
         org.realityforge.arez:arez-processor:jar:#{arez_version}
         org.realityforge.arez:arez-extras:jar:gwt:#{arez_version}
       ) + self.braincheck_gwt + self.javapoet
