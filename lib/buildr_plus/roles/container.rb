@@ -75,6 +75,12 @@ BuildrPlus::Roles.role(:container) do
     end
   end
 
+  if BuildrPlus::FeatureManager.activated?(:arez)
+    BuildrPlus::Arez.arez_test_options.each_pair do |k, v|
+      default_testng_args << "-D#{k}=#{v}"
+    end
+  end
+
   default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
 
   ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))

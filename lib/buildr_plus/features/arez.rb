@@ -12,4 +12,20 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:arez)
+BuildrPlus::FeatureManager.feature(:arez) do |f|
+  f.enhance(:Config) do
+
+    def arez_test_options
+      {
+        'braincheck.dynamic_provider' => 'true',
+        'braincheck.environment' => 'development',
+        'arez.dynamic_provider' => 'true',
+        'arez.environment' => 'development'
+      }
+    end
+
+    def arez_java_args
+      %w(-ea)
+    end
+  end
+end
