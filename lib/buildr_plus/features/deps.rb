@@ -159,7 +159,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:ce_data_types]
       generators << [:gwt_client_config] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
-      generators << [:arez_client_dao] if BuildrPlus::FeatureManager.activated?(:arez)
       generators << [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt_module] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       generators.flatten
