@@ -124,7 +124,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def braincheck_version
-      '1.2.0'
+      '1.3.0'
     end
 
     def braincheck
@@ -367,7 +367,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      'X'
+      '0.5.93-arez-b1'
     end
 
     def replicant_shared
