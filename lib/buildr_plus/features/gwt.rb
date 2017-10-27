@@ -101,6 +101,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
         t = task(target_directory => [artifact]) do
           rm_rf target_directory
           unzip(target_directory => artifact).target.invoke
+          rm_f Dir["#{target_directory}/**/*.class"]
         end
         project.iml.main_generated_source_directories << target_directory
         project.compile.from(target_directory)
