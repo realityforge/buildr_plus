@@ -94,10 +94,6 @@ module BuildrPlus::Keycloak
           "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
       "#{prefix}KEYCLOAK_CLIENT#{suffix}"
     end
-
-    def old_redfish_config_prefix
-      config_prefix
-    end
   end
 end
 
