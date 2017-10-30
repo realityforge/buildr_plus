@@ -39,6 +39,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       project.compile.options.lint = 'all'
       project.compile.options.source = "1.#{BuildrPlus::Java.version}"
       project.compile.options.target = "1.#{BuildrPlus::Java.version}"
+      project.iml.instance_variable_set('@main_generated_source_directories',[])
     end
 
     after_define do |project|
@@ -57,7 +58,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       project.task(':java:check').enhance([t.name])
 
       if project.iml? && project.enable_annotation_processor?
-        project.iml.main_source_directories << project._('generated/processors/main/java')
+        project.iml.main_generated_source_directories << project._('generated/processors/main/java')
       end
 
       if project.ipr? && BuildrPlus::Java.enable_annotation_processor?
