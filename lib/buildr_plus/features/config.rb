@@ -264,13 +264,6 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       environment.setting("#{prefix}_REALM_PUBLIC_KEY", environment.keycloak.public_key) unless environment.setting?("#{prefix}_REALM_PUBLIC_KEY")
       environment.setting("#{prefix}_SERVER_URL", environment.keycloak.base_url) unless environment.setting?("#{prefix}_SERVER_URL")
       environment.setting("#{prefix}_CLIENT_NAME", client.name) unless environment.setting?("#{prefix}_CLIENT_NAME")
-
-      ## TODO: These lines should be removed after all the projects are updated
-      prefix = client.old_redfish_config_prefix
-      environment.setting("#{prefix}_KEYCLOAK_REALM", environment.keycloak.realm) unless environment.setting?("#{prefix}_KEYCLOAK_REALM")
-      environment.setting("#{prefix}_KEYCLOAK_REALM_PUBLIC_KEY", environment.keycloak.public_key) unless environment.setting?("#{prefix}_KEYCLOAK_REALM_PUBLIC_KEY")
-      environment.setting("#{prefix}_KEYCLOAK_AUTH_SERVER_URL", environment.keycloak.base_url) unless environment.setting?("#{prefix}_KEYCLOAK_AUTH_SERVER_URL")
-      environment.setting("#{prefix}_KEYCLOAK_CLIENT_NAME", client.name) unless environment.setting?("#{prefix}_KEYCLOAK_CLIENT_NAME")
     end
 
     def populate_volume_configuration(environment)
