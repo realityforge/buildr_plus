@@ -112,23 +112,18 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       @include_api_client.nil? ? BuildrPlus::FeatureManager.activated?(:role_user_experience) : !!@include_api_client
     end
 
-    def remote_client_by_client_type(client_type)
-      self.remote_clients_map[client_type.to_s] || (raise "Unable to locate remote_client with client_type '#{client_type}'")
-    end
-
     def remote_client(client_type, options = {})
-      raise "Attempting to redefine remote_client #{client_type}" if self.remote_clients_map[client_type.to_s]
       remote_client = BuildrPlus::Keycloak::KeycloakRemoteClient.new(client_type, options)
-      self.remote_clients_map[client_type.to_s] = remote_client
+      self.remote_clients_list << remote_client
       remote_client
     end
 
     def remote_clients
-      remote_clients_map.values
+      remote_clients_list.dup
     end
 
-    def remote_clients_map
-      @remote_clients ||= {}
+    def remote_clients_list
+      @remote_clients ||= []
     end
 
     def client_by_client_type(client_type)
