@@ -17,6 +17,10 @@
   <suppress checks="ConstantName" files=".*[\\/]client[\\/]view[\\/].*UI\.java"/>
   <suppress checks="MagicNumberCheck" files=".*[\\/]client[\\/]view[\\/]ui[\\/].*\.java"/>
 
+  <!-- Suppress warnings about star imports when working with React4j components -->
+  <suppress checks="AvoidStarImport" files=".*[\\/]client[\\/]components[\\/].*\.java"/>
+  <suppress checks="AvoidStaticImport" files=".*[\\/]client[\\/]components[\\/].*\.java"/>
+
   <!-- Some suppressions for tests -->
   <suppress checks="MethodName" files="(.*[\\/])?test[\\/]java[\\/].*\.java"/>
   <suppress checks="MagicNumber" files="(.*[\\/])?test[\\/]java[\\/].*\.java"/>
