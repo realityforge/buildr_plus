@@ -106,7 +106,10 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
         project.iml.main_generated_source_directories << target_directory
         project.compile.from(target_directory)
         project.compile.dependencies.delete(artifact)
-        task(':domgen:all').enhance([t.name])
+
+        desc 'Expand all GWT deps so they are accessible to GWT compiler'
+        expand_task = task('gwt:expand_deps').enhance([t.name])
+        task(':domgen:all').enhance([expand_task.name])
       end
     end
 
