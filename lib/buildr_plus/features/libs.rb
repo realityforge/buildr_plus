@@ -339,7 +339,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.23'
+      '0.24'
     end
 
     def arez
