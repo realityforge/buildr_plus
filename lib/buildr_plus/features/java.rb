@@ -58,10 +58,11 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       project.task(':java:check').enhance([t.name])
 
       if project.enable_annotation_processor?
-        f = project.file(project._(:target, 'generated/processors/main/java')) do
+        project.file(project._(:target, 'generated/processors/main/java')).enhance([project.compile])
+        t = project.task('processors_setup') do
           mkdir_p project._(:target, 'generated/processors/main/java')
         end
-        project.compile.enhance([f])
+        project.compile.enhance([t.name])
         project.compile.options.merge!(:other => ['-s', project._(:target, 'generated/processors/main/java')])
         if project.iml?
           project.iml.main_generated_source_directories << project._('generated/processors/main/java')

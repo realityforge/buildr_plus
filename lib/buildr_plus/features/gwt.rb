@@ -29,29 +29,36 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
         project.compile.sources.each do |src|
           jar.include("#{src}/*")
         end
+        generated_source_deps(project).each do |src|
+          jar.include("#{src}/*")
+          jar.enhance([src])
+          jar.enhance do |j|
+            j.include("#{src}/*")
+          end
+        end
       end
     end
 
-    def deps_for_gwt_compile(project)
-      # Unfortunately buildr does not gracefully handle resource directories not being present
-      # when project processed so we collect extra dependencies by looking at the generated directories
+    def generated_source_deps(project)
       extra_deps = project.iml.main_generated_resource_directories.flatten.compact.collect do |a|
         a.is_a?(String) ? file(a) : a
       end + project.iml.main_generated_source_directories.flatten.compact.collect do |a|
         a.is_a?(String) ? file(a) : a
       end
-
-      project.compile.dependencies + [project.compile.target] + extra_deps
+      extra_deps += [project.file(project._(:target, 'generated/processors/main/java'))] if project.enable_annotation_processor?
+      extra_deps
     end
 
     def define_gwt_task(project, suffix = '', options = {})
-      dependencies = deps_for_gwt_compile(project)
+      extra_deps = generated_source_deps(project)
+
+      dependencies = project.compile.dependencies + [project.compile.target] + extra_deps
       if ENV['GWT'].nil? || ENV['GWT'] == project.name
         project.gwt(project.determine_top_level_gwt_modules(suffix),
                     {
                       :java_args => BuildrPlus::Gwt.gwtc_java_args,
                       :dependencies => dependencies,
-                     :js_exports => BuildrPlus::Gwt.enable_gwt_js_exports?
+                      :js_exports => BuildrPlus::Gwt.enable_gwt_js_exports?
                     }.merge(options))
       end
     end
@@ -68,7 +75,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
         raise message
       end
       project.iml.add_gwt_facet(module_config,
-                                :settings => {:compilerMaxHeapSize => '1024'},
+                                :settings => { :compilerMaxHeapSize => '1024' },
                                 :gwt_dev_artifact => BuildrPlus::Libs.gwt_dev)
 
     end
@@ -117,7 +124,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
     # If none specified then derive one based on root projects name and group
     def determine_top_level_gwt_modules(suffix)
       m = self.top_level_gwt_modules
-      gwt_modules = !m.empty? ? m : self.gwt_modules.select{|m| m =~ /#{suffix}$/}
+      gwt_modules = !m.empty? ? m : self.gwt_modules.select {|m| m =~ /#{suffix}$/}
 
       if gwt_modules.empty?
         puts "Unable to determine top level gwt modules for project '#{project.name}'."
