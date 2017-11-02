@@ -94,6 +94,15 @@ module BuildrPlus::Keycloak
           "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
       "#{prefix}KEYCLOAK_CLIENT#{suffix}"
     end
+
+    def env_var
+      prefix = "#{Reality::Naming.uppercase_constantize(self.external? ? self.application : BuildrPlus::Keycloak.root_project.name)}"
+      suffix =
+        ((!self.external? && self.default?) || (self.external? && self.application == self.client_type)) ?
+          '' :
+          "#{Reality::Naming.uppercase_constantize(self.client_type)}"
+      "#{prefix}#{'' == prefix ? '' : '' == suffix ? '' : '_'}#{suffix}"
+    end
   end
 end
 
@@ -190,7 +199,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << "--admin-username=#{BuildrPlus::Config.environment_config.keycloak.admin_username}" if BuildrPlus::Config.environment_config.keycloak.admin_username
           args << "--admin-password=#{BuildrPlus::Config.environment_config.keycloak.admin_password}"
           BuildrPlus::Keycloak.clients.each do |client|
-            args << "-e#{client.config_prefix}_NAME=#{client.name}"
+            args << "-e#{client.env_var}_NAME=#{client.name}"
           end
           args << "-e#{cname}_ORIGIN=http://127.0.0.1:8080"
           args << "-e#{cname}_URL=http://127.0.0.1:8080/#{name}"
