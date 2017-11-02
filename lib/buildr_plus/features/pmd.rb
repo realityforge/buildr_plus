@@ -35,11 +35,11 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
           # The specs for requirements
           def dependencies
             %w(
-              net.sourceforge.pmd:pmd-core:jar:5.6.1
-              net.sourceforge.pmd:pmd-java:jar:5.6.1
-              net.sourceforge.pmd:pmd-java8:jar:5.6.1
-              net.sourceforge.pmd:pmd-javascript:jar:5.6.1
-              net.sourceforge.pmd:pmd-ruby:jar:5.6.1
+              net.sourceforge.pmd:pmd-core:jar:5.8.1
+              net.sourceforge.pmd:pmd-java:jar:5.8.1
+              net.sourceforge.pmd:pmd-java8:jar:5.8.1
+              net.sourceforge.pmd:pmd-javascript:jar:5.8.1
+              net.sourceforge.pmd:pmd-ruby:jar:5.8.1
               jaxen:jaxen:jar:1.1.6
               commons-io:commons-io:jar:2.4
               com.beust:jcommander:jar:1.48
