@@ -17,10 +17,7 @@ BuildrPlus::FeatureManager.feature(:arez) do |f|
 
     def arez_test_options
       {
-        'braincheck.dynamic_provider' => 'true',
         'braincheck.environment' => 'development',
-        'arez.dynamic_provider' => 'true',
-        'arez.logger' => 'proxy',
         'arez.environment' => 'development'
       }
     end
