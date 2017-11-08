@@ -366,6 +366,24 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.arez:arez-browser-extras:jar:gwt:#{arez_version})
     end
 
+    def react4j_version
+      '0.10'
+    end
+
+    def react4j
+      %W(
+        org.realityforge.react4j:react4j-annotations:jar:#{react4j_version}
+        org.realityforge.react4j:react4j-core:jar:#{react4j_version}
+        org.realityforge.react4j:react4j-dom:jar:#{react4j_version}
+        org.realityforge.react4j:react4j-processor:jar:#{react4j_version}
+        org.realityforge.react4j:react4j-widget:jar:#{react4j_version}
+      ) + self.elemental2_dom + self.elemental2_promise
+    end
+
+    def react4j_arez
+      %W(org.realityforge.react4j:react4j-arez:jar:#{react4j_version})
+    end
+
     def replicant_version
       '0.5.94-arez-b3'
     end

@@ -163,7 +163,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
     attr_writer :modern_checkstyle_rule_type
 
     def modern_checkstyle_rule_type?
-      @modern_checkstyle_rule_type.nil? ? BuildrPlus::FeatureManager.activated?(:arez) : !!@modern_checkstyle_rule_type
+      @modern_checkstyle_rule_type.nil? ? BuildrPlus::FeatureManager.activated?(:react4j) : !!@modern_checkstyle_rule_type
     end
 
     def default_checkstyle_rules

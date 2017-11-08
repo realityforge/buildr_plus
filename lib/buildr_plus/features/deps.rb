@@ -281,6 +281,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client) if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(:berk_gwt) if BuildrPlus::FeatureManager.activated?(:berk)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_gwt + BuildrPlus::Libs.arez_browser_gwt) if BuildrPlus::FeatureManager.activated?(:arez)
 
       dependencies.flatten
     end
@@ -470,6 +471,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << gwt_deps
+      if BuildrPlus::FeatureManager.activated?(:react4j)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j_arez) if BuildrPlus::FeatureManager.activated?(:arez)
+      end
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_appcache_client, BuildrPlus::Libs.gwt_appcache_server]) if BuildrPlus::FeatureManager.activated?(:appcache)
 
       dependencies.flatten
