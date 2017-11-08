@@ -160,8 +160,14 @@ end
 
 BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
   f.enhance(:Config) do
+    attr_writer :modern_checkstyle_rule_type
+
+    def modern_checkstyle_rule_type?
+      @modern_checkstyle_rule_type.nil? ? BuildrPlus::FeatureManager.activated?(:arez) : !!@modern_checkstyle_rule_type
+    end
+
     def default_checkstyle_rules
-      'au.com.stocksoftware.checkstyle:checkstyle:xml:1.14'
+      "au.com.stocksoftware.checkstyle:checkstyle#{modern_checkstyle_rule_type? ? '-ng' : ''}:xml:1.15"
     end
 
     def checkstyle_rules
