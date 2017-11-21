@@ -366,6 +366,14 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.arez:arez-browser-extras:jar:gwt:#{arez_version})
     end
 
+    def router_fu
+      %w(
+        org.realityforge.router.fu:router-fu-annotations:jar:0.01
+        org.realityforge.router.fu:router-fu-core:jar:0.01
+        org.realityforge.router.fu:router-fu-processor:jar:0.01
+      ) + self.braincheck_gwt + self.javapoet
+    end
+
     def react4j_version
       '0.15'
     end
