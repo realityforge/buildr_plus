@@ -49,7 +49,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def findbugs_provided
-      %w(com.google.code.findbugs:jsr305:jar:3.0.0 com.google.code.findbugs:annotations:jar:3.0.0)
+      %w(com.google.code.findbugs:jsr305:jar:3.0.2 com.google.code.findbugs:annotations:jar:3.0.1)
     end
 
     def ee_provided
