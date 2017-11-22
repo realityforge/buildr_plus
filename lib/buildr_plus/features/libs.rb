@@ -368,9 +368,9 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def router_fu
       %w(
-        org.realityforge.router.fu:router-fu-annotations:jar:0.01
-        org.realityforge.router.fu:router-fu-core:jar:0.01
-        org.realityforge.router.fu:router-fu-processor:jar:0.01
+        org.realityforge.router.fu:router-fu-annotations:jar:0.02
+        org.realityforge.router.fu:router-fu-core:jar:0.02
+        org.realityforge.router.fu:router-fu-processor:jar:0.02
       ) + self.braincheck_gwt + self.javapoet
     end
 
