@@ -335,7 +335,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def javapoet
-      %w(com.squareup:javapoet:jar:1.7.0) + self.guava
+      %w(com.squareup:javapoet:jar:1.8.0) + self.guava
     end
 
     def arez_version
@@ -434,6 +434,33 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def awaitility
       %w(org.awaitility:awaitility:jar:2.0.0)
+    end
+
+    def dagger_version
+      '2.13'
+    end
+
+    def dagger_compile
+      %W(
+          com.google.dagger:dagger:jar:#{dagger_version}
+          com.google.dagger:dagger-producers:jar:#{dagger_version}
+        ) + self.guava + self.javapoet
+    end
+
+    def dagger
+      self.dagger_compile + self.javax_inject
+    end
+
+    def dagger_compiler
+      %W(
+          com.google.dagger:dagger-compiler:jar:#{dagger_version}
+          com.google.googlejavaformat:google-java-format:jar:1.4
+          com.google.errorprone:javac-shaded:jar:9-dev-r4023-3
+        ) + self.dagger
+    end
+
+    def dagger_gwt
+      %W(com.google.dagger:dagger-gwt:jar:#{dagger_version}) + self.dagger
     end
 
     def testng_version
