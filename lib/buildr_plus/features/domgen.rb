@@ -129,7 +129,6 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
             facet_mapping =
               {
                 :arez => :arez,
-                :dagger => :dagger,
                 :graphql => :graphql,
                 :redfish => :redfish,
                 :iris_audit => :iris_audit,

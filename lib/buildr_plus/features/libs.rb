@@ -171,14 +171,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(javax.inject:javax.inject:jar:1)
     end
 
-    def gwt_gin
-      %w(com.google.gwt.inject:gin:jar:2.1.2) + self.javax_inject + self.guice + self.gwt_user
-    end
-
-    def gwt_gin_extensions
-      %w(org.realityforge.gwt.gin:gwt-gin-extensions:jar:0.1)
-    end
-
     def gwt_webpoller
       %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.5)
     end
