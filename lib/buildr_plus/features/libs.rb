@@ -444,7 +444,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(
           com.google.dagger:dagger:jar:#{dagger_version}
           com.google.dagger:dagger-producers:jar:#{dagger_version}
-        ) + self.guava + self.javapoet
+        )
     end
 
     def dagger
@@ -456,11 +456,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
           com.google.dagger:dagger-compiler:jar:#{dagger_version}
           com.google.googlejavaformat:google-java-format:jar:1.4
           com.google.errorprone:javac-shaded:jar:9-dev-r4023-3
-        ) + self.dagger
+        ) + self.dagger + self.guava + self.javapoet
     end
 
     def dagger_gwt
-      %W(com.google.dagger:dagger-gwt:jar:#{dagger_version}) + self.dagger
+      %W(
+          com.google.dagger:dagger:jar:sources:#{dagger_version}
+          com.google.dagger:dagger-producers:jar:sources:#{dagger_version}
+          com.google.dagger:dagger-gwt:jar:sources:#{dagger_version}
+        ) + self.dagger
     end
 
     def testng_version
