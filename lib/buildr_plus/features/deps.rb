@@ -243,6 +243,14 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_inject)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger)
+
+      dependencies.flatten
+    end
+
+    def replicant_shared_processorpath
+      dependencies = []
+
       dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_compiler)
 
       dependencies.flatten
@@ -268,6 +276,14 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
       dependencies << replicant_shared_provided_deps if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_gwt)
+
+      dependencies.flatten
+    end
+
+    def gwt_processorpath
+      dependencies = []
+
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_compiler)
 
       dependencies.flatten
     end

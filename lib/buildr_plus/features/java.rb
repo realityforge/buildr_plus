@@ -35,11 +35,16 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       @enable_annotation_processor.nil? ? BuildrPlus::Java.enable_annotation_processor? : !!@enable_annotation_processor
     end
 
+    def processorpath
+      @processorpath ||= {}
+    end
+
     before_define do |project|
       project.compile.options.lint = 'all'
       project.compile.options.source = "1.#{BuildrPlus::Java.version}"
       project.compile.options.target = "1.#{BuildrPlus::Java.version}"
       project.iml.instance_variable_set('@main_generated_source_directories',[])
+      project.iml.instance_variable_set('@processorpath',{})
     end
 
     after_define do |project|
