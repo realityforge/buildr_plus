@@ -335,6 +335,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
+      # TODO: When you move to 0.26 then remove component dependency from processor path
       '0.25'
     end
 
