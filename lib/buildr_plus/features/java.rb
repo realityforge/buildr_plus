@@ -49,11 +49,6 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
 
     after_define do |project|
       project.test.options[:properties].merge!('user.timezone' => 'Australia/Melbourne')
-      unless project.processorpath.empty?
-        processor_deps = Buildr.artifacts(project.processorpath)
-        project.compile.enhance(processor_deps)
-        project.compile.options[:other] = ['-processorpath', processor_deps.collect {|d| d.to_s}.join(File::PATH_SEPARATOR)]
-      end
 
       t = project.task 'java:check' do
         (project.test.compile.sources + project.compile.sources).each do |src|
@@ -73,7 +68,12 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
           mkdir_p project._(:target, 'generated/processors/main/java')
         end
         project.compile.enhance([t.name])
-        project.compile.options.merge!(:other => ['-s', project._(:target, 'generated/processors/main/java')])
+        unless project.processorpath.empty?
+          processor_deps = Buildr.artifacts(project.processorpath)
+          project.compile.enhance(processor_deps)
+          processorpath = processor_deps.collect {|d| d.to_s}.join(File::PATH_SEPARATOR)
+          project.compile.options[:other] = ['-processorpath', processorpath, '-s', project._(:target, 'generated/processors/main/java')]
+        end
         if project.iml?
           project.iml.main_generated_source_directories << project._('generated/processors/main/java')
         end

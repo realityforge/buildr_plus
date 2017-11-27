@@ -353,7 +353,9 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_processor
+      # TODO: Component jar should not be needed here but is. Should clean up references in processor jar?
       %W(
+        org.realityforge.arez:arez-component:jar:gwt:#{arez_version}
         org.realityforge.arez:arez-processor:jar:#{arez_version}
       ) + self.javapoet + self.arez_annotations + self.findbugs_provided
     end
