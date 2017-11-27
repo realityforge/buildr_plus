@@ -252,6 +252,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_compiler)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_processor)
 
       dependencies.flatten
     end
@@ -272,9 +273,11 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_provided_deps
       dependencies = []
 
+      if BuildrPlus::FeatureManager.activated?(:replicant)
+        dependencies << self.replicant_shared_provided_deps
+      end
       dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
-      dependencies << replicant_shared_provided_deps if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_gwt)
 
       dependencies.flatten
@@ -283,7 +286,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_processorpath
       dependencies = []
 
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_compiler)
+      dependencies << self.replicant_shared_processorpath
 
       dependencies.flatten
     end
@@ -303,7 +306,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def gwt_deps
-      gwt_provided_deps + gwt_compile_deps
+      self.gwt_provided_deps + self.gwt_compile_deps
     end
 
     def gwt_qa_support_deps
@@ -486,12 +489,20 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def user_experience_deps
       dependencies = []
 
-      dependencies << gwt_deps
+      dependencies << self.gwt_deps
       if BuildrPlus::FeatureManager.activated?(:react4j)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j_arez) if BuildrPlus::FeatureManager.activated?(:arez)
       end
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_appcache_client, BuildrPlus::Libs.gwt_appcache_server]) if BuildrPlus::FeatureManager.activated?(:appcache)
+
+      dependencies.flatten
+    end
+
+    def user_experience_processorpath
+      dependencies = []
+
+      dependencies << self.gwt_processorpath
 
       dependencies.flatten
     end

@@ -338,14 +338,24 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       '0.25'
     end
 
-    def arez
+    def arez_annotations
       %W(
         org.realityforge.arez:arez-annotations:jar:#{arez_version}
+      )
+    end
+
+    def arez
+      %W(
         org.realityforge.arez:arez-core:jar:#{arez_version}
         org.realityforge.arez:arez-component:jar:#{arez_version}
-        org.realityforge.arez:arez-processor:jar:#{arez_version}
         org.realityforge.arez:arez-extras:jar:#{arez_version}
-      ) + self.braincheck + self.javapoet
+      ) + self.braincheck + self.arez_annotations
+    end
+
+    def arez_processor
+      %W(
+        org.realityforge.arez:arez-processor:jar:#{arez_version}
+      ) + self.javapoet + self.arez_annotations + self.findbugs_provided
     end
 
     def arez_gwt
@@ -353,21 +363,25 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.realityforge.arez:arez-annotations:jar:gwt:#{arez_version}
         org.realityforge.arez:arez-core:jar:gwt:#{arez_version}
         org.realityforge.arez:arez-component:jar:gwt:#{arez_version}
-        org.realityforge.arez:arez-processor:jar:#{arez_version}
         org.realityforge.arez:arez-extras:jar:gwt:#{arez_version}
-      ) + self.braincheck_gwt + self.javapoet
+      ) + self.braincheck_gwt
     end
 
     def arez_browser_gwt
       %W(org.realityforge.arez:arez-browser-extras:jar:gwt:#{arez_version})
     end
 
+    def router_fu_annotations
+      %w(org.realityforge.router.fu:router-fu-annotations:jar:0.02)
+    end
+
     def router_fu
-      %w(
-        org.realityforge.router.fu:router-fu-annotations:jar:0.02
-        org.realityforge.router.fu:router-fu-core:jar:0.02
-        org.realityforge.router.fu:router-fu-processor:jar:0.02
-      ) + self.braincheck_gwt + self.javapoet
+      %w(org.realityforge.router.fu:router-fu-core:jar:0.02) + self.braincheck_gwt + self.router_fu_annotations
+    end
+
+    def router_fu_processor
+      # TODO: Should not add router_fu but library needs to be updated to decouple if want to enable this
+      %w(org.realityforge.router.fu:router-fu-processor:jar:0.02) + self.router_fu_annotations + self.javapoet + self.router_fu
     end
 
     def react4j_version
@@ -389,7 +403,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '0.5.94-arez-b7'
+      'X'
     end
 
     def replicant_shared
@@ -448,10 +462,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def dagger_compiler
       %W(
+          com.google.dagger:dagger-producers:jar:#{dagger_version}
           com.google.dagger:dagger-compiler:jar:#{dagger_version}
           com.google.googlejavaformat:google-java-format:jar:1.4
           com.google.errorprone:javac-shaded:jar:9-dev-r4023-3
-        ) + self.guava + self.javapoet
+        ) + self.guava + self.javapoet + self.dagger
     end
 
     def dagger_gwt

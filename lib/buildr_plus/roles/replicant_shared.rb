@@ -22,11 +22,7 @@ BuildrPlus::Roles.role(:replicant_shared, :requires => [:replicant]) do
   end
 
   compile.with BuildrPlus::Deps.replicant_shared_deps
-  unless BuildrPlus::Deps.replicant_shared_processorpath.empty?
-    processor_deps = Buildr.artifacts(BuildrPlus::Deps.replicant_shared_processorpath)
-    compile.enhance(processor_deps)
-    compile.options[:other] = ['-processorpath', processor_deps.collect{|d|d.to_s}.join(File::PATH_SEPARATOR)]
-  end
+  project.processorpath << BuildrPlus::Deps.replicant_shared_processorpath
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
 

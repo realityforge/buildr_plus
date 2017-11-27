@@ -36,7 +36,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     end
 
     def processorpath
-      @processorpath ||= {}
+      @processorpath ||= []
     end
 
     before_define do |project|
@@ -49,6 +49,11 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
 
     after_define do |project|
       project.test.options[:properties].merge!('user.timezone' => 'Australia/Melbourne')
+      unless project.processorpath.empty?
+        processor_deps = Buildr.artifacts(project.processorpath)
+        project.compile.enhance(processor_deps)
+        project.compile.options[:other] = ['-processorpath', processor_deps.collect {|d| d.to_s}.join(File::PATH_SEPARATOR)]
+      end
 
       t = project.task 'java:check' do
         (project.test.compile.sources + project.compile.sources).each do |src|
@@ -81,6 +86,21 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
               xml.sourceOutputDir :name => 'generated/processors/main/java'
               xml.sourceTestOutputDir :name => 'generated/processors/test/java'
               xml.outputRelativeToContentRoot :value => true
+              xml.processorPath :useClasspath => true
+            end
+            enabled = Buildr.projects(:no_invoke => true).select {|p| p.iml? && p.enable_annotation_processor? && !p.processorpath.empty?}
+            enabled.each do |prj|
+              xml.profile(:name => "#{prj.name}", :enabled => true) do
+                xml.sourceOutputDir :name => 'generated/processors/main/java'
+                xml.sourceTestOutputDir :name => 'generated/processors/test/java'
+                xml.outputRelativeToContentRoot :value => true
+                xml.module :name => prj.iml.name
+                xml.processorPath :useClasspath => false do
+                  Buildr.artifacts(prj.processorpath).each do |path|
+                    xml.entry :name => project.ipr.send(:resolve_path, path.to_s)
+                  end
+                end
+              end
             end
             disabled = Buildr.projects(:no_invoke => true).select {|p| p.iml? && !p.enable_annotation_processor?}
             unless disabled.empty?

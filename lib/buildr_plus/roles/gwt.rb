@@ -40,11 +40,7 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
   end
 
   compile.with BuildrPlus::Deps.gwt_deps
-  unless BuildrPlus::Deps.gwt_processorpath.empty?
-    processor_deps = Buildr.artifacts(BuildrPlus::Deps.gwt_processorpath)
-    compile.enhance(processor_deps)
-    compile.options[:other] = ['-processorpath', processor_deps.collect{|d|d.to_s}.join(File::PATH_SEPARATOR)]
-  end
+  project.processorpath << BuildrPlus::Deps.gwt_processorpath
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_shared)
