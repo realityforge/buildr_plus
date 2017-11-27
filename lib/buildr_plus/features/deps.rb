@@ -503,6 +503,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << self.gwt_processorpath
+      dependencies << BuildrPlus::Libs.react4j_processor if BuildrPlus::FeatureManager.activated?(:react4j)
 
       dependencies.flatten
     end
