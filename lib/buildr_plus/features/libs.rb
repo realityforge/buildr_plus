@@ -383,7 +383,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.15'
+      '0.17'
     end
 
     def react4j
@@ -397,12 +397,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_processor
-      #TODO: The future version of this should no longer need core, annotations, jsinterop_base, elemental2_core or jsinterop
-      %W(
-        org.realityforge.react4j:react4j-annotations:jar:#{react4j_version}
-        org.realityforge.react4j:react4j-core:jar:#{react4j_version}
-        org.realityforge.react4j:react4j-processor:jar:#{react4j_version}
-      ) + self.javapoet + self.findbugs_provided + self.jsinterop + self.jsinterop_base + self.elemental2_core
+      %W(org.realityforge.react4j:react4j-processor:jar:#{react4j_version}) + self.javapoet + self.findbugs_provided
     end
 
     def react4j_arez
