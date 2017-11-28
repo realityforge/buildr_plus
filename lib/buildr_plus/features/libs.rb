@@ -335,8 +335,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      # TODO: When you move to 0.26 then remove component dependency from processor path
-      '0.25'
+      '0.27'
     end
 
     def arez_annotations
@@ -354,11 +353,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_processor
-      # TODO: Component jar should not be needed here but is. Should clean up references in processor jar?
-      %W(
-        org.realityforge.arez:arez-component:jar:gwt:#{arez_version}
-        org.realityforge.arez:arez-processor:jar:#{arez_version}
-      ) + self.javapoet + self.arez_annotations + self.findbugs_provided
+      %W(org.realityforge.arez:arez-processor:jar:#{arez_version}) + self.javapoet + self.findbugs_provided
     end
 
     def arez_gwt
