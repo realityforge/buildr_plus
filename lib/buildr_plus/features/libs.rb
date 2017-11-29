@@ -369,17 +369,20 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.arez:arez-browser-extras:jar:gwt:#{arez_version})
     end
 
+    def router_fu_version
+      '0.03'
+    end
+
     def router_fu_annotations
-      %w(org.realityforge.router.fu:router-fu-annotations:jar:0.02)
+      %W(org.realityforge.router.fu:router-fu-annotations:jar:#{router_fu_version})
     end
 
     def router_fu
-      %w(org.realityforge.router.fu:router-fu-core:jar:0.02) + self.braincheck_gwt + self.router_fu_annotations
+      %W(org.realityforge.router.fu:router-fu-core:jar:#{router_fu_version}) + self.braincheck_gwt + self.router_fu_annotations
     end
 
     def router_fu_processor
-      # TODO: Should not add router_fu but library needs to be updated to decouple if want to enable this
-      %w(org.realityforge.router.fu:router-fu-processor:jar:0.02) + self.router_fu_annotations + self.javapoet + self.router_fu
+      %W(org.realityforge.router.fu:router-fu-processor:jar:#{router_fu_version})
     end
 
     def react4j_version
