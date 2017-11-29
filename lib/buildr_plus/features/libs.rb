@@ -383,7 +383,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.17'
+      '0.18'
     end
 
     def react4j
@@ -397,7 +397,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_processor
-      %W(org.realityforge.react4j:react4j-processor:jar:#{react4j_version}) + self.javapoet + self.findbugs_provided
+      %W(org.realityforge.react4j:react4j-processor:jar:#{react4j_version})
     end
 
     def react4j_arez
