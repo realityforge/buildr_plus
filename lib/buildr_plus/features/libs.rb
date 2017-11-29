@@ -335,7 +335,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.27'
+      '0.30'
     end
 
     def arez_annotations
@@ -353,7 +353,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_processor
-      %W(org.realityforge.arez:arez-processor:jar:#{arez_version}) + self.javapoet + self.findbugs_provided
+      %W(org.realityforge.arez:arez-processor:jar:#{arez_version})
     end
 
     def arez_gwt
