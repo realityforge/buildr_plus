@@ -471,7 +471,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
           com.google.dagger:dagger-compiler:jar:#{dagger_version}
           com.google.googlejavaformat:google-java-format:jar:1.4
           com.google.errorprone:javac-shaded:jar:9-dev-r4023-3
-        ) + self.guava + self.javapoet + self.dagger
+        ) + self.javapoet + self.dagger
     end
 
     def dagger_gwt
