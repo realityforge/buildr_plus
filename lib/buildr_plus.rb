@@ -39,6 +39,7 @@ require 'buildr_plus/util'
 
 # Patches that should always be applied
 require 'buildr_plus/patches/group_project_patch'
+require 'buildr_plus/patches/ziptask_patch'
 
 require 'buildr_plus/features/appcache'
 require 'buildr_plus/features/appconfig'
