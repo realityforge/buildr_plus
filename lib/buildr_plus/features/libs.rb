@@ -136,7 +136,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jsinterop
-      %w(com.google.jsinterop:jsinterop-annotations:jar:1.0.1 com.google.jsinterop:jsinterop-annotations:jar:sources:1.0.1)
+      %w(com.google.jsinterop:jsinterop-annotations:jar:1.0.2 com.google.jsinterop:jsinterop-annotations:jar:sources:1.0.2)
     end
 
     def jsinterop_base
