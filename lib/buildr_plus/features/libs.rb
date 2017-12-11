@@ -141,18 +141,20 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def jsinterop_base
       %w(com.google.jsinterop:base:jar:1.0.0-beta-1 com.google.jsinterop:base:jar:sources:1.0.0-beta-1) + self.jsinterop
+    def elemental_version
+      '1.0.0-beta-3'
     end
 
     def elemental2_core
-      %w(com.google.elemental2:elemental2-core:jar:1.0.0-beta-1) + self.jsinterop_base
+      %W(com.google.elemental2:elemental2-core:jar:#{elemental_version}) + self.jsinterop_base
     end
 
     def elemental2_dom
-      %w(com.google.elemental2:elemental2-dom:jar:1.0.0-beta-1) + self.elemental2_core
+      %W(com.google.elemental2:elemental2-dom:jar:#{elemental_version}) + self.elemental2_core
     end
 
     def elemental2_promise
-      %w(com.google.elemental2:elemental2-promise:jar:1.0.0-beta-1) + self.elemental2_core
+      %W(com.google.elemental2:elemental2-promise:jar:#{elemental_version}) + self.elemental2_core
     end
 
     def gwt_user
