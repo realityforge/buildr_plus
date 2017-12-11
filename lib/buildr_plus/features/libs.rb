@@ -140,7 +140,9 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jsinterop_base
-      %w(com.google.jsinterop:base:jar:1.0.0-beta-1 com.google.jsinterop:base:jar:sources:1.0.0-beta-1) + self.jsinterop
+      %w(com.google.jsinterop:base:jar:1.0.0-beta-3 com.google.jsinterop:base:jar:sources:1.0.0-beta-3) + self.jsinterop
+    end
+
     def elemental_version
       '1.0.0-beta-3'
     end
