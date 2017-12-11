@@ -370,7 +370,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def router_fu_version
-      '0.03'
+      '0.04'
     end
 
     def router_fu_annotations
@@ -386,7 +386,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.20'
+      '0.23'
     end
 
     def react4j
