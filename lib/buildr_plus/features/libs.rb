@@ -140,11 +140,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jsinterop_base
-      %w(com.google.jsinterop:base:jar:1.0.0-beta-3 com.google.jsinterop:base:jar:sources:1.0.0-beta-3) + self.jsinterop
+      %w(com.google.jsinterop:base:jar:1.0.0-RC1 com.google.jsinterop:base:jar:sources:1.0.0-RC1) + self.jsinterop
     end
 
     def elemental_version
-      '1.0.0-beta-3'
+      '1.0.0-RC1'
     end
 
     def elemental2_core
@@ -339,7 +339,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.34'
+      '0.37'
     end
 
     def arez_annotations
@@ -390,7 +390,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.23'
+      '0.28'
     end
 
     def react4j
