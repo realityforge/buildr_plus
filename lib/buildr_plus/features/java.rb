@@ -80,6 +80,14 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       end
 
       if project.ipr? && BuildrPlus::Java.enable_annotation_processor?
+
+        # If an annotation processor fails it can result in lots of errors due to code not
+        # being generated yet. So make sure the compiler reports all errors so can track down
+        # the root cause
+        project.ipr.add_component('JavacSettings') do |component|
+          component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => '-Xmaxerrs 10000')
+        end
+
         project.ipr.add_component('CompilerConfiguration') do |component|
           component.annotationProcessing do |xml|
             xml.profile(:default => true, :name => 'Default', :enabled => true) do

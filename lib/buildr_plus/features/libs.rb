@@ -339,7 +339,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.44'
+      '0.48'
     end
 
     def arez_annotations
@@ -390,7 +390,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.37'
+      '0.38'
     end
 
     def react4j
@@ -411,7 +411,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '5.97-arez-b17'
+      '5.97-arez-b18'
     end
 
     def replicant_shared
@@ -447,7 +447,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guice
-      %w(aopalliance:aopalliance:jar:1.0 com.google.inject:guice:jar:3.0 com.google.inject.extensions:guice-assistedinject:jar:3.0)
+      %w(aopalliance:aopalliance:jar:1.0 org.ow2.asm:asm:jar:5.0.3 au.com.stocksoftware.com.google.inject:guice:jar:4.1.1-stock)
     end
 
     def awaitility
@@ -501,7 +501,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops_lib
-      'org.realityforge.guiceyloops:guiceyloops:jar:0.94'
+      'org.realityforge.guiceyloops:guiceyloops:jar:0.95'
     end
 
     def guiceyloops_gwt
