@@ -27,6 +27,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators = [:ee_data_types, :ee_cdi_qualifier]
       if BuildrPlus::FeatureManager.activated?(:db)
         generators << [:jpa_model, :jpa_ejb_dao, :jpa_template_persistence_xml, :jpa_template_orm_xml]
+        generators << [:transaction_time_jpa_extension]
         generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
         generators << [:imit_server_entity_listener] if BuildrPlus::FeatureManager.activated?(:replicant)
       end
