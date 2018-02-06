@@ -105,6 +105,9 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
 
       if BuildrPlus::FeatureManager.activated?(:dbt) && Dbt.repository.database_for_key?(:default)
         generators = BuildrPlus::Domgen.db_generators
+        if BuildrPlus::FeatureManager.activated?(:sql_analysis)
+          generators << :sql_analysis_sql
+        end
         if BuildrPlus::FeatureManager.activated?(:sync)
           generators << (BuildrPlus::Db.mssql? ? :sync_sql : :sync_pgsql)
         end
@@ -128,6 +131,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
           if BuildrPlus::Domgen.enforce_postload_constraints?
             facet_mapping =
               {
+                :sql_analysis => :sql_analysis,
                 :arez => :arez,
                 :graphql => :graphql,
                 :redfish => :redfish,
