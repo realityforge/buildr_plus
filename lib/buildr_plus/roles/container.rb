@@ -160,7 +160,7 @@ BuildrPlus::Roles.role(:container) do
                                   :start_javascript_debugger => false,
                                   :open_in_browser => false,
                                   :vm_parameters => "-Xmx3G -Djava.io.tmpdir=#{_('tmp/gwt')}",
-                                  :shell_parameters => "#{BuildrPlus::Gwt.enable_gwt_js_exports? ? '-generateJsInteropExports ' : ''}-port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:generated, 'gwt-export')}/ -XmethodNameDisplayMode FULL -noincremental",
+                                  :shell_parameters => "#{BuildrPlus::Gwt.enable_gwt_js_exports? ? '-generateJsInteropExports ' : ''}-port 8888 -codeServerPort 8889 -bindAddress 0.0.0.0 -war #{_(:generated, 'gwt-export')}/ -style PRETTY -XmethodNameDisplayMode FULL -noincremental",
                                   :launch_page => "http://127.0.0.1:8080/#{p.root_project.name}/#{path}")
       end
     end
