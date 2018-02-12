@@ -124,7 +124,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def braincheck_version
-      '1.3.0'
+      '1.4.0'
     end
 
     def braincheck
