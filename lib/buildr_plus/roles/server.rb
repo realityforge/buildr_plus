@@ -78,7 +78,12 @@ BuildrPlus::Roles.role(:server) do
         short_name = gwt_module.gsub(/.*\.([^.]+)Dev$/, '\1').downcase
         webroots[_('..', :generated, 'gwt-export', short_name)] = "/#{short_name}"
       end
-      BuildrPlus::Gwt.define_gwt_task(p, 'Prod', :target_project => project.name)
+      BuildrPlus::Gwt.define_gwt_task(p,
+                                      'Prod',
+                                      :target_project => project.name,
+                                      # In the future we should consider adapting our apps so we can use -XdisableClassMetadata
+                                      # however that involves removing some introspection of types ... if any?
+                                      :gwtc_args => %w(-XdisableCastChecking -optimize 9 -nocheckAssertions -XmethodNameDisplayMode NONE -noincremental))
     end
   end
 

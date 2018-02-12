@@ -58,6 +58,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
                     {
                       :java_args => BuildrPlus::Gwt.gwtc_java_args,
                       :dependencies => dependencies,
+                      :gwtc_args => options[:gwtc_args],
                       :js_exports => BuildrPlus::Gwt.enable_gwt_js_exports?
                     }.merge(options))
       end
