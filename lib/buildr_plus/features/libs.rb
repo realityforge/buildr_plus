@@ -398,7 +398,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.realityforge.react4j:react4j-annotations:jar:#{react4j_version}
         org.realityforge.react4j:react4j-core:jar:#{react4j_version}
         org.realityforge.react4j:react4j-dom:jar:#{react4j_version}
-        org.realityforge.react4j:react4j-widget:jar:#{react4j_version}
       ) + self.elemental2_dom + self.elemental2_promise
     end
 
