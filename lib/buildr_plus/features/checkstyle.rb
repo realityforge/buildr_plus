@@ -197,17 +197,26 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:gwt)
+        r.subpackage_rule('client', 'com.google.inject', :disallow => true)
+        r.subpackage_rule('client', 'com.google.gwt', :disallow => true)
+
+        r.subpackage_rule('client', 'com.google.gwt.user.client.rpc.AsyncCallback', :rule_type => :class)
+        r.subpackage_rule('client', 'com.google.gwt.event.dom.client.KeyCodes', :rule_type => :class)
+
+        # TODO: Remove this next line when we figure out the solution
+        r.subpackage_rule('client', 'com.google.gwt.i18n.shared.DateTimeFormat', :rule_type => :class)
+
+        # We will keep this rule until we figure out a way ala GWT 3 for resources
+        r.subpackage_rule('client', 'com.google.gwt.resources.client')
+
         r.subpackage_rule('client', 'org.realityforge.gwt.datatypes.client.date')
         r.subpackage_rule('client', 'javax.inject.Inject', :rule_type => :class)
-        r.subpackage_rule('client', 'com.google.inject.Inject', :rule_type => :class, :disallow => true)
         r.subpackage_rule('client', 'javax.inject.Provider', :rule_type => :class)
         r.subpackage_rule('client', 'javax.inject.Named', :rule_type => :class)
         r.subpackage_rule('client', 'com.google.gwt.event.shared.EventBus', :rule_type => :class)
         r.subpackage_rule('client', "#{g}.shared")
         r.subpackage_rule('client', "#{g}.client")
         r.subpackage_rule('client.ioc', 'javax.inject')
-        r.subpackage_rule('client.ioc', 'com.google.inject')
-        r.subpackage_rule('client.ioc', 'com.google.gwt.inject.client')
 
         if BuildrPlus::FeatureManager.activated?(:berk)
           r.subpackage_rule('client', 'iris.berk.server.data_type.EnvironmentSettingDTO', :rule_type => :class, :disallow => true)
@@ -220,6 +229,8 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         if BuildrPlus::FeatureManager.activated?(:appcache)
           r.subpackage_rule('client', 'org.realityforge.gwt.appcache.client', :local_only => true)
         end
+
+        r.subpackage_rule('client.test', 'com.google.inject')
       end
 
       if BuildrPlus::FeatureManager.activated?(:keycloak)
@@ -398,8 +409,8 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
         t = task 'checkstyle:setup' do
           FileUtils.mkdir_p File.dirname(checkstyle_import_rules)
-          File.open(checkstyle_import_rules, 'wb') do |f|
-            f.write project.import_rules.as_xml
+          File.open(checkstyle_import_rules, 'wb') do |file|
+            file.write project.import_rules.as_xml
           end
         end
 
