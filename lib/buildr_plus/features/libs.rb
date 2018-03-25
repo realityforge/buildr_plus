@@ -124,15 +124,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def braincheck_version
-      '1.4.0'
+      '1.5.0'
     end
 
     def braincheck
       %W(org.realityforge.braincheck:braincheck:jar:#{braincheck_version}) + self.anodoc
-    end
-
-    def braincheck_gwt
-      %W(org.realityforge.braincheck:braincheck:jar:gwt:#{braincheck_version}) + self.anodoc
     end
 
     def jsinterop
@@ -382,7 +378,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def router_fu
-      %W(org.realityforge.router.fu:router-fu-core:jar:#{router_fu_version}) + self.braincheck_gwt + self.router_fu_annotations
+      %W(org.realityforge.router.fu:router-fu-core:jar:#{router_fu_version}) + self.braincheck + self.router_fu_annotations
     end
 
     def router_fu_processor
