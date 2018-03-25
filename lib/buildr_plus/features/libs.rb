@@ -362,7 +362,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.realityforge.arez:arez-core:jar:gwt:#{arez_version}
         org.realityforge.arez:arez-component:jar:gwt:#{arez_version}
         org.realityforge.arez:arez-extras:jar:gwt:#{arez_version}
-      ) + self.braincheck_gwt
+      ) + self.braincheck
     end
 
     def arez_browser_gwt
