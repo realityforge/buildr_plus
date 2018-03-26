@@ -335,7 +335,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.63'
+      '0.73'
     end
 
     def arez_annotations
@@ -356,17 +356,8 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.arez:arez-processor:jar:#{arez_version})
     end
 
-    def arez_gwt
-      %W(
-        org.realityforge.arez:arez-annotations:jar:gwt:#{arez_version}
-        org.realityforge.arez:arez-core:jar:gwt:#{arez_version}
-        org.realityforge.arez:arez-component:jar:gwt:#{arez_version}
-        org.realityforge.arez:arez-extras:jar:gwt:#{arez_version}
-      ) + self.braincheck
-    end
-
-    def arez_browser_gwt
-      %W(org.realityforge.arez:arez-browser-extras:jar:gwt:#{arez_version})
+    def arez_browser
+      %W(org.realityforge.arez:arez-browser-extras:jar:#{arez_version})
     end
 
     def router_fu_version
@@ -386,7 +377,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.51'
+      '0.54'
     end
 
     def react4j
