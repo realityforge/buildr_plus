@@ -335,7 +335,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.73'
+      '0.74'
     end
 
     def arez_annotations
