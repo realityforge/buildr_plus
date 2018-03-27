@@ -217,7 +217,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def graphql_java
-      %w(com.graphql-java:graphql-java:jar:3.0.0) + BuildrPlus::Libs.slf4j + BuildrPlus::Libs.antlr4_runtime
+      %w(com.graphql-java:graphql-java:jar:3.0.0) + self.slf4j + self.antlr4_runtime
     end
 
     def graphql_java_tools
