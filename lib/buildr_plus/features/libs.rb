@@ -223,7 +223,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     def graphql_java_tools
       %w(
         com.esotericsoftware:reflectasm:jar:1.11.3
-        com.google.guava:guava:jar:21.0
         com.graphql-java:graphql-java-tools:jar:3.2.1
         org.jetbrains.kotlin:kotlin-reflect:jar:1.1.1
         org.jetbrains.kotlin:kotlin-stdlib:jar:1.1.1
@@ -236,6 +235,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         self.jackson_databind +
         self.jackson_datatype_jdk8 +
         self.jackson_module_kotlin +
+        self.guava + # Expected 21.0
         self.jetbrains_annotations
     end
 
@@ -327,7 +327,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guava
-      %w(com.google.guava:guava:jar:21.0)
+      %w(com.google.guava:guava:jar:23.3-jre)
     end
 
     def javapoet
@@ -441,7 +441,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def dagger_version
-      '2.13'
+      '2.15'
     end
 
     def dagger_compile
@@ -456,6 +456,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def dagger_compiler
       %W(
+          com.google.dagger:dagger-spi:jar:#{dagger_version}
           com.google.dagger:dagger-producers:jar:#{dagger_version}
           com.google.dagger:dagger-compiler:jar:#{dagger_version}
           com.google.googlejavaformat:google-java-format:jar:1.4
