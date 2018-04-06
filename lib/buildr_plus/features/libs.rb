@@ -397,7 +397,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '5.97-arez-b20'
+      '5.98-arez-b21'
     end
 
     def replicant_shared
