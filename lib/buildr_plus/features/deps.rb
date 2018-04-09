@@ -300,7 +300,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client) if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(:berk_gwt) if BuildrPlus::FeatureManager.activated?(:berk)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.arez_browser) if BuildrPlus::FeatureManager.activated?(:arez)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.arez_spytools) if BuildrPlus::FeatureManager.activated?(:arez)
 
       dependencies.flatten
     end
