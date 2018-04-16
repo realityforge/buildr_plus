@@ -19,6 +19,7 @@ BuildrPlus::FeatureManager.feature(:repositories) do |f|
       Buildr.repositories.remote.unshift('https://stocksoftware.jfrog.io/stocksoftware/public')
       Buildr.repositories.remote.unshift('http://central.maven.org/maven2')
       Buildr.repositories.remote.unshift('https://stocksoftware.jfrog.io/stocksoftware/oss')
+      Buildr.repositories.remote.unshift('https://stocksoftware.jfrog.io/stocksoftware/staging')
       if BuildrPlus::FeatureManager.activated?(:geolatte)
         Buildr.repositories.remote.unshift('http://download.osgeo.org/webdav/geotools')
       end
