@@ -335,7 +335,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.79'
+      '0.80'
     end
 
     def arez_annotations
@@ -376,7 +376,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.66'
+      '0.67'
     end
 
     def react4j
