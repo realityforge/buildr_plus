@@ -306,7 +306,7 @@ CONTENT
     def package_stage
       return '' if skip_stage?('Package')
       options = {}
-      options[:testng] = true if BuildrPlus::FeatureManager.activated?(:findbugs)
+      options[:testng] = true if BuildrPlus::FeatureManager.activated?(:testng)
       option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
       "        kinjen.package_stage( this#{option_string} )\n"
     end
