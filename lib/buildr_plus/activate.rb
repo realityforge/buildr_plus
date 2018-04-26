@@ -13,7 +13,7 @@
 #
 
 if BuildrPlus::Roles.default_role
-  projects = BuildrPlus::Roles.projects.select { |p| !p.template? }
+  projects = BuildrPlus::Roles.projects.select {|p| !p.template?}
   projects[0].roles << BuildrPlus::Roles.default_role if projects.size == 1 && projects[0].roles.empty?
 end
 
@@ -22,4 +22,20 @@ BuildrPlus::Roles.define_top_level_projects
 # Force the materialization of projects so the
 # redfish tasks config has been set up
 Buildr.projects
+
+Buildr.projects.each do |project|
+  if project.iml?
+    project_deps = Buildr.artifacts([project.iml.main_dependencies]).collect do |d|
+      Buildr.projects(:no_invoke => true).select do |other_project|
+        [other_project.packages, other_project.compile.target, other_project.resources.target, other_project.test.compile.target, other_project.test.resources.target].flatten.
+          detect {|artifact| artifact.to_s == d.to_s}
+      end
+    end.flatten
+
+    project.iml.main_dependencies.delete_if do |candidate|
+      project_deps.any? {|p| Buildr.artifacts([p.compile.dependencies]).any? {|artifact| candidate.to_s == artifact.to_s}}
+    end
+  end
+end
+
 Redfish::Buildr.define_tasks_for_domains if BuildrPlus::FeatureManager.activated?(:redfish)
