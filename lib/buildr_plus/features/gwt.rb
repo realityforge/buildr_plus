@@ -101,8 +101,8 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
     # expand_dependency(Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client).select{|a|a.group == 'org.realityforge.replicant'})
     #
     def expand_dependency(artifacts)
-      artifacts = Buildr.artifacts([artifacts])
-      artifacts.each do |artifact|
+      project.compile.dependencies = Buildr.artifacts(project.compile.dependencies)
+      Buildr.artifacts([artifacts]).each do |artifact|
         key = artifact.group + '_' + artifact.id
         target_directory = _(:generated, 'deps', key)
         t = task(target_directory => [artifact]) do
@@ -112,7 +112,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
         end
         project.iml.main_generated_source_directories << target_directory
         project.compile.from(target_directory)
-        project.compile.dependencies.delete(artifact)
+        project.compile.dependencies.delete_if{|a| a.to_s == artifact.to_s}
         project.root_project.pmd.exclude_paths << target_directory
 
         desc 'Expand all GWT deps so they are accessible to GWT compiler'
