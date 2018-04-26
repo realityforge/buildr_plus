@@ -301,6 +301,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(:berk_gwt) if BuildrPlus::FeatureManager.activated?(:berk)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.arez_spytools) if BuildrPlus::FeatureManager.activated?(:arez)
+      if BuildrPlus::FeatureManager.activated?(:react4j)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j_arez) if BuildrPlus::FeatureManager.activated?(:arez)
+      end
 
       dependencies.flatten
     end
@@ -490,10 +494,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << self.gwt_deps
-      if BuildrPlus::FeatureManager.activated?(:react4j)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j_arez) if BuildrPlus::FeatureManager.activated?(:arez)
-      end
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_appcache_client, BuildrPlus::Libs.gwt_appcache_server]) if BuildrPlus::FeatureManager.activated?(:appcache)
 
       dependencies.flatten
