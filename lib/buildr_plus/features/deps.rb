@@ -81,7 +81,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:robots] if BuildrPlus::Artifacts.war?
       generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:berk_service_impl, :berk_qa_support] if BuildrPlus::FeatureManager.activated?(:berk)
-      generators << [:imit_shared, :imit_server_service, :imit_server_qa, :imit_server_ee_client] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         generators << [:keycloak_config_service, :keycloak_js_service] if BuildrPlus::FeatureManager.activated?(:gwt)
@@ -122,7 +122,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       end
 
       generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
-      generators << [:imit_shared, :imit_server_service, :imit_server_qa, :imit_server_ee_client] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       if BuildrPlus::FeatureManager.activated?(:sync)
         if BuildrPlus::Sync.standalone?
@@ -326,37 +326,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
-    def replicant_ee_qa_support_deps
-      dependencies = []
-
-      dependencies << gwt_deps
-      dependencies << BuildrPlus::Libs.replicant_client_qa_support
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_qa_support)
-
-      dependencies.flatten
-    end
-
-    def replicant_ee_client_deps
-      dependencies = []
-
-      dependencies << replicant_shared_deps
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.ee_provided)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_ee_client)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_authfilter) if BuildrPlus::FeatureManager.activated?(:keycloak)
-
-      dependencies.flatten
-    end
-
-    def replicant_ee_client_test_deps
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.mockito)
-
-      dependencies.flatten
-    end
-
     def model_provided_deps
       dependencies = []
 
@@ -378,7 +347,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
       end
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_datatypes]) if BuildrPlus::FeatureManager.activated?(:gwt)
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.replicant_client_common]) if BuildrPlus::FeatureManager.activated?(:remote_references)
       dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_gwt_support]) if BuildrPlus::FeatureManager.activated?(:jackson)
 
       dependencies.flatten
@@ -397,7 +365,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Mail.mail_qa, BuildrPlus::Libs.mustache, BuildrPlus::Libs.greenmail]) if BuildrPlus::FeatureManager.activated?(:mail)
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.replicant_client_qa_support]) if BuildrPlus::FeatureManager.activated?(:remote_references)
 
       dependencies.flatten
     end
