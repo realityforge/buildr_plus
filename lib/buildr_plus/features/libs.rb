@@ -403,24 +403,16 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.replicant:replicant-shared:jar:#{replicant_version})
     end
 
-    def replicant_client_common
-      %W(org.realityforge.replicant:replicant-client-common:jar:#{replicant_version}) + self.replicant_shared + self.gwt_webpoller + self.gwt_datatypes
+    def replicant_client
+      %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) + self.replicant_shared + self.gwt_webpoller + self.gwt_datatypes
     end
 
     def replicant_client_qa_support
       %W(org.realityforge.replicant:replicant-client-qa-support:jar:#{replicant_version}) + self.guiceyloops_gwt
     end
 
-    def replicant_ee_client
-      %W(org.realityforge.replicant:replicant-client-ee:jar:#{replicant_version}) + self.replicant_client_common + self.replicant_shared_ee
-    end
-
-    def replicant_gwt_client
-      %W(org.realityforge.replicant:replicant-client-gwt:jar:#{replicant_version}) + self.replicant_client_common
-    end
-
     def replicant_server
-      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.replicant_shared + self.gwt_rpc + self.replicant_shared_ee
+      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.replicant_shared + self.gwt_rpc
     end
 
     def gwt_rpc

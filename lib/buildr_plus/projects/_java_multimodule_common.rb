@@ -18,14 +18,6 @@ base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
 BuildrPlus::FeatureManager.activate_features([:less]) if File.exist?("#{base_directory}/server/#{BuildrPlus::Less.default_less_path}")
 
-if File.exist?("#{base_directory}/replicant-shared")
-  BuildrPlus::Roles.project('replicant-shared', :roles => [:replicant_shared], :parent => :container, :template => true, :description => 'Shared Replicant Components')
-  BuildrPlus::Roles.project('replicant-qa-support', :roles => [:replicant_qa_support], :parent => :container, :template => true, :description => 'Shared Replicant Test Infrastructure')
-  if File.exist?("#{base_directory}/replicant-qa")
-    BuildrPlus::Roles.project('replicant-qa', :roles => [:replicant_qa], :parent => :container, :template => true, :description => 'GWT Model Tests')
-  end
-end
-
 if File.exist?("#{base_directory}/shared")
   BuildrPlus::Roles.project('shared', :roles => [:shared], :parent => :container, :template => true, :description => 'Shared Components')
 end

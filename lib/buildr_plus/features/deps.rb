@@ -153,53 +153,25 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
-    def replicant_shared_generators
-      generators = []
-
-      generators << [:ce_data_types]
-      generators << [:gwt_client_config] if BuildrPlus::FeatureManager.activated?(:gwt)
-      generators << [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
-      generators << [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt_module] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-      generators.flatten
-    end
-
-    def replicant_qa_generators
-      generators = []
-
-      generators += [:arez_main_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
-      generators += [:imit_client_main_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-      generators.flatten
-    end
-
-    def replicant_qa_test_generators
-      generators = []
-
-      generators += [:arez_test_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
-      generators += [:imit_client_test_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-      generators.flatten
-    end
-
     def gwt_generators
-      generators = [:gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
+      generators = [:ce_data_types, :gwt_client_config, :gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
-      generators += [:arez_client_dao_gwt] if BuildrPlus::FeatureManager.activated?(:arez)
-      generators += [:imit_client_entity_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators += [:arez_entity, :arez_client_dao_gwt] if BuildrPlus::FeatureManager.activated?(:arez)
+      generators += [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt_module, :imit_client_entity_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
 
-      generators += self.replicant_shared_generators unless BuildrPlus::FeatureManager.activated?(:role_replicant_shared)
       generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
 
       generators.flatten
     end
 
     def gwt_qa_generators
-      generators = [:gwt_rpc_module]
-      generators += [:gwt_client_main_jso_qa_support]
-      generators += [:imit_client_main_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators = []
 
-      generators += self.replicant_qa_generators unless BuildrPlus::FeatureManager.activated?(:role_replicant_qa)
+      generators += [:arez_main_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
+      generators += [:imit_client_main_qa_external, :imit_client_main_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators += [:gwt_rpc_module]
+      generators += [:gwt_client_main_jso_qa_support]
 
       generators.flatten
     end
@@ -207,9 +179,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_qa_test_generators
       generators = [:gwt_rpc_test_module]
       generators += [:gwt_client_test_jso_qa_support]
-      generators += [:imit_client_test_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-      generators += self.replicant_qa_test_generators unless BuildrPlus::FeatureManager.activated?(:role_replicant_qa)
+      generators += [:imit_client_test_qa_external, :imit_client_test_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators += [:arez_test_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
 
       generators.flatten
     end
@@ -237,45 +208,9 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
-    def replicant_shared_provided_deps
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_inject)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger)
-
-      dependencies.flatten
-    end
-
-    def replicant_shared_processorpath
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_compiler)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_processor)
-
-      dependencies.flatten
-    end
-
-    def replicant_shared_complie_deps
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client_common)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez)
-
-      dependencies.flatten
-    end
-
-    def replicant_shared_deps
-      replicant_shared_provided_deps + replicant_shared_complie_deps
-    end
-
     def gwt_provided_deps
       dependencies = []
 
-      if BuildrPlus::FeatureManager.activated?(:replicant)
-        dependencies << self.replicant_shared_provided_deps
-      end
       dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.findbugs_provided)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_gwt)
@@ -286,7 +221,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_processorpath
       dependencies = []
 
-      dependencies << self.replicant_shared_processorpath
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_compiler)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_processor)
 
       dependencies.flatten
     end
@@ -297,10 +233,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_user)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_datatypes)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_gwt_client) if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(:berk_gwt) if BuildrPlus::FeatureManager.activated?(:berk)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.arez_spytools) if BuildrPlus::FeatureManager.activated?(:arez)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client) if BuildrPlus::FeatureManager.activated?(:replicant)
       if BuildrPlus::FeatureManager.activated?(:react4j)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j_arez) if BuildrPlus::FeatureManager.activated?(:arez)

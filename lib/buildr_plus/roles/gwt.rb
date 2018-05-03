@@ -43,7 +43,6 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
   project.processorpath << BuildrPlus::Deps.gwt_processorpath
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
-  BuildrPlus::Roles.merge_projects_with_role(project.compile, :replicant_shared)
 
   if BuildrPlus::FeatureManager.activated?(:arez)
     project.test.options[:java_args] = (project.test.options[:java_args] ? project.test.options[:java_args] : []) << BuildrPlus::Arez.arez_java_args
