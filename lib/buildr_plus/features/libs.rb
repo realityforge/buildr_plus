@@ -403,10 +403,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.replicant:replicant-shared:jar:#{replicant_version})
     end
 
-    def replicant_shared_ee
-      %W(org.realityforge.replicant:replicant-shared-ee:jar:#{replicant_version})
-    end
-
     def replicant_client_common
       %W(org.realityforge.replicant:replicant-client-common:jar:#{replicant_version}) + self.replicant_shared + self.gwt_webpoller + self.gwt_datatypes
     end

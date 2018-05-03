@@ -217,11 +217,6 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
               elsif r.sync? && !r.sync.standalone? && BuildrPlus::Sync.standalone?
                 raise "Domgen repository #{r.name} declares repository.sync.standalone = false while in BuildrPlus BuildrPlus::Sync.standalone? is true"
               end
-              if r.imit? && r.imit.support_ee_client? && !BuildrPlus::Artifacts.replicant_ee_client?
-                raise "Domgen repository #{r.name} declares repository.imit.support_ee_client = true while in BuildrPlus BuildrPlus::Artifacts.replicant_ee_client? is false"
-              elsif !(r.imit? && r.imit.support_ee_client?) && BuildrPlus::Artifacts.replicant_ee_client?
-                raise "Domgen repository #{r.name} declares repository.imit.support_ee_client = false while in BuildrPlus BuildrPlus::Artifacts.replicant_ee_client? is true"
-              end
 
               if !r.robots? && BuildrPlus::Artifacts.war?
                 raise "Domgen repository #{r.name} should enable robots facet as BuildrPlus BuildrPlus::Artifacts.war? is true"

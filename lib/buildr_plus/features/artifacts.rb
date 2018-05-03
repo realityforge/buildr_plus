@@ -27,8 +27,7 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
       if @library.nil?
         @library = BuildrPlus::FeatureManager.activated?(:role_soap_client) ||
           BuildrPlus::FeatureManager.activated?(:role_gwt) ||
-          BuildrPlus::FeatureManager.activated?(:role_library) ||
-          BuildrPlus::FeatureManager.activated?(:role_replicant_ee_client)
+          BuildrPlus::FeatureManager.activated?(:role_library)
       end
       !!@library
     end
@@ -49,12 +48,6 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
 
     def replicant_client?
       @replicant_client.nil? ? library? && BuildrPlus::FeatureManager.activated?(:replicant) : !!@replicant_client
-    end
-
-    attr_writer :replicant_ee_client
-
-    def replicant_ee_client?
-      replicant_client? && (@replicant_ee_client.nil? ? true : !!@replicant_ee_client)
     end
 
     attr_writer :db
