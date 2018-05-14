@@ -407,10 +407,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) + self.replicant_shared + self.gwt_webpoller + self.gwt_datatypes
     end
 
-    def replicant_client_qa_support
-      %W(org.realityforge.replicant:replicant-client-qa-support:jar:#{replicant_version}) + self.guiceyloops_gwt
-    end
-
     def replicant_server
       %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.replicant_shared + self.gwt_rpc
     end
