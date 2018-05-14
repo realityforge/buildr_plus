@@ -430,7 +430,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     def dagger_compile
       %W(
           com.google.dagger:dagger:jar:#{dagger_version}
-        )
+      )
     end
 
     def dagger
@@ -451,7 +451,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(
           com.google.dagger:dagger:jar:sources:#{dagger_version}
           com.google.dagger:dagger-gwt:jar:sources:#{dagger_version}
-        ) + self.dagger + self.javax_inject_gwt
+      ) + self.dagger + self.javax_inject_gwt
     end
 
     def testng_version
