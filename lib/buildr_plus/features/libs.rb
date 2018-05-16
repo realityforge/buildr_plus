@@ -155,6 +155,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(com.google.elemental2:elemental2-promise:jar:#{elemental_version}) + self.elemental2_core
     end
 
+    def elemental2_webstorage
+      %W(com.google.elemental2:elemental2-webstorage:jar:#{elemental_version}) + self.elemental2_dom
+    end
+
     def gwt_user
       %w(com.google.gwt:gwt-user:jar:2.8.2 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end
@@ -404,7 +408,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_client
-      %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) + self.replicant_shared + self.gwt_webpoller + self.gwt_datatypes
+      %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) + self.replicant_shared + self.gwt_webpoller + self.gwt_datatypes + self.elemental2_webstorage
     end
 
     def replicant_server
