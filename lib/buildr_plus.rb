@@ -17,7 +17,7 @@ unless expected_versions.include?(Buildr::VERSION.to_s)
   raise "buildr_plus expected one of the Buildr versions #{expected_versions.join(', ')} but actual version is #{Buildr::VERSION}"
 end
 
-bundler_version = '1.12.5'
+bundler_version = '1.16.2'
 unless Bundler::VERSION >= bundler_version || defined?(JRUBY_VERSION)
   raise "buildr_plus expected Bundler version #{bundler_version} but actual version is #{Bundler::VERSION}"
 end
