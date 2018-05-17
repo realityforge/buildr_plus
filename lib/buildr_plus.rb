@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-expected_versions = %w(1.5.3 1.5.4 1.5.5)
+expected_versions = %w(1.5.3 1.5.4 1.5.5 1.5.6)
 unless expected_versions.include?(Buildr::VERSION.to_s)
   raise "buildr_plus expected one of the Buildr versions #{expected_versions.join(', ')} but actual version is #{Buildr::VERSION}"
 end
