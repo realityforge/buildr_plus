@@ -408,7 +408,13 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_client
-      %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) + self.replicant_shared + self.gwt_webpoller + self.gwt_datatypes + self.elemental2_webstorage
+      %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) +
+        self.replicant_shared +
+        self.gwt_webpoller +
+        self.gwt_datatypes +
+        self.elemental2_webstorage +
+        # ee provided is for json API
+        self.ee_provided
     end
 
     def replicant_server
