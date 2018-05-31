@@ -117,6 +117,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
 
         desc 'Expand all GWT deps so they are accessible to GWT compiler'
         expand_task = task('gwt:expand_deps').enhance([t.name])
+        project.compile.enhance([expand_task.name])
         task(':domgen:all').enhance([expand_task.name])
       end
     end
