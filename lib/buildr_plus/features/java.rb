@@ -85,7 +85,8 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
         # being generated yet. So make sure the compiler reports all errors so can track down
         # the root cause
         project.ipr.add_component('JavacSettings') do |component|
-          component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => '-Xmaxerrs 10000')
+          # TODO: Remove -Aarez.defer.unresolved=false once we have fixed router_fu
+          component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => "-Xmaxerrs 10000#{BuildrPlus::FeatureManager.activated?(:arez) ? ' -Aarez.defer.unresolved=false' : ''}")
         end
 
         project.ipr.add_component('CompilerConfiguration') do |component|
