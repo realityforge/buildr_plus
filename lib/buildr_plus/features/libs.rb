@@ -119,16 +119,12 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       self.jackson_core + self.jackson_databind + self.jackson_annotations
     end
 
-    def anodoc
-      %w(org.realityforge.anodoc:anodoc:jar:1.0.0)
-    end
-
     def braincheck_version
       '1.9.0'
     end
 
     def braincheck
-      %W(org.realityforge.braincheck:braincheck:jar:#{braincheck_version}) + self.anodoc
+      %W(org.realityforge.braincheck:braincheck:jar:#{braincheck_version})
     end
 
     def jsinterop
