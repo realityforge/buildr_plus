@@ -396,16 +396,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '5.99-arez-b32'
-    end
-
-    def replicant_shared
-      %W(org.realityforge.replicant:replicant-shared:jar:#{replicant_version})
+      '5.99-arez-b33'
     end
 
     def replicant_client
       %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) +
-        self.replicant_shared +
         self.gwt_webpoller +
         self.gwt_datatypes +
         self.elemental2_webstorage +
@@ -414,7 +409,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_server
-      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.replicant_shared + self.gwt_rpc
+      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.gwt_rpc
     end
 
     def gwt_rpc
