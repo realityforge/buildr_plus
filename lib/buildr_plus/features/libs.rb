@@ -48,8 +48,12 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.jetbrains:annotations:jar:15.0)
     end
 
+    def javax_annotations
+      %w(org.realityforge.javax.annotation:javax.annotation:jar:1.0.0)
+    end
+
     def findbugs_provided
-      %w(com.google.code.findbugs:jsr305:jar:3.0.2 com.google.code.findbugs:annotations:jar:3.0.1)
+      %w(com.google.code.findbugs:annotations:jar:3.0.1) + self.javax_annotations
     end
 
     def ee_provided
