@@ -352,6 +352,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(
         org.realityforge.arez:arez-core:jar:#{arez_version}
         org.realityforge.arez:arez-component:jar:#{arez_version}
+        org.realityforge.arez:arez-entity:jar:#{arez_version}
       ) + self.braincheck + self.arez_annotations
     end
 
