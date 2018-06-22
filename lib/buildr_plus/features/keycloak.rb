@@ -115,6 +115,12 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       Buildr.projects.first.root_project
     end
 
+    def local_application_url
+      @local_application_url || ENV['LOCAL_APPLICATION_URL'] || 'http://127.0.0.1:8080'
+    end
+
+    attr_writer :local_application_url
+
     attr_writer :include_api_client
 
     def include_api_client?
@@ -201,13 +207,13 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           BuildrPlus::Keycloak.clients.each do |client|
             args << "-e#{client.env_var}_NAME=#{client.name}"
           end
-          args << "-e#{cname}_ORIGIN=http://127.0.0.1:8080"
-          args << "-e#{cname}_URL=http://127.0.0.1:8080/#{name}"
+          args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
+          args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{name}"
 
           BuildrPlus::Keycloak.clients.collect {|c| c.application}.compact.sort.uniq.each do |app|
             cname = Reality::Naming.uppercase_constantize(app)
-            args << "-e#{cname}_ORIGIN=http://127.0.0.1:8080"
-            args << "-e#{cname}_URL=http://127.0.0.1:8080/#{app}"
+            args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
+            args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{app}"
           end
 
           Java::Commands.java(args)
