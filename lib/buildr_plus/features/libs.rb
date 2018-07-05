@@ -339,21 +339,14 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.95'
-    end
-
-    def arez_annotations
-      %W(
-        org.realityforge.arez:arez-annotations:jar:#{arez_version}
-      )
+      '0.96'
     end
 
     def arez
       %W(
         org.realityforge.arez:arez-core:jar:#{arez_version}
-        org.realityforge.arez:arez-component:jar:#{arez_version}
         org.realityforge.arez:arez-entity:jar:#{arez_version}
-      ) + self.braincheck + self.arez_annotations
+      ) + self.braincheck
     end
 
     def arez_processor
