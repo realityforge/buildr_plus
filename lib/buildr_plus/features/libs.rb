@@ -374,12 +374,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.81'
+      '0.82'
     end
 
     def react4j
       %W(
-        org.realityforge.react4j:react4j-annotations:jar:#{react4j_version}
         org.realityforge.react4j:react4j-core:jar:#{react4j_version}
         org.realityforge.react4j:react4j-dom:jar:#{react4j_version}
       ) + self.elemental2_dom + self.elemental2_promise
