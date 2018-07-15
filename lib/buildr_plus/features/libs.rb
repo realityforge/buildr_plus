@@ -123,12 +123,8 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       self.jackson_core + self.jackson_databind + self.jackson_annotations
     end
 
-    def braincheck_version
-      '1.9.0'
-    end
-
     def braincheck
-      %W(org.realityforge.braincheck:braincheck:jar:#{braincheck_version})
+      %w(org.realityforge.braincheck:braincheck:jar:1.9.0)
     end
 
     def jsinterop
