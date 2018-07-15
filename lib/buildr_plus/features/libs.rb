@@ -45,7 +45,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jetbrains_annotations
-      %w(org.jetbrains:annotations:jar:15.0)
+      %w(org.realityforge.org.jetbrains.annotations:org.jetbrains.annotations:jar:1.0.0)
     end
 
     def javax_annotations
