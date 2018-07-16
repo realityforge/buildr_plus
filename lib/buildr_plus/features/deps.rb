@@ -253,7 +253,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << gwt_deps
-      dependencies << BuildrPlus::Libs.powermock if BuildrPlus::FeatureManager.activated?(:powermock)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
       dependencies << Buildr.artifacts([:iris_audit_gwt_qa_support]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(:berk_gwt_qa_support) if BuildrPlus::FeatureManager.activated?(:berk)
