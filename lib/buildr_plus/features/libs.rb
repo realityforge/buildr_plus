@@ -52,12 +52,16 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.javax.annotation:javax.annotation:jar:1.0.0)
     end
 
-    def findbugs_provided
-      %w(com.google.code.findbugs:annotations:jar:3.0.1) + self.javax_annotations
+    # def findbugs_provided
+    #   %w(com.google.code.findbugs:jsr305:jar:3.0.2 com.google.code.findbugs:annotations:jar:3.0.1)
+    # end
+    #
+    def spotbugs_provided
+      %w(com.google.code.findbugs:jsr305:jar:3.0.2 com.github.spotbugs:spotbugs-annotations:jar:3.1.5 net.jcip:jcip-annotations:jar:1.0) #+ self.javax_annotations
     end
 
     def ee_provided
-      %w(javax:javaee-api:jar:7.0) + self.findbugs_provided + self.jetbrains_annotations
+      %w(javax:javaee-api:jar:7.0) + self.spotbugs_provided + self.jetbrains_annotations
     end
 
     def glassfish_embedded

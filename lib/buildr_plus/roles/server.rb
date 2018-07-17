@@ -48,8 +48,8 @@ BuildrPlus::Roles.role(:server) do
 
   package(:war).tap do |war|
     war.libs.clear
-    # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
-    war.libs << BuildrPlus::Deps.findbugs_provided
+    # Spotbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+    war.libs << BuildrPlus::Deps.spotbugs_provided
     war.libs << BuildrPlus::Deps.jetbrains_annotations
     war.libs << BuildrPlus::Deps.server_compile_deps
     BuildrPlus::Roles.buildr_projects_with_role(:shared).each do |dep|

@@ -286,7 +286,7 @@ CONTENT
       return '' if skip_stage?('Commit')
       options = {}
       options[:checkstyle] = true if BuildrPlus::FeatureManager.activated?(:checkstyle)
-      options[:findbugs] = true if BuildrPlus::FeatureManager.activated?(:findbugs)
+      options[:spotbugs] = true if BuildrPlus::FeatureManager.activated?(:spotbugs)
       options[:pmd] = true if BuildrPlus::FeatureManager.activated?(:pmd)
       options[:jdepend] = true if BuildrPlus::FeatureManager.activated?(:jdepend)
       option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"

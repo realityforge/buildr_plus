@@ -99,8 +99,8 @@ BuildrPlus::Roles.role(:container) do
         nil
 
     dependencies = [server_project, model_project, shared_project].compact
-    # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
-    dependencies << BuildrPlus::Deps.findbugs_provided
+    # Spotbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+    dependencies << BuildrPlus::Deps.spotbugs_provided
     dependencies << BuildrPlus::Deps.jetbrains_annotations
     dependencies << BuildrPlus::Deps.server_compile_deps
 

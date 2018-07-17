@@ -39,8 +39,8 @@ BuildrPlus::Roles.role(:all_in_one) do
 
   package(:war).tap do |war|
     war.libs.clear
-    # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
-    war.libs << BuildrPlus::Deps.findbugs_provided
+    # Spotbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+    war.libs << BuildrPlus::Deps.spotbugs_provided
     war.libs << BuildrPlus::Deps.jetbrains_annotations
     war.libs << BuildrPlus::Deps.server_compile_deps
     war.exclude project.less_path if BuildrPlus::FeatureManager.activated?(:less)
@@ -95,8 +95,8 @@ BuildrPlus::Roles.role(:all_in_one) do
   ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))
 
   dependencies = [project]
-  # Findbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
-  dependencies << BuildrPlus::Deps.findbugs_provided
+  # Spotbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
+  dependencies << BuildrPlus::Deps.spotbugs_provided
   dependencies << BuildrPlus::Deps.jetbrains_annotations
   dependencies << BuildrPlus::Deps.server_compile_deps
 
