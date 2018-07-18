@@ -43,15 +43,22 @@ module Buildr
         )
       end
 
+      def fb_contrib_dependencies
+        %w(com.mebigfatguy.fb-contrib:fb-contrib:jar:7.4.2.sb)
+      end
+
       def spotbugs(output_file, source_paths, analyze_paths, options = {})
         dependencies = (options[:dependencies] || []) + self.dependencies
         cp = Buildr.artifacts(dependencies).each { |a| a.invoke if a.respond_to?(:invoke) }.map(&:to_s).join(File::PATH_SEPARATOR)
+
+        plugins = (options[:plugins] || self.fb_contrib_dependencies)
+        pluginList = Buildr.artifacts(plugins).each { |a| a.invoke if a.respond_to?(:invoke) }.map(&:to_s).join(File::PATH_SEPARATOR)
 
         args = {
           :output => options[:output] || 'xml',
           :outputFile => output_file,
           :effort => 'max',
-          :pluginList => '',
+          :pluginList => pluginList,
           :classpath => cp,
           :reportLevel => options[:report_level] || 'low',
           :timeout => '90000000',
