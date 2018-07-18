@@ -53,7 +53,7 @@ module Buildr
           :effort => 'max',
           :pluginList => '',
           :classpath => cp,
-          :reportLevel => options[:report_level] || 'medium',
+          :reportLevel => options[:report_level] || 'low',
           :timeout => '90000000',
           :debug => 'false'
         }
