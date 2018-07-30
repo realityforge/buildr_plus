@@ -142,6 +142,8 @@ BuildrPlus::Roles.role(:container) do
       end
     end
 
+    iml.excluded_directories << project._('tmp')
+
     BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
       gwt_modules = p.determine_top_level_gwt_modules('Dev')
       gwt_modules.each do |gwt_module|
