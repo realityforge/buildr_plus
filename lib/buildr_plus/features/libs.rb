@@ -312,10 +312,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez
-      %W(
-        org.realityforge.arez:arez-core:jar:#{arez_version}
-        org.realityforge.arez:arez-entity:jar:#{arez_version}
-      ) + self.braincheck
+      %W(org.realityforge.arez:arez-core:jar:#{arez_version}) + self.braincheck
     end
 
     def arez_processor
