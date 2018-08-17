@@ -327,12 +327,8 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       '0.13'
     end
 
-    def router_fu_annotations
-      %W(org.realityforge.router.fu:router-fu-annotations:jar:#{router_fu_version})
-    end
-
     def router_fu
-      %W(org.realityforge.router.fu:router-fu-core:jar:#{router_fu_version}) + self.braincheck + self.router_fu_annotations
+      %W(org.realityforge.router.fu:router-fu-core:jar:#{router_fu_version}) + self.braincheck
     end
 
     def router_fu_processor
