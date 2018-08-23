@@ -308,7 +308,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.104'
+      '0.105'
     end
 
     def arez
@@ -320,11 +320,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.23)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.29)
     end
 
     def router_fu_version
-      '0.13'
+      '0.14'
     end
 
     def router_fu
@@ -336,7 +336,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.92'
+      '0.93'
     end
 
     def react4j
@@ -355,7 +355,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.07'
+      '6.08'
     end
 
     def replicant_client
