@@ -88,7 +88,6 @@ module BuildrPlus #nodoc
       def to_h
         data = {}
         data['driver'] = 'sql_server'
-        data['delete_backup_history'] = self.delete_backup_history?
         data['instance'] = self.instance if self.instance
         data['restore_name'] = self.restore_name if self.restore_name
         data['backup_name'] = self.backup_name if self.backup_name
