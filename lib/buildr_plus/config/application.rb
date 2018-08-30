@@ -73,6 +73,7 @@ module BuildrPlus #nodoc
               results[key]['backup_name'] = database.backup_name if database.backup_name
               results[key]['restore_name'] = database.restore_name if database.restore_name
               results[key]['backup_location'] = database.backup_location if database.backup_location
+              results[key]['delete_backup_history'] = database.delete_backup_history? if database.delete_backup_history_set?
             end
 
             if database.import_from
