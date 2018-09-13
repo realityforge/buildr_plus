@@ -308,7 +308,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.105'
+      '0.106'
     end
 
     def arez
@@ -336,7 +336,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.93'
+      '0.94'
     end
 
     def react4j
@@ -431,7 +431,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops_lib
-      'org.realityforge.guiceyloops:guiceyloops:jar:0.95'
+      'org.realityforge.guiceyloops:guiceyloops:jar:0.96'
     end
 
     def guiceyloops_gwt
