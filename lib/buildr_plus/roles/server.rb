@@ -85,7 +85,7 @@ BuildrPlus::Roles.role(:server) do
                                       # however that involves removing some introspection of types ... if any?
                                       # -generateJsInteropExports is enabled so that Maps/Sets/Collections are converted to look nice in debugger.
                                       # In theory we should also add "-includeJsInteropExports java.*" to restrict the exporting to those we want
-                                      # in debugger but currentlt that is not supported due to a GWT bug.
+                                      # in debugger but currently that is not supported due to a GWT bug.
                                       :gwtc_args => %w(-XdisableCastChecking -optimize 9 -nocheckAssertions -XmethodNameDisplayMode NONE -noincremental -generateJsInteropExports))
     end
   end
