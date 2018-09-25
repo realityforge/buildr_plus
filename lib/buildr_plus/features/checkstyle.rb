@@ -215,7 +215,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('client', 'javax.inject.Inject', :rule_type => :class)
         r.subpackage_rule('client', 'javax.inject.Provider', :rule_type => :class)
         r.subpackage_rule('client', 'javax.inject.Named', :rule_type => :class)
-        r.subpackage_rule('client', 'com.google.gwt.event.shared.EventBus', :rule_type => :class)
         r.subpackage_rule('client', "#{g}.shared")
         r.subpackage_rule('client', "#{g}.client")
         r.subpackage_rule('client.ioc', 'javax.inject')
