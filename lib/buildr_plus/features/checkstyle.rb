@@ -220,6 +220,10 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('client', "#{g}.client")
         r.subpackage_rule('client.ioc', 'javax.inject')
 
+        if BuildrPlus::FeatureManager.activated?(:arez)
+          r.subpackage_rule('client', 'javax.xml.ws.Action', :rule_type => :class)
+        end
+
         if BuildrPlus::FeatureManager.activated?(:berk)
           r.subpackage_rule('client', 'iris.berk.server.data_type.EnvironmentSettingDTO', :rule_type => :class, :disallow => true)
         end
