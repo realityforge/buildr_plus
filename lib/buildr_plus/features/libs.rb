@@ -160,10 +160,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.gwt.ga:gwt-ga:jar:0.5)
     end
 
-    def gwt_mmvp
-      %w(org.realityforge.gwt.mmvp:gwt-mmvp:jar:0.9)
-    end
-
     def gwt_appcache_client
       %w(org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.11)
     end
