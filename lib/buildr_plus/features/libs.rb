@@ -164,10 +164,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.gwt.mmvp:gwt-mmvp:jar:0.9)
     end
 
-    def gwt_lognice
-      %w(org.realityforge.gwt.lognice:gwt-lognice:jar:0.6)
-    end
-
     def gwt_appcache_client
       %w(org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.11)
     end
