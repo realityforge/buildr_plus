@@ -169,7 +169,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_appcache_client
-      %w(org.realityforge.gwt.appcache:gwt-appcache-client:jar:1.0.11 org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.11)
+      %w(org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.11)
     end
 
     def gwt_appcache_server
