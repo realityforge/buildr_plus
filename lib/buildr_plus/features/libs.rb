@@ -149,7 +149,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_webpoller
-      %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.7)
+      %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.8)
     end
 
     def gwt_datatypes
@@ -343,7 +343,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.11'
+      '6.12'
     end
 
     def replicant_client
