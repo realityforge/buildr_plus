@@ -153,7 +153,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_datatypes
-      %w(org.realityforge.gwt.datatypes:gwt-datatypes:jar:0.9)
+      %w(org.realityforge.gwt.datatypes:gwt-datatypes:jar:0.10)
     end
 
     def gwt_appcache_client
