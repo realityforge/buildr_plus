@@ -187,7 +187,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
     def user_experience_generators
       generators = [:imit_client_react4j_support, :gwt_client_app, :gwt_client_gwt_modules, :gwt_client_test_ux_qa_support]
-      generators += [:keycloak_gwt_app] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += self.gwt_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt)
       generators += self.gwt_qa_test_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt_qa)
 

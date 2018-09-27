@@ -248,7 +248,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_gwt
-      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.3)
+      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.4)
     end
 
     def keycloak_domgen_support
