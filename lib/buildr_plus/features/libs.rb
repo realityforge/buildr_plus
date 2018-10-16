@@ -324,7 +324,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.101'
+      '0.102'
     end
 
     def react4j
@@ -343,7 +343,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.16'
+      '6.17'
     end
 
     def replicant_client
