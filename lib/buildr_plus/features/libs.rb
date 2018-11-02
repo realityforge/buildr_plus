@@ -288,11 +288,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guava
-      %w(com.google.guava:guava:jar:23.3-jre)
+      %w(com.google.guava:guava:jar:25.0-jre)
     end
 
     def javapoet
-      %w(com.squareup:javapoet:jar:1.8.0) + self.guava
+      %w(com.squareup:javapoet:jar:1.11.1) + self.guava
     end
 
     def arez_version
@@ -372,7 +372,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def dagger_version
-      '2.15'
+      '2.19'
     end
 
     def dagger_compile
@@ -390,7 +390,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
           com.google.dagger:dagger-spi:jar:#{dagger_version}
           com.google.dagger:dagger-producers:jar:#{dagger_version}
           com.google.dagger:dagger-compiler:jar:#{dagger_version}
-          com.google.googlejavaformat:google-java-format:jar:1.4
+          com.google.googlejavaformat:google-java-format:jar:1.5
           com.google.errorprone:javac-shaded:jar:9-dev-r4023-3
         ) + self.javapoet + self.dagger
     end
