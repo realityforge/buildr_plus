@@ -27,12 +27,30 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     def enable_annotation_processor?
       @enable_annotation_processor.nil? ? true : !!@enable_annotation_processor
     end
+
+    attr_writer :require_annotation_processors_path
+
+    def require_annotation_processors_path?
+      @require_annotation_processors_path.nil? ? true : !!@require_annotation_processors_path
+    end
   end
   f.enhance(:ProjectExtension) do
     attr_writer :enable_annotation_processor
 
     def enable_annotation_processor?
       @enable_annotation_processor.nil? ? BuildrPlus::Java.enable_annotation_processor? : !!@enable_annotation_processor
+    end
+
+    def annotation_processor_active?
+      if @enable_annotation_processor.nil?
+        BuildrPlus::Java.enable_annotation_processor? &&
+          (
+            !BuildrPlus::Java.require_annotation_processors_path? ||
+            !self.processorpath.empty?
+          )
+      else
+        enable_annotation_processor?
+      end
     end
 
     def processorpath
@@ -62,7 +80,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       end
       project.task(':java:check').enhance([t.name])
 
-      if project.enable_annotation_processor?
+      if project.annotation_processor_active?
         project.file(project._(:target, 'generated/processors/main/java')).enhance([project.compile])
         t = project.task('processors_setup') do
           mkdir_p project._(:target, 'generated/processors/main/java')
@@ -112,11 +130,11 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
                 end
               end
             end
-            disabled = Buildr.projects(:no_invoke => true).select {|p| p.iml? && !p.enable_annotation_processor?}
+            disabled = Buildr.projects(:no_invoke => true).select {|p| p.iml? && !p.annotation_processor_active?}
             unless disabled.empty?
               xml.profile(:name => 'Disabled') do
                 disabled.each do |p|
-                  xml.module :name => p.name
+                  xml.module :name => p.iml.name
                 end
               end
             end
