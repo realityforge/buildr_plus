@@ -81,12 +81,7 @@ BuildrPlus::Roles.role(:server) do
       BuildrPlus::Gwt.define_gwt_task(p,
                                       'Prod',
                                       :target_project => project.name,
-                                      # In the future we should consider adapting our apps so we can use -XdisableClassMetadata
-                                      # however that involves removing some introspection of types ... if any?
-                                      # -generateJsInteropExports is enabled so that Maps/Sets/Collections are converted to look nice in debugger.
-                                      # In theory we should also add "-includeJsInteropExports java.*" to restrict the exporting to those we want
-                                      # in debugger but currently that is not supported due to a GWT bug.
-                                      :gwtc_args => %w(-XdisableCastChecking -optimize 9 -nocheckAssertions -XmethodNameDisplayMode NONE -noincremental -logLevel INFO -generateJsInteropExports))
+                                      :gwtc_args => %w(-XdisableClassMetadata -XdisableCastChecking -optimize 9 -nocheckAssertions -XmethodNameDisplayMode NONE -noincremental -logLevel INFO -compileReport))
     end
   end
 
