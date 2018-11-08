@@ -13,6 +13,15 @@
 #
 
 BuildrPlus::FeatureManager.feature(:braid) do |f|
+  f.enhance(:Config) do
+
+    attr_writer :allow_local_changes
+
+    def allow_local_changes?
+      @allow_local_changes.nil? ? false : !!@allow_local_changes
+    end
+  end
+
   f.enhance(:ProjectExtension) do
     desc 'Check braids align with filesystem.'
     task 'braid:check' do
@@ -53,6 +62,13 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
           raise "Vendor directory 'vendor/tools/#{feature}' exists but buildr_plus '#{feature}' feature is not enabled." unless BuildrPlus::FeatureManager.activated?(feature)
         elsif !File.exist?("#{base_directory}/vendor/tools/#{feature}")
           raise "Vendor directory 'vendor/tools/#{feature}' does not exist but buildr_plus '#{feature}' feature is is enabled." if BuildrPlus::FeatureManager.activated?(feature)
+        end
+      end
+      unless BuildrPlus::Braid.allow_local_changes?
+        config.mirrors.each do |mirror|
+          unless `braid diff #{mirror}`.chomp.empty?
+            raise "Vendor directory '#{mirror}' has local changes but buildr_plus is configured to disallow local changes. Please push changes to upstream."
+          end
         end
       end
     end
