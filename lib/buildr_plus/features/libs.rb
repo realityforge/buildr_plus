@@ -129,15 +129,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_user
-      %w(org.realityforge.com.google.gwt:gwt-user:jar:2.8.2-p1 org.w3c.css:sac:jar:1.3) + self.jsinterop
+      %w(com.google.gwt:gwt-user:jar:2.8.2 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end
 
     def gwt_servlet
-      %w(org.realityforge.com.google.gwt:gwt-servlet:jar:2.8.2-p1)
+      %w(com.google.gwt:gwt-servlet:jar:2.8.2)
     end
 
     def gwt_dev
-      'org.realityforge.com.google.gwt:gwt-dev:jar:2.8.2-p1'
+      'com.google.gwt:gwt-dev:jar:2.8.2'
     end
 
     def javax_inject
