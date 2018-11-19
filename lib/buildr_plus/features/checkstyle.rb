@@ -203,7 +203,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('client', 'com.google.gwt', :disallow => true)
 
         r.subpackage_rule('client', 'com.google.gwt.user.client.rpc.AsyncCallback', :rule_type => :class)
-        r.subpackage_rule('client', 'com.google.gwt.event.dom.client.KeyCodes', :rule_type => :class)
 
         # TODO: Remove this next line when we figure out the solution
         r.subpackage_rule('client', 'com.google.gwt.i18n.shared.DateTimeFormat', :rule_type => :class)
