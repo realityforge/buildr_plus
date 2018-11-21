@@ -210,7 +210,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         # We will keep this rule until we figure out a way ala GWT 3 for resources
         r.subpackage_rule('client', 'com.google.gwt.resources.client')
 
-        r.subpackage_rule('client', 'org.realityforge.gwt.datatypes.client.date')
         r.subpackage_rule('client', 'javax.inject.Inject', :rule_type => :class)
         r.subpackage_rule('client', 'javax.inject.Provider', :rule_type => :class)
         r.subpackage_rule('client', 'javax.inject.Named', :rule_type => :class)

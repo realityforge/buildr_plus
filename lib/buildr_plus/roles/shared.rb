@@ -22,6 +22,9 @@ BuildrPlus::Roles.role(:shared) do
 
   project.publish = BuildrPlus::Artifacts.model? || BuildrPlus::Artifacts.gwt?
 
+  compile.with BuildrPlus::Deps.shared_deps
+  test.with BuildrPlus::Deps.shared_test_deps
+
   package(:jar)
   package(:sources)
 

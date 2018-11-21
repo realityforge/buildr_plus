@@ -207,6 +207,22 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
+    def shared_deps
+      dependencies = []
+
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_annotations)
+
+      dependencies.flatten
+    end
+
+    def shared_test_deps
+      dependencies = []
+
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops])
+
+      dependencies.flatten
+    end
+
     def gwt_provided_deps
       dependencies = []
 
@@ -230,7 +246,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_user)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_datatypes)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(:berk_gwt) if BuildrPlus::FeatureManager.activated?(:berk)
@@ -279,7 +294,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geotools_for_geolatte) if BuildrPlus::FeatureManager.activated?(:geotools)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
       end
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_datatypes]) if BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_gwt_support]) if BuildrPlus::FeatureManager.activated?(:jackson)
 
       dependencies.flatten

@@ -152,10 +152,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.8)
     end
 
-    def gwt_datatypes
-      %w(org.realityforge.gwt.datatypes:gwt-datatypes:jar:0.10)
-    end
-
     def gwt_appcache_client
       %w(org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.12)
     end
@@ -349,7 +345,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     def replicant_client
       %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) +
         self.gwt_webpoller +
-        self.gwt_datatypes +
         self.elemental2_webstorage +
         # ee provided is for json API
         self.ee_provided
@@ -360,7 +355,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_rpc
-      self.gwt_datatypes + self.jackson_gwt_support + self.gwt_servlet
+      self.jackson_gwt_support + self.gwt_servlet
     end
 
     def guice
