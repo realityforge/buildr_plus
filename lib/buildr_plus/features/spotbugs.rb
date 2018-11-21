@@ -112,7 +112,7 @@ BuildrPlus::FeatureManager.feature(:spotbugs) do |f|
           config = BuildrPlus::Spotbugs.setup_filter_config
           if File.exist?(project.spotbugs.filter_file)
             content = IO.read(project.spotbugs.filter_file)
-            content.gsub!('</FindBugsFilter>', config.rules_as_xml)
+            content.gsub!('</FindBugsFilter>', config.rules_as_xml + '</FindBugsFilter>')
             IO.write(target_filters_file, content)
           else
             IO.write(target_filters_file, config.as_xml)
