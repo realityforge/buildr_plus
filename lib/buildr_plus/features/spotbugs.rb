@@ -33,7 +33,7 @@ BuildrPlus::FeatureManager.feature(:spotbugs) do |f|
       if project.ipr?
         project.spotbugs.additional_project_names =
           BuildrPlus::Spotbugs.additional_project_names ||
-            BuildrPlus::Util.subprojects(project).select { |p| !(p =~ /.*\:soap-client$/) }
+            BuildrPlus::Util.subprojects(project).select {|p| !(p =~ /.*:soap-client$/)}
       end
     end
   end
