@@ -117,7 +117,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def elemental2_dom
-      %W(com.google.elemental2:elemental2-dom:jar:#{elemental_version}) + self.elemental2_core
+      %W(com.google.elemental2:elemental2-dom:jar:#{elemental_version}) + self.elemental2_promise
     end
 
     def elemental2_promise
@@ -244,7 +244,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_gwt
-      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.4)
+      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.4) + self.elemental2_webstorage
     end
 
     def keycloak_domgen_support
