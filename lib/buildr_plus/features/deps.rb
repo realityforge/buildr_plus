@@ -218,7 +218,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def shared_test_deps
       dependencies = []
 
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops])
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops_gwt])
 
       dependencies.flatten
     end
