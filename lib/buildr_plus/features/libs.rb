@@ -304,7 +304,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.37)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.47)
     end
 
     def router_fu_version
