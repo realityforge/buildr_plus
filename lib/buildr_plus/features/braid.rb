@@ -64,7 +64,13 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
           raise "Vendor directory 'vendor/tools/#{feature}' does not exist but buildr_plus '#{feature}' feature is is enabled." if BuildrPlus::FeatureManager.activated?(feature)
         end
       end
-      unless BuildrPlus::Braid.allow_local_changes?
+      if BuildrPlus::Braid.allow_local_changes?
+        local_changes = false
+        config.mirrors.each do |mirror|
+          local_changes = true unless `braid diff #{mirror}`.chomp.empty?
+        end
+        raise "Braid directories have no local changes but buildr_plus is configured to allow local changes. Please change allow_local_changes setting." unless local_changes
+      else
         config.mirrors.each do |mirror|
           unless `braid diff #{mirror}`.chomp.empty?
             raise "Vendor directory '#{mirror}' has local changes but buildr_plus is configured to disallow local changes. Please push changes to upstream."
