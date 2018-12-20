@@ -391,10 +391,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def dagger_gwt
-      %W(
-          com.google.dagger:dagger:jar:sources:#{dagger_version}
-          com.google.dagger:dagger-gwt:jar:sources:#{dagger_version}
-      ) + self.dagger + self.javax_inject_gwt
+      %w(org.realityforge.dagger:dagger-gwt-lite:jar:2.19-rf1) + self.javax_inject_gwt
     end
 
     def testng_version
