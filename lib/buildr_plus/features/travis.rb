@@ -25,7 +25,6 @@ BuildrPlus::FeatureManager.feature(:travis => [:oss]) do |f|
 language: ruby
 jdk:
   - oraclejdk#{BuildrPlus::Java.version}
-sudo: #{docker_active ? 'required' : 'false'}
 rvm:
   - #{rv}
 CONTENT
