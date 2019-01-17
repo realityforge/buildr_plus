@@ -292,7 +292,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.116'
+      '0.123'
     end
 
     def arez
@@ -320,7 +320,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.107'
+      '0.110'
     end
 
     def react4j
@@ -339,7 +339,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.20'
+      '6.21'
     end
 
     def replicant_client
