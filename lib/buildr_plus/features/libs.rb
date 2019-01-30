@@ -292,7 +292,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.124'
+      '0.127'
     end
 
     def arez
@@ -320,7 +320,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.113'
+      '0.114'
     end
 
     def react4j
@@ -332,10 +332,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def react4j_processor
       %W(org.realityforge.react4j:react4j-processor:jar:#{react4j_version})
-    end
-
-    def react4j_arez
-      %W(org.realityforge.react4j:react4j-arez:jar:#{react4j_version})
     end
 
     def replicant_version

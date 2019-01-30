@@ -254,7 +254,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client) if BuildrPlus::FeatureManager.activated?(:replicant)
       if BuildrPlus::FeatureManager.activated?(:react4j)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j_arez) if BuildrPlus::FeatureManager.activated?(:arez)
       end
 
       dependencies.flatten
