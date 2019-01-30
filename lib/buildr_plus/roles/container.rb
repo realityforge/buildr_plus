@@ -79,6 +79,11 @@ BuildrPlus::Roles.role(:container) do
     BuildrPlus::Arez.arez_test_options.each_pair do |k, v|
       default_testng_args << "-D#{k}=#{v}"
     end
+    if BuildrPlus::FeatureManager.activated?(:replicant)
+      BuildrPlus::Replicant.replicant_test_options.each_pair do |k, v|
+        default_testng_args << "-D#{k}=#{v}"
+      end
+    end
   end
 
   default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
