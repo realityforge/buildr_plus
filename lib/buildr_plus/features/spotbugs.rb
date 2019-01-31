@@ -69,7 +69,7 @@ module BuildrPlus::Spotbugs
     end
 
     if BuildrPlus::FeatureManager.activated?(:react4j)
-      config.rule('ACEM_ABSTRACT_CLASS_EMPTY_METHODS,CE_CLASS_ENVY',
+      config.rule('ACEM_ABSTRACT_CLASS_EMPTY_METHODS,CE_CLASS_ENVY,PME_POOR_MANS_ENUM',
                   :class_name_pattern => '~.*\.React4j_.*')
     end
 
