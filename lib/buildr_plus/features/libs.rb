@@ -108,24 +108,28 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(com.google.jsinterop:base:jar:1.0.0-RC1) + self.jsinterop
     end
 
-    def elemental_version
-      '1.0.0-RC1'
+    def elemental2_version
+      '1.0.0-b14-2f97dbe'
+    end
+
+    def elemental2_group_id
+      'org.realityforge.com.google.elemental2'
     end
 
     def elemental2_core
-      %W(com.google.elemental2:elemental2-core:jar:#{elemental_version}) + self.jsinterop_base
+      %W(#{elemental2_group_id}:elemental2-core:jar:#{elemental2_version}) + self.jsinterop_base
     end
 
     def elemental2_dom
-      %W(com.google.elemental2:elemental2-dom:jar:#{elemental_version}) + self.elemental2_promise
+      %W(#{elemental2_group_id}:elemental2-dom:jar:#{elemental2_version}) + self.elemental2_promise
     end
 
     def elemental2_promise
-      %W(com.google.elemental2:elemental2-promise:jar:#{elemental_version}) + self.elemental2_core
+      %W(#{elemental2_group_id}:elemental2-promise:jar:#{elemental2_version}) + self.elemental2_core
     end
 
     def elemental2_webstorage
-      %W(com.google.elemental2:elemental2-webstorage:jar:#{elemental_version}) + self.elemental2_dom
+      %W(#{elemental2_group_id}:elemental2-webstorage:jar:#{elemental2_version}) + self.elemental2_dom
     end
 
     def gwt_user
