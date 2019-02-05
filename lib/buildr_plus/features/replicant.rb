@@ -21,3 +21,4 @@ BuildrPlus::FeatureManager.feature(:replicant => [:gwt, :arez]) do |f|
     end
   end
 end
+
