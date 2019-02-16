@@ -13,7 +13,6 @@ Gem::Specification.new do |s|
   s.summary            = %q{A set of simple defaults for buildr.}
   s.description        = %q{A set of simple defaults for buildr.}
 
-  s.rubyforge_project  = %q{buildr_plus}
 
   s.files              = `git ls-files`.split("\n")
   s.test_files         = `git ls-files -- {spec}/*`.split("\n")
