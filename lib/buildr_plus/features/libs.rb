@@ -109,7 +109,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def elemental2_version
-      '1.0.0-b15-7a28038'
+      '1.0.0-b17-6897368'
     end
 
     def elemental2_group_id
