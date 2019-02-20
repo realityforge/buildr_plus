@@ -65,7 +65,7 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
 
         project.pmd.additional_project_names =
           BuildrPlus::Pmd.additional_project_names ||
-            BuildrPlus::Util.subprojects(project).select { |p| !(p =~ /.*\:soap-client$/) }
+            BuildrPlus::Util.subprojects(project).select {|p| !(p =~ /.*\:soap-client$/)}
       end
     end
   end
