@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:pmd) do |f|
   f.enhance(:Config) do
     def default_pmd_rules
-      'au.com.stocksoftware.pmd:pmd:xml:1.6'
+      'au.com.stocksoftware.pmd:pmd:xml:1.7'
     end
 
     def pmd_rules
@@ -35,20 +35,49 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
           # The specs for requirements
           def dependencies
             %w(
-              net.sourceforge.pmd:pmd-core:jar:5.8.1
-              net.sourceforge.pmd:pmd-java:jar:5.8.1
-              net.sourceforge.pmd:pmd-java8:jar:5.8.1
-              net.sourceforge.pmd:pmd-javascript:jar:5.8.1
-              net.sourceforge.pmd:pmd-ruby:jar:5.8.1
+              net.sourceforge.pmd:pmd-core:jar:6.11.0
+              net.sourceforge.pmd:pmd-java:jar:6.11.0
+              net.sourceforge.pmd:pmd-java8:jar:6.11.0
               jaxen:jaxen:jar:1.1.6
-              commons-io:commons-io:jar:2.4
-              com.beust:jcommander:jar:1.48
-              org.ow2.asm:asm:jar:5.0.4
-              com.google.code.gson:gson:jar:2.5
+              commons-io:commons-io:jar:2.6
+              com.beust:jcommander:jar:1.72
+              org.ow2.asm:asm:jar:7.0
+              com.google.code.gson:gson:jar:2.8.5
               net.java.dev.javacc:javacc:jar:5.0
               net.sourceforge.saxon:saxon:jar:9.1.0.8
-              org.apache.commons:commons-lang3:jar:3.4
+              org.apache.commons:commons-lang3:jar:3.8.1
+              org.antlr:antlr4-runtime:jar:4.7
               )
+          end
+
+          def pmd(rule_set_files, format, output_file_prefix, source_paths, options = {})
+            dependencies = (options[:dependencies] || []) + self.dependencies
+            cp = Buildr.artifacts(dependencies).each(&:invoke).map(&:to_s)
+            (options[:rule_set_paths] || []).each {|p| cp << p}
+
+            rule_sets = rule_set_files.dup
+
+            Buildr.artifacts(options[:rule_set_artifacts] || []).each do |artifact|
+              a = artifact.to_s
+              dirname = File.dirname(a)
+              rule_sets << a[dirname.length + 1, a.length]
+              cp << File.dirname(a)
+              artifact.invoke
+            end
+
+            puts 'PMD: Analyzing source code...'
+            mkdir_p File.dirname(output_file_prefix)
+
+            Buildr.ant('pmd-report') do |ant|
+              ant.taskdef :name => 'pmd', :classpath => cp.join(';'), :classname => 'net.sourceforge.pmd.ant.PMDTask'
+              ant.pmd :shortFilenames => true, :rulesetfiles => rule_sets.join(','), :noCache => true do
+                ant.formatter :type => format, :toFile => "#{output_file_prefix}.#{format}"
+                source_paths.each do |src|
+                  ant.fileset :dir => src, :includes => '**/*.java' if File.directory?(src)
+                end
+              end
+
+            end
           end
         end
       end
