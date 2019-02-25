@@ -105,7 +105,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jsinterop_base
-      %w(com.google.jsinterop:base:jar:1.0.0-RC1) + self.jsinterop
+      %w(org.realityforge.com.google.jsinterop:base:jar:1.0.0-b2-e6d791f) + self.jsinterop
     end
 
     def elemental2_version
@@ -324,7 +324,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.120'
+      '0.121'
     end
 
     def react4j
@@ -339,7 +339,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.31'
+      '6.32'
     end
 
     def replicant_client
