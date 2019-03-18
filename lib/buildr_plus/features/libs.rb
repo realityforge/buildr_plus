@@ -109,7 +109,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def elemental2_version
-      '1.0.0-b19-fb227e3'
+      '1.0.0-b20-bfe6e22'
     end
 
     def elemental2_group_id
@@ -339,7 +339,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def spritz
-      %w(org.realityforge.spritz:spritz-core:jar:0.04)
+      %w(org.realityforge.spritz:spritz-core:jar:0.06)
     end
 
     def replicant_version
