@@ -334,10 +334,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.react4j:react4j-processor:jar:#{react4j_version})
     end
 
-    def spritz
-      %w(org.realityforge.spritz:spritz-core:jar:0.06)
-    end
-
     def replicant_version
       '6.37'
     end
@@ -346,8 +342,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) +
         self.elemental2_webstorage +
         # ee provided is for json API
-        self.ee_provided +
-        self.spritz
+        self.ee_provided
     end
 
     def replicant_server
