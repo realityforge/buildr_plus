@@ -152,10 +152,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(javax.inject:javax.inject:jar:sources:1) + self.javax_inject
     end
 
-    def gwt_webpoller
-      %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.8)
-    end
-
     def gwt_appcache_client
       %w(org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.12)
     end
@@ -348,7 +344,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def replicant_client
       %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) +
-        self.gwt_webpoller +
         self.elemental2_webstorage +
         # ee provided is for json API
         self.ee_provided +
