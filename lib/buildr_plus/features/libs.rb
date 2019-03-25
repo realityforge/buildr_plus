@@ -339,10 +339,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_client
-      %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) +
-        self.elemental2_webstorage +
-        # ee provided is for json API
-        self.ee_provided
+      %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) + self.elemental2_webstorage
     end
 
     def replicant_server
