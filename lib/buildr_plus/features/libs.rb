@@ -363,9 +363,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def dagger_compile
-      %W(
-          com.google.dagger:dagger:jar:#{dagger_version}
-      )
+      %W(com.google.dagger:dagger:jar:#{dagger_version})
     end
 
     def dagger
