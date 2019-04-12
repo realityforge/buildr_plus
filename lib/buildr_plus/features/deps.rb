@@ -375,7 +375,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service)
-        dependencies << Buildr.artifacts([BuildrPlus::Libs.keycloak_authfilter])
         if BuildrPlus::FeatureManager.activated?(:gwt)
           dependencies << Buildr.artifacts(BuildrPlus::Libs.proxy_servlet)
         end
