@@ -256,7 +256,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_converger
-      'org.realityforge.keycloak.converger:keycloak-converger:jar:1.6'
+      'org.realityforge.keycloak.converger:keycloak-converger:jar:1.7'
     end
 
     def jboss_logging
