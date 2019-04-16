@@ -97,7 +97,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def braincheck
-      %w(org.realityforge.braincheck:braincheck:jar:1.15.0)
+      %w(org.realityforge.braincheck:braincheck:jar:1.16.0)
     end
 
     def jsinterop
@@ -292,7 +292,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.135'
+      '0.136'
     end
 
     def arez
@@ -320,7 +320,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.121'
+      '0.125'
     end
 
     def react4j
