@@ -116,7 +116,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     end
 
     def local_application_url
-      @local_application_url || ENV['LOCAL_APPLICATION_URL'] || 'http://127.0.0.1:8080'
+      @local_application_url || ENV['LOCAL_APPLICATION_URL'] || (BuildrPlus::Config.environment == 'test' ? 'http://127.0.0.1:*' : 'http://127.0.0.1:8080')
     end
 
     attr_writer :local_application_url
