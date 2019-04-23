@@ -396,20 +396,36 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
     before_define do |project|
       if project.ipr?
         project.checkstyle.config_directory = project._('etc/checkstyle')
-        project.checkstyle.configuration_artifact = BuildrPlus::Checkstyle.checkstyle_rules
 
-        unless File.exist?(project.checkstyle.suppressions_file)
-          project.checkstyle.suppressions_file =
-            "#{File.expand_path(File.dirname(__FILE__))}/checkstyle_suppressions.xml"
+        original_suppressions_file = project.checkstyle.suppressions_file
+        unless File.exist?(original_suppressions_file)
+          original_suppressions_file = "#{File.expand_path(File.dirname(__FILE__))}/checkstyle_suppressions.xml"
         end
 
         checkstyle_dir = project._(:target, :generated, :checkstyle)
         checkstyle_import_rules = "#{checkstyle_dir}/import-control.xml"
+        checkstyle_check_rules = "#{checkstyle_dir}/rules.xml"
+        checkstyle_suppressions = "#{checkstyle_dir}/suppressions.xml"
+
+        project.checkstyle.configuration_file = checkstyle_check_rules
+        project.checkstyle.suppressions_file = checkstyle_suppressions
 
         t = task 'checkstyle:setup' do
           FileUtils.mkdir_p checkstyle_dir
           File.open(checkstyle_import_rules, 'wb') do |file|
             file.write project.import_rules.as_xml
+          end
+
+          supressions = IO.read(original_suppressions_file)
+          File.open(checkstyle_suppressions, 'wb') do |file|
+            file.write supressions
+          end
+
+          a = Buildr.artifact(BuildrPlus::Checkstyle.checkstyle_rules)
+          a.invoke
+          rules = IO.read(a.to_s)
+          File.open(checkstyle_check_rules, 'wb') do |file|
+            file.write rules
           end
         end
 
