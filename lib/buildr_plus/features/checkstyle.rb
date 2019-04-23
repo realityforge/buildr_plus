@@ -385,6 +385,12 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
     first_time do
       require 'buildr/checkstyle'
+
+      class Buildr::Checkstyle::Config
+        def enabled?
+          project.ipr?
+        end
+      end
     end
 
     before_define do |project|
