@@ -101,7 +101,7 @@ module BuildrPlus::Checkstyle
 XML
       xml << "\n#{'  ' * indent}<subpackage name=\"#{name}\">\n" unless parent.nil?
 
-      rules.each do |r|
+      rules.sort_by {|rule| rule.allow? ? 0 : 1}.each do |r|
         xml << r.as_xml(indent + 1)
       end
 
