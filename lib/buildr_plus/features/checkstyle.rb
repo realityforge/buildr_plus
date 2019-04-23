@@ -443,11 +443,10 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
     <property name="message" value="Avoid the use of new Date(). Use TimeService.currentDate()"/>
   </module>
   <module name="RegexpSingleline">
-    <property name="id" value="noNewDate"/>
+    <property name="id" value="noSystemCurrentTimeMillis"/>
     <property name="format" value="System\.currentTimeMillis\(\)"/>
     <property name="message" value="Avoid the use of System.currentTimeMillis(). Use TimeService.currentTimeMillis()"/>
   </module>
-
 
 RULES
           end
