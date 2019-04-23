@@ -67,7 +67,7 @@ module BuildrPlus::Checkstyle
     end
 
     def rule(rule, options = {})
-      raise "Duplicate checkstyle rule #{rule} for package #{qualified_name}" if @rules.any? { |r| r.rule == rule }
+      raise "Duplicate checkstyle rule #{rule} for package #{qualified_name}" if @rules.any? {|r| r.rule == rule}
       @rules << Rule.new(rule, options)
     end
 
