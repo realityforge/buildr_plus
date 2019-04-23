@@ -397,10 +397,11 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
             "#{File.expand_path(File.dirname(__FILE__))}/checkstyle_suppressions.xml"
         end
 
-        checkstyle_import_rules = project._(:target, :generated, 'checkstyle/import-control.xml')
+        checkstyle_dir = project._(:target, :generated, :checkstyle)
+        checkstyle_import_rules = "#{checkstyle_dir}/import-control.xml"
 
         t = task 'checkstyle:setup' do
-          FileUtils.mkdir_p File.dirname(checkstyle_import_rules)
+          FileUtils.mkdir_p checkstyle_dir
           File.open(checkstyle_import_rules, 'wb') do |file|
             file.write project.import_rules.as_xml
           end
