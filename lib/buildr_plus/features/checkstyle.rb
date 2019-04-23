@@ -391,6 +391,26 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           project.ipr?
         end
       end
+
+      module ::Buildr::Checkstyle
+        class << self
+          # The specs for requirements
+          def dependencies
+            %w(
+              com.puppycrawl.tools:checkstyle:jar:8.19
+              org.antlr:antlr4-runtime:jar:4.7.2
+              antlr:antlr:jar:2.7.7
+              com.google.guava:guava:jar:27.1-jre
+              commons-beanutils:commons-beanutils:jar:1.9.3
+              commons-logging:commons-logging:jar:1.2
+              commons-collections:commons-collections:jar:3.2.2
+              info.picocli:picocli:jar:3.9.5
+              net.sf.saxon:Saxon-HE:jar:9.9.1-2
+              com.ibm.icu:icu4j:jar:63.1
+            )
+          end
+        end
+      end
     end
 
     before_define do |project|
