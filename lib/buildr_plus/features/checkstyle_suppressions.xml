@@ -25,6 +25,11 @@
   <suppress checks="ImportControl" files="(.*[\\/])?test[\\/]java[\\/].*\.java"/>
   <suppress checks="VisibilityModifier" files=".*[\\/]test[\\/]java[\\/].*\.java"/>
 
+  <suppress id="noLocalDateNow" files="(.*[\\/]test[\\/]java|gwt|user-experience)[\\/].*\.java"/>
+  <suppress id="noLocalDateTimeNow" files="(.*[\\/]test[\\/]java|gwt|user-experience)[\\/].*\.java"/>
+  <suppress id="noNewDate" files="(.*[\\/]test[\\/]java|gwt|user-experience)[\\/].*\.java"/>
+  <suppress id="noSystemCurrentTimeMillis" files="(.*[\\/]test[\\/]java|gwt|user-experience)[\\/].*\.java"/>
+
   <!-- Factory for test factories have to import a bunch of test code. Can not be moved to test hierarchy as modifiers are package access  -->
   <suppress checks="ImportControl" files="(.*[\\/])?gwt-qa-support[\\/]src[\\/]main[\\/]java[\\/].*[\\/]client[\\/]entity[\\/].*Factory\.java"/>
 </suppressions>
