@@ -447,22 +447,22 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 <module name="Checker">
   <module name="RegexpSingleline">
     <property name="id" value="noLocalDateNow"/>
-    <property name="format" value="LocalDate\.now\(\)"/>
+    <property name="format" value="LocalDate\\.now\\(\\)"/>
     <property name="message" value="Avoid the use of LocalDate.now(). Use TimeService.currentLocalDate()"/>
   </module>
   <module name="RegexpSingleline">
     <property name="id" value="noLocalDateTimeNow"/>
-    <property name="format" value="LocalDateTime\.now\(\)"/>
+    <property name="format" value="LocalDateTime\\.now\\(\\)"/>
     <property name="message" value="Avoid the use of LocalDateTime.now(). Use TimeService.currentLocalDateTime()"/>
   </module>
   <module name="RegexpSingleline">
     <property name="id" value="noNewDate"/>
-    <property name="format" value="new Date\(\)"/>
+    <property name="format" value="new Date\\(\\)"/>
     <property name="message" value="Avoid the use of new Date(). Use TimeService.currentDate()"/>
   </module>
   <module name="RegexpSingleline">
     <property name="id" value="noSystemCurrentTimeMillis"/>
-    <property name="format" value="System\.currentTimeMillis\(\)"/>
+    <property name="format" value="System\\.currentTimeMillis\\(\\)"/>
     <property name="message" value="Avoid the use of System.currentTimeMillis(). Use TimeService.currentTimeMillis()"/>
   </module>
 
