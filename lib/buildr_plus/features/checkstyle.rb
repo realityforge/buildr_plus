@@ -95,9 +95,7 @@ module BuildrPlus::Checkstyle
       xml << <<XML if parent.nil?
 <?xml version="1.0"?>
 <!-- DO NOT EDIT: File is auto-generated -->
-<!DOCTYPE import-control PUBLIC
-  "-//Puppy Crawl//DTD Import Control 1.1//EN"
-  "http://www.puppycrawl.com/dtds/import_control_1_1.dtd">
+<!DOCTYPE import-control PUBLIC "-//Puppy Crawl//DTD Import Control 1.4//EN" "https://checkstyle.org/dtds/import_control_1_4.dtd">
 
 <import-control pkg="#{name}">
 XML
