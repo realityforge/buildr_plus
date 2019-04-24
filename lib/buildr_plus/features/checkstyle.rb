@@ -442,7 +442,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           a = Buildr.artifact(BuildrPlus::Checkstyle.checkstyle_rules)
           a.invoke
           rules = IO.read(a.to_s)
-          if BuildrPlus::FeatureManager.activated?(:timerservice)
+          if BuildrPlus::FeatureManager.activated?(:timeservice)
             rules.gsub!("<module name=\"Checker\">\n", <<RULES)
 <module name="Checker">
   <module name="RegexpSingleline">
