@@ -427,6 +427,8 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
         project.checkstyle.configuration_file = checkstyle_check_rules
         project.checkstyle.suppressions_file = checkstyle_suppressions
+        project.checkstyle.properties['checkstyle.suppressions.file'] = checkstyle_suppressions
+        project.checkstyle.properties['checkstyle.import-control.file'] = checkstyle_import_rules
 
         t = task 'checkstyle:setup' do
           FileUtils.mkdir_p checkstyle_dir
@@ -474,7 +476,6 @@ RULES
         end
 
         task 'checkstyle:xml' => %w(checkstyle:setup)
-        task 'checkstyle:html' => %w(checkstyle:setup)
 
         project.task(':domgen:all').enhance([t.name])
 
