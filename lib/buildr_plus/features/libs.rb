@@ -173,6 +173,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.rest.field_filter:rest-field-filter:jar:0.4)
     end
 
+    def timeservice
+      %w(org.realityforge.timeservice:timeservice:jar:0.01)
+    end
+
     def graphql_java
       %w(com.graphql-java:graphql-java:jar:3.0.0) + self.slf4j + self.antlr4_runtime
     end
