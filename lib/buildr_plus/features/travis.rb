@@ -34,23 +34,23 @@ services:
   - docker
 CONTENT
       end
-      content += <<CONTENT
+      if docker_active
+        content += <<CONTENT
 addons:
   apt:
     packages:
-CONTENT
-      if BuildrPlus::Db.tiny_tds_defined?
-        content += <<CONTENT
-    - freetds-dev
-CONTENT
-      end
-      if docker_active
-        content += <<CONTENT
     - socat
 CONTENT
       end
       content += <<CONTENT
 install:
+CONTENT
+      if BuildrPlus::Db.tiny_tds_defined?
+        content += <<CONTENT
+  - sudo apt-get install -y freetds-dev
+CONTENT
+      end
+      content += <<CONTENT
   - rvm use #{rv}
   - gem install bundler
   - bundle install
