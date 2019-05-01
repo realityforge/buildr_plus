@@ -35,6 +35,9 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
     Resgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
       t.filter = Resgen::Filters.include_catalog_below(project._(:source, :main))
     end
+    if BuildrPlus::FeatureManager.activated?(:react4j)
+      Resgen::Build.define_generate_task([:react4j_components], :key => :react4j, :buildr_project => project)
+    end
   end
 
   project.publish = false

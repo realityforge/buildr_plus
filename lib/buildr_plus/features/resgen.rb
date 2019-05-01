@@ -31,6 +31,7 @@ BuildrPlus::FeatureManager.feature(:resgen) do |f|
         facet_mapping =
           {
             :gwt => :gwt,
+            :react4j => :react4j,
           }
 
         Resgen.repositories.each do |r|
