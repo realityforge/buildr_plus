@@ -15,6 +15,12 @@
 BuildrPlus::FeatureManager.feature(:assets) do |f|
   f.enhance(:Config) do
 
+    attr_writer :support_ie11
+
+    def support_ie11?
+      @support_ie11.nil? ? false : !!@support_ie11
+    end
+
     attr_writer :allow_bad_fonts
 
     def allow_bad_fonts?
@@ -37,12 +43,19 @@ BuildrPlus::FeatureManager.feature(:assets) do |f|
             end.compact
 
             bad_font_files = ttf_files + eot_files + svg_files
+            bad_font_files += woff_files unless BuildrPlus::Assets.support_ie11?
             if bad_font_files.size > 0
-              BuildrPlus.error <<TEXT
+              error_text = <<TEXT
 The project has found to be using font files that go against best practices.
-Ideally the only font files that should be used are the WOFF 2.0 variant for
-browsers that support it and WOFF for all other browsers. For an explanation
-of the reasoning see:
+Ideally the only font files that should be used are the WOFF 2.0 variant.
+TEXT
+              if BuildrPlus::Assets.support_ie11?
+                error_text += <<TEXT
+However WOFF files are supported for IE11.
+TEXT
+              end
+              error_text += <<TEXT
+For an explanation of the reasoning see:
 
 https://developers.google.com/web/fundamentals/performance/optimizing-content-efficiency/webfont-optimization
 http://caniuse.com/#feat=woff
@@ -51,8 +64,9 @@ http://caniuse.com/#feat=woff2
 The following font files should be removed. Do not forget to update the
 @font-face declarations in any css files to remove references to files.
 
-#{bad_font_files.collect { |f| "* #{f}" }.join("\n")}
+#{bad_font_files.collect {|f| "* #{f}"}.join("\n")}
 TEXT
+              BuildrPlus.error error_text
             end
           end
         end
