@@ -416,7 +416,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def slf4j
-      %w(org.slf4j:slf4j-api:jar:1.6.6 org.slf4j:slf4j-jdk14:jar:1.6.6)
+      %w(org.slf4j:slf4j-api:jar:1.7.25 org.slf4j:slf4j-jdk14:jar:1.7.25)
     end
 
     def greenmail
