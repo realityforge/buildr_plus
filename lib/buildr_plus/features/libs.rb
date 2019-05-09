@@ -208,7 +208,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def antlr4_runtime
-      %w(org.antlr:antlr4-runtime:jar:4.5.1)
+      %w(org.antlr:antlr4-runtime:jar:4.7.2)
     end
 
     def rest_criteria
