@@ -129,6 +129,12 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       @include_api_client.nil? ? BuildrPlus::FeatureManager.activated?(:role_user_experience) : !!@include_api_client
     end
 
+    attr_writer :include_graphiql_client
+
+    def include_graphiql_client?
+      @include_graphiql_client.nil? ? BuildrPlus::FeatureManager.activated?(:graphiql) : !!@include_graphiql_client
+    end
+
     def remote_client(client_type, options = {})
       remote_client = BuildrPlus::Keycloak::KeycloakRemoteClient.new(client_type, options)
       self.remote_clients_list << remote_client
@@ -170,6 +176,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
         unless BuildrPlus::FeatureManager.activated?(:role_library)
           BuildrPlus::Keycloak.client(buildr_project.root_project.name)
           BuildrPlus::Keycloak.client('api') if BuildrPlus::Keycloak.include_api_client?
+          BuildrPlus::Keycloak.client('graphiql') if BuildrPlus::Keycloak.include_graphiql_client?
         end
       end
     end
