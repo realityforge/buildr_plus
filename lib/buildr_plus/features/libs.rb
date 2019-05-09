@@ -173,34 +173,24 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def graphql_java
-      %w(com.graphql-java:graphql-java:jar:3.0.0) + self.slf4j + self.antlr4_runtime
+      %w(com.graphql-java:graphql-java:jar:12.0) + self.slf4j + self.antlr4_runtime + self.graphql_java_dataloader
     end
 
-    def graphql_java_tools
+    def graphql_java_dataloader
+      %w(com.graphql-java:java-dataloader:jar:2.1.1 org.reactivestreams:reactive-streams:jar:1.0.2)
+    end
+
+    def graphql_java_servlet
       %w(
-        com.esotericsoftware:reflectasm:jar:1.11.3
-        com.graphql-java:graphql-java-tools:jar:3.2.1
-        org.jetbrains.kotlin:kotlin-reflect:jar:1.1.1
-        org.jetbrains.kotlin:kotlin-stdlib:jar:1.1.1
-        org.jetbrains.kotlin:kotlin-stdlib:jar:1.1.3-2
-        org.ow2.asm:asm:jar:5.0.4
-        ru.vyarus:generics-resolver:jar:2.0.1
+        com.graphql-java:graphql-java-servlet:jar:6.1.3
+        commons-fileupload:commons-fileupload:jar:1.3.3
+        commons-io:commons-io:jar:2.5
       ) + self.graphql_java +
         self.jackson_annotations +
         self.jackson_core +
         self.jackson_databind +
         self.jackson_datatype_jdk8 +
-        self.jackson_module_kotlin +
-        self.guava + # Expected 21.0
-        self.jetbrains_annotations
-    end
-
-    def graphql_java_servlet
-      %w(
-        com.graphql-java:graphql-java-servlet:jar:4.0.0
-        commons-fileupload:commons-fileupload:jar:1.3.3
-        commons-io:commons-io:jar:2.5
-      ) + self.graphql_java_tools
+        self.guava # Expected 20.0
     end
 
     def graphql_domgen_support
