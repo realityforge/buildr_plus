@@ -190,7 +190,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def graphql_domgen_support
-      %w(org.realityforge.keycloak.domgen:graphql-domgen-support:jar:1.2.0)
+      %w(org.realityforge.keycloak.domgen:graphql-domgen-support:jar:1.3.0)
     end
 
     def antlr4_runtime
