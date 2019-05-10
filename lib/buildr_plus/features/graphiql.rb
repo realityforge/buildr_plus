@@ -42,8 +42,8 @@ BuildrPlus::FeatureManager.feature(:graphiql => [:graphql, :gwt_cache_filter]) d
         'net.jsdelivr:fetch:js:0.9.0' => 'http://cdn.jsdelivr.net/fetch/0.9.0/fetch.min.js',
         'net.jsdelivr:react:js:15.4.2' => 'http://cdn.jsdelivr.net/react/15.4.2/react.min.js',
         'net.jsdelivr:react-dom:js:15.4.2' => 'http://cdn.jsdelivr.net/react/15.4.2/react-dom.min.js',
-        'net.jsdelivr:graphiql:css:0.11.2' => 'http://cdn.jsdelivr.net/npm/graphiql@0.11.2/graphiql.css',
-        'net.jsdelivr:graphiql:js:0.11.2' => 'http://cdn.jsdelivr.net/npm/graphiql@0.11.2/graphiql.min.js',
+        'net.jsdelivr:graphiql:css:0.13.0' => 'http://cdn.jsdelivr.net/npm/graphiql@0.13.0/graphiql.css',
+        'net.jsdelivr:graphiql:js:0.13.0' => 'http://cdn.jsdelivr.net/npm/graphiql@0.13.0/graphiql.min.js',
       }
     end
 
@@ -80,6 +80,9 @@ BuildrPlus::FeatureManager.feature(:graphiql => [:graphql, :gwt_cache_filter]) d
 <script>
 
   function graphQLFetcher(graphQLParams) {
+    if( graphQLParams['variables'] == null ) {
+      graphQLParams['variables'] = undefined;
+    }
     return fetch('../graphql', {
       method: 'post',
       headers: {
