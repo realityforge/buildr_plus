@@ -104,6 +104,7 @@ BuildrPlus::FeatureManager.feature(:graphiql => [:graphql, :gwt_cache_filter]) d
 
   var element = React.createElement(GraphiQL, { fetcher: graphQLFetcher }, React.createElement(GraphiQL.Logo, {}, '#{Reality::Naming.humanize(root_project.name)} API'));
   ReactDOM.render(element, document.getElementById('graphiql'));
+  history.replaceState(null, null, window.location.origin + window.location.pathname );
 </script>
 </body>
 </html>
