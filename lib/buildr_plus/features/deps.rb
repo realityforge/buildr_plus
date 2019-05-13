@@ -24,7 +24,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def model_generators
-      generators = [:ee_data_types, :ee_cdi_qualifier]
+      generators = [:ee_data_types]
       if BuildrPlus::FeatureManager.activated?(:db)
         generators << [:jpa_model, :jpa_ejb_dao, :jpa_template_persistence_xml, :jpa_template_orm_xml]
         generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
