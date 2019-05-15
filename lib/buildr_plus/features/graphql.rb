@@ -17,20 +17,22 @@ BuildrPlus::FeatureManager.feature(:graphql) do |f|
     after_define do |buildr_project|
       if buildr_project.ipr?
 
-        desc 'GraphQL Schema'
-        define :graphqls do
-          project.no_iml
+        buildr_project.instance_eval do
+          desc 'GraphQL Schema'
+          define :graphqls do
+            project.no_iml
 
-          [:graphqls, :graphqls_sources].each do |type|
-            package(type).enhance do |t|
-              project.task(':domgen:all').invoke
-              mkdir_p File.dirname(t.to_s)
-              content = IO.read(root_project._("server/generated/domgen/server/main/java/#{project.group.gsub('.', '/')}/server/#{root_project.name}.graphqls"))
-              Dir["#{root_project._("server/src/main/java/#{project.group.gsub('.', '/')}")}/**/*.graphqls"].each do |f|
-                content += IO.read(f)
+            [:graphqls, :graphqls_sources].each do |type|
+              package(type).enhance do |t|
+                project.task(':domgen:all').invoke
+                mkdir_p File.dirname(t.to_s)
+                content = IO.read(root_project._("server/generated/domgen/server/main/java/#{project.group.gsub('.', '/')}/server/#{root_project.name}.graphqls"))
+                Dir["#{root_project._("server/src/main/java/#{project.group.gsub('.', '/')}")}/**/*.graphqls"].each do |f|
+                  content += IO.read(f)
+                end
+
+                IO.write(t.to_s, content)
               end
-
-              IO.write(t.to_s, content)
             end
           end
         end
