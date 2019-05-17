@@ -26,8 +26,8 @@ BuildrPlus::FeatureManager.feature(:graphql) do |f|
               package(type).enhance do |t|
                 project.task(':domgen:all').invoke
                 mkdir_p File.dirname(t.to_s)
-                content = IO.read(root_project._("server/generated/domgen/server/main/java/#{project.group.gsub('.', '/')}/server/#{root_project.name}.graphqls"))
-                Dir["#{root_project._("server/src/main/java/#{project.group.gsub('.', '/')}")}/**/*.graphqls"].each do |f|
+                content = IO.read(root_project._("server/generated/domgen/server/main/resources/#{project.group.gsub('.', '/')}/server/#{root_project.name}.graphqls"))
+                Dir["#{root_project._("server/src/main/resources/#{project.group.gsub('.', '/')}")}/**/*.graphqls"].each do |f|
                   content += IO.read(f)
                 end
 
