@@ -53,6 +53,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def model_qa_support_main_generators
       generators = []
       generators << [:jpa_main_qa, :jpa_main_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
+      generators << [:sql_analysis_main_qa] if BuildrPlus::FeatureManager.activated?(:sql_analysis)
       generators << [:ejb_main_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
       generators << [:imit_server_main_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
