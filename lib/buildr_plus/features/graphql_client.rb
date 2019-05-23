@@ -23,12 +23,10 @@ BuildrPlus::FeatureManager.feature(:graphql_client) do |f|
     attr_reader :graphql_schema_artifact
 
     def generate
-      a = Buildr.artifact(self.graphql_schema_artifact)
-      a.invoke
       <<JSON
 {
   "name": "#{Reality::Naming.pascal_case(self.graphql_schema_name)} GraphQL Schema",
-  "schemaPath": "#{a.to_s}",
+  "schemaPath": "generated/graphql_client/schema.graphql",
   "extensions": {
     "endpoints": {
       "Default GraphQL Endpoint": {
@@ -45,6 +43,16 @@ JSON
     end
   end
   f.enhance(:ProjectExtension) do
+    task 'graphql_client:get_schema' do
+      dir = "#{File.dirname(Buildr.application.buildfile.to_s)}/generated/graphql_client"
+      mkdir_p dir
+      a = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact)
+      a.invoke
+      cp a.to_s, "#{dir}/schema.graphql"
+    end
+
+    task('domgen:all').enhance(['graphql_client:get_schema'])
+
     desc 'Recreate the .graphqlconfig file'
     task 'graphql_client:check' do
       filename = "#{File.dirname(Buildr.application.buildfile.to_s)}/.graphqlconfig"
