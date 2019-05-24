@@ -44,11 +44,13 @@ JSON
   end
   f.enhance(:ProjectExtension) do
     task 'graphql_client:get_schema' do
-      dir = "#{File.dirname(Buildr.application.buildfile.to_s)}/generated/graphql_client"
-      mkdir_p dir
-      a = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact)
-      a.invoke
-      cp a.to_s, "#{dir}/schema.graphql"
+      if BuildrPlus::FeatureManager.activated?(:graphql_client) && !BuildrPlus::GraphqlClient.graphql_schema_artifact.nil?
+        dir = "#{File.dirname(Buildr.application.buildfile.to_s)}/generated/graphql_client"
+        mkdir_p dir
+        a = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact)
+        a.invoke
+        cp a.to_s, "#{dir}/schema.graphql"
+      end
     end
 
     task('domgen:all').enhance(['graphql_client:get_schema'])
