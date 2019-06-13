@@ -39,6 +39,7 @@ require 'buildr_plus/util'
 
 # Patches that should always be applied
 require 'buildr_plus/patches/group_project_patch'
+require 'buildr_plus/patches/resources_filter_patch'
 
 require 'buildr_plus/features/appcache'
 require 'buildr_plus/features/appconfig'
@@ -65,6 +66,7 @@ require 'buildr_plus/features/gems'
 require 'buildr_plus/features/generated_files'
 require 'buildr_plus/features/geolatte'
 require 'buildr_plus/features/geotools'
+require 'buildr_plus/features/giggle'
 require 'buildr_plus/features/github'
 require 'buildr_plus/features/graphql'
 require 'buildr_plus/features/graphql_client'
