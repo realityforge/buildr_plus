@@ -38,29 +38,6 @@ BuildrPlus::Roles.role(:server) do
     project.assets.enhance([f])
   end
 
-  if BuildrPlus::FeatureManager.activated?(:giggle)
-    desc 'Generate GraphQL support code'
-    generate_task = project.task('giggle:generate')
-    jar = artifact(BuildrPlus::Deps.giggle)
-
-    generated_dir = _(:generated, 'giggle/src/java')
-    t = project.task(generated_dir => [project.task(':domgen:all')]) do
-      type_mapping_file = root_project._("server/generated/domgen/server/main/resources/#{project.group.gsub('.', '/')}/server/types.mapping")
-      schema_pkg = project.project('graphqls').package(:graphqls)
-      schema_pkg.invoke
-      jar.invoke
-      Java::Commands.java %W(-jar #{jar} --package #{project.root_project.group}server.graphql --schema #{schema_pkg} --type-mapping #{type_mapping_file} --output-directory #{generated_dir} --generator java-server)
-    end
-
-    project.task(':giggle:generate').enhance([t.name])
-
-    generate_task.enhance([t.name])
-    project.iml.main_source_directories << generated_dir
-    project.compile.enhance([t.name])
-    project.compile.from(generated_dir)
-    project.root_project.pmd.exclude_paths << generated_dir if BuildrPlus::FeatureManager.activated?(:pmd)
-  end
-
   project.publish = true
 
   compile.with BuildrPlus::Deps.server_deps
