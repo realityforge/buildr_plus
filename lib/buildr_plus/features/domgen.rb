@@ -140,6 +140,7 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 :berk => :berk,
                 :keycloak => :keycloak,
                 :jms => :jms,
+                :giggle => :giggle,
                 :mail => :mail,
                 :soap => :jws,
                 :gwt => :gwt,

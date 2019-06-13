@@ -15,6 +15,10 @@
 BuildrPlus::FeatureManager.feature(:libs) do |f|
   f.enhance(:Config) do
 
+    def giggle
+      'org.realityforge.giggle:giggle-compiler:jar:all:0.02'
+    end
+
     def mustache
       %w(com.github.spullara.mustache.java:compiler:jar:0.8.15)
     end

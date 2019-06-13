@@ -79,6 +79,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       end
 
       generators << [:graphql_endpoint] if BuildrPlus::FeatureManager.activated?(:graphql)
+      generators << [:giggle] if BuildrPlus::FeatureManager.activated?(:giggle)
       generators << [:robots] if BuildrPlus::Artifacts.war?
       generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:berk_service_impl, :berk_qa_support] if BuildrPlus::FeatureManager.activated?(:berk)
