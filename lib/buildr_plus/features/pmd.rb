@@ -76,7 +76,6 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
                   ant.fileset :dir => src, :includes => '**/*.java' if File.directory?(src)
                 end
               end
-
             end
           end
         end
