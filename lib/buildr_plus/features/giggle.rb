@@ -23,7 +23,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:graphql]) do |f|
         schema_pkg.invoke
         jar = Buildr.artifact(BuildrPlus::Deps.giggle)
         jar.invoke
-        Java::Commands.java %W(-jar #{jar} --package #{project.root_project.group}server.graphql --schema #{schema_pkg} --type-mapping #{type_mapping_file} --output-directory #{generated_dir} --generator java-server)
+        Java::Commands.java %W(-jar #{jar} --package #{project.root_project.group}.server.graphql --schema #{schema_pkg} --type-mapping #{type_mapping_file} --output-directory #{generated_dir} --generator java-server)
       end
 
       link_giggle_task(project, generate_task, generated_dir)
@@ -32,12 +32,12 @@ BuildrPlus::FeatureManager.feature(:giggle => [:graphql]) do |f|
     def generate_giggle_java_client(project)
       generated_dir = project._(:generated, 'giggle-client/src/java')
       generate_task = project.task(generated_dir => [project.task(':domgen:all')]) do
-        schema_pkg = project.project('graphqls').package(:graphqls)
+        schema_pkg = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact)
         schema_pkg.invoke
         jar = Buildr.artifact(BuildrPlus::Deps.giggle)
         jar.invoke
         graphql_documents = Dir["#{project._(:source, :main, :java)}/**/*.graphql"].collect {|f| ['--document', f]}.flatten
-        Java::Commands.java %W(-jar #{jar} --package #{project.root_project.group}server.api --schema #{schema_pkg} --output-directory #{generated_dir} --generator java-client) + graphql_documents
+        Java::Commands.java %W(-jar #{jar} --package #{project.root_project.group}.server.api --schema #{schema_pkg} --output-directory #{generated_dir} --generator java-client) + graphql_documents
       end
 
       link_giggle_task(project, generate_task, generated_dir)
