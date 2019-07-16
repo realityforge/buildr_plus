@@ -95,6 +95,8 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
         if project.iml?
           project.iml.main_generated_source_directories << project._('generated/processors/main/java')
         end
+      else
+        project.compile.options[:other] = ['-proc:none']
       end
 
       if project.ipr? && BuildrPlus::Java.enable_annotation_processor?
