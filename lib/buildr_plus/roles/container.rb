@@ -29,67 +29,6 @@ BuildrPlus::Roles.role(:container) do
 
   project.publish = false
 
-  default_testng_args = []
-  default_testng_args << '-ea'
-  default_testng_args << '-Xmx2024M'
-
-  if BuildrPlus::Roles.project_with_role?(:integration_tests)
-    server_project = project(BuildrPlus::Roles.project_with_role(:server).name)
-    war_package = server_project.package(:war)
-    war_dir = File.dirname(war_package.to_s)
-
-    default_testng_args << "-Dembedded.glassfish.artifacts=#{BuildrPlus::Guiceyloops.glassfish_spec_list}"
-    default_testng_args << "-Dwar.dir=#{war_dir}"
-    BuildrPlus::Integration.additional_applications_to_deploy.each do |key, artifact|
-      default_testng_args << "-D#{key}.war.filename=#{Buildr.artifact(artifact).to_s}"
-    end
-  end
-
-  if BuildrPlus::FeatureManager.activated?(:db)
-    default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}" unless BuildrPlus::FeatureManager.activated?(:gwt)
-
-    if BuildrPlus::FeatureManager.activated?(:dbt)
-      BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
-      Dbt.repository.load_configuration_data
-
-      Dbt.database_keys.each do |database_key|
-        next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
-
-        prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
-        database = Dbt.configuration_for_key(database_key, :test)
-        default_testng_args << "-D#{prefix}test.db.url=#{database.build_jdbc_url(:credentials_inline => true)}"
-        default_testng_args << "-D#{prefix}test.db.name=#{database.catalog_name}"
-      end
-    end
-  end
-
-  if BuildrPlus::FeatureManager.activated?(:keycloak)
-    environment = BuildrPlus::Config.application_config.environment_by_key(:test)
-    default_testng_args << "-Dkeycloak.server-url=#{environment.keycloak.base_url}"
-    default_testng_args << "-Dkeycloak.public-key=#{environment.keycloak.public_key}"
-    default_testng_args << "-Dkeycloak.realm=#{environment.keycloak.realm}"
-    default_testng_args << "-Dkeycloak.service_username=#{environment.keycloak.service_username}"
-    default_testng_args << "-Dkeycloak.service_password=#{environment.keycloak.service_password}"
-    BuildrPlus::Keycloak.clients.each do |client|
-      default_testng_args << "-D#{client.client_type}.keycloak.client=#{client.auth_client.name('test')}"
-    end
-  end
-
-  if BuildrPlus::FeatureManager.activated?(:arez)
-    BuildrPlus::Arez.arez_test_options.each_pair do |k, v|
-      default_testng_args << "-D#{k}=#{v}"
-    end
-    if BuildrPlus::FeatureManager.activated?(:replicant)
-      BuildrPlus::Replicant.replicant_test_options.each_pair do |k, v|
-        default_testng_args << "-D#{k}=#{v}"
-      end
-    end
-  end
-
-  default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
-
-  ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))
-
   # Need to use definitions as projects have yet to be when resolving
   # container project which is typically the root project
   if BuildrPlus::Roles.project_with_role?(:server)

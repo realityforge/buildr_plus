@@ -64,30 +64,4 @@ BuildrPlus::Roles.role(:all_in_one_library) do
 
   iml.add_jpa_facet if BuildrPlus::FeatureManager.activated?(:db)
   iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
-
-  default_testng_args = []
-  default_testng_args << '-ea'
-  default_testng_args << '-Xmx2024M'
-
-  if BuildrPlus::FeatureManager.activated?(:db)
-    default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}" unless BuildrPlus::FeatureManager.activated?(:gwt)
-
-    if BuildrPlus::FeatureManager.activated?(:dbt)
-      BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
-      Dbt.repository.load_configuration_data
-
-      Dbt.database_keys.each do |database_key|
-        next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
-
-        prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
-        database = Dbt.configuration_for_key(database_key, :test)
-        default_testng_args << "-D#{prefix}test.db.url=#{database.build_jdbc_url(:credentials_inline => true)}"
-        default_testng_args << "-D#{prefix}test.db.name=#{database.catalog_name}"
-      end
-    end
-  end
-
-  default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
-
-  ipr.add_default_testng_configuration(:jvm_args => default_testng_args.join(' '))
 end
