@@ -29,6 +29,15 @@ BuildrPlus::Roles.role(:container) do
 
   project.publish = false
 
+  BuildrPlus::Roles.projects.each do |p|
+    other = project.project(p.name)
+    unless other.test.compile.sources.empty? || !other.iml?
+      ipr.add_testng_configuration(p.name.to_s,
+                                   :module => other.iml.name,
+                                   :jvm_args => BuildrPlus::Testng.default_testng_args(project,p).join(' '))
+    end
+  end
+
   # Need to use definitions as projects have yet to be when resolving
   # container project which is typically the root project
   if BuildrPlus::Roles.project_with_role?(:server)

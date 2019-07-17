@@ -67,6 +67,10 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
         roles.any? { |r| r.to_s == role.to_s }
       end
 
+      def in_any_role?(roles)
+        roles.any?(&method(:in_role?))
+      end
+
       def customize(type = :pre, &block)
         (type == :pre ? pre_customization_map : post_customization_map) << block
       end

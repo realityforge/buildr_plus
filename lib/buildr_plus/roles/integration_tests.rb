@@ -20,7 +20,6 @@ BuildrPlus::Roles.role(:integration_tests) do
     generators << [:jws_service_integration_test] if BuildrPlus::FeatureManager.activated?(:soap)
     generators << [:appconfig_integration_test] if BuildrPlus::FeatureManager.activated?(:appconfig)
     generators << [:syncrecord_integration_test] if BuildrPlus::FeatureManager.activated?(:syncrecord)
-    generators << [:timerstatus_integration_test] if BuildrPlus::FeatureManager.activated?(:timerstatus)
     generators += project.additional_domgen_generators
 
     Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|

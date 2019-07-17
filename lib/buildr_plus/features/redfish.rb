@@ -237,10 +237,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         if BuildrPlus::Redfish.local_domain? && !Redfish.domain_by_key?('local')
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_local_development(domain, :features => [:jms, :jdbc])
-            if BuildrPlus::FeatureManager.activated?(:timerstatus)
-              domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
-              BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)
-            end
             if BuildrPlus::FeatureManager.activated?(:db)
               if BuildrPlus::Db.mssql?
                 library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])

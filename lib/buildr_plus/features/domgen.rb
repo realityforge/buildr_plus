@@ -149,7 +149,6 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
                 :gwt_cache_filter => :gwt_cache_filter,
                 :appconfig => :appconfig,
                 :syncrecord => :syncrecord,
-                :timerstatus => :timerstatus,
                 :appcache => :appcache
               }
 
@@ -157,18 +156,6 @@ BuildrPlus::FeatureManager.feature(:domgen) do |f|
               if r.java? && BuildrPlus::Domgen.enforce_package_name?
                 if r.java.base_package != project.group_as_package
                   raise "Buildr projects group '#{project.group_as_package}' expected to match domgens 'java.base_package' setting ('#{r.java.base_package}') but it does not."
-                end
-              end
-
-              unless BuildrPlus::FeatureManager.activated?(:timerstatus) || BuildrPlus::FeatureManager.activated?(:role_library)
-                r.data_modules.select { |data_module| data_module.ejb? }.each do |data_module|
-                  data_module.services.select { |service| service.ejb? }.each do |service|
-                    service.methods.select { |method| method.ejb? }.each do |method|
-                      if method.ejb.schedule?
-                        raise "Buildr project does not define 'timerstatus' feature but domgen defines method '#{method.qualified_name}' that defines a schedule."
-                      end
-                    end
-                  end
                 end
               end
 

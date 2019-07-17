@@ -306,9 +306,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.rest', 'org.realityforge.replicant.server.ee.rest')
         end
 
-        if BuildrPlus::FeatureManager.activated?(:timerstatus)
-          r.subpackage_rule('server.rest', 'iris.timerstatus.server.service')
-        end
         if BuildrPlus::FeatureManager.activated?(:appconfig)
           r.subpackage_rule('server.rest', 'org.realityforge.rest.field_filter')
           r.subpackage_rule('server.rest', 'iris.appconfig.server.rest')

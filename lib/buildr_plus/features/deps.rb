@@ -107,7 +107,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:mail_mail_queue, :mail_test_module] if BuildrPlus::FeatureManager.activated?(:mail)
       generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators << [:keycloak_filter, :keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
-      generators << [:timerstatus_filter] if BuildrPlus::FeatureManager.activated?(:timerstatus)
       generators << [:iris_audit_server] if BuildrPlus::FeatureManager.activated?(:iris_audit)
 
       generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
@@ -364,7 +363,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       dependencies << model_compile_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_cache_filter]) if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
-      dependencies << Buildr.artifacts([BuildrPlus::Timerstatus.timerstatus, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:timerstatus)
       dependencies << Buildr.artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Libs.mustache]) if BuildrPlus::FeatureManager.activated?(:mail)
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
