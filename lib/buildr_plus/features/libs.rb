@@ -69,7 +69,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def eclipselink
-      'org.eclipse.persistence:eclipselink:jar:2.6.0'
+      'org.eclipse.persistence:eclipselink:jar:2.7.4'
     end
 
     def mockito
