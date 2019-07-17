@@ -61,7 +61,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def ee_provided
-      %w(javax:javaee-api:jar:7.0) + self.spotbugs_provided + self.jetbrains_annotations
+      %w(javax:javaee-api:jar:8.0.1) + self.spotbugs_provided + self.jetbrains_annotations
     end
 
     def glassfish_embedded
