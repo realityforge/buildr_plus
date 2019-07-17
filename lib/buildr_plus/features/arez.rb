@@ -14,16 +14,11 @@
 
 BuildrPlus::FeatureManager.feature(:arez) do |f|
   f.enhance(:Config) do
-
     def arez_test_options
       {
         'braincheck.environment' => 'development',
         'arez.environment' => 'development'
       }
-    end
-
-    def arez_java_args
-      %w(-ea)
     end
   end
 end

@@ -28,7 +28,6 @@ BuildrPlus::Roles.role(:gwt_qa_support, :requires => [:gwt]) do
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
 
   if BuildrPlus::FeatureManager.activated?(:arez)
-    project.test.options[:java_args] = (project.test.options[:java_args] ? project.test.options[:java_args] : []) << BuildrPlus::Arez.arez_java_args
     project.test.options[:properties] = (project.test.options[:properties] ? project.test.options[:properties] : {}).merge(BuildrPlus::Arez.arez_test_options)
     if BuildrPlus::FeatureManager.activated?(:replicant)
       project.test.options[:properties] = (project.test.options[:properties] ? project.test.options[:properties] : {}).merge(BuildrPlus::Replicant.replicant_test_options)
