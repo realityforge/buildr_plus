@@ -30,7 +30,7 @@ class Buildr::IntellijIdea::IdeaProject
       xml.option(:name => 'GROUP_NAME', :value => '')
       xml.option(:name => 'TEST_OBJECT', :value => 'PACKAGE')
       xml.option(:name => 'VM_PARAMETERS', :value => jvm_args)
-      xml.option(:name => 'PARAMETERS', :value => '')
+      xml.option(:name => 'PARAMETERS', :value => '-configfailurepolicy continue')
       xml.option(:name => 'WORKING_DIRECTORY', :value => dir) if dir
       xml.option(:name => 'OUTPUT_DIRECTORY', :value => '')
       xml.option(:name => 'PROPERTIES_FILE', :value => '')
