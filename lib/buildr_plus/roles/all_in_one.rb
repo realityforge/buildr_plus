@@ -91,20 +91,20 @@ BuildrPlus::Roles.role(:all_in_one) do
   local_packaged_apps['greenmail'] = BuildrPlus::Libs.greenmail_server if BuildrPlus::FeatureManager.activated?(:mail)
 
   ipr.add_glassfish_remote_configuration(project,
-                                         :server_name => 'GlassFish 4.1.2.172',
+                                         :server_name => 'GlassFish 5.192.0',
                                          :exploded => [project.name],
                                          :packaged => remote_packaged_apps)
   unless BuildrPlus::Redfish.local_domain_update_only?
     ipr.add_glassfish_configuration(project,
-                                    :server_name => 'GlassFish 4.1.2.172',
+                                    :server_name => 'GlassFish 5.192.0',
                                     :exploded => [project.name],
                                     :packaged => local_packaged_apps)
 
     if local_packaged_apps.size > 0
       only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
       ipr.add_glassfish_configuration(project,
-                                      :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 4.1.2.172",
-                                      :server_name => 'GlassFish 4.1.2.172',
+                                      :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 5.192.0",
+                                      :server_name => 'GlassFish 5.192.0',
                                       :exploded => [project.name],
                                       :packaged => only_packaged_apps)
     end
