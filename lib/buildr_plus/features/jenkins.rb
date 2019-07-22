@@ -258,6 +258,7 @@ CONTENT
       return '' if skip_stage?('Zim')
       dependencies = []
       ([root_project] + root_project.projects).each do |p|
+        next unless p.publish?
         p.packages.each do |pkg|
           spec = pkg.to_hash
           group = spec[:group].to_s.gsub(/\.pg$/, '')
