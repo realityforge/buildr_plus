@@ -52,6 +52,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
     def model_qa_support_main_generators
       generators = []
+      generators << [:ee_main_qa]
       generators << [:jpa_main_qa, :jpa_main_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:sql_analysis_main_qa] if BuildrPlus::FeatureManager.activated?(:sql_analysis)
       generators << [:ejb_main_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
@@ -65,6 +66,14 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:jpa_test_qa, :jpa_test_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:ejb_test_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
       generators << [:imit_server_test_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators.flatten
+    end
+
+    def model_qa_generators
+      generators = []
+      generators << [:ee_test_qa, :ee_test_qa_aggregate]
+      generators << [:jpa_dao_test, :jpa_application_orm_xml, :jpa_application_persistence_xml, :jpa_test_orm_xml, :jpa_test_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
 
       generators.flatten
     end
