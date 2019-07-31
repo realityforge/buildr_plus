@@ -185,6 +185,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       r.rule('edu.umd.cs.findbugs.annotations.SuppressWarnings', :rule_type => :class, :disallow => true)
       r.rule('org.jetbrains.annotations.NotNull', :rule_type => :class, :disallow => true)
       r.rule('org.jetbrains.annotations.Nullable', :rule_type => :class, :disallow => true)
+      r.rule('com.sun.istack.NotNull', :rule_type => :class, :disallow => true)
       r.rule('javax.faces.bean', :disallow => true)
       r.rule('org.hamcrest', :disallow => true)
 
