@@ -210,6 +210,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
         # TODO: Remove this next line when we figure out the solution
         r.subpackage_rule('client', 'com.google.gwt.i18n.shared.DateTimeFormat', :rule_type => :class)
+        r.subpackage_rule('client', 'com.google.gwt.i18n.client.DateTimeFormat', :rule_type => :class)
 
         # We will keep this rule until we figure out a way ala GWT 3 for resources
         r.subpackage_rule('client', 'com.google.gwt.resources.client')
