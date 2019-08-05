@@ -218,9 +218,22 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('client', 'javax.inject.Inject', :rule_type => :class)
         r.subpackage_rule('client', 'javax.inject.Provider', :rule_type => :class)
         r.subpackage_rule('client', 'javax.inject.Named', :rule_type => :class)
+        r.subpackage_rule('client', 'javax.inject.Singleton', :rule_type => :class)
         r.subpackage_rule('client', "#{g}.shared")
         r.subpackage_rule('client', "#{g}.client")
         r.subpackage_rule('client.ioc', 'javax.inject')
+        r.subpackage_rule('client.ioc', 'dagger')
+
+        # TODO: Remove this once we move to GWT 3
+        r.subpackage_rule('client.ioc', 'com.google.gwt.core.client.GWT', :rule_type => :class)
+
+        if BuildrPlus::FeatureManager.activated?(:keycloak)
+          r.subpackage_rule('client', 'org.realityforge.gwt.keycloak.Keycloak', :rule_type => :class)
+        end
+
+        if BuildrPlus::FeatureManager.activated?(:iris_audit)
+          r.subpackage_rule('client.ioc', 'iris.audit.client.ioc.AuditGwtRpcServicesDaggerModule', :rule_type => :class)
+        end
 
         if BuildrPlus::FeatureManager.activated?(:arez)
           r.subpackage_rule('client', 'javax.xml.ws.Action', :rule_type => :class, :disallow => true)
