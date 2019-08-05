@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:domgen) do |f|
+BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
   f.enhance(:Config) do
     def default_pgsql_generators
       [:pgsql]

@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:resgen) do |f|
+BuildrPlus::FeatureManager.feature(:resgen => [:generate]) do |f|
   f.enhance(:ProjectExtension) do
 
     def additional_resgen_generators

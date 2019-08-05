@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:giggle => [:graphql]) do |f|
+BuildrPlus::FeatureManager.feature(:giggle => [:generate, :graphql]) do |f|
   f.enhance(:Config) do
 
     def generate_giggle_java_server(project)
