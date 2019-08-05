@@ -298,6 +298,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
         if BuildrPlus::FeatureManager.activated?(:mail)
           r.subpackage_rule('server.service', 'javax.mail')
+          r.subpackage_rule('server.service', 'iris.mail.server.data_type')
           r.subpackage_rule('server.service', 'iris.mail.server.service')
         end
         if BuildrPlus::FeatureManager.activated?(:appconfig)
