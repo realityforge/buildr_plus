@@ -30,7 +30,7 @@ BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
       if project.ipr?
         project.ipr.add_component_from_artifact(BuildrPlus::IdeaCodestyle.codestyle)
 
-        ipr.add_component('NullableNotNullManager') do |component|
+        project.ipr.add_component('NullableNotNullManager') do |component|
           component.option :name => 'myDefaultNullable', :value => 'javax.annotation.Nullable'
           component.option :name => 'myDefaultNotNull', :value => 'javax.annotation.Nonnull'
           component.option :name => 'myNullables' do |option|
