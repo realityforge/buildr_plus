@@ -27,7 +27,30 @@ BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
 
   f.enhance(:ProjectExtension) do
     after_define do |project|
-      project.ipr.add_component_from_artifact(BuildrPlus::IdeaCodestyle.codestyle) if project.ipr?
+      if project.ipr?
+        project.ipr.add_component_from_artifact(BuildrPlus::IdeaCodestyle.codestyle)
+
+        ipr.add_component('NullableNotNullManager') do |component|
+          component.option :name => 'myDefaultNullable', :value => 'javax.annotation.Nullable'
+          component.option :name => 'myDefaultNotNull', :value => 'javax.annotation.Nonnull'
+          component.option :name => 'myNullables' do |option|
+            option.value do |value|
+              value.list :size => '2' do |list|
+                list.item :index => '0', :class => 'java.lang.String', :itemvalue => 'org.jetbrains.annotations.Nullable'
+                list.item :index => '1', :class => 'java.lang.String', :itemvalue => 'javax.annotation.Nullable'
+              end
+            end
+          end
+          component.option :name => 'myNotNulls' do |option|
+            option.value do |value|
+              value.list :size => '2' do |list|
+                list.item :index => '0', :class => 'java.lang.String', :itemvalue => 'org.jetbrains.annotations.NotNull'
+                list.item :index => '1', :class => 'java.lang.String', :itemvalue => 'javax.annotation.Nonnull'
+              end
+            end
+          end
+        end
+      end
     end
   end
 end
