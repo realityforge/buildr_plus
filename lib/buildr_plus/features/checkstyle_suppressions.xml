@@ -19,6 +19,9 @@
   <suppress checks="AvoidStarImport" files=".*[\\/]client[\\/]components[\\/].*\.java"/>
   <suppress checks="AvoidStaticImport" files=".*[\\/]client[\\/]components[\\/].*\.java"/>
 
+  <!-- Suppress warnings that are only intended for test code -->
+  <suppress id="noJdkAssertInTests" files=".*[\\/]main[\\/]java[\\/].*\.java"/>
+
   <!-- Some suppressions for tests -->
   <suppress checks="MethodName" files="(.*[\\/])?test[\\/]java[\\/].*\.java"/>
   <suppress checks="MagicNumber" files="(.*[\\/])?test[\\/]java[\\/].*\.java"/>

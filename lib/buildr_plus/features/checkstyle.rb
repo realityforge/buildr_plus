@@ -165,7 +165,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
     end
 
     def default_checkstyle_rules
-      "au.com.stocksoftware.checkstyle:checkstyle#{modern_checkstyle_rule_type? ? '-ng' : ''}:xml:1.18"
+      "au.com.stocksoftware.checkstyle:checkstyle#{modern_checkstyle_rule_type? ? '-ng' : ''}:xml:1.19"
     end
 
     def checkstyle_rules
