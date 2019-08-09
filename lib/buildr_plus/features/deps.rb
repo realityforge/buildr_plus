@@ -31,11 +31,11 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         generators << [:imit_server_entity_listener] if BuildrPlus::FeatureManager.activated?(:replicant)
       end
 
-      generators << [:jaxb_marshalling_tests, :xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
+      generators << [:xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:jms_model] if BuildrPlus::FeatureManager.activated?(:jms)
       generators << [:jws_shared] if BuildrPlus::FeatureManager.activated?(:soap)
 
-      generators << [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
+      generators << [:jackson_date_util] if BuildrPlus::FeatureManager.activated?(:jackson)
 
       generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
 
@@ -62,7 +62,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
     def model_qa_support_test_generators
       generators = []
-      generators << [:ee_test_qa, :ee_test_qa_aggregate]
       generators << [:jpa_test_qa, :jpa_test_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:ejb_test_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
       generators << [:imit_server_test_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
@@ -74,6 +73,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators = []
       generators << [:ee_test_qa, :ee_test_qa_aggregate]
       generators << [:jpa_dao_test, :jpa_application_orm_xml, :jpa_application_persistence_xml, :jpa_test_orm_xml, :jpa_test_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
+      generators << [:jaxb_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:xml)
+      generators << [:jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
 
       generators.flatten
     end
@@ -120,6 +121,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
       generators += self.model_qa_support_test_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
+      generators += self.model_qa_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa)
 
       generators.flatten
     end
