@@ -64,8 +64,9 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(javax:javaee-api:jar:8.0.1) + self.spotbugs_provided + self.jetbrains_annotations
     end
 
+    # TODO: Remove thirdparty-local repository once payara is no longer version 5.192-rf. See repositories.rb
     def glassfish_embedded
-      %w(fish.payara.extras:payara-embedded-all:jar:5.192)
+      %w(fish.payara.extras:payara-embedded-all:jar:5.192-rf)
     end
 
     def eclipselink
