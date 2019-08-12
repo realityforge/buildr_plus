@@ -30,7 +30,7 @@ BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
       if project.ipr?
         project.ipr.add_component_from_artifact(BuildrPlus::IdeaCodestyle.codestyle)
 
-        ipr.add_component('JavaProjectCodeInsightSettings') do |xml|
+        project.ipr.add_component('JavaProjectCodeInsightSettings') do |xml|
           xml.tag!('excluded-names') do
             xml << '<name>com.sun.istack.internal.NotNull</name>'
             xml << '<name>com.sun.istack.internal.Nullable</name>'
