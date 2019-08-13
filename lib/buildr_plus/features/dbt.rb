@@ -119,8 +119,6 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
     end
 
     after_define do |buildr_project|
-      buildr_project.group = "#{buildr_project.group}#{BuildrPlus::Db.artifact_suffix}"
-
       if buildr_project.ipr?
         BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
 
