@@ -32,11 +32,17 @@ BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
 
         project.ipr.add_component('JavaProjectCodeInsightSettings') do |xml|
           xml.tag!('excluded-names') do
+            xml << '<name>com.sun.istack.NotNull</name>'
+            xml << '<name>com.sun.istack.Nullable</name>'
             xml << '<name>com.sun.istack.internal.NotNull</name>'
             xml << '<name>com.sun.istack.internal.Nullable</name>'
             xml << '<name>org.jetbrains.annotations.Nullable</name>'
             xml << '<name>org.jetbrains.annotations.NotNull</name>'
             xml << '<name>org.testng.AssertJUnit</name>'
+            xml << '<name>org.testng.internal.Nullable</name>'
+            xml << '<name>org.mockito.internal.matchers.NotNull</name>'
+            xml << '<name>edu.umd.cs.findbugs.annotations.Nonnull</name>'
+            xml << '<name>edu.umd.cs.findbugs.annotations.Nullable</name>'
           end
         end
         project.ipr.add_component('NullableNotNullManager') do |component|
