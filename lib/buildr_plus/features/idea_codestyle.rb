@@ -43,6 +43,7 @@ BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
             xml << '<name>org.mockito.internal.matchers.NotNull</name>'
             xml << '<name>edu.umd.cs.findbugs.annotations.Nonnull</name>'
             xml << '<name>edu.umd.cs.findbugs.annotations.Nullable</name>'
+            xml << '<name>edu.umd.cs.findbugs.annotations.SuppressWarnings</name>'
           end
         end
         project.ipr.add_component('NullableNotNullManager') do |component|
