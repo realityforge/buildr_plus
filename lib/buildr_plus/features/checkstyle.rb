@@ -188,6 +188,8 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       r.rule('org.testng.internal.Nullable', :rule_type => :class, :disallow => true)
       r.rule('com.sun.istack.NotNull', :rule_type => :class, :disallow => true)
       r.rule('com.sun.istack.Nullable', :rule_type => :class, :disallow => true)
+      r.rule('com.sun.istack.internal.NotNull', :rule_type => :class, :disallow => true)
+      r.rule('com.sun.istack.internal.Nullable', :rule_type => :class, :disallow => true)
       r.rule('org.mockito.internal.matchers.NotNull', :rule_type => :class, :disallow => true)
       r.rule('edu.umd.cs.findbugs.annotations.Nonnull', :rule_type => :class, :disallow => true)
       r.rule('edu.umd.cs.findbugs.annotations.Nullable', :rule_type => :class, :disallow => true)
