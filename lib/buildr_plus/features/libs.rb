@@ -178,7 +178,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def graphql_java
-      %w(com.graphql-java:graphql-java:jar:12.0) + self.slf4j + self.antlr4_runtime + self.graphql_java_dataloader
+      %w(com.graphql-java:graphql-java:jar:13.0) + self.slf4j + self.antlr4_runtime + self.graphql_java_dataloader
     end
 
     def graphql_java_dataloader
@@ -186,20 +186,17 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def graphql_java_servlet
-      %w(
-        com.graphql-java:graphql-java-servlet:jar:6.1.3
-        commons-fileupload:commons-fileupload:jar:1.3.3
-        commons-io:commons-io:jar:2.5
-      ) + self.graphql_java +
+      %w(com.graphql-java-kickstart:graphql-java-servlet:jar:8.0.0) +
+        self.graphql_java +
         self.jackson_annotations +
         self.jackson_core +
         self.jackson_databind +
         self.jackson_datatype_jdk8 +
-        self.guava # Expected 20.0
+        self.guava # Expected 24.1.1-jre
     end
 
     def graphql_domgen_support
-      %w(org.realityforge.keycloak.domgen:graphql-domgen-support:jar:1.6.0)
+      %w(org.realityforge.keycloak.domgen:graphql-domgen-support:jar:1.8.0)
     end
 
     def antlr4_runtime
