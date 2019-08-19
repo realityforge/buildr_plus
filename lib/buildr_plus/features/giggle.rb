@@ -37,7 +37,18 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate, :graphql]) do |f|
         jar = Buildr.artifact(BuildrPlus::Deps.giggle)
         jar.invoke
         graphql_documents = Dir["#{project._(:source, :main, :java)}/**/*.graphql"].collect {|f| ['--document', f]}.flatten
-        Java::Commands.java %W(-jar #{jar} --package #{project.root_project.group}.server.api --schema #{schema_pkg} --output-directory #{generated_dir} --generator java-client) + graphql_documents
+
+        defines = []
+        {
+          'cdi.service.name' => "#{Reality::Naming.pascal_case(BuildrPlus::GraphqlClient.graphql_schema_name)}Service",
+          'cdi.base_url.jndi_name' => "#{project.name}/env/#{BuildrPlus::GraphqlClient.graphql_schema_name}_url",
+          'cdi.url.suffix' => '/graphql',
+          'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(BuildrPlus::GraphqlClient.graphql_schema_name)}.Keycloak",
+        }.each_pair do |k, v|
+          defines << "-D#{k}=#{v}"
+        end
+
+        Java::Commands.java %W(-jar #{jar} --package #{project.root_project.group}.server.api --schema #{schema_pkg} --output-directory #{generated_dir} --generator java-client --generator java-cdi-client) + defines + graphql_documents
       end
 
       link_giggle_task(project, generate_task, generated_dir)
