@@ -41,7 +41,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate, :graphql]) do |f|
         defines = []
         {
           'cdi.service.name' => "#{Reality::Naming.pascal_case(BuildrPlus::GraphqlClient.graphql_schema_name)}Service",
-          'cdi.base_url.jndi_name' => "#{project.name}/env/#{BuildrPlus::GraphqlClient.graphql_schema_name}_url",
+          'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{BuildrPlus::GraphqlClient.graphql_schema_name}_url",
           'cdi.url.suffix' => '/graphql',
           'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(BuildrPlus::GraphqlClient.graphql_schema_name)}.Keycloak",
         }.each_pair do |k, v|
