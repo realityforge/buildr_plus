@@ -140,7 +140,8 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 :berk => :berk,
                 :keycloak => :keycloak,
                 :jms => :jms,
-                :giggle => :giggle,
+                # Giggle support can be client-side caller and thus can not require domgen to support it
+                #:giggle => :giggle,
                 :mail => :mail,
                 :soap => :jws,
                 :gwt => :gwt,
