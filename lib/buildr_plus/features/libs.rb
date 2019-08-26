@@ -114,7 +114,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def elemental2_version
-      '2.26'
+      '2.25'
     end
 
     def elemental2_group_id
