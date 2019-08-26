@@ -76,7 +76,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
     def app_scope
       return ENV['APP_SCOPE'] if ENV['APP_SCOPE']
-      return ENV['PRODUCT_VERSION'] if running_in_jenkins?
+      return "#{ENV['PRODUCT_VERSION']}".gsub('-','_').gsub('.','_') if running_in_jenkins?
       nil
     end
 
@@ -104,7 +104,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
     def db_scope
       if running_in_jenkins?
-        "#{self.app_scope}_"
+        "#{get_buildr_project.root_project.name}_#{self.app_scope}_"
       else
         "#{user || 'NOBODY'}#{self.app_scope.nil? ? '' : "_#{self.app_scope}"}_"
       end
