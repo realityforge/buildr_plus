@@ -64,11 +64,21 @@ BuildrPlus::Roles.role(:container) do
     ejb_module_names = [server_project.iml.name]
     ejb_module_names << model_project.iml.name if model_project
 
+    exploded_war_name = "#{project.iml.id}-exploded"
     ipr.add_exploded_war_artifact(project,
+                                  :name => exploded_war_name,
                                   :dependencies => dependencies,
                                   :war_module_names => war_module_names,
                                   :jpa_module_names => jpa_module_names,
                                   :ejb_module_names => ejb_module_names)
+
+    war_name = "#{project.iml.id}-archive"
+    ipr.add_war_artifact(project,
+                         :name => war_name,
+                         :dependencies => dependencies,
+                         :war_module_names => war_module_names,
+                         :jpa_module_names => jpa_module_names,
+                         :ejb_module_names => ejb_module_names)
 
     remote_packaged_apps = BuildrPlus::Glassfish.remote_only_packaged_apps.dup.merge(BuildrPlus::Glassfish.packaged_apps)
     local_packaged_apps = BuildrPlus::Glassfish.non_remote_only_packaged_apps.dup.merge(BuildrPlus::Glassfish.packaged_apps)
@@ -77,12 +87,12 @@ BuildrPlus::Roles.role(:container) do
 
     ipr.add_glassfish_remote_configuration(project,
                                            :server_name => 'GlassFish 5.192.0',
-                                           :exploded => [project.name],
+                                           :exploded => [war_name],
                                            :packaged => remote_packaged_apps)
     unless BuildrPlus::Redfish.local_domain_update_only?
       ipr.add_glassfish_configuration(project,
                                       :server_name => 'GlassFish 5.192.0',
-                                      :exploded => [project.name],
+                                      :exploded => [exploded_war_name],
                                       :packaged => local_packaged_apps)
 
       if local_packaged_apps.size > 0
@@ -90,7 +100,7 @@ BuildrPlus::Roles.role(:container) do
         ipr.add_glassfish_configuration(project,
                                         :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 5.192.0",
                                         :server_name => 'GlassFish 5.192.0',
-                                        :exploded => [project.name],
+                                        :exploded => [exploded_war_name],
                                         :packaged => only_packaged_apps)
       end
     end
