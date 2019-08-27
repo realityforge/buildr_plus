@@ -312,7 +312,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           domain = Redfish.domain_by_key('docker')
           prj = nil
           prj = buildr_project if buildr_project.roles.empty?
-          [:server, :all_in_one].each do |role|
+          [:server].each do |role|
             prj = Buildr.project(BuildrPlus::Roles.buildr_project_with_role(role).name) if BuildrPlus::Roles.project_with_role?(role)
           end
 
