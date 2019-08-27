@@ -87,12 +87,12 @@ BuildrPlus::Roles.role(:container) do
 
     ipr.add_glassfish_remote_configuration(project,
                                            :server_name => 'GlassFish 5.192.0',
-                                           :exploded => [war_name],
+                                           :artifacts => {war_name => project.iml.id},
                                            :packaged => remote_packaged_apps)
     unless BuildrPlus::Redfish.local_domain_update_only?
       ipr.add_glassfish_configuration(project,
                                       :server_name => 'GlassFish 5.192.0',
-                                      :exploded => [exploded_war_name],
+                                      :exploded => {exploded_war_name => project.iml.id},
                                       :packaged => local_packaged_apps)
 
       if local_packaged_apps.size > 0
@@ -100,7 +100,7 @@ BuildrPlus::Roles.role(:container) do
         ipr.add_glassfish_configuration(project,
                                         :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 5.192.0",
                                         :server_name => 'GlassFish 5.192.0',
-                                        :exploded => [exploded_war_name],
+                                        :exploded => {exploded_war_name => project.iml.id},
                                         :packaged => only_packaged_apps)
       end
     end
