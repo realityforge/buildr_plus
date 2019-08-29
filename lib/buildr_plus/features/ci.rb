@@ -173,6 +173,15 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
             pull_request_actions << create
             package_actions << create
             database_drops << drop
+
+            database.datasets.each do |dataset_name|
+              desc "Test the create_with_dataset:#{dataset_name} process"
+              project.task ":ci:create_with_dataset:#{dataset_name}" => %W(ci:common_setup create_with_dataset:#{dataset_name} dbt:verify_constraints dbt:drop)
+
+              if BuildrPlus::FeatureManager.activated?(:jenkins)
+                BuildrPlus::Jenkins.add_pre_package_buildr_stage("Dataset #{dataset_name}", "ci:create_with_dataset:#{dataset_name}")
+              end
+            end
           end
         end
 
