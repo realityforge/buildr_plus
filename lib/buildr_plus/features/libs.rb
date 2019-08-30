@@ -243,7 +243,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_authfilter
-      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:0.2)
+      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:1.01)
     end
 
     def keycloak_converger

@@ -346,7 +346,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Libs.glassfish_embedded])
       dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility) if BuildrPlus::FeatureManager.activated?(:jms)
       if BuildrPlus::FeatureManager.activated?(:keycloak)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
         dependencies << Buildr.artifacts([BuildrPlus::Libs.keycloak_authfilter])
       end
       dependencies.flatten
