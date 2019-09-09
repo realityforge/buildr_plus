@@ -53,7 +53,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def javax_annotations
-      %w(org.realityforge.javax.annotation:javax.annotation:jar:1.0.0)
+      %w(org.realityforge.javax.annotation:javax.annotation:jar:1.0.1)
     end
 
     def spotbugs_provided
