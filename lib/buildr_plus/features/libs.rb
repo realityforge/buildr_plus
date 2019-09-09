@@ -195,8 +195,8 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         self.guava # Expected 24.1.1-jre
     end
 
-    def graphql_domgen_support
-      %w(org.realityforge.keycloak.domgen:graphql-domgen-support:jar:1.9.0)
+    def graphql_java_scalars
+      %w(org.realityforge.graphql.scalars:graphql-java-scalars:jar:0.01)
     end
 
     def antlr4_runtime

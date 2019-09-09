@@ -381,7 +381,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_appcache_server) if BuildrPlus::FeatureManager.activated?(:appcache)
       if BuildrPlus::FeatureManager.activated?(:graphql)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_servlet)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_domgen_support)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_scalars)
       end
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
