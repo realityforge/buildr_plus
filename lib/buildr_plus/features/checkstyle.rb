@@ -202,6 +202,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
       if BuildrPlus::FeatureManager.activated?(:graphql)
         r.subpackage_rule('server.service', 'graphql.schema')
+        r.subpackage_rule('server.service', 'graphql.servlet.config.GraphQLSchemaProvider', :rule_type => :class)
         r.subpackage_rule('server.service', 'org.realityforge.graphql.domgen')
       end
 
