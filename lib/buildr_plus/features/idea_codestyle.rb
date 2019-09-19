@@ -39,6 +39,7 @@ BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
             xml << '<name>org.jetbrains.annotations.Nullable</name>'
             xml << '<name>org.jetbrains.annotations.NotNull</name>'
             xml << '<name>org.testng.AssertJUnit</name>'
+            xml << '<name>graphql.Assert</name>'
             xml << '<name>org.testng.internal.Nullable</name>'
             xml << '<name>org.mockito.internal.matchers.NotNull</name>'
             xml << '<name>edu.umd.cs.findbugs.annotations.Nonnull</name>'
