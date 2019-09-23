@@ -110,7 +110,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jsinterop_base
-      %w(org.realityforge.com.google.jsinterop:base:jar:1.0.0-b2-e6d791f) + self.jsinterop
+      %w(com.google.jsinterop:base:jar:1.0.0) + self.jsinterop
     end
 
     def elemental2_version
