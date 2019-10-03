@@ -77,6 +77,13 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
     end
   end
   f.enhance(:ProjectExtension) do
+
+    attr_writer :idea_testng_configuration_created
+
+    def idea_testng_configuration_created?
+      @idea_testng_configuration_created.nil? ? false : !!@idea_testng_configuration_created
+    end
+
     Buildr.settings.build['testng'] = BuildrPlus::Libs.testng_version
     before_define do |project|
       project.test.using :testng

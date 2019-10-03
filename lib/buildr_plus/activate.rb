@@ -36,6 +36,15 @@ Buildr.projects.each do |project|
       project_deps.any? {|p| Buildr.artifacts([p.compile.dependencies]).any? {|artifact| candidate.to_s == artifact.to_s}}
     end
   end
+  if project.ipr?
+    Buildr.projects(:no_invoke => true).each do |other|
+      unless other.test.compile.sources.empty? || !other.iml? || other.idea_testng_configuration_created?
+        project.ipr.add_testng_configuration(other.iml.name,
+                                             :module => other.iml.name,
+                                             :jvm_args => BuildrPlus::Testng.default_testng_args(project, nil).join(' '))
+      end
+    end
+  end
 end
 
 Redfish::Buildr.define_tasks_for_domains if BuildrPlus::FeatureManager.activated?(:redfish)
