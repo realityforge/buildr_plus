@@ -29,7 +29,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
       link_giggle_task(project, generate_task, generated_dir)
     end
 
-    def generate_giggle_java_client(project)
+    def generate_giggle_java_client(project, options = {})
       generated_dir = project._(:generated, 'giggle-client/src/java')
       generate_task = project.task(generated_dir => [project.task(':domgen:all')]) do
         schema_pkg = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact)
@@ -38,11 +38,14 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
         jar.invoke
         graphql_documents = Dir["#{project._(:source, :main, :java)}/**/*.graphql"].collect {|f| ['--document', f]}.flatten
 
+        url_suffix = options[:url_suffix] || '/graphql'
+        read_timeout = options[:read_timeout] || '10000'
         defines = []
         {
           'cdi.service.name' => "#{Reality::Naming.pascal_case(BuildrPlus::GraphqlClient.graphql_schema_name)}Service",
           'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{BuildrPlus::GraphqlClient.graphql_schema_name}_url",
-          'cdi.url.suffix' => '/graphql',
+          'cdi.url.suffix' => url_suffix,
+          'cdi.read_timeout' => read_timeout,
           'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(BuildrPlus::GraphqlClient.graphql_schema_name)}.Keycloak",
         }.each_pair do |k, v|
           defines << "-D#{k}=#{v}"
