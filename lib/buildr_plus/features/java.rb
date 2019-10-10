@@ -108,7 +108,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
         project.ipr.add_component('JavacSettings') do |component|
           # TODO: Remove -Aarez.defer.unresolved=false once we have fixed router_fu
           # dagger.formatGeneratedSource=DISABLE speeds up the dagger annotation processor by ~ 40%
-          component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => "-Xmaxerrs 10000#{BuildrPlus::FeatureManager.activated?(:arez) ? ' -Aarez.defer.unresolved=false' : ''}#{BuildrPlus::FeatureManager.activated?(:arez) ? ' -Adagger.formatGeneratedSource=DISABLED' : ''}")
+          component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => "-Xmaxerrs 10000#{BuildrPlus::FeatureManager.activated?(:arez) ? ' -Aarez.defer.unresolved=false' : ''}#{BuildrPlus::FeatureManager.activated?(:arez) ? ' -Adagger.formatGeneratedSource=DISABLED' : ''} -Xlint:all,-processing,-serial")
         end
 
         project.ipr.add_component('CompilerConfiguration') do |component|
