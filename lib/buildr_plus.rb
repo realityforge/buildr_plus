@@ -42,6 +42,7 @@ require 'buildr_plus/patches/group_project_patch'
 require 'buildr_plus/patches/resources_filter_patch'
 require 'buildr_plus/patches/idea_patch'
 require 'buildr_plus/patches/idea_artifact_patch'
+require 'buildr_plus/patches/testng_patch'
 
 require 'buildr_plus/features/appcache'
 require 'buildr_plus/features/appconfig'
