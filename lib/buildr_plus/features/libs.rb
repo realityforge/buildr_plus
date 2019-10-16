@@ -298,6 +298,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.arez.spytools:arez-spytools:jar:0.75)
     end
 
+    def grim_annotations
+      %w(org.realityforge.grim:grim-annotations:jar:0.01)
+    end
+
     def router_fu_version
       '0.18'
     end
