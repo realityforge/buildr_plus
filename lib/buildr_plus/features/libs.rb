@@ -295,7 +295,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.77)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.78)
     end
 
     def grim_annotations
