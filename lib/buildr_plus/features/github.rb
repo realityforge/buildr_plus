@@ -13,4 +13,78 @@
 #
 
 # Enable this feature if the code is hosted in public github server
-BuildrPlus::FeatureManager.feature(:github)
+BuildrPlus::FeatureManager.feature(:github) do |f|
+  f.enhance(:Config) do
+    attr_writer :enable_github_actions
+
+    def enable_github_actions?
+      @enable_github_actions.nil? ? true : !!@enable_github_actions
+    end
+
+    def generate_github_actions
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      automerge = "#{base_directory}/.github/workflows/automerge.yml"
+      FileUtils.mkdir_p File.dirname(automerge)
+      IO.write(automerge, automerge_content)
+    end
+
+    def check_github_actions
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      automerge = "#{base_directory}/.github/workflows/automerge.yml"
+      if !File.exist?(automerge) || IO.read(automerge) != automerge_content
+        puts 'Github automerge action is not uptodate'
+        return false
+      end
+      true
+    end
+
+    private
+
+    def automerge_content
+      <<CONTENT
+# DO NOT EDIT: File is auto-generated
+name: automerge
+on:
+  pull_request:
+    types:
+      - labeled
+      - unlabeled
+      - synchronize
+      - opened
+      - edited
+      - ready_for_review
+      - reopened
+      - unlocked
+  pull_request_review:
+    types:
+      - submitted
+  status: {}
+jobs:
+  automerge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: automerge
+        uses: "pascalgn/automerge-action@733fcc62d711705eae9cd66fcf49c93c1d1a98c6"
+        env:
+          # see https://github.com/marketplace/actions/merge-pull-requests#configuration for more configuration options
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          # Only merge if automerge label is present and wip label is not present
+          MERGE_LABELS: "automerge,!wip"
+CONTENT
+    end
+  end
+
+  f.enhance(:ProjectExtension) do
+    desc 'Check Github actions are configured.'
+    task 'github:check' do
+      if BuildrPlus::Github.enable_github_actions? && !BuildrPlus::Github.check_github_actions
+        raise 'Github actions are not correctly configured. Please run "buildr github:fix" and commit changes.'
+      end
+    end
+
+    desc 'Configure Github actions.'
+    task 'github:fix' do
+      BuildrPlus::Github.generate_github_actions if BuildrPlus::Github.enable_github_actions?
+    end
+  end
+end
