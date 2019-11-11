@@ -34,12 +34,12 @@ module Buildr
           net.jcip:jcip-annotations:jar:1.0
           org.apache.bcel:bcel:jar:6.2
 
-          org.ow2.asm:asm:jar:6.2
-          org.ow2.asm:asm-analysis:jar:6.2
-          org.ow2.asm:asm-commons:jar:6.2
-          org.ow2.asm:asm-tree:jar:6.2
-          org.ow2.asm:asm-util:jar:6.2
-          org.ow2.asm:asm-xml:jar:6.2
+          org.ow2.asm:asm:jar:7.1
+          org.ow2.asm:asm-analysis:jar:7.1
+          org.ow2.asm:asm-commons:jar:7.1
+          org.ow2.asm:asm-tree:jar:7.1
+          org.ow2.asm:asm-util:jar:7.1
+          org.ow2.asm:asm-xml:jar:7.1
         )
       end
 

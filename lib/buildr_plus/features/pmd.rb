@@ -41,7 +41,7 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
               jaxen:jaxen:jar:1.1.6
               commons-io:commons-io:jar:2.6
               com.beust:jcommander:jar:1.72
-              org.ow2.asm:asm:jar:7.0
+              org.ow2.asm:asm:jar:7.1
               com.google.code.gson:gson:jar:2.8.5
               net.java.dev.javacc:javacc:jar:5.0
               net.sourceforge.saxon:saxon:jar:9.1.0.8
