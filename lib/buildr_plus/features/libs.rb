@@ -114,7 +114,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def elemental2_version
-      '2.25'
+      '2.27'
     end
 
     def elemental2_group_id
@@ -295,7 +295,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.80)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.81)
     end
 
     def grim_annotations
@@ -315,7 +315,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.140'
+      '0.141'
     end
 
     def react4j
