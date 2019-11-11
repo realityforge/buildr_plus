@@ -283,7 +283,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.153'
+      '0.154'
     end
 
     def arez
@@ -295,7 +295,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.79)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.80)
     end
 
     def grim_annotations
@@ -315,7 +315,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.139'
+      '0.140'
     end
 
     def react4j
@@ -330,7 +330,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.48'
+      '6.49'
     end
 
     def replicant_client
