@@ -106,7 +106,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jsinterop
-      %w(com.google.jsinterop:jsinterop-annotations:jar:1.0.2)
+      %w(org.realityforge.com.google.jsinterop:jsinterop-annotations:jar:2.8.2-v20191108)
     end
 
     def jsinterop_base
@@ -138,15 +138,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_user
-      %w(com.google.gwt:gwt-user:jar:2.8.2 org.w3c.css:sac:jar:1.3) + self.jsinterop
+      %w(org.realityforge.com.google.gwt:gwt-user:jar:2.8.2-v20191108 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end
 
     def gwt_servlet
-      %w(com.google.gwt:gwt-servlet:jar:2.8.2)
+      %w(org.realityforge.com.google.gwt:gwt-servlet:jar:2.8.2-v20191108)
     end
 
     def gwt_dev
-      'com.google.gwt:gwt-dev:jar:2.8.2'
+      'org.realityforge.com.google.gwt:gwt-dev:jar:2.8.2-v20191108'
     end
 
     def javax_inject
@@ -346,7 +346,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guice
-      %w(aopalliance:aopalliance:jar:1.0 org.ow2.asm:asm:jar:5.0.3 au.com.stocksoftware.com.google.inject:guice:jar:4.1.1-stock)
+      %w(aopalliance:aopalliance:jar:1.0 org.ow2.asm:asm:jar:7.1 au.com.stocksoftware.com.google.inject:guice:jar:4.1.1-stock)
     end
 
     def awaitility
