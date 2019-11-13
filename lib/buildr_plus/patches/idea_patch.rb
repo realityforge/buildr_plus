@@ -24,11 +24,11 @@ class Buildr::IntellijIdea::IdeaProject
     add_configuration(name, 'TestNG', nil, false, opts) do |xml|
       xml.module(:name => module_name)
       xml.option(:name => 'SUITE_NAME', :value => '')
-      xml.option(:name => 'PACKAGE_NAME', :value => '')
-      xml.option(:name => 'MAIN_CLASS_NAME', :value => '')
-      xml.option(:name => 'METHOD_NAME', :value => '')
-      xml.option(:name => 'GROUP_NAME', :value => '')
-      xml.option(:name => 'TEST_OBJECT', :value => 'PACKAGE')
+      xml.option(:name => 'PACKAGE_NAME', :value => options[:package_name] || '')
+      xml.option(:name => 'MAIN_CLASS_NAME', :value => options[:class_name] || '')
+      xml.option(:name => 'METHOD_NAME', :value => options[:method_name] || '')
+      xml.option(:name => 'GROUP_NAME', :value => options[:group_name] || '')
+      xml.option(:name => 'TEST_OBJECT', :value => (!options[:class_name].nil? ? 'CLASS' : 'PACKAGE'))
       xml.option(:name => 'VM_PARAMETERS', :value => jvm_args)
       xml.option(:name => 'PARAMETERS', :value => '-configfailurepolicy continue')
       xml.option(:name => 'WORKING_DIRECTORY', :value => dir) if dir
