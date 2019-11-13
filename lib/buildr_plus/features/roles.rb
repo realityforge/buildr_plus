@@ -259,7 +259,7 @@ BuildrPlus::FeatureManager.feature(:roles) do |f|
     end
 
     before_define do |project|
-      project.descriptor = BuildrPlus::Roles.project(project.name.gsub(/^[^:]*\:/, ''))
+      project.descriptor = BuildrPlus::Roles.project(project.name.gsub(/^[^:]*:/, ''))
     end
   end
 end
