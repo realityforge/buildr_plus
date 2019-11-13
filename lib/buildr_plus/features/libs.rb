@@ -174,7 +174,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def timeservice
-      %w(org.realityforge.timeservice:timeservice:jar:0.01)
+      %w(org.realityforge.timeservice:timeservice:jar:0.02)
     end
 
     def graphql_java
