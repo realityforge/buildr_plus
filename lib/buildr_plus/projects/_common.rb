@@ -22,6 +22,7 @@ BuildrPlus::FeatureManager.activate_features([
                                                :clean,
                                                :checks,
                                                :assets,
+                                               :github,
                                                :repositories,
                                                :generated_files,
                                                :artifacts,
