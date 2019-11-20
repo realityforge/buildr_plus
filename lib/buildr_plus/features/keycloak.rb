@@ -116,9 +116,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     end
 
     def local_application_url
-      # We put a * here so that the redirect url works in integration tests. Of course this makes
-      # the Base URL and Admin URL wildly incorrect but that does not seem to impact the build at this stage.
-      @local_application_url || ENV['LOCAL_APPLICATION_URL'] || (BuildrPlus::Config.environment == 'test' ? '*' : 'http://127.0.0.1:8080')
+      @local_application_url || ENV['LOCAL_APPLICATION_URL'] || 'http://127.0.0.1:8080'
     end
 
     attr_writer :local_application_url
@@ -199,6 +197,15 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
             a = Buildr.artifact(client.artifact)
             a.invoke
             cp_r a.to_s, "#{base_dir}/#{client.client_type}.json"
+          end
+          if BuildrPlus::Config.environment == 'test'
+            Dir["#{base_dir}/*"].each do |filename|
+              # Patch redirectUris and webOrigins so that always works from tests
+              json = JSON.load(IO.read(filename))
+              json['redirectUris'] = ['*'] unless json['redirectUris'].size == 0
+              json['webOrigins'] = ['*'] unless json['webOrigins'].size == 0
+              IO.write(filename, JSON.pretty_generate(json))
+            end
           end
 
           a = Buildr.artifact(BuildrPlus::Libs.keycloak_converger)
