@@ -12,8 +12,15 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:replicant => [:gwt, :arez]) do |f|
+BuildrPlus::FeatureManager.feature(:replicant => [:gwt]) do |f|
+  f.suggested_features << :arez
   f.enhance(:Config) do
+
+    def replicant5?
+      # assume that if arez is disabled we are still back on replicant 5.x variant.
+      !BuildrPlus::FeatureManager.activated?(:arez)
+    end
+
     def replicant_test_options
       {
         'replicant.environment' => 'development'
