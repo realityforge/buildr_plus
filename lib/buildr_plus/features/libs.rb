@@ -359,7 +359,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant5_server
-      %W(org.realityforge.replicant:replicant-server:jar:#{replicant5_version}) + self.gwt_rpc
+      %W(org.realityforge.replicant:replicant-shared:jar:#{replicant5_version}) +
+      %W(org.realityforge.replicant:replicant-shared-ee:jar:#{replicant5_version}) +
+      %W(org.realityforge.replicant:replicant-server:jar:#{replicant5_version}) +
+        self.gwt_rpc
     end
 
     def gwt_rpc
