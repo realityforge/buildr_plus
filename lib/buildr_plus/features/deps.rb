@@ -361,7 +361,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def integration_deps
       dependencies = []
 
-      dependencies << integration_qa_support_deps
+      dependencies << self.integration_qa_support_deps
 
       dependencies.flatten
     end
@@ -369,7 +369,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def server_provided_deps
       dependencies = []
 
-      dependencies << model_provided_deps
+      dependencies << self.model_provided_deps
       dependencies << Buildr.artifacts(BuildrPlus::Libs.glassfish_embedded) if BuildrPlus::FeatureManager.activated?(:soap)
 
       dependencies.flatten
@@ -424,7 +424,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def server_deps
-      server_provided_deps + server_compile_deps
+      self.server_provided_deps + self.server_compile_deps
     end
 
     def user_experience_deps
@@ -448,7 +448,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def user_experience_test_deps
       dependencies = []
 
-      dependencies << gwt_qa_support_deps
+      dependencies << self.gwt_qa_support_deps
 
       dependencies.flatten
     end
