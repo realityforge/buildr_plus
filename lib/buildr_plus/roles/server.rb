@@ -43,6 +43,7 @@ BuildrPlus::Roles.role(:server) do
   compile.with BuildrPlus::Deps.server_deps
   test.with BuildrPlus::Deps.server_test_deps
 
+  BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :model)
   BuildrPlus::Roles.merge_projects_with_role(project.test, :model_qa_support)
 
