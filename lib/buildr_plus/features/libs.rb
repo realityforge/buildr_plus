@@ -348,7 +348,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     def replicant5_client
       %W(org.realityforge.replicant:replicant-client:jar:#{replicant5_version}) +
         %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.5) +
-        %w(org.realityforge.gwt.datatypes:gwt-datatypes:jar:0.9) +
         self.elemental2_webstorage
     end
 
