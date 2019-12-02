@@ -181,6 +181,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators += [:arez_main_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
       generators += [:imit_client_main_qa_external, :imit_client_main_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators += [:imit_client_dao_gwt] if BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::Replicant.replicant5?
 
       generators += [:gwt_rpc_module]
       generators += [:gwt_client_main_jso_qa_support]
