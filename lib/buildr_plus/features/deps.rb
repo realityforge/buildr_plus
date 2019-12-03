@@ -254,7 +254,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_compiler) if BuildrPlus::FeatureManager.activated?(:dagger)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_processor)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_processor) if BuildrPlus::FeatureManager.activated?(:arez)
 
       dependencies.flatten
     end
