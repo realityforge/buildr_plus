@@ -14,6 +14,10 @@
 
 BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
   f.enhance(:Config) do
+    def gwt_test_options
+      {'braincheck.environment' => 'development'}
+    end
+
     attr_writer :enable_gwt_js_exports
 
     def enable_gwt_js_exports?

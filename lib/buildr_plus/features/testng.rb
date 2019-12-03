@@ -62,6 +62,12 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
         end
       end
 
+      if BuildrPlus::FeatureManager.activated?(:gwt) && project_descriptor && project_descriptor.in_any_role?([:gwt, :gwt_qa, :user_experience])
+        BuildrPlus::Gwt.gwt_test_options.each_pair do |k, v|
+          default_testng_args << "-D#{k}=#{v}"
+          end
+      end
+
       if BuildrPlus::FeatureManager.activated?(:arez) && project_descriptor && project_descriptor.in_any_role?([:gwt, :gwt_qa, :user_experience])
         BuildrPlus::Arez.arez_test_options.each_pair do |k, v|
           default_testng_args << "-D#{k}=#{v}"
