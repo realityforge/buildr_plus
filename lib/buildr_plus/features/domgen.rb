@@ -137,7 +137,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 :redfish => :redfish,
                 :iris_audit => :iris_audit,
                 :jackson => :jackson,
-                :berk => :berk,
                 :keycloak => :keycloak,
                 :jms => :jms,
                 # Giggle support can be client-side caller and thus can not require domgen to support it

@@ -92,7 +92,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:giggle] if BuildrPlus::FeatureManager.activated?(:giggle)
       generators << [:robots] if BuildrPlus::Artifacts.war?
       generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
-      generators << [:berk_service_impl, :berk_qa_support] if BuildrPlus::FeatureManager.activated?(:berk)
       generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       if BuildrPlus::FeatureManager.activated?(:keycloak)
@@ -266,7 +265,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.braincheck)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
-      dependencies << Buildr.artifacts(:berk_gwt) if BuildrPlus::FeatureManager.activated?(:berk)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.grim_annotations + BuildrPlus::Libs.jetbrains_annotations + BuildrPlus::Libs.arez_spytools) if BuildrPlus::FeatureManager.activated?(:arez)
       if BuildrPlus::FeatureManager.activated?(:replicant)
         if BuildrPlus::Replicant.replicant5?
@@ -292,7 +290,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << gwt_deps
       dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
       dependencies << Buildr.artifacts([:iris_audit_gwt_qa_support]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
-      dependencies << Buildr.artifacts(:berk_gwt_qa_support) if BuildrPlus::FeatureManager.activated?(:berk)
 
       dependencies.flatten
     end
@@ -408,7 +405,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         end
       end
       dependencies << Buildr.artifacts(:iris_audit_server) if BuildrPlus::FeatureManager.activated?(:iris_audit)
-      dependencies << Buildr.artifacts([:berk_model, :berk_server]) if BuildrPlus::FeatureManager.activated?(:berk)
 
       dependencies << Buildr.artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
       dependencies << Buildr.artifacts(Object.const_get(:LIBRARY_DEPS)) if Object.const_defined?(:LIBRARY_DEPS)
@@ -421,7 +417,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       dependencies << self.model_qa_support_deps
       dependencies << Buildr.artifacts(BuildrPlus::Syncrecord.syncrecord_server_qa) if BuildrPlus::FeatureManager.activated?(:syncrecord)
-      dependencies << Buildr.artifacts([:berk_model_qa_support]) if BuildrPlus::FeatureManager.activated?(:berk)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility)
 
       dependencies.flatten
