@@ -245,7 +245,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.spotbugs_provided)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_gwt)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_gwt) if BuildrPlus::FeatureManager.activated?(:dagger)
 
       dependencies.flatten
     end
@@ -253,7 +253,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_processorpath
       dependencies = []
 
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_compiler)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.dagger_compiler) if BuildrPlus::FeatureManager.activated?(:dagger)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_processor)
 
       dependencies.flatten

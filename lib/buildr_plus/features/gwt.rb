@@ -13,6 +13,8 @@
 #
 
 BuildrPlus::FeatureManager.feature(:gwt => [:jackson, :javascript]) do |f|
+  f.suggested_features << :dagger
+
   f.enhance(:Config) do
     def gwt_test_options
       {'braincheck.environment' => 'development'}
