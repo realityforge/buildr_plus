@@ -214,8 +214,11 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:gwt)
-        r.subpackage_rule('client', 'com.google.inject', :disallow => true)
-        r.subpackage_rule('client', 'com.google.gwt', :disallow => true)
+        # If arez is enabled then we assume we are using modern GWT, otherwise we can use the old stuff
+        if BuildrPlus::FeatureManager.activated?(:arez)
+          r.subpackage_rule('client', 'com.google.inject', :disallow => true)
+          r.subpackage_rule('client', 'com.google.gwt', :disallow => true)
+        end
 
         r.subpackage_rule('client', 'com.google.gwt.user.client.rpc.AsyncCallback', :rule_type => :class)
 
