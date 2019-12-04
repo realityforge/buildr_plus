@@ -169,7 +169,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
       generators += [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
-      generators += [:imit_client_dao, :imit_client_dao_gwt] if BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::Replicant.replicant5?
+      generators += [:imit_client_dao] if BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::Replicant.replicant5?
 
       generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
 
