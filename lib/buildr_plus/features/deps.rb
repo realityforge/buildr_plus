@@ -195,7 +195,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators += [:gwt_client_test_jso_qa_support]
       generators += [:imit_client_test_qa_external, :imit_client_test_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators += [:arez_test_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
-      generators += [:imit_client_test_qa] if BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::Replicant.replicant5?
 
       generators.flatten
     end
