@@ -342,7 +342,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant5_version
-      '5.103'
+      '5.104'
     end
 
     def replicant5_client
