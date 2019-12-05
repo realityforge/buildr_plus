@@ -322,7 +322,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(
         org.realityforge.react4j:react4j-core:jar:#{react4j_version}
         org.realityforge.react4j:react4j-dom:jar:#{react4j_version}
-      ) + self.elemental2_dom + self.elemental2_promise
+      ) + self.elemental2_dom
     end
 
     def react4j_processor
