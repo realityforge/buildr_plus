@@ -201,7 +201,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
     def user_experience_generators
       generators = [:gwt_client_app, :gwt_client_gwt_modules, :gwt_client_test_ux_qa_support]
-      generators += [:imit_client_react4j_support] if BuildrPlus::FeatureManager.activated?(:replicant) && !BuildrPlus::Replicant.replicant5?
+      generators += [:imit_client_react4j_support] if BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::FeatureManager.activated?(:react4j)
       generators += self.gwt_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt)
       generators += self.gwt_qa_test_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt_qa)
 
