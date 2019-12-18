@@ -341,21 +341,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.gwt_rpc
     end
 
-    def replicant5_version
-      '5.106'
-    end
-
-    def replicant5_client
-      %W(org.realityforge.replicant:replicant-client:jar:#{replicant5_version}) +
-        %w(org.realityforge.gwt.webpoller:gwt-webpoller:jar:0.9.5) +
-        self.elemental2_webstorage
-    end
-
-    def replicant5_server
-      %W(org.realityforge.replicant:replicant-server:jar:#{replicant5_version}) +
-        self.gwt_rpc
-    end
-
     def gwt_rpc
       self.jackson_gwt_support + self.gwt_servlet
     end

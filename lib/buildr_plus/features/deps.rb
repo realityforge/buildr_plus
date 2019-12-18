@@ -169,7 +169,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
       generators += [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
-      generators += [:imit_client_dao] if BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::Replicant.replicant5?
 
       generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
 
@@ -181,8 +180,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators += [:arez_main_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
       generators += [:imit_client_main_qa_external, :imit_client_main_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
-      generators += [:imit_client_dao_gwt] if BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::Replicant.replicant5?
-      generators += [:imit_client_main_qa] if BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::Replicant.replicant5?
 
       generators += [:gwt_rpc_module]
       generators += [:gwt_client_main_jso_qa_support]
@@ -265,13 +262,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.grim_annotations + BuildrPlus::Libs.jetbrains_annotations + BuildrPlus::Libs.arez_spytools) if BuildrPlus::FeatureManager.activated?(:arez)
-      if BuildrPlus::FeatureManager.activated?(:replicant)
-        if BuildrPlus::Replicant.replicant5?
-          dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant5_client)
-        else
-          dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client)
-        end
-      end
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client) if BuildrPlus::FeatureManager.activated?(:replicant)
       if BuildrPlus::FeatureManager.activated?(:react4j)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j)
       end
@@ -384,13 +375,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
-      if BuildrPlus::FeatureManager.activated?(:replicant)
-        if BuildrPlus::Replicant.replicant5?
-          dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant5_server)
-        else
-          dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server)
-        end
-      end
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_appcache_server) if BuildrPlus::FeatureManager.activated?(:appcache)
       if BuildrPlus::FeatureManager.activated?(:graphql)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_servlet)
