@@ -1,8 +1,8 @@
 def define_lessc_task(project, options = {})
   params = {
     :js => false,
-    :strict_math => false,
-    :optimize => false,
+    :strict_math => true,
+    :optimize => true,
     :strict_units => true,
     :target_dir => project._(:generated, :less, :main, :webapp),
     :target_subdir => 'css',
