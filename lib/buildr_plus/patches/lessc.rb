@@ -1,16 +1,16 @@
 def define_lessc_task(project, options = {})
   params = {
     :js => false,
-    :strict_math => true,
-    :optimize => true,
+    :strict_math => false,
+    :optimize => false,
     :strict_units => true,
     :target_dir => project._(:generated, :less, :main, :webapp),
     :target_subdir => 'css',
-    :source_dir => project._(BuildrPlus::Less.default_less_path),
+    :source_dir => BuildrPlus::Less.default_less_path,
     :source_pattern => '**/[^_]*.less'
   }.merge(options)
 
-  source_dir = params[:source_dir]
+  source_dir = project._(params[:source_dir])
   source_pattern = params[:source_pattern]
   target_dir = params[:target_dir]
 
