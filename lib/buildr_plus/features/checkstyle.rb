@@ -66,8 +66,16 @@ module BuildrPlus::Checkstyle
       "#{parent.nil? ? '' : "#{parent.qualified_name}."}#{name}"
     end
 
+    def rule?(rule)
+      @rules.any? { |r| r.rule == rule }
+    end
+
+    def remove_rule(rule)
+      @rules.delete_if { |r| r.rule == rule }
+    end
+
     def rule(rule, options = {})
-      raise "Duplicate checkstyle rule #{rule} for package #{qualified_name}" if @rules.any? {|r| r.rule == rule}
+      raise "Duplicate checkstyle rule #{rule} for package #{qualified_name}" if rule?(rule)
       @rules << Rule.new(rule, options)
     end
 
@@ -140,6 +148,9 @@ XML
         if element.name == 'allow' || element.name == 'disallow'
           rule_type = element.attributes['pkg'].nil? ? :class : :package
           rule = element.attributes['pkg'] || element.attributes['class']
+
+          # If the user has specified a rule that overrides existing rule then remove existing rule
+          subpackage.remove_rule(rule) if subpackage.rule?(rule)
 
           subpackage.rule(rule,
                           :disallow => (element.name == 'disallow'),
