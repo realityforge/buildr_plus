@@ -17,7 +17,7 @@ BuildrPlus::FeatureManager.feature(:repositories) do |f|
     first_time do
       Buildr.repositories.remote.unshift(ENV['DOWNLOAD_REPO']) if ENV['DOWNLOAD_REPO']
       Buildr.repositories.remote.unshift('https://stocksoftware.jfrog.io/stocksoftware/public')
-      Buildr.repositories.remote.unshift('http://central.maven.org/maven2')
+      Buildr.repositories.remote.unshift('https://repo.maven.apache.org/maven2')
       Buildr.repositories.remote.unshift('https://stocksoftware.jfrog.io/stocksoftware/oss')
       Buildr.repositories.remote.unshift('https://stocksoftware.jfrog.io/stocksoftware/staging')
       # TODO: Remove thirdparty-local once payara is no longer version 5.192-rf
