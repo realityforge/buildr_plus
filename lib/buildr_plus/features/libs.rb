@@ -298,7 +298,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_dom
-      %w(org.realityforge.arez.dom:arez-dom:jar:0.52)
+      %w(org.realityforge.arez.dom:arez-dom:jar:0.53)
     end
 
     def grim_annotations
