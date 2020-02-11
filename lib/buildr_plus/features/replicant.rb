@@ -12,8 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:replicant => [:gwt]) do |f|
-  f.suggested_features << :arez
+BuildrPlus::FeatureManager.feature(:replicant => [:gwt, :arez]) do |f|
   f.enhance(:Config) do
 
     def replicant_test_options
