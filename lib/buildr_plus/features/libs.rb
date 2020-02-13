@@ -318,7 +318,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.149'
+      '0.150'
     end
 
     def react4j
