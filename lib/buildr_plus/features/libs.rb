@@ -282,7 +282,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.168'
+      '0.169'
     end
 
     def arez
@@ -294,11 +294,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.95)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.96)
     end
 
     def arez_dom
-      %w(org.realityforge.arez.dom:arez-dom:jar:0.54)
+      %w(org.realityforge.arez.dom:arez-dom:jar:0.56)
     end
 
     def grim_annotations
