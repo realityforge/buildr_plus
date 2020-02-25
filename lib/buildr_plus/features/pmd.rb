@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:pmd) do |f|
   f.enhance(:Config) do
     def default_pmd_rules
-      'au.com.stocksoftware.pmd:pmd:xml:1.8'
+      'au.com.stocksoftware.pmd:pmd:xml:1.9'
     end
 
     def pmd_rules
