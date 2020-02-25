@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:pmd) do |f|
   f.enhance(:Config) do
     def default_pmd_rules
-      'au.com.stocksoftware.pmd:pmd:xml:1.7'
+      'au.com.stocksoftware.pmd:pmd:xml:1.8'
     end
 
     def pmd_rules
@@ -93,7 +93,7 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
 
         project.pmd.additional_project_names =
           BuildrPlus::Pmd.additional_project_names ||
-            BuildrPlus::Util.subprojects(project).select {|p| !(p =~ /.*\:soap-client$/)}
+            BuildrPlus::Util.subprojects(project).select {|p| !(p =~ /.*:soap-client$/)}
       end
     end
   end
