@@ -68,6 +68,23 @@ BuildrPlus::Roles.role(:server) do
     war.include assets.to_s, :as => '.' if BuildrPlus::FeatureManager.activated?(:gwt) || BuildrPlus::FeatureManager.activated?(:less) || BuildrPlus::FeatureManager.activated?(:sass)
   end
 
+  package(:war).tap do |war|
+    war.enhance do
+      if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
+        project.assets.invoke
+
+        puts "Pre-encoding assets with brotli"
+        Dir.glob("#{project.assets.to_s}/**/*").select { |f| !File.directory?(f) }.each do |f|
+          next if f =~ /^.*\.br$/
+          next if f.start_with?("#{project.assets.to_s}/WEB-INF")
+          FileUtils.rm_f "#{f}.br" if File.exist?("#{f}.br")
+          sh "brotli #{f}"
+        end
+        puts "Asset encoding complete"
+      end
+    end
+  end
+
   project.iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
