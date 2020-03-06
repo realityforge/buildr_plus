@@ -165,7 +165,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_cache_filter
-      %w(org.realityforge.gwt.cache-filter:gwt-cache-filter:jar:0.8)
+      %w(org.realityforge.gwt.cache-filter:gwt-cache-filter:jar:0.9)
     end
 
     def field_filter
