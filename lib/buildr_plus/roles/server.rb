@@ -82,7 +82,7 @@ BuildrPlus::Roles.role(:server) do
       BuildrPlus::Gwt.define_gwt_task(p,
                                       'Prod',
                                       :target_project => project.name,
-                                      :gwtc_args => (BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::Replicant.enable_entity_broker? ? [] : %w(-XdisableClassMetadata) ) + %w(-XdisableCastChecking -optimize 9 -nocheckAssertions -XmethodNameDisplayMode NONE -noincremental -logLevel INFO -compileReport))
+                                      :gwtc_args => (BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::Replicant.enable_entity_broker? ? [] : %w(-XdisableClassMetadata)) + %w(-XdisableCastChecking -optimize 9 -nocheckAssertions -XmethodNameDisplayMode NONE -noincremental -logLevel INFO -compileReport))
     end
   end
 
