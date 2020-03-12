@@ -73,18 +73,6 @@ module BuildrPlus::Spotbugs
                   :class_name_pattern => '~.*\.React4j_.*')
     end
 
-    # gwt facet is a proxy for dagger
-    if BuildrPlus::FeatureManager.activated?(:gwt)
-      config.rule('IICU_INCORRECT_INTERNAL_CLASS_USE,CE_CLASS_ENVY',
-                  :class_name_pattern => '~.*_Factory')
-      config.rule('IICU_INCORRECT_INTERNAL_CLASS_USE',
-                  :class_name_pattern => '~.*DaggerModule_.*')
-      config.rule('IICU_INCORRECT_INTERNAL_CLASS_USE,UP_UNUSED_PARAMETER',
-                  :class_name_pattern => '~.*\.Dagger.*DaggerComponent')
-      config.rule('IICU_INCORRECT_INTERNAL_CLASS_USE',
-                  :class_name_pattern => '~.*\.Dagger.*DaggerComponent\$Builder')
-    end
-
     config
   end
 
