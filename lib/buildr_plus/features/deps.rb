@@ -179,18 +179,20 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators = []
 
       generators += [:arez_main_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
-      generators += [:imit_client_main_qa_external, :imit_client_main_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators += [:imit_client_main_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators += [:keycloak_gwt_main_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
-      generators += [:gwt_rpc_module]
+      generators += [:gwt_rpc_main_qa_external]
       generators += [:gwt_client_main_jso_qa_support]
 
       generators.flatten
     end
 
     def gwt_qa_test_generators
-      generators = [:gwt_rpc_test_module]
+      generators = [:gwt_rpc_test_qa_external]
       generators += [:gwt_client_test_jso_qa_support]
-      generators += [:imit_client_test_qa_external, :imit_client_test_gwt_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators += [:imit_client_test_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators += [:keycloak_gwt_test_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_test_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
 
       generators.flatten
