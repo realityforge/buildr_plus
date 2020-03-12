@@ -393,7 +393,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops_gwt
-      [guiceyloops_lib] + self.mockito + self.guice + self.testng
+      [guiceyloops_lib] + self.mockito + self.testng
     end
 
     def glassfish_timers_domain
