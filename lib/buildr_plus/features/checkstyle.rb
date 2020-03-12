@@ -240,13 +240,11 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         # We will keep this rule until we figure out a way ala GWT 3 for resources
         r.subpackage_rule('client', 'com.google.gwt.resources.client')
 
-        r.subpackage_rule('client', 'javax.inject.Inject', :rule_type => :class)
-        r.subpackage_rule('client', 'javax.inject.Singleton', :rule_type => :class)
-        r.subpackage_rule('client', 'javax.inject.Provider', :rule_type => :class)
+        r.subpackage_rule('client', 'sting.Injectable', :rule_type => :class)
+        r.subpackage_rule('client', 'sting.Fragment', :rule_type => :class)
         r.subpackage_rule('client', "#{g}.shared")
         r.subpackage_rule('client', "#{g}.client")
-        r.subpackage_rule('client.ioc', 'javax.inject')
-        r.subpackage_rule('client.ioc', 'dagger')
+        r.subpackage_rule('client.ioc', 'sting')
 
         # TODO: Remove this once we move to GWT 3
         r.subpackage_rule('client.ioc', 'com.google.gwt.core.client.GWT', :rule_type => :class)
@@ -261,7 +259,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         end
 
         if BuildrPlus::FeatureManager.activated?(:iris_audit)
-          r.subpackage_rule('client.ioc', 'iris.audit.client.ioc.AuditGwtRpcServicesDaggerModule', :rule_type => :class)
+          r.subpackage_rule('client.ioc', 'iris.audit.client.ioc.AuditGwtRpcServicesFragment', :rule_type => :class)
         end
 
         if BuildrPlus::FeatureManager.activated?(:arez)
