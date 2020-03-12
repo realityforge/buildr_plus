@@ -321,6 +321,18 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.router.fu:router-fu-processor:jar:#{router_fu_version})
     end
 
+    def sting_version
+      '0.07'
+    end
+
+    def sting_core
+      %W(org.realityforge.sting:sting-core:jar:#{sting_version})
+    end
+
+    def sting_processor
+      %W(org.realityforge.sting:sting-processor:jar:#{sting_version})
+    end
+
     def react4j_version
       '0.151'
     end
