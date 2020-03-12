@@ -409,7 +409,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops
-      self.guiceyloops_gwt + self.glassfish_embedded
+      self.guiceyloops_gwt + self.javax_inject + self.guice + self.glassfish_embedded
     end
 
     def guiceyloops_lib
