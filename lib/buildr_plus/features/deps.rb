@@ -284,6 +284,20 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
+    def gwt_qa_support_processorpath
+      dependencies = []
+
+
+      dependencies.flatten
+    end
+
+    def gwt_qa_processorpath
+      dependencies = []
+
+
+      dependencies.flatten
+    end
+
     def model_provided_deps
       dependencies = []
 
