@@ -372,30 +372,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.awaitility:awaitility:jar:2.0.0)
     end
 
-    def dagger_version
-      '2.25.2'
-    end
-
-    def dagger_compiler
-      %W(
-          com.google.dagger:dagger:jar:#{dagger_version}
-          com.google.dagger:dagger-spi:jar:#{dagger_version}
-          com.google.dagger:dagger-producers:jar:#{dagger_version}
-          com.google.dagger:dagger-compiler:jar:#{dagger_version}
-          com.google.googlejavaformat:google-java-format:jar:1.5
-          com.google.errorprone:javac-shaded:jar:9-dev-r4023-3
-          com.google.googlejavaformat:google-java-format:jar:1.5
-          com.google.guava:failureaccess:jar:1.0.1
-          org.jetbrains.kotlinx:kotlinx-metadata-jvm:jar:0.1.0
-          org.jetbrains.kotlin:kotlin-stdlib:jar:1.3.50
-          org.jetbrains.kotlin:kotlin-stdlib-common:jar:1.3.50
-        ) + self.javapoet + self.javax_inject
-    end
-
-    def dagger_gwt
-      %w(org.realityforge.dagger:dagger-gwt-lite:jar:2.25.2-rf1) + self.javax_inject_gwt
-    end
-
     def testng_version
       '6.11'
     end
