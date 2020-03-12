@@ -297,6 +297,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.arez.spytools:arez-spytools:jar:0.97)
     end
 
+    def arez_testng
+      %w(org.realityforge.arez.testng:arez-testng:jar:0.02)
+    end
+
     def arez_dom
       %w(org.realityforge.arez.dom:arez-dom:jar:0.57)
     end
