@@ -280,6 +280,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << gwt_deps
       dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
       dependencies << Buildr.artifacts([:iris_audit_gwt_qa_support]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_testng) if BuildrPlus::FeatureManager.activated?(:arez)
 
       dependencies.flatten
     end
