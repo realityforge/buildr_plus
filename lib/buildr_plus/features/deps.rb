@@ -288,6 +288,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_qa_support_processorpath
       dependencies = []
 
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_processor) if BuildrPlus::FeatureManager.activated?(:sting)
 
       dependencies.flatten
     end
@@ -295,6 +296,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_qa_processorpath
       dependencies = []
 
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_processor) if BuildrPlus::FeatureManager.activated?(:sting)
 
       dependencies.flatten
     end
