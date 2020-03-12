@@ -83,8 +83,10 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
 
       if project.annotation_processor_active?
         project.file(project._(:target, 'generated/processors/main/java')).enhance([project.compile])
+        project.file(project._(:target, 'generated/processors/test/java')).enhance([project.compile])
         t = project.task('processors_setup') do
           mkdir_p project._(:target, 'generated/processors/main/java')
+          mkdir_p project._(:target, 'generated/processors/test/java')
         end
         project.compile.enhance([t.name])
         unless project.processorpath.empty?
@@ -95,6 +97,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
         end
         if project.iml?
           project.iml.main_generated_source_directories << project._('generated/processors/main/java')
+          project.iml.test_generated_source_directories << project._('generated/processors/test/java')
         end
       else
         project.compile.options[:other] = ['-proc:none']
