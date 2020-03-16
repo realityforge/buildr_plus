@@ -385,15 +385,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops
-      self.guiceyloops_gwt + self.javax_inject + self.guice + self.glassfish_embedded
-    end
-
-    def guiceyloops_lib
-      'org.realityforge.guiceyloops:guiceyloops:jar:0.106'
-    end
-
-    def guiceyloops_gwt
-      [guiceyloops_lib] + self.mockito + self.testng
+      self.mockito + self.testng + %w(org.realityforge.guiceyloops:guiceyloops:jar:0.106) + self.guice + self.glassfish_embedded
     end
 
     def glassfish_timers_domain

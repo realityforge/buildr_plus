@@ -232,7 +232,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def shared_test_deps
       dependencies = []
 
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops_gwt])
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.mockito)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.testng)
 
       dependencies.flatten
     end
@@ -279,8 +280,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_qa_support_deps
       dependencies = []
 
-      dependencies << gwt_deps
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.guiceyloops_gwt)
+      dependencies << self.shared_test_deps
+      dependencies << self.gwt_deps
       dependencies << Buildr.artifacts([:iris_audit_gwt_qa_support]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_testng) if BuildrPlus::FeatureManager.activated?(:arez)
 
