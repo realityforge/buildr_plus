@@ -167,6 +167,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_generators
       generators = [:ce_data_types, :gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
+      generators += [:iris_audit_client] if BuildrPlus::FeatureManager.activated?(:iris_audit)
       generators += [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
       generators += [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
 
