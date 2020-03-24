@@ -322,7 +322,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def sting_version
-      '0.09'
+      '0.10'
     end
 
     def sting_core
