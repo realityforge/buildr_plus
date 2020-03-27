@@ -156,6 +156,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(javax.inject:javax.inject:jar:sources:1) + self.javax_inject
     end
 
+    def gwt_serviceworker
+      %w(org.realityforge.gwt.serviceworker:gwt-serviceworker-linker:jar:0.02)
+    end
+
     def gwt_appcache_linker
       %w(org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.12)
     end

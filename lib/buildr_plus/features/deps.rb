@@ -436,6 +436,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       dependencies << self.gwt_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_appcache_linker, BuildrPlus::Libs.gwt_appcache_server]) if BuildrPlus::FeatureManager.activated?(:appcache)
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_serviceworker]) if BuildrPlus::FeatureManager.activated?(:serviceworker)
 
       dependencies.flatten
     end
