@@ -21,7 +21,6 @@ BuildrPlus::Roles.project('server', :roles => [:server], :parent => :container, 
 if File.exist?("#{base_directory}/user-experience")
   BuildrPlus::Roles.project('user-experience', :roles => [:user_experience], :parent => :container, :template => true, :description => 'GWT Client-side UI')
 
-  BuildrPlus::FeatureManager.activate_features([:appcache]) unless BuildrPlus::FeatureManager.activated?(:appcache)
   BuildrPlus::FeatureManager.activate_features([:serviceworker]) unless BuildrPlus::FeatureManager.activated?(:serviceworker)
   BuildrPlus::FeatureManager.activate_features([:gwt_cache_filter]) unless BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
 end

@@ -149,8 +149,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 :gwt_cache_filter => :gwt_cache_filter,
                 :appconfig => :appconfig,
                 :syncrecord => :syncrecord,
-                :serviceworker => :serviceworker,
-                :appcache => :appcache
+                :serviceworker => :serviceworker
               }
 
             Domgen.repositories.each do |r|

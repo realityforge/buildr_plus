@@ -160,14 +160,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.gwt.serviceworker:gwt-serviceworker-linker:jar:0.02)
     end
 
-    def gwt_appcache_linker
-      %w(org.realityforge.gwt.appcache:gwt-appcache-linker:jar:1.0.12)
-    end
-
-    def gwt_appcache_server
-      %w(org.realityforge.gwt.appcache:gwt-appcache-server:jar:1.0.12)
-    end
-
     def gwt_cache_filter
       %w(org.realityforge.gwt.cache-filter:gwt-cache-filter:jar:0.9)
     end

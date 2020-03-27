@@ -44,7 +44,6 @@ require 'buildr_plus/patches/idea_patch'
 require 'buildr_plus/patches/idea_artifact_patch'
 require 'buildr_plus/patches/testng_patch'
 
-require 'buildr_plus/features/appcache'
 require 'buildr_plus/features/appconfig'
 require 'buildr_plus/features/arez'
 require 'buildr_plus/features/artifact_assets'
