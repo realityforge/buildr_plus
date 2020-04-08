@@ -278,7 +278,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.172'
+      '0.173'
     end
 
     def arez
@@ -290,15 +290,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.99)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.100)
     end
 
     def arez_testng
-      %w(org.realityforge.arez.testng:arez-testng:jar:0.02)
+      %w(org.realityforge.arez.testng:arez-testng:jar:0.05)
     end
 
     def arez_dom
-      %w(org.realityforge.arez.dom:arez-dom:jar:0.57)
+      %w(org.realityforge.arez.dom:arez-dom:jar:0.60)
     end
 
     def grim_annotations
@@ -318,7 +318,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def sting_version
-      '0.13'
+      '0.14'
     end
 
     def sting_core
@@ -330,7 +330,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.152'
+      '0.154'
     end
 
     def react4j
