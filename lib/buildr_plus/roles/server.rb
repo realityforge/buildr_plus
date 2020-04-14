@@ -15,17 +15,7 @@
 BuildrPlus::Roles.role(:server) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = BuildrPlus::Deps.server_generators + project.additional_domgen_generators
-    Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
-      t.filter = Proc.new do |artifact_type, artifact|
-        if artifact_type == :message && (artifact.imit? && artifact.imit.subscription_message?)
-          false
-        elsif project.domgen_filter
-          project.domgen_filter.call(artifact_type, artifact)
-        else
-          true
-        end
-      end
-    end
+    Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
   end
 
   if BuildrPlus::FeatureManager.activated?(:graphiql)
