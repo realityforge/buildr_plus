@@ -273,10 +273,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(com.google.guava:guava:jar:27.1-jre)
     end
 
-    def javapoet
-      %w(com.squareup:javapoet:jar:1.11.1) + self.guava
-    end
-
     def arez_version
       '0.173'
     end
