@@ -20,7 +20,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def mustache
-      %w(com.github.spullara.mustache.java:compiler:jar:0.8.15)
+      %w(com.github.spullara.mustache.java:compiler:jar:0.9.6) + self.guava
     end
 
     def javacsv
