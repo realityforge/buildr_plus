@@ -32,7 +32,7 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
         default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
       end
 
-      if BuildrPlus::FeatureManager.activated?(:db) && project_descriptor && project_descriptor.in_any_role?([:server, :sync_model, :model, :model_qa, :integration_tests])
+      if BuildrPlus::FeatureManager.activated?(:db) && project_descriptor && project_descriptor.in_any_role?([:library, :server, :sync_model, :model, :model_qa, :integration_tests])
         default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}" unless project_descriptor.in_any_role?([:integration_tests])
 
         if BuildrPlus::FeatureManager.activated?(:dbt)
