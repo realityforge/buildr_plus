@@ -35,7 +35,7 @@ BuildrPlus::Roles.role(:container) do
       other.idea_testng_configuration_created = true
       ipr.add_testng_configuration(p.name.to_s,
                                    :module => other.iml.name,
-                                   :jvm_args => BuildrPlus::Testng.default_testng_args(project,p).join(' '))
+                                   :jvm_args => BuildrPlus::Testng.default_testng_args(other,p).join(' '))
     end
   end
 
