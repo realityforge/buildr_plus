@@ -109,6 +109,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
           generators << :sql_analysis_sql
         end
         if BuildrPlus::FeatureManager.activated?(:sync)
+          generators << :sync_db_common
           generators << (BuildrPlus::Db.mssql? ? :sync_sql : :sync_pgsql)
         end
         if BuildrPlus::FeatureManager.activated?(:appconfig)
