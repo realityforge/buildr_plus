@@ -274,7 +274,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.174'
+      '0.175'
     end
 
     def arez
@@ -286,15 +286,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.101)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.102)
     end
 
     def arez_testng
-      %w(org.realityforge.arez.testng:arez-testng:jar:0.06)
+      %w(org.realityforge.arez.testng:arez-testng:jar:0.07)
     end
 
     def arez_dom
-      %w(org.realityforge.arez.dom:arez-dom:jar:0.61)
+      %w(org.realityforge.arez.dom:arez-dom:jar:0.62)
     end
 
     def grim_annotations
@@ -341,7 +341,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.86'
+      '6.87'
     end
 
     def replicant_client
