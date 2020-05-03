@@ -230,7 +230,7 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       if BuildrPlus::FeatureManager.activated?(:gwt)
         prefix = "#{Reality::Naming.uppercase_constantize(root_project.name)}_CODE_SERVER_"
         environment.setting("#{prefix}HOST", 'localhost')
-        environment.setting("#{prefix}PORT", '8889')
+        environment.setting("#{prefix}PORT", BuildrPlus::Gwt.code_server_port)
       end
     end
 
