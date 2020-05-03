@@ -24,6 +24,12 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson, :javascript]) do |
       @enable_gwt_js_exports.nil? ? false : !!@enable_gwt_js_exports
     end
 
+    attr_writer :code_server_port
+
+    def code_server_port
+      @code_server_port.nil? ? 8889 : @code_server_port
+    end
+
     def gwtc_java_args
       %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M)
     end
