@@ -101,11 +101,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def braincheck
-      %w(org.realityforge.braincheck:braincheck:jar:1.27.0)
+      %w(org.realityforge.braincheck:braincheck:jar:1.28.0)
     end
 
     def jsinterop
-      %w(org.realityforge.com.google.jsinterop:jsinterop-annotations:jar:2.8.2-v20191108)
+      %w(com.google.jsinterop:jsinterop-annotations:jar:2.0.0)
     end
 
     def jsinterop_base
@@ -137,15 +137,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_user
-      %w(org.realityforge.com.google.gwt:gwt-user:jar:2.8.2-v20191108 org.w3c.css:sac:jar:1.3) + self.jsinterop
+      %w(org.realityforge.com.google.gwt:gwt-user:jar:2.9.0 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end
 
     def gwt_servlet
-      %w(org.realityforge.com.google.gwt:gwt-servlet:jar:2.8.2-v20191108)
+      %w(org.realityforge.com.google.gwt:gwt-servlet:jar:2.9.0)
     end
 
     def gwt_dev
-      'org.realityforge.com.google.gwt:gwt-dev:jar:2.8.2-v20191108'
+      'org.realityforge.com.google.gwt:gwt-dev:jar:2.9.0'
     end
 
     def javax_inject
@@ -274,7 +274,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.175'
+      '0.177'
     end
 
     def arez
@@ -326,7 +326,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.154'
+      '0.156'
     end
 
     def react4j
@@ -341,7 +341,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.87'
+      '6.88'
     end
 
     def replicant_client
