@@ -22,6 +22,12 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       @version || 8
     end
 
+    attr_writer :fail_on_compile_warning
+
+    def fail_on_compile_warning?
+      @fail_on_compile_warning.nil? ? true : !!@fail_on_compile_warning
+    end
+
     attr_writer :enable_annotation_processor
 
     def enable_annotation_processor?
@@ -39,6 +45,12 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
 
     def enable_annotation_processor?
       @enable_annotation_processor.nil? ? BuildrPlus::Java.enable_annotation_processor? : !!@enable_annotation_processor
+    end
+
+    attr_writer :fail_on_compile_warning
+
+    def fail_on_compile_warning?
+      @fail_on_compile_warning.nil? ? BuildrPlus::Java.fail_on_compile_warning? : !!@fail_on_compile_warning
     end
 
     def annotation_processor_active?
@@ -63,7 +75,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       project.compile.options.target = "1.#{BuildrPlus::Java.version}"
       project.compile.options.warnings = true
       # TODO: Remove -Aarez.defer.unresolved=false once we have fixed router_fu
-      project.compile.options.other = %w(-Werror -Xmaxerrs 10000 -Xmaxwarns 10000) + (BuildrPlus::FeatureManager.activated?(:react4j) ? %w(-Aarez.defer.unresolved=false) : [])
+      project.compile.options[:other] = %w(-Xmaxerrs 10000 -Xmaxwarns 10000) + (BuildrPlus::FeatureManager.activated?(:react4j) ? %w(-Aarez.defer.unresolved=false) : []) + (fail_on_compile_warning? ? %w(-Werror) : [])
       project.iml.instance_variable_set('@main_generated_source_directories', [])
       project.iml.instance_variable_set('@processorpath', {})
       (project.test.options[:java_args] ||= []) << %w(-ea)
@@ -96,14 +108,14 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
           processor_deps = Buildr.artifacts(project.processorpath)
           project.compile.enhance(processor_deps)
           processorpath = processor_deps.collect {|d| d.to_s}.join(File::PATH_SEPARATOR)
-          project.compile.options[:other] = ['-processorpath', processorpath, '-s', project._(:target, 'generated/processors/main/java')]
+          project.compile.options[:other] += ['-processorpath', processorpath, '-s', project._(:target, 'generated/processors/main/java')]
         end
         if project.iml?
           project.iml.main_generated_source_directories << project._('generated/processors/main/java')
           project.iml.test_generated_source_directories << project._('generated/processors/test/java')
         end
       else
-        project.compile.options[:other] = ['-proc:none']
+        project.compile.options[:other] += ['-proc:none']
       end
 
       if project.ipr? && BuildrPlus::Java.enable_annotation_processor?
