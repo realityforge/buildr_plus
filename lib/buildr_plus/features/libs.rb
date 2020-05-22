@@ -297,6 +297,18 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.arez.dom:arez-dom:jar:0.66)
     end
 
+    def arez_persist_version
+      '0.01'
+    end
+
+    def arez_persist_core
+      %W(org.realityforge.arez.persist:arez-persist-core:jar:#{arez_persist_version})
+    end
+
+    def arez_persist_processor
+      %W(org.realityforge.arez.persist:arez-persist-processor:jar:#{arez_persist_version})
+    end
+
     def grim_annotations
       %w(org.realityforge.grim:grim-annotations:jar:0.04)
     end
