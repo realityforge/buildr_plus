@@ -101,7 +101,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def braincheck
-      %w(org.realityforge.braincheck:braincheck:jar:1.28.0)
+      %w(org.realityforge.braincheck:braincheck:jar:1.29.0)
     end
 
     def jsinterop
@@ -274,7 +274,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.181'
+      '0.182'
     end
 
     def arez
@@ -286,19 +286,19 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.108)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.109)
     end
 
     def arez_testng
-      %w(org.realityforge.arez.testng:arez-testng:jar:0.13)
+      %w(org.realityforge.arez.testng:arez-testng:jar:0.14)
     end
 
     def arez_dom
-      %w(org.realityforge.arez.dom:arez-dom:jar:0.68)
+      %w(org.realityforge.arez.dom:arez-dom:jar:0.69)
     end
 
     def arez_persist_version
-      '0.07'
+      '0.08'
     end
 
     def arez_persist_core
@@ -326,7 +326,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def sting_version
-      '0.15'
+      '0.16'
     end
 
     def sting_core
@@ -338,7 +338,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.160'
+      '0.162'
     end
 
     def react4j
@@ -353,7 +353,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.93'
+      '6.94'
     end
 
     def replicant_client
