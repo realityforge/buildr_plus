@@ -125,7 +125,7 @@ BuildrPlus::Roles.role(:container) do
                                   :start_javascript_debugger => false,
                                   :open_in_browser => false,
                                   :vm_parameters => '-Xmx3G',
-                                  :shell_parameters => "#{BuildrPlus::Gwt.enable_gwt_js_exports? ? '-generateJsInteropExports ' : ''}-codeServerPort #{BuildrPlus::Gwt.code_server_port} -bindAddress 0.0.0.0 -deploy #{_(:generated, :gwt, 'deploy')} -extra #{_(:generated, :gwt, 'extra')} -war #{_(:generated, :gwt, 'war')} -style PRETTY -XmethodNameDisplayMode FULL -incremental -logLevel INFO -strict -nostartServer",
+                                  :shell_parameters => "#{BuildrPlus::Gwt.enable_gwt_js_exports? ? '-generateJsInteropExports ' : ''}-codeServerPort #{BuildrPlus::Gwt.code_server_port} -bindAddress 0.0.0.0 -deploy #{_(:generated, :gwt, 'deploy')} -extra #{_(:generated, :gwt, 'extra')} -war #{_(:generated, :gwt, 'war')} -style PRETTY -XmethodNameDisplayMode FULL -noincremental -logLevel INFO -strict -nostartServer",
                                   :launch_page => "http://127.0.0.1:8080/#{p.root_project.name}/#{path}")
       end
     end
