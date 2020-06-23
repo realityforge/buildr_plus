@@ -314,7 +314,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def router_fu_version
-      '0.29'
+      '0.31'
     end
 
     def router_fu
