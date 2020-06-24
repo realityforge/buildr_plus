@@ -74,8 +74,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       project.compile.options.source = "1.#{BuildrPlus::Java.version}"
       project.compile.options.target = "1.#{BuildrPlus::Java.version}"
       project.compile.options.warnings = true
-      # TODO: Remove -Aarez.defer.unresolved=false once we have fixed router_fu
-      project.compile.options[:other] = %w(-Xmaxerrs 10000 -Xmaxwarns 10000) + (BuildrPlus::FeatureManager.activated?(:react4j) ? %w(-Aarez.defer.unresolved=false) : []) + (project.fail_on_compile_warning? ? %w(-Werror) : [])
+      project.compile.options[:other] = %w(-Xmaxerrs 10000 -Xmaxwarns 10000) + (project.fail_on_compile_warning? ? %w(-Werror) : [])
       project.iml.instance_variable_set('@main_generated_source_directories', [])
       project.iml.instance_variable_set('@processorpath', {})
       (project.test.options[:java_args] ||= []) << %w(-ea)
@@ -124,8 +123,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
         # being generated yet. So make sure the compiler reports all errors so can track down
         # the root cause
         project.ipr.add_component('JavacSettings') do |component|
-          # TODO: Remove -Aarez.defer.unresolved=false once we have fixed router_fu
-          component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => "-Xmaxerrs 10000 -Xmaxwarns 10000#{BuildrPlus::FeatureManager.activated?(:react4j) ? ' -Aarez.defer.unresolved=false' : ''} -Xlint:all,-processing,-serial")
+          component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => '-Xmaxerrs 10000 -Xmaxwarns 10000 -Xlint:all,-processing,-serial')
         end
 
         project.ipr.add_component('CompilerConfiguration') do |component|
