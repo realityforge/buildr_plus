@@ -298,7 +298,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_persist_version
-      '0.10'
+      '0.11'
     end
 
     def arez_persist_core
