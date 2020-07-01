@@ -22,10 +22,6 @@ BuildrPlus::FeatureManager.feature(:graphql_client) do |f|
       @graphql_schemas ||= {}
     end
 
-    def graphql_schema_name(name = :default)
-      self.graphql_schemas[name]
-    end
-
     def graphql_schema_artifact(name = :default)
       self.graphql_schemas[name]
     end
