@@ -32,6 +32,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
     def generate_giggle_java_client(project, options = {})
       schema = options[:schema] || :default
       dir = options[:dir] || "**"
+      package_name = options[:package_name] || "#{project.root_project.group}.server.api"
       generated_dir = project._(:generated, "giggle-client-#{schema}/src/java")
 
       generate_task = project.task(generated_dir => [project.task(':domgen:all')]) do
@@ -54,7 +55,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
           defines << "-D#{k}=#{v}"
         end
 
-        Java::Commands.java %W(-jar #{jar} --package #{project.root_project.group}.server.api.#{schema} --schema #{schema_pkg} --output-directory #{generated_dir} --generator java-client --generator java-cdi-client) + defines + graphql_documents
+        Java::Commands.java %W(-jar #{jar} --package #{package_name} --schema #{schema_pkg} --output-directory #{generated_dir} --generator java-client --generator java-cdi-client) + defines + graphql_documents
       end
 
       link_giggle_task(project, generate_task, generated_dir)
