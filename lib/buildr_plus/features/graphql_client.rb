@@ -15,12 +15,20 @@
 BuildrPlus::FeatureManager.feature(:graphql_client) do |f|
   f.enhance(:Config) do
     def endpoint(graphql_schema_name, graphql_schema_artifact)
-      @graphql_schema_name = graphql_schema_name
-      @graphql_schema_artifact = graphql_schema_artifact
+      self.graphql_schemas[graphql_schema_name] = graphql_schema_artifact
     end
 
-    attr_reader :graphql_schema_name
-    attr_reader :graphql_schema_artifact
+    def graphql_schemas
+      @graphql_schemas ||= {}
+    end
+
+    def graphql_schema_name(name = :default)
+      self.graphql_schemas[name]
+    end
+
+    def graphql_schema_artifact(name = :default)
+      self.graphql_schemas[name]
+    end
 
     def generate
       <<JSON
