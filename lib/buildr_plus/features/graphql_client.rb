@@ -26,7 +26,7 @@ BuildrPlus::FeatureManager.feature(:graphql_client) do |f|
       if name == :default
         self.graphql_schemas.keys[0]
       else
-        self.graphql_schemas[name]
+        name
       end
     end
 
