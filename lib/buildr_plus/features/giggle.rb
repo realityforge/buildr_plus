@@ -30,28 +30,33 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
     end
 
     def generate_giggle_java_client(project, options = {})
-      generated_dir = project._(:generated, 'giggle-client/src/java')
+      schema = options[:schema] || :default
+      dir = options[:dir] || "**"
+      package_name = options[:package_name] || "#{project.root_project.group}.server.api"
+      generated_dir = project._(:generated, "giggle-client#{schema == :default ? '' : '-'+schema.to_s}/src/java")
+
       generate_task = project.task(generated_dir => [project.task(':domgen:all')]) do
-        schema_pkg = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact)
+        schema_pkg = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact(schema))
         schema_pkg.invoke
         jar = Buildr.artifact(BuildrPlus::Deps.giggle)
         jar.invoke
-        graphql_documents = Dir["#{project._(:source, :main, :java)}/**/*.graphql"].collect {|f| ['--document', f]}.flatten
+        graphql_documents = Dir["#{project._(:source, :main, :java)}/#{dir}/*.graphql"].collect {|f| ['--document', f]}.flatten
 
         url_suffix = options[:url_suffix] || '/graphql'
         read_timeout = options[:read_timeout] || '10000'
         defines = []
+        graphql_client_schema_name = BuildrPlus::GraphqlClient.graphql_schema_name(schema)
         {
-          'cdi.service.name' => "#{Reality::Naming.pascal_case(BuildrPlus::GraphqlClient.graphql_schema_name)}Service",
-          'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{BuildrPlus::GraphqlClient.graphql_schema_name}_url",
+          'cdi.service.name' => "#{Reality::Naming.pascal_case(graphql_client_schema_name)}Service",
+          'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{graphql_client_schema_name}_url",
           'cdi.url.suffix' => url_suffix,
           'cdi.read_timeout' => read_timeout,
-          'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(BuildrPlus::GraphqlClient.graphql_schema_name)}.Keycloak",
+          'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(graphql_client_schema_name)}.Keycloak",
         }.each_pair do |k, v|
           defines << "-D#{k}=#{v}"
         end
 
-        Java::Commands.java %W(-jar #{jar} --package #{project.root_project.group}.server.api --schema #{schema_pkg} --output-directory #{generated_dir} --generator java-client --generator java-cdi-client) + defines + graphql_documents
+        Java::Commands.java %W(-jar #{jar} --package #{package_name} --schema #{schema_pkg} --output-directory #{generated_dir} --generator java-client --generator java-cdi-client) + defines + graphql_documents
       end
 
       link_giggle_task(project, generate_task, generated_dir)
