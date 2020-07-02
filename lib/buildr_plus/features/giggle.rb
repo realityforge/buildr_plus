@@ -33,7 +33,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
       schema = options[:schema] || :default
       dir = options[:dir] || "**"
       package_name = options[:package_name] || "#{project.root_project.group}.server.api"
-      generated_dir = project._(:generated, "giggle-client-#{schema}/src/java")
+      generated_dir = project._(:generated, "giggle-client#{schema == :default ? '' : '-'+schema.to_s}/src/java")
 
       generate_task = project.task(generated_dir => [project.task(':domgen:all')]) do
         schema_pkg = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact(schema))
@@ -45,12 +45,13 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
         url_suffix = options[:url_suffix] || '/graphql'
         read_timeout = options[:read_timeout] || '10000'
         defines = []
+        graphql_client_schema_name = BuildrPlus::GraphqlClient.graphql_schema_name(schema)
         {
-          'cdi.service.name' => "#{Reality::Naming.pascal_case(schema)}Service",
-          'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{schema}_url",
+          'cdi.service.name' => "#{Reality::Naming.pascal_case(graphql_client_schema_name)}Service",
+          'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{graphql_client_schema_name}_url",
           'cdi.url.suffix' => url_suffix,
           'cdi.read_timeout' => read_timeout,
-          'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(schema)}.Keycloak",
+          'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(graphql_client_schema_name)}.Keycloak",
         }.each_pair do |k, v|
           defines << "-D#{k}=#{v}"
         end

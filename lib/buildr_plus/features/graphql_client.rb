@@ -22,38 +22,62 @@ BuildrPlus::FeatureManager.feature(:graphql_client) do |f|
       @graphql_schemas ||= {}
     end
 
-    def graphql_schema_artifact(name = :default)
-      self.graphql_schemas[name]
+    def graphql_schema_name(name)
+      if name == :default
+        self.graphql_schemas.keys[0]
+      else
+        self.graphql_schemas[name]
+      end
+    end
+
+    def graphql_schema_artifact(name)
+      if name == :default
+        self.graphql_schemas.values[0]
+      else
+        self.graphql_schemas[name]
+      end
     end
 
     def generate
-      <<JSON
+      project_json = []
+      contents = <<JSON
 {
-  "name": "#{Reality::Naming.pascal_case(self.graphql_schema_name)} GraphQL Schema",
-  "schemaPath": "generated/graphql_client/schema.graphql",
-  "extensions": {
-    "endpoints": {
-      "Default GraphQL Endpoint": {
-        "url": "http://localhost:8080/#{self.graphql_schema_name}/graphql",
-        "headers": {
-          "user-agent": "JS GraphQL"
-        },
-        "introspect": false
+  "projects": {
+JSON
+      BuildrPlus::GraphqlClient.graphql_schemas.each do |schema, artifact|
+        project_json << <<JSON
+    "#{schema}": {
+      "name": "#{Reality::Naming.pascal_case(schema)} GraphQL Schema",
+      "schemaPath": "generated/graphql_client/#{schema}_schema.graphql",
+      "extensions": {
+        "endpoints": {
+          "#{Reality::Naming.pascal_case(schema)} GraphQL Endpoint": {
+            "url": "http://localhost:8080/#{schema}/graphql",
+            "headers": {
+              "user-agent": "JS GraphQL"
+            },
+            "introspect": false
+          }
+        }
       }
     }
-  }
-}
 JSON
+      end
+      contents << project_json.join(",\n") << "\t}\n}"
     end
   end
   f.enhance(:ProjectExtension) do
     task 'graphql_client:get_schema' do
-      if BuildrPlus::FeatureManager.activated?(:graphql_client) && !BuildrPlus::GraphqlClient.graphql_schema_artifact.nil?
-        dir = "#{File.dirname(Buildr.application.buildfile.to_s)}/generated/graphql_client"
-        mkdir_p dir
-        a = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact)
-        a.invoke
-        cp a.to_s, "#{dir}/schema.graphql"
+      if BuildrPlus::FeatureManager.activated?(:graphql_client)
+        BuildrPlus::GraphqlClient.graphql_schemas.each do |schema, artifact|
+          unless artifact.nil?
+            dir = "#{File.dirname(Buildr.application.buildfile.to_s)}/generated/graphql_client"
+            mkdir_p dir
+            a = Buildr.artifact(artifact)
+            a.invoke
+            cp a.to_s, "#{dir}/#{schema}_schema.graphql"
+          end
+        end
       end
     end
 
@@ -62,7 +86,7 @@ JSON
     desc 'Recreate the .graphqlconfig file'
     task 'graphql_client:check' do
       filename = "#{File.dirname(Buildr.application.buildfile.to_s)}/.graphqlconfig"
-      if BuildrPlus::FeatureManager.activated?(:graphql_client) && !BuildrPlus::GraphqlClient.graphql_schema_name
+      if BuildrPlus::FeatureManager.activated?(:graphql_client) && BuildrPlus::GraphqlClient.graphql_schemas.empty?
         raise 'The graphql_client feature is enabled but no client has been configured. Please add BuildrPlus::GraphqlClient.endpoint(:myclient, :myclient_schema) to the buildfile and commit changes.'
       elsif BuildrPlus::FeatureManager.activated?(:graphql_client)
         if !File.exist?(filename)
@@ -79,12 +103,14 @@ JSON
 
     desc 'Recreate the .graphqlconfig file'
     task 'graphql_client:fix' do
-      if BuildrPlus::FeatureManager.activated?(:graphql_client) && !BuildrPlus::GraphqlClient.graphql_schema_name
-        raise 'The graphql_client feature is enabled but no client has been configured. Please add BuildrPlus::GraphqlClient.endpoint(:myclient, :myclient_schema) to the buildfile and commit changes.'
-      elsif BuildrPlus::FeatureManager.activated?(:graphql_client) && BuildrPlus::GraphqlClient.graphql_schema_name
-        filename = "#{File.dirname(Buildr.application.buildfile.to_s)}/.graphqlconfig"
-        IO.write(filename, BuildrPlus::GraphqlClient.generate)
-        sh "git add #{filename}"
+      if BuildrPlus::FeatureManager.activated?(:graphql_client)
+        if BuildrPlus::GraphqlClient.graphql_schemas.empty?
+          raise 'The graphql_client feature is enabled but no client has been configured. Please add BuildrPlus::GraphqlClient.endpoint(:myclient, :myclient_schema) to the buildfile and commit changes.'
+        else
+          filename = "#{File.dirname(Buildr.application.buildfile.to_s)}/.graphqlconfig"
+          IO.write(filename, BuildrPlus::GraphqlClient.generate)
+          sh "git add #{filename}"
+        end
       end
     end
   end
