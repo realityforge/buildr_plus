@@ -31,7 +31,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson, :javascript]) do |
     end
 
     def gwtc_java_args
-      %w(-ea -Djava.awt.headless=true -Xms512M -Xmx1024M)
+      %w(-ea -Djava.awt.headless=true -Xms512M -Xmx3G)
     end
 
     def add_source_to_jar(project)
