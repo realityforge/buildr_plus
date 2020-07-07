@@ -168,7 +168,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:iris_audit_client] if BuildrPlus::FeatureManager.activated?(:iris_audit)
       generators += [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
-      generators += [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt, :imit_client_service] if BuildrPlus::FeatureManager.activated?(:replicant)
+      if BuildrPlus::FeatureManager.activated?(:replicant)
+        generators += [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt, :imit_client_service]
+        generators += [:imit_client_react4j_support] if BuildrPlus::FeatureManager.activated?(:react4j)
+      end
 
       generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
 
@@ -200,7 +203,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
     def user_experience_generators
       generators = [:gwt_client_app, :gwt_client_gwt_modules]
-      generators += [:imit_client_react4j_support] if BuildrPlus::FeatureManager.activated?(:replicant) && BuildrPlus::FeatureManager.activated?(:react4j)
       generators += self.gwt_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt)
       generators += self.gwt_qa_test_generators unless BuildrPlus::FeatureManager.activated?(:role_gwt_qa)
 
@@ -253,6 +255,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_processor) if BuildrPlus::FeatureManager.activated?(:sting)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_processor) if BuildrPlus::FeatureManager.activated?(:arez)
+      dependencies << BuildrPlus::Libs.react4j_processor if BuildrPlus::FeatureManager.activated?(:react4j)
 
       dependencies.flatten
     end
@@ -442,7 +445,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << self.gwt_processorpath
-      dependencies << BuildrPlus::Libs.react4j_processor if BuildrPlus::FeatureManager.activated?(:react4j)
 
       dependencies.flatten
     end
