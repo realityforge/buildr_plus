@@ -226,8 +226,8 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
           args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{name}"
 
-          BuildrPlus::Keycloak.clients.each do |client|
-            app = client.application
+          BuildrPlus::Keycloak.clients.sort_by{|c|c.client_type}.each do |client|
+            app = client.application || name
             cname = client.env_var
             args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
             args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{app}"
