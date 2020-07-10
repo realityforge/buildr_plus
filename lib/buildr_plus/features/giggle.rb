@@ -33,14 +33,14 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
       schema = options[:schema] || :default
       dir = options[:dir] || "**"
       package_name = options[:package_name] || "#{project.root_project.group}.server.api"
-      generated_dir = project._(:generated, "giggle-client#{schema == :default ? '' : '-'+schema.to_s}/src/java")
+      generated_dir = project._(:generated, "giggle-client#{schema == :default ? '' : '-' + schema.to_s}/src/java")
 
       generate_task = project.task(generated_dir => [project.task(':domgen:all')]) do
         schema_pkg = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact(schema))
         schema_pkg.invoke
         jar = Buildr.artifact(BuildrPlus::Deps.giggle)
         jar.invoke
-        graphql_documents = Dir["#{project._(:source, :main, :java)}/#{dir}/*.graphql"].collect {|f| ['--document', f]}.flatten
+        graphql_documents = Dir["#{project._(:source, :main, :java)}/#{dir}/*.graphql"].collect { |f| ['--document', f] }.flatten
 
         url_suffix = options[:url_suffix] || '/graphql'
         read_timeout = options[:read_timeout] || '10000'
