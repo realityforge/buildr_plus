@@ -77,7 +77,9 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
   end
 
   f.enhance(:ProjectExtension) do
-    desc 'Generate all of the GraphQL support code'
-    task 'giggle:generate'
+    if BuildrPlus::FeatureManager.activated?(:giggle)
+      desc 'Generate all of the GraphQL support code'
+      task 'giggle:generate'
+    end
   end
 end
