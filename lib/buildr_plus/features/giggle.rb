@@ -39,6 +39,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
       package_name = options[:package_name] || "#{project.root_project.group}.server.api"
       generated_dir = project._(:generated, "giggle-client#{schema == :default ? '' : '-' + schema.to_s}/src/java")
 
+      graphql_client_schema_name = BuildrPlus::GraphqlClient.graphql_schema_name(schema)
       generate_task = project.task(generated_dir => [project.task(':domgen:all')]) do
         schema_pkg = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact(schema))
         schema_pkg.invoke
@@ -49,7 +50,6 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
         url_suffix = options[:url_suffix] || '/graphql'
         read_timeout = options[:read_timeout] || '10000'
         defines = []
-        graphql_client_schema_name = BuildrPlus::GraphqlClient.graphql_schema_name(schema)
         {
           'cdi.service.name' => "#{Reality::Naming.pascal_case(graphql_client_schema_name)}Service",
           'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{graphql_client_schema_name}_url",
