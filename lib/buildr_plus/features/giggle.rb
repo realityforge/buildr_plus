@@ -40,6 +40,8 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
       generated_dir = project._(:generated, "giggle-client#{schema == :default ? '' : '-' + schema.to_s}/src/java")
 
       graphql_client_schema_name = BuildrPlus::GraphqlClient.graphql_schema_name(schema)
+      keycloak_client = options[:keycloak_client] || graphql_client_schema_name
+
       generate_task = project.task(generated_dir => [project.task(':domgen:all')]) do
         schema_pkg = Buildr.artifact(BuildrPlus::GraphqlClient.graphql_schema_artifact(schema))
         schema_pkg.invoke
@@ -55,7 +57,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
           'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{graphql_client_schema_name}_url",
           'cdi.url.suffix' => url_suffix,
           'cdi.read_timeout' => read_timeout,
-          'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(graphql_client_schema_name)}.Keycloak",
+          'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(keycloak_client)}.Keycloak",
         }.each_pair do |k, v|
           defines << "-D#{k}=#{v}"
         end
