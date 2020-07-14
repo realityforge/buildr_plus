@@ -96,11 +96,8 @@ module BuildrPlus::Keycloak
     end
 
     def env_var
-      prefix = "#{Reality::Naming.uppercase_constantize(self.external? ? self.application : BuildrPlus::Keycloak.root_project.name)}"
-      suffix =
-        ((!self.external? && self.default?) || (self.external? && self.application == self.client_type)) ?
-          '' :
-          "#{Reality::Naming.uppercase_constantize(self.client_type)}"
+      prefix = "#{Reality::Naming.uppercase_constantize(self.external? ? '' : BuildrPlus::Keycloak.root_project.name)}"
+      suffix = (!self.external? && self.default?) ? '' : "#{Reality::Naming.uppercase_constantize(self.client_type)}"
       "#{prefix}#{'' == prefix ? '' : '' == suffix ? '' : '_'}#{suffix}"
     end
   end
