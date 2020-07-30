@@ -35,7 +35,7 @@ BuildrPlus::Roles.role(:container) do
       other.idea_testng_configuration_created = true
       ipr.add_testng_configuration(p.name.to_s,
                                    :module => other.iml.name,
-                                   :jvm_args => BuildrPlus::Testng.default_testng_args(project,p).join(' '))
+                                   :jvm_args => BuildrPlus::Testng.default_testng_args(other,p).join(' '))
     end
   end
 
@@ -44,13 +44,13 @@ BuildrPlus::Roles.role(:container) do
   if BuildrPlus::Roles.project_with_role?(:server)
     server_project = project(BuildrPlus::Roles.project_with_role(:server).name)
     model_project =
-        BuildrPlus::Roles.project_with_role?(:model) ?
-            project(BuildrPlus::Roles.project_with_role(:model).name) :
-            nil
+      BuildrPlus::Roles.project_with_role?(:model) ?
+        project(BuildrPlus::Roles.project_with_role(:model).name) :
+        nil
     shared_project =
-        BuildrPlus::Roles.project_with_role?(:shared) ?
-            project(BuildrPlus::Roles.project_with_role(:shared).name) :
-            nil
+      BuildrPlus::Roles.project_with_role?(:shared) ?
+        project(BuildrPlus::Roles.project_with_role(:shared).name) :
+        nil
 
     dependencies = [server_project, model_project, shared_project].compact
     # Spotbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
