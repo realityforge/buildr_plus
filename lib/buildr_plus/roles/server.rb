@@ -81,9 +81,9 @@ BuildrPlus::Roles.role(:server) do
   if BuildrPlus::FeatureManager.activated?(:role_user_experience)
     webroots[_(:source, :main, :webapp_local)] = '/'
     BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
-      gwt_modules = p.determine_top_level_gwt_modules('Dev')
+      gwt_modules = p.determine_top_level_gwt_modules('Prod')
       gwt_modules.each do |gwt_module|
-        short_name = gwt_module.gsub(/.*\.([^.]+)Dev$/, '\1').downcase
+        short_name = gwt_module.gsub(/.*\.([^.]+)Prod$/, '\1').downcase
         webroots[_('..', :generated, 'gwt-export', short_name)] = "/#{short_name}"
       end
       BuildrPlus::Gwt.define_gwt_task(p,
