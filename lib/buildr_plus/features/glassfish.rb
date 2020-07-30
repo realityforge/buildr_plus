@@ -33,5 +33,7 @@ BuildrPlus::FeatureManager.feature(:glassfish) do |f|
     def addtional_default_testng_args
       @addtional_default_testng_args ||= []
     end
+
+    attr_accessor :context_root
   end
 end

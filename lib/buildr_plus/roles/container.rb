@@ -35,7 +35,7 @@ BuildrPlus::Roles.role(:container) do
       other.idea_testng_configuration_created = true
       ipr.add_testng_configuration(p.name.to_s,
                                    :module => other.iml.name,
-                                   :jvm_args => BuildrPlus::Testng.default_testng_args(other,p).join(' '))
+                                   :jvm_args => BuildrPlus::Testng.default_testng_args(project,p).join(' '))
     end
   end
 
@@ -44,13 +44,13 @@ BuildrPlus::Roles.role(:container) do
   if BuildrPlus::Roles.project_with_role?(:server)
     server_project = project(BuildrPlus::Roles.project_with_role(:server).name)
     model_project =
-      BuildrPlus::Roles.project_with_role?(:model) ?
-        project(BuildrPlus::Roles.project_with_role(:model).name) :
-        nil
+        BuildrPlus::Roles.project_with_role?(:model) ?
+            project(BuildrPlus::Roles.project_with_role(:model).name) :
+            nil
     shared_project =
-      BuildrPlus::Roles.project_with_role?(:shared) ?
-        project(BuildrPlus::Roles.project_with_role(:shared).name) :
-        nil
+        BuildrPlus::Roles.project_with_role?(:shared) ?
+            project(BuildrPlus::Roles.project_with_role(:shared).name) :
+            nil
 
     dependencies = [server_project, model_project, shared_project].compact
     # Spotbugs+jetbrains libs added otherwise CDI scanning slows down due to massive number of ClassNotFoundExceptions
@@ -86,14 +86,16 @@ BuildrPlus::Roles.role(:container) do
 
     local_packaged_apps['greenmail'] = BuildrPlus::Libs.greenmail_server if BuildrPlus::FeatureManager.activated?(:mail)
 
+    context_root = BuildrPlus::Glassfish.context_root || project.iml.id
+
     ipr.add_glassfish_remote_configuration(project,
                                            :server_name => 'GlassFish 5.2020.3',
-                                           :artifacts => {war_name => project.iml.id},
+                                           :artifacts => {war_name => context_root},
                                            :packaged => remote_packaged_apps)
     unless BuildrPlus::Redfish.local_domain_update_only?
       ipr.add_glassfish_configuration(project,
                                       :server_name => 'GlassFish 5.2020.3',
-                                      :exploded => {exploded_war_name => project.iml.id},
+                                      :exploded => {exploded_war_name => context_root},
                                       :packaged => local_packaged_apps)
 
       if local_packaged_apps.size > 0
@@ -101,7 +103,7 @@ BuildrPlus::Roles.role(:container) do
         ipr.add_glassfish_configuration(project,
                                         :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 5.2020.3",
                                         :server_name => 'GlassFish 5.2020.3',
-                                        :exploded => {exploded_war_name => project.iml.id},
+                                        :exploded => {exploded_war_name => context_root},
                                         :packaged => only_packaged_apps)
       end
     end
