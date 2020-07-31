@@ -108,6 +108,8 @@ BuildrPlus::Roles.role(:container) do
       end
     end
 
+    iml.excluded_directories << project._('dataSources') if BuildrPlus::FeatureManager.activated?(:db)
+    iml.excluded_directories << project._(:generated, :gwt) if BuildrPlus::FeatureManager.activated?(:gwt)
     iml.excluded_directories << project._('tmp')
 
     BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
