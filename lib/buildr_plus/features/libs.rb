@@ -294,7 +294,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_dom
-      %w(org.realityforge.arez.dom:arez-dom:jar:0.76)
+      %w(org.realityforge.arez.dom:arez-dom:jar:0.77)
     end
 
     def arez_persist_version
