@@ -88,10 +88,16 @@ module BuildrPlus::Keycloak
 
     def redfish_config_prefix
       prefix = "#{Reality::Naming.uppercase_constantize(self.external? ? self.application : BuildrPlus::Keycloak.root_project.name)}_"
-      suffix =
-        ((!self.external? && self.default?) || (self.external? && self.application == self.client_type)) ?
-          '' :
-          "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
+      suffix = ''
+      if self.external?
+        if self.application != self.client_type
+          suffix = "_#{Reality::Naming.uppercase_constantize(self.client_type.to_s.gsub(/^#{self.application}/,''))}"
+        end
+      else
+        if !self.default?
+          suffix = "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
+        end
+      end
       "#{prefix}KEYCLOAK_CLIENT#{suffix}"
     end
 
