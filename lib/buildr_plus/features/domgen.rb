@@ -215,10 +215,14 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
 
               if BuildrPlus::FeatureManager.activated?(:replicant)
                 if BuildrPlus::Replicant.enable_entity_broker? && !r.imit.enable_entity_broker?
-                  BuildrPlus.error("BuildrPlus setiing BuildrPlus::Replicant.enable_entity_broker = true while domgen setting repository.imit.enable_entity_broker = false.")
+                  BuildrPlus.error("BuildrPlus setting BuildrPlus::Replicant.enable_entity_broker = true while domgen setting repository.imit.enable_entity_broker = false.")
                 elsif !BuildrPlus::Replicant.enable_entity_broker? && r.imit.enable_entity_broker?
-                  BuildrPlus.error("BuildrPlus setiing BuildrPlus::Replicant.enable_entity_broker = false while domgen setting repository.imit.enable_entity_broker = true.")
+                  BuildrPlus.error("BuildrPlus setting BuildrPlus::Replicant.enable_entity_broker = false while domgen setting repository.imit.enable_entity_broker = true.")
                 end
+              end
+
+              if r.keycloak? && r.keycloak.keycloak_version != BuildrPlus::Keycloak.keycloak_version
+                BuildrPlus.error("BuildrPlus setting BuildrPlus::Keycloak.keycloak_version (#{BuildrPlus::Keycloak.keycloak_version}) does not match equivalent domgen setting repository.keycloak.keycloak_version (#{r.keycloak.keycloak_version}).")
               end
 
               if r.sync? && r.sync.standalone? && !BuildrPlus::Sync.standalone?
