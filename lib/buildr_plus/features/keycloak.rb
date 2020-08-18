@@ -118,6 +118,20 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       Buildr.projects.first.root_project
     end
 
+    def keycloak_version=(keycloak_version)
+      valid_versions = %w(5 11)
+      raise "Invalid keycloak version #{keycloak_version}. Valid versions include #{valid_versions}" unless valid_versions.include?(keycloak_version.to_s)
+      @keycloak_version = keycloak_version
+    end
+
+    def keycloak_version
+      @keycloak_version.nil? ? '5' : @keycloak_version
+    end
+
+    def keycloak_converger
+      self.keycloak_version == '5' ? 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.8' : 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.9'
+    end
+
     def local_application_url
       @local_application_url || ENV['LOCAL_APPLICATION_URL'] || 'http://127.0.0.1:8080'
     end
@@ -211,7 +225,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
             end
           end
 
-          a = Buildr.artifact(BuildrPlus::Libs.keycloak_converger)
+          a = Buildr.artifact(BuildrPlus::Keycloak.keycloak_converger)
           a.invoke
 
           args = []
@@ -244,7 +258,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           base_dir = buildr_project._('generated/keycloak_to_delete')
           mkdir_p base_dir
 
-          a = Buildr.artifact(BuildrPlus::Libs.keycloak_converger)
+          a = Buildr.artifact(BuildrPlus::Keycloak.keycloak_converger)
           a.invoke
 
           args = []
