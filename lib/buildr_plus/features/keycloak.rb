@@ -237,15 +237,11 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << "--realm-name=#{BuildrPlus::Config.environment_config.keycloak.realm}"
           args << "--admin-username=#{BuildrPlus::Config.environment_config.keycloak.admin_username}" if BuildrPlus::Config.environment_config.keycloak.admin_username
           args << "--admin-password=#{BuildrPlus::Config.environment_config.keycloak.admin_password}"
-          BuildrPlus::Keycloak.clients.each do |client|
-            args << "-e#{client.env_var}_NAME=#{client.name}"
-          end
-          args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
-          args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{name}"
 
           BuildrPlus::Keycloak.clients.sort_by{|c|c.client_type}.each do |client|
             app = client.application || name
             cname = client.env_var
+            args << "-e#{cname}_NAME=#{client.name}"
             args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
             args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{app}"
           end
