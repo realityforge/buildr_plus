@@ -39,6 +39,12 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       !!@manual_configuration
     end
 
+    attr_writer :container_options
+
+    def container_options
+      @container_options || ''
+    end
+
     def jenkins_build_scripts
       (@jenkins_build_scripts ||= standard_build_scripts).dup
     end
@@ -363,7 +369,7 @@ CONTENT
       end
 
       result = <<CONTENT
-    kinjen.run_in_container( this, 'stocksoftware/build' ) {
+    kinjen.run_in_container( this, 'stocksoftware/build', '#{BuildrPlus::Jenkins.container_options}' ) {
 #{c}
     }
 CONTENT
