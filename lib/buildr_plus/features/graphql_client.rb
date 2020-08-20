@@ -52,7 +52,7 @@ JSON
       "extensions": {
         "endpoints": {
           "#{Reality::Naming.pascal_case(schema)} GraphQL Endpoint": {
-            "url": "http://localhost:8080/#{schema}/graphql",
+            "url": "http://127.0.0.1:8080/#{schema}/graphql",
             "headers": {
               "user-agent": "JS GraphQL"
             },

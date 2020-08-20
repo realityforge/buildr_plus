@@ -127,7 +127,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:mail)
-        properties["#{constant_prefix}_MAIL_HOST"] = 'localhost'
+        properties["#{constant_prefix}_MAIL_HOST"] = '127.0.0.1'
         properties["#{constant_prefix}_MAIL_USER"] = domain.name
         properties["#{constant_prefix}_MAIL_FROM"] = "#{domain.name}@example.com"
       end
