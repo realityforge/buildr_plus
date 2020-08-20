@@ -409,7 +409,14 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         if BuildrPlus::FeatureManager.activated?(:gwt)
           dependencies << Buildr.artifacts(BuildrPlus::Libs.proxy_servlet)
         end
+
+        unless BuildrPlus::Keycloak.remote_clients.empty?
+          # This will also include this library in server when remote clients only used in client
+          # but this is a relatively rare scenario
+          dependencies << BuildrPlus::Libs.keycloak_authfilter
+        end
       end
+
       dependencies << Buildr.artifacts(:iris_audit_server) if BuildrPlus::FeatureManager.activated?(:iris_audit)
 
       dependencies << Buildr.artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
