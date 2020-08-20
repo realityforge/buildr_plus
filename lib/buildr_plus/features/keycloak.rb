@@ -106,6 +106,11 @@ module BuildrPlus::Keycloak
       suffix = (!self.external? && self.default?) ? '' : "#{Reality::Naming.uppercase_constantize(self.client_type)}"
       "#{prefix}#{'' == prefix ? '' : '' == suffix ? '' : '_'}#{suffix}"
     end
+
+    # Generate a secret that is "constant" during development so it is easy to configure in redfish
+    def secret_value
+      Java.java.util.UUID.nameUUIDFromBytes( Java.java.lang.String.new(env_var).getBytes( Java.java.nio.charset.StandardCharsets.UTF_8 ) ).toString
+    end
   end
 end
 
@@ -244,6 +249,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
             args << "-e#{cname}_NAME=#{client.name}"
             args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
             args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{app}"
+            args << "-e#{cname}_SECRET=#{client.secret_value}"
           end
 
           Java::Commands.java(args)
