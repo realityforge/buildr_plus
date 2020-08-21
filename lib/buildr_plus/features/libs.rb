@@ -262,7 +262,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def simple_keycloak_service
-      %w(org.realityforge.keycloak.sks:simple-keycloak-service:jar:0.1)
+      %w(org.realityforge.keycloak.sks:simple-keycloak-service:jar:0.2)
     end
 
     def guava
