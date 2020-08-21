@@ -209,7 +209,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def commons_codec
-      %w(commons-codec:commons-codec:jar:1.9)
+      %w(commons-codec:commons-codec:jar:1.11)
     end
 
     def bouncycastle
