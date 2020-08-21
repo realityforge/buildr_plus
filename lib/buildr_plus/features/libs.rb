@@ -213,7 +213,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def bouncycastle
-      %w(org.bouncycastle:bcprov-jdk15on:jar:1.52 org.bouncycastle:bcpkix-jdk15on:jar:1.52)
+      %w(org.bouncycastle:bcprov-jdk15on:jar:1.65 org.bouncycastle:bcpkix-jdk15on:jar:1.65)
     end
 
     def proxy_servlet
