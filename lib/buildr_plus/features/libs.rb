@@ -242,7 +242,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jboss_logging
-      %w(org.jboss.logging:jboss-logging:jar:3.3.0.Final)
+      %w(org.jboss.logging:jboss-logging:jar:3.4.1.Final)
     end
 
     def keycloak_core
