@@ -221,7 +221,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def httpclient
-      %w(org.apache.httpcomponents:httpclient:jar:4.5 org.apache.httpcomponents:httpcore:jar:4.4.1) +
+      %w(org.apache.httpcomponents:httpclient:jar:4.5.12 org.apache.httpcomponents:httpcore:jar:4.4.13) +
         self.commons_logging + self.commons_codec
     end
 
