@@ -234,7 +234,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_domgen_support
-      %w(org.realityforge.keycloak.domgen:keycloak-domgen-support:jar:1.4)
+      %w(org.realityforge.keycloak.domgen:keycloak-domgen-support:jar:1.5)
     end
 
     def keycloak_authfilter
@@ -259,6 +259,23 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.keycloak:keycloak-adapter-core:jar:2.0.0.Final
         org.realityforge.org.keycloak:keycloak-servlet-adapter-spi:jar:2.0.0.Final
       ) + self.keycloak_core + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
+    end
+
+    def keycloak_core_v11
+      %w(
+        org.keycloak:keycloak-core:jar:11.0.0
+        org.keycloak:keycloak-common:jar:11.0.0
+        com.sun.activation:jakarta.activation:jar:1.2.1
+      ) + self.bouncycastle
+    end
+
+    def keycloak_v11
+      %w(
+        org.keycloak:keycloak-servlet-filter-adapter:jar:11.0.0
+        org.keycloak:keycloak-adapter-spi:jar:11.0.0
+        org.keycloak:keycloak-adapter-core:jar:11.0.0
+        org.keycloak:keycloak-servlet-adapter-spi:jar:11.0.0
+      ) + self.keycloak_core_v11 + self.keycloak_domgen_support + self.httpclient + self.jboss_logging
     end
 
     def simple_keycloak_service
