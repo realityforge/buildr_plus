@@ -98,7 +98,7 @@ BuildrPlus::Roles.role(:container) do
                                       :exploded => {exploded_war_name => context_root},
                                       :packaged => local_packaged_apps)
 
-      if local_packaged_apps.size > 0
+      if BuildrPlus::Glassfish.support_app_only_configuration?
         only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
         ipr.add_glassfish_configuration(project,
                                         :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 5.2020.3",

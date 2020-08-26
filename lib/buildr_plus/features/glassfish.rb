@@ -34,6 +34,15 @@ BuildrPlus::FeatureManager.feature(:glassfish) do |f|
       @addtional_default_testng_args ||= []
     end
 
+    attr_writer :support_app_only_configuration
+
+    def support_app_only_configuration?
+      @support_app_only_configuration.nil? ? !BuildrPlus::Redfish.local_domain_update_only? &&
+        (!BuildrPlus::Glassfish.non_remote_only_packaged_apps.empty? ||
+          !BuildrPlus::Glassfish.packaged_apps.empty? ||
+          !BuildrPlus::FeatureManager.activated?(:mail)) : !!@support_app_only_configuration
+    end
+
     attr_accessor :context_root
   end
 end
