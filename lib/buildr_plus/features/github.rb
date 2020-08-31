@@ -28,10 +28,20 @@ BuildrPlus::FeatureManager.feature(:github) do |f|
       IO.write(automerge, automerge_content)
     end
 
+    def remove_github_actions
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      automerge = "#{base_directory}/.github/workflows/automerge.yml"
+      FileUtils.rm_f automerge
+    end
+
     def check_github_actions
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       automerge = "#{base_directory}/.github/workflows/automerge.yml"
-      if !File.exist?(automerge) || IO.read(automerge) != automerge_content
+      exists = File.exist?(automerge)
+      if !enable_github_actions? && exists
+        puts 'Github automerge action present but actions disabled'
+        return false
+      elsif enable_github_actions? && (!exists || IO.read(automerge) != automerge_content)
         puts 'Github automerge action is not uptodate'
         return false
       end
@@ -77,14 +87,18 @@ CONTENT
   f.enhance(:ProjectExtension) do
     desc 'Check Github actions are configured.'
     task 'github:check' do
-      if BuildrPlus::Github.enable_github_actions? && !BuildrPlus::Github.check_github_actions
+      unless BuildrPlus::Github.check_github_actions
         raise 'Github actions are not correctly configured. Please run "buildr github:fix" and commit changes.'
       end
     end
 
     desc 'Configure Github actions.'
     task 'github:fix' do
-      BuildrPlus::Github.generate_github_actions if BuildrPlus::Github.enable_github_actions?
+      if BuildrPlus::Github.enable_github_actions?
+        BuildrPlus::Github.generate_github_actions
+      else
+        BuildrPlus::Github.remove_github_actions
+      end
     end
   end
 end
