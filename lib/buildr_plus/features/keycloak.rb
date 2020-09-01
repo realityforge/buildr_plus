@@ -239,7 +239,9 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << a.to_s
           args << '-v'
           args << '-d' << base_dir
-          args << '--secrets-dir' << buildr_project._('config/secrets')
+          unless BuildrPlus::Keycloak.keycloak_version == '5'
+            args << '--secrets-dir' << buildr_project._('config/secrets')
+          end
 
           args << "--server-url=#{BuildrPlus::Config.environment_config.keycloak.base_url}"
           args << "--realm-name=#{BuildrPlus::Config.environment_config.keycloak.realm}"
