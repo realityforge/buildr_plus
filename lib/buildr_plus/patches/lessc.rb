@@ -42,6 +42,8 @@ def define_lessc_task(project, options = {})
       touch target_dir
     end
 
+    project.task(':generate:all' => [compile_task])
+
     project.assets.paths << project.file(target_dir => [compile_task])
     target_dir
   else
