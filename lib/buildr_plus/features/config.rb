@@ -238,14 +238,11 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       prefix = remote_client.redfish_config_prefix
       environment.setting("#{prefix}_REALM", environment.keycloak.realm) unless environment.setting?("#{prefix}_REALM")
       environment.setting("#{prefix}_SERVER_URL", environment.keycloak.base_url) unless environment.setting?("#{prefix}_SERVER_URL")
-
-      # Assume that by default the remote data source uses same keycloak realm but uses this
-      # apps client as the remote app is often configured with a bearer only client
-      client = BuildrPlus::Keycloak.client_by_client_type(root_project.name)
-      environment.setting("#{prefix}_CLIENT_NAME", client.name) unless environment.setting?("#{prefix}_CLIENT_NAME")
       environment.setting("#{prefix}_USERNAME", environment.keycloak.service_username) unless environment.setting?("#{prefix}_USERNAME")
       environment.setting("#{prefix}_PASSWORD", environment.keycloak.service_password) unless environment.setting?("#{prefix}_PASSWORD")
-      environment.setting("#{prefix}_SECRET", client.secret_value) unless environment.setting?("#{prefix}_SECRET")
+      puts "Setting:#{prefix}_CLIENT_NAME to  #{remote_client.name}"
+      environment.setting("#{prefix}_CLIENT_NAME", remote_client.name) unless environment.setting?("#{prefix}_CLIENT_NAME")
+      environment.setting("#{prefix}_SECRET", remote_client.secret_value) unless environment.setting?("#{prefix}_SECRET")
     end
 
     def populate_keycloak_client_settings(environment, client)

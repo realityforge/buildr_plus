@@ -23,13 +23,25 @@ module BuildrPlus::Keycloak
     attr_accessor :application
 
     def default?
-      self.client_type == self.application
+      self.client_type.to_s == self.application.to_s
+    end
+
+    attr_writer :name
+
+    def name(environment = BuildrPlus::Config.environment)
+      @name || "#{BuildrPlus::Config.app_scope}#{BuildrPlus::Config.app_scope.nil? ? '' : '_'}#{BuildrPlus::Config.user || 'NOBODY'}_#{self.default? || self.application.nil? ? '' : "#{Reality::Naming.uppercase_constantize(self.application || BuildrPlus::Keycloak.root_project.name)}_"}#{Reality::Naming.uppercase_constantize(self.client_type.to_s)}_#{BuildrPlus::Config.env_code(environment)}"
     end
 
     def redfish_config_prefix
       prefix = "#{Reality::Naming.uppercase_constantize(self.application || BuildrPlus::Keycloak.root_project.name)}_"
       suffix = self.default? ? '' : "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
       "#{prefix}KEYCLOAK_REMOTE_CLIENT#{suffix}"
+    end
+
+    # Generate a secret that is "constant" during development so it is easy to configure in redfish
+    def secret_value
+      filename = BuildrPlus::Keycloak.root_project._("config/secrets/#{name}")
+      File.exists?(filename) ? IO.read(filename) : "-"
     end
   end
 
@@ -254,6 +266,10 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
             args << "-e#{cname}_NAME=#{client.name}"
             args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
             args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{app}"
+          end
+
+          BuildrPlus::Keycloak.remote_clients.sort_by{|c|c.client_type}.each do |remote_client|
+            args << "--unmanaged-client=#{remote_client.name}"
           end
 
           Java::Commands.java(args)
