@@ -157,7 +157,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     end
 
     def remote_client(client_type, options = {})
-      remote_client = BuildrPlus::Keycloak::KeycloakRemoteClient.new(client_type, options)
+      remote_client = BuildrPlus::Keycloak::KeycloakRemoteClient.new(client_type.to_s, options)
       self.remote_clients_list << remote_client
       remote_client
     end
