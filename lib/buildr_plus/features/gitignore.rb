@@ -66,6 +66,8 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << '/node_modules'
       end
 
+      gitignores << '/config/secrets' if BuildrPlus::FeatureManager.activated?(:keycloak)
+
       gitignores << '/config/database.yml' if BuildrPlus::FeatureManager.activated?(:dbt)
 
       gitignores << '/volumes' if BuildrPlus::FeatureManager.activated?(:redfish)

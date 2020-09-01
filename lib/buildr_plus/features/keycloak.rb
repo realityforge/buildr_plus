@@ -109,7 +109,8 @@ module BuildrPlus::Keycloak
 
     # Generate a secret that is "constant" during development so it is easy to configure in redfish
     def secret_value
-      Java.java.util.UUID.nameUUIDFromBytes( Java.java.lang.String.new(env_var).getBytes( Java.java.nio.charset.StandardCharsets.UTF_8 ) ).toString
+      filename = BuildrPlus::Keycloak.root_project._("config/secrets/#{name}")
+      File.exists?(filename) ? IO.read(filename) : "-"
     end
   end
 end
@@ -134,7 +135,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     end
 
     def keycloak_converger
-      self.keycloak_version == '5' ? 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.8' : 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.9'
+      self.keycloak_version == '5' ? 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.8' : 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.12'
     end
 
     def local_application_url
@@ -238,6 +239,8 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << a.to_s
           args << '-v'
           args << '-d' << base_dir
+          args << '--secrets-dir' << buildr_project._('config/secrets')
+
           args << "--server-url=#{BuildrPlus::Config.environment_config.keycloak.base_url}"
           args << "--realm-name=#{BuildrPlus::Config.environment_config.keycloak.realm}"
           args << "--admin-username=#{BuildrPlus::Config.environment_config.keycloak.admin_username}" if BuildrPlus::Config.environment_config.keycloak.admin_username
@@ -249,7 +252,6 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
             args << "-e#{cname}_NAME=#{client.name}"
             args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
             args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{app}"
-            args << "-e#{cname}_SECRET=#{client.secret_value}"
           end
 
           Java::Commands.java(args)
