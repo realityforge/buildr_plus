@@ -135,7 +135,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     end
 
     def keycloak_converger
-      self.keycloak_version == '5' ? 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.8' : 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.12'
+      self.keycloak_version == '5' ? 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.8' : 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.13'
     end
 
     def local_application_url
