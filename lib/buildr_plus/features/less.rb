@@ -21,7 +21,7 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
     attr_writer :options
 
     def options
-      @options || {}
+      @options ||= {}
     end
 
     def less_path
