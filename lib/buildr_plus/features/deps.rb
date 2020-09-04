@@ -35,7 +35,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:jms_model] if BuildrPlus::FeatureManager.activated?(:jms)
       generators << [:jws_shared] if BuildrPlus::FeatureManager.activated?(:soap)
 
-      generators << [:jackson_date_util, :jackson_date_time_util] if BuildrPlus::FeatureManager.activated?(:jackson)
+      generators << [:jackson_date_util] if BuildrPlus::FeatureManager.activated?(:jackson)
 
       generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
 
