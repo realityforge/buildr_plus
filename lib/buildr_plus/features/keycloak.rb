@@ -106,7 +106,7 @@ module BuildrPlus::Keycloak
           suffix = "_#{Reality::Naming.uppercase_constantize(self.client_type.to_s.gsub(/^#{self.application}/,''))}"
         end
       else
-        if !self.default?
+        unless self.default?
           suffix = "_#{Reality::Naming.uppercase_constantize(self.client_type)}"
         end
       end
