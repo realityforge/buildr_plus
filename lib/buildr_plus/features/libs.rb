@@ -413,6 +413,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.slf4j:slf4j-api:jar:1.7.25 org.slf4j:slf4j-jdk14:jar:1.7.25)
     end
 
+    def json_schema_validator
+      %w(
+          com.networknt:json-schema-validator:jar:1.0.43
+          org.apache.commons:commons-lang3:jar:3.5
+          org.jruby.joni:joni:jar:2.1.31
+          org.jruby.jcodings:jcodings:jar:1.0.46
+      ) + self.jackson_databind + self.slf4j
+    end
+
     def greenmail
       %w(com.icegreen:greenmail:jar:1.4.1) + self.slf4j
     end
