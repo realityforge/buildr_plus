@@ -85,7 +85,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jackson_databind
-      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.10.4)
+      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.10.4) + self.jackson_core + self.jackson_annotations
     end
 
     def jackson_datatype_jdk8
@@ -94,10 +94,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def jackson_datatype_jsr310
       %w(com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.9.9)
-    end
-
-    def jackson_gwt_support
-      self.jackson_core + self.jackson_databind + self.jackson_annotations
     end
 
     def braincheck
@@ -378,7 +374,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_rpc
-      self.jackson_gwt_support + self.gwt_servlet
+      self.jackson_databind + self.gwt_servlet
     end
 
     def guice

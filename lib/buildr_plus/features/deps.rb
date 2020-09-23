@@ -329,7 +329,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geotools_for_geolatte) if BuildrPlus::FeatureManager.activated?(:geotools)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
       end
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_gwt_support]) if BuildrPlus::FeatureManager.activated?(:jackson)
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_databind]) if BuildrPlus::FeatureManager.activated?(:jackson)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.timeservice) if BuildrPlus::FeatureManager.activated?(:timeservice)
 
       dependencies.flatten

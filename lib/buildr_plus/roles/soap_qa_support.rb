@@ -29,7 +29,7 @@ BuildrPlus::Roles.role(:soap_qa_support, :requires => [:role_soap_client]) do
                BuildrPlus::Libs.mockito
 
   if BuildrPlus::FeatureManager.activated?(:gwt)
-    compile.with BuildrPlus::Libs.jackson_gwt_support
+    compile.with BuildrPlus::Libs.jackson_databind
   end
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :soap_client)

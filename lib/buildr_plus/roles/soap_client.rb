@@ -26,7 +26,7 @@ BuildrPlus::Roles.role(:soap_client, :requires => [:soap]) do
 
   project.publish = true
 
-  compile.with Buildr.artifacts([BuildrPlus::Libs.jackson_gwt_support]) if BuildrPlus::FeatureManager.activated?(:jackson)
+  compile.with Buildr.artifacts([BuildrPlus::Libs.jackson_databind]) if BuildrPlus::FeatureManager.activated?(:jackson)
 
   package(:jar)
   package(:sources)
