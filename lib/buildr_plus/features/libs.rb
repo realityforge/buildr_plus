@@ -422,6 +422,13 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       ) + self.jackson_databind + self.slf4j
     end
 
+    def pdfbox
+      %w(
+        org.apache.pdfbox:pdfbox:jar:2.0.21
+        org.apache.pdfbox:fontbox:jar:2.0.21
+      ) + self.commons_logging + self.bouncycastle
+    end
+
     def greenmail
       %w(com.icegreen:greenmail:jar:1.4.1) + self.slf4j
     end
