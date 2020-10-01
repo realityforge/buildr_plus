@@ -426,6 +426,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(
         org.apache.pdfbox:pdfbox:jar:2.0.21
         org.apache.pdfbox:fontbox:jar:2.0.21
+        org.apache.pdfbox:xmpbox:jar:2.0.21
       ) + self.commons_logging + self.bouncycastle
     end
 
