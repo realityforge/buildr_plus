@@ -15,6 +15,8 @@
 # Enable this feature if the code is tested using jenkins
 BuildrPlus::FeatureManager.feature(:jenkins) do |f|
   f.enhance(:Config) do
+    attr_writer :jenkins_deploy_name
+
     attr_writer :auto_deploy
 
     def auto_deploy?
@@ -239,8 +241,9 @@ CONTENT
       kinjen.complete_build( this )
         CONTENT
       end
+
       if BuildrPlus::Jenkins.auto_deploy?
-        content += deploy_stage(root_project)
+        content += deploy_stage(@jenkins_deploy_name.nil? ? root_project.name : @jenkins_deploy_name)
       end
 
       if BuildrPlus::Jenkins.auto_zim?
@@ -254,9 +257,9 @@ CONTENT
       inside_docker_image(config_git + content)
     end
 
-    def deploy_stage(root_project)
+    def deploy_stage(jenkins_name)
       <<-DEPLOY_STEP
-        kinjen.deploy_stage( this, '#{root_project.name}', '#{deployment_environment}' )
+        kinjen.deploy_stage( this, '#{jenkins_name}', '#{deployment_environment}' )
       DEPLOY_STEP
     end
 
