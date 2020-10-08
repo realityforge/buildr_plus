@@ -208,6 +208,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(commons-codec:commons-codec:jar:1.11)
     end
 
+    def commons_io
+      %w(commons-io:commons-io:jar:1.3.1)
+    end
+
     def bouncycastle
       %w(org.bouncycastle:bcprov-jdk15on:jar:1.65 org.bouncycastle:bcpkix-jdk15on:jar:1.65)
     end
@@ -428,6 +432,55 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         org.apache.pdfbox:fontbox:jar:2.0.21
         org.apache.pdfbox:xmpbox:jar:2.0.21
       ) + self.commons_logging + self.bouncycastle
+    end
+
+    def openhtmltopdf
+      %w(
+        com.openhtmltopdf:openhtmltopdf-pdfbox:jar:1.0.4
+        com.openhtmltopdf:openhtmltopdf-core:jar:1.0.4
+        com.openhtmltopdf:openhtmltopdf-svg-support:jar:1.0.4
+        de.rototor.pdfbox:graphics2d:jar:0.26
+        com.openhtmltopdf:openhtmltopdf-core:jar:1.0.4
+        com.openhtmltopdf:openhtmltopdf-svg-support:jar:1.0.4
+      ) + BuildrPlus::Libs.xmlgraphics + BuildrPlus::Libs.pdfbox
+    end
+
+    def xmlgraphics
+      %w(
+        org.apache.xmlgraphics:batik-anim:jar:1.12
+        org.apache.xmlgraphics:batik-awt-util:jar:1.12
+        org.apache.xmlgraphics:batik-bridge:jar:1.12
+        org.apache.xmlgraphics:batik-codec:jar:1.12
+        org.apache.xmlgraphics:batik-constants:jar:1.12
+        org.apache.xmlgraphics:batik-css:jar:1.12
+        org.apache.xmlgraphics:batik-dom:jar:1.12
+        org.apache.xmlgraphics:batik-ext:jar:1.12
+        org.apache.xmlgraphics:batik-gvt:jar:1.12
+        org.apache.xmlgraphics:batik-i18n:jar:1.12
+        org.apache.xmlgraphics:batik-parser:jar:1.12
+        org.apache.xmlgraphics:batik-script:jar:1.12
+        org.apache.xmlgraphics:batik-svg-dom:jar:1.12
+        org.apache.xmlgraphics:batik-svggen:jar:1.12
+        org.apache.xmlgraphics:batik-transcoder:jar:1.12
+        org.apache.xmlgraphics:batik-util:jar:1.12
+        org.apache.xmlgraphics:batik-xml:jar:1.12
+        org.apache.xmlgraphics:xmlgraphics-commons:jar:2.4
+      ) + self.commons_io + self.xml_apis_ext
+    end
+
+    def xml_apis_ext
+      %w(xml-apis:xml-apis-ext:jar:1.3.04)
+    end
+
+    def thymeleaf
+      %w(
+        org.thymeleaf:thymeleaf:jar:3.0.11.RELEASE
+        ognl:ognl:jar:3.1.12
+        org.javassist:javassist:jar:3.20.0-GA
+        org.attoparser:attoparser:jar:2.0.5.RELEASE
+        org.unbescape:unbescape:jar:1.1.6.RELEASE
+        org.thymeleaf.extras:thymeleaf-extras-java8time:jar:3.0.4.RELEASE
+      ) + self.commons_logging
     end
 
     def greenmail
