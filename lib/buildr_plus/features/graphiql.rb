@@ -24,10 +24,8 @@ BuildrPlus::FeatureManager.feature(:graphiql => [:graphql, :gwt_cache_filter]) d
           artifact.invoke
           target_file = "#{directory}/#{spec_to_filename(artifact)}"
           FileUtils.cp artifact.to_s, target_file
-          sh("gzip -9 -k -f #{target_file}")
         end
         filename = generate_index(directory)
-        sh("gzip -9 -k -f #{filename}")
       rescue => e
         FileUtils.rm_rf assets_dir
         raise e
