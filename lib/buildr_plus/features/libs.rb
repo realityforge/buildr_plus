@@ -230,7 +230,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_gwt
-      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.7) + self.elemental2_webstorage
+      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.8) + self.elemental2_webstorage
     end
 
     def keycloak_domgen_support
