@@ -16,7 +16,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
   f.enhance(:Config) do
 
     def giggle
-      'org.realityforge.giggle:giggle-compiler:jar:all:0.11'
+      'org.realityforge.giggle:giggle-compiler:jar:all:0.12'
     end
 
     def mustache
