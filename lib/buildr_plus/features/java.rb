@@ -108,6 +108,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
           project.compile.enhance(processor_deps)
           processorpath = processor_deps.collect {|d| d.to_s}.join(File::PATH_SEPARATOR)
           project.compile.options[:other] += ['-processorpath', processorpath, '-s', project._(:target, 'generated/processors/main/java')]
+          project.test.compile.options[:other] += ['-processorpath', processorpath, '-s', project._(:target, 'generated/processors/test/java')]
         end
         if project.iml?
           project.iml.main_generated_source_directories << project._('generated/processors/main/java')
