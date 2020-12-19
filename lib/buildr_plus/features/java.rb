@@ -124,7 +124,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
         # being generated yet. So make sure the compiler reports all errors so can track down
         # the root cause
         project.ipr.add_component('JavacSettings') do |component|
-          component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => '-Xmaxerrs 10000 -Xmaxwarns 10000 -Xlint:all,-processing,-serial')
+          component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => "-Xmaxerrs 10000 -Xmaxwarns 10000 -Xlint:all,-processing,-serial#{project.fail_on_compile_warning? ? ' -Werror' : ''}")
         end
 
         project.ipr.add_component('CompilerConfiguration') do |component|
