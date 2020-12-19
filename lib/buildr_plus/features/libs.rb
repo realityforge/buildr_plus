@@ -299,19 +299,19 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.119)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.120)
     end
 
     def arez_testng
-      %w(org.realityforge.arez.testng:arez-testng:jar:0.23)
+      %w(org.realityforge.arez.testng:arez-testng:jar:0.24)
     end
 
     def arez_dom
-      %w(org.realityforge.arez.dom:arez-dom:jar:0.79)
+      %w(org.realityforge.arez.dom:arez-dom:jar:0.80)
     end
 
     def arez_persist_version
-      '0.20'
+      '0.21'
     end
 
     def arez_persist_core
