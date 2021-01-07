@@ -350,15 +350,19 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(org.realityforge.sting:sting-processor:jar:#{sting_version})
     end
 
+    def zemeckis_core
+      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.05)
+    end
+
     def react4j_version
-      '0.176'
+      '0.179'
     end
 
     def react4j
       %W(
         org.realityforge.react4j:react4j-core:jar:#{react4j_version}
         org.realityforge.react4j:react4j-dom:jar:#{react4j_version}
-      ) + self.elemental2_dom
+      ) + self.elemental2_dom + self.zemeckis_core
     end
 
     def react4j_processor
@@ -366,11 +370,13 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.101'
+      '6.103'
     end
 
     def replicant_client
-      %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) + self.elemental2_webstorage
+      %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) +
+        self.elemental2_webstorage +
+        self.zemeckis_core
     end
 
     def replicant_server
