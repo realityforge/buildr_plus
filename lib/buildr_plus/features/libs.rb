@@ -396,11 +396,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def testng_version
-      '6.11'
+      '6.14.3'
     end
 
     def testng
-      %W(org.testng:testng:jar:#{testng_version})
+      %W(org.testng:testng:jar:#{testng_version} com.beust:jcommander:jar:1.72)
     end
 
     def jndikit
