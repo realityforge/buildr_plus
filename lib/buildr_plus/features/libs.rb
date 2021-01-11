@@ -351,7 +351,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def zemeckis_core
-      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.06)
+      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.07)
     end
 
     def react4j_version
