@@ -444,7 +444,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << self.gwt_deps
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_serviceworker]) if BuildrPlus::FeatureManager.activated?(:serviceworker)
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_serviceworker, BuildrPlus::Libs.zemeckis_core]) if BuildrPlus::FeatureManager.activated?(:serviceworker)
 
       dependencies.flatten
     end
