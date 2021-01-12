@@ -230,7 +230,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_gwt
-      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.8) + self.elemental2_webstorage
+      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.9) + self.elemental2_webstorage
     end
 
     def keycloak_domgen_support
@@ -238,7 +238,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_authfilter
-      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:1.03)
+      %w(org.realityforge.keycloak.client.authfilter:keycloak-jaxrs-client-authfilter:jar:1.04)
     end
 
     def jboss_logging
