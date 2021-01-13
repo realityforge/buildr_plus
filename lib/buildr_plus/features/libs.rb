@@ -291,7 +291,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez
-      %W(org.realityforge.arez:arez-core:jar:#{arez_version}) + self.braincheck + self.jetbrains_annotations + self.grim_annotation
+      %W(org.realityforge.arez:arez-core:jar:#{arez_version}) + self.braincheck + self.jetbrains_annotations + self.grim_annotations
     end
 
     def arez_processor
