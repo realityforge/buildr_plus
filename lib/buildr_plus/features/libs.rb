@@ -351,7 +351,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def zemeckis_core
-      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.08) + self.braincheck + self.jetbrains_annotations + self.grim_annotation
+      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.08) + self.braincheck + self.jetbrains_annotations + self.grim_annotations
     end
 
     def react4j_version
