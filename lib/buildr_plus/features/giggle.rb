@@ -54,7 +54,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
         defines = []
         {
           'cdi.service.name' => "#{Reality::Naming.pascal_case(graphql_client_schema_name)}Service",
-          'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{graphql_client_schema_name}_url",
+          'cdi.base_url.jndi_name' => "#{project.root_project.name}/env/#{graphql_client_schema_name}_internal_url",
           'cdi.url.suffix' => url_suffix,
           'cdi.read_timeout' => read_timeout,
           'cdi.keycloak.client.name' => "#{Reality::Naming.pascal_case(keycloak_client)}.Keycloak",
