@@ -217,7 +217,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def proxy_servlet
-      self.httpclient + %w(org.realityforge.proxy-servlet:proxy-servlet:jar:0.2.0)
+      self.httpclient + %w(org.realityforge.proxy-servlet:proxy-servlet:jar:0.3.0)
     end
 
     def httpclient
