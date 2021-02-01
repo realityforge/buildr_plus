@@ -123,7 +123,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
             properties[key] = environment.broker.admin_password.to_s
           end
         end
-
       end
 
       if BuildrPlus::FeatureManager.activated?(:mail)
@@ -154,7 +153,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           properties[key] = "http://127.0.0.1:8080/#{Reality::Naming.underscore($1)}"
         end
       end
-
       properties.merge!(environment.settings)
 
       properties
