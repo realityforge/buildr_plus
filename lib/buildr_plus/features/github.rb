@@ -68,13 +68,16 @@ on:
   pull_request_review:
     types:
       - submitted
+  check_suite:
+    types:
+      - completed
   status: {}
 jobs:
   automerge:
     runs-on: ubuntu-latest
     steps:
       - name: automerge
-        uses: "pascalgn/automerge-action@a4b03eff945989d41c623c2784d6602560b91e5b"
+        uses: "pascalgn/automerge-action@v0.13.0"
         env:
           # see https://github.com/marketplace/actions/merge-pull-requests#configuration for more configuration options
           GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
