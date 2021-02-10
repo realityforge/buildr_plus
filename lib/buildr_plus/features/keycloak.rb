@@ -177,10 +177,6 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       @remote_clients ||= []
     end
 
-    def client_by_client_type(client_type)
-      self.clients_map[client_type.to_s] || (raise "Unable to locate client with client_type '#{client_type.name}'")
-    end
-
     def client(client_type, options = {})
       raise "Attempting to redefine client_type #{client_type}" if self.clients_map[client_type.to_s]
       client = BuildrPlus::Keycloak::KeycloakClient.new(client_type.to_s, options)
