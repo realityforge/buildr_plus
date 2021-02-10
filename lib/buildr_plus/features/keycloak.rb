@@ -229,7 +229,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           file.invoke
           cp_r Dir["#{file}/*"], base_dir
 
-          BuildrPlus::Keycloak.clients.select {|c| c.external?}.each do |client|
+          BuildrPlus::Keycloak.clients.select { |c| c.external? }.each do |client|
             a = Buildr.artifact(client.artifact)
             a.invoke
             cp_r a.to_s, "#{base_dir}/#{client.client_type}.json"
