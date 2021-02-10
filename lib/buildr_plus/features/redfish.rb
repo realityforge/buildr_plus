@@ -278,7 +278,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
             if BuildrPlus::FeatureManager.activated?(:mail)
               RedfishPlus.configure_local_mail_port(domain)
             end
-            if BuildrPlus::FeatureManager.activated?(:keycloak)
+            if BuildrPlus::FeatureManager.activated?(:replicant)
               RedfishPlus.custom_resource(domain, "#{buildr_project.name}/env/disable_session_service_protection", true, 'java.lang.Boolean')
             end
             if BuildrPlus::FeatureManager.activated?(:syncrecord)
