@@ -295,7 +295,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           desc 'Keycloak Client Definitions'
           define 'keycloak-clients' do
             project.no_iml
-            BuildrPlus::Keycloak.clients.select {|c| !c.external?}.each do |client|
+            BuildrPlus::Keycloak.clients.select { |c| !c.external? }.each do |client|
               desc "Keycloak #{client.client_type} Client Definition"
               define client.client_type.to_s do
                 project.no_iml
