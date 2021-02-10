@@ -193,6 +193,16 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     def clients_map
       @clients ||= {}
     end
+
+    def patch_client(client, filename)
+      content = IO.read(filename)
+      app = client.application || BuildrPlus::Keycloak.root_project.name
+      cname = client.env_var
+      content.gsub!("{{#{cname}_NAME}}", "#{client.name}")
+      content.gsub!("{{#{cname}_ORIGIN}}", "#{BuildrPlus::Keycloak.local_application_url}")
+      content.gsub!("{{#{cname}_URL}}", "#{BuildrPlus::Keycloak.local_application_url}/#{app}")
+      IO.write(filename, content)
+    end
   end
 
   f.enhance(:ProjectExtension) do
@@ -220,12 +230,19 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
 
           file = buildr_project.file("generated/domgen/#{name}/main/etc/keycloak")
           file.invoke
-          cp_r Dir["#{file}/*"], base_dir
+
+          BuildrPlus::Keycloak.clients.select { |c| !c.external? }.each do |client|
+            target_filename = "#{base_dir}/#{client.key}.json"
+            cp_r "#{file}/#{client.client_type}.json", target_filename
+            BuildrPlus::Keycloak.patch_client(client, target_filename)
+          end
 
           BuildrPlus::Keycloak.clients.select { |c| c.external? }.each do |client|
             a = Buildr.artifact(client.artifact)
             a.invoke
-            cp_r a.to_s, "#{base_dir}/#{client.client_type}.json"
+            target_filename = "#{base_dir}/#{client.key}.json"
+            cp_r a.to_s, target_filename
+            BuildrPlus::Keycloak.patch_client(client, target_filename)
           end
           if BuildrPlus::Config.environment == 'test'
             Dir["#{base_dir}/*"].each do |filename|
@@ -253,14 +270,6 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << "--realm-name=#{BuildrPlus::Config.environment_config.keycloak.realm}"
           args << "--admin-username=#{BuildrPlus::Config.environment_config.keycloak.admin_username}" if BuildrPlus::Config.environment_config.keycloak.admin_username
           args << "--admin-password=#{BuildrPlus::Config.environment_config.keycloak.admin_password}"
-
-          BuildrPlus::Keycloak.clients.sort_by{|c|c.client_type}.each do |client|
-            app = client.application || name
-            cname = client.env_var
-            args << "-e#{cname}_NAME=#{client.name}"
-            args << "-e#{cname}_ORIGIN=#{BuildrPlus::Keycloak.local_application_url}"
-            args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{app}"
-          end
 
           existing = BuildrPlus::Keycloak.clients.collect{|client| client.name}
           BuildrPlus::Keycloak.remote_clients.select{|c|!existing.include?(c.name)}.sort_by { |c| c.name }.each do |remote_client|
