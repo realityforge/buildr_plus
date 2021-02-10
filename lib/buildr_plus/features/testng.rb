@@ -57,9 +57,6 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
         default_testng_args << "-Dkeycloak.realm=#{environment.keycloak.realm}"
         default_testng_args << "-Dkeycloak.service_username=#{environment.keycloak.service_username}"
         default_testng_args << "-Dkeycloak.service_password=#{environment.keycloak.service_password}"
-        BuildrPlus::Keycloak.clients.each do |client|
-          default_testng_args << "-D#{client.client_type}.keycloak.client=#{client.auth_client.name('test')}"
-        end
       end
 
       if BuildrPlus::FeatureManager.activated?(:gwt) && project_descriptor && project_descriptor.in_any_role?([:gwt, :gwt_qa, :user_experience])

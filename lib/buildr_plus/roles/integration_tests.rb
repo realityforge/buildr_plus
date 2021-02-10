@@ -54,9 +54,6 @@ BuildrPlus::Roles.role(:integration_tests) do
     properties['keycloak.realm'] = environment.keycloak.realm
     properties['keycloak.service_username'] = environment.keycloak.service_username
     properties['keycloak.service_password'] = environment.keycloak.service_password
-    BuildrPlus::Keycloak.clients.each do |client|
-      properties["#{client.client_type}.keycloak.client"] = client.auth_client.name(:test)
-    end
   end
 
   test.using :java_args => BuildrPlus::Guiceyloops.integration_test_java_args, :properties => properties

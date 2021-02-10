@@ -85,11 +85,6 @@ module BuildrPlus::Keycloak
       @auth_client_type || self.client_type
     end
 
-    # Return the client that is responsible for the initial authentication process for this client
-    def auth_client
-      BuildrPlus::Keycloak.client_by_client_type(self.auth_client_type)
-    end
-
     def config_prefix
       prefix =
         (self.external? || self.default?) ?
