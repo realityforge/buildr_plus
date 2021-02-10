@@ -46,13 +46,15 @@ module BuildrPlus::Keycloak
   end
 
   class KeycloakClient < Reality::BaseElement
-    def initialize(client_type, options = {})
-      @client_type = client_type
+    def initialize(key, options = {})
+      @key = key
       @artifact = nil
       super(options)
     end
 
-    attr_reader :client_type
+    attr_reader :key
+
+    attr_accessor :client_type
 
     # Buildr application representing keycloak configuration
     attr_accessor :artifact
@@ -94,7 +96,7 @@ module BuildrPlus::Keycloak
     end
 
     def redfish_config_prefix
-      prefix = "#{Reality::Naming.uppercase_constantize(self.external? ? self.application : BuildrPlus::Keycloak.root_project.name)}_"
+      prefix = "#{Reality::Naming.uppercase_constantize(self.application || BuildrPlus::Keycloak.root_project.name)}_"
       suffix = ''
       if self.external?
         if self.application != self.client_type
@@ -177,10 +179,12 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       @remote_clients ||= []
     end
 
-    def client(client_type, options = {})
-      raise "Attempting to redefine client_type #{client_type}" if self.clients_map[client_type.to_s]
-      client = BuildrPlus::Keycloak::KeycloakClient.new(client_type.to_s, options)
-      self.clients_map[client_type.to_s] = client
+    def client(name, options = {})
+      options = options.dup
+      options[:client_type] = name unless options[:client_type]
+      client = BuildrPlus::Keycloak::KeycloakClient.new(name, options)
+      raise "Attempting to redefine client #{client.key}" if self.clients_map[client.key]
+      self.clients_map[client.key] = client
       client
     end
 
@@ -297,7 +301,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
             project.no_iml
             BuildrPlus::Keycloak.clients.select { |c| !c.external? }.each do |client|
               desc "Keycloak #{client.client_type} Client Definition"
-              define client.client_type.to_s do
+              define client.key.to_s do
                 project.no_iml
 
                 [:json, :json_sources].each do |type|
