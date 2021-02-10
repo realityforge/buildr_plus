@@ -262,7 +262,8 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
             args << "-e#{cname}_URL=#{BuildrPlus::Keycloak.local_application_url}/#{app}"
           end
 
-          BuildrPlus::Keycloak.remote_clients.sort_by{|c|c.client_type}.each do |remote_client|
+          existing = BuildrPlus::Keycloak.clients.collect{|client| client.name}
+          BuildrPlus::Keycloak.remote_clients.select{|c|!existing.include?(c.name)}.sort_by { |c| c.name }.each do |remote_client|
             args << "--unmanaged-client=#{remote_client.name}"
           end
 
