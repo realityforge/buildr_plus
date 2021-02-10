@@ -222,6 +222,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           cname = Reality::Naming.uppercase_constantize(name)
 
           base_dir = buildr_project._('generated/keycloak')
+          rm_rf base_dir
           mkdir_p base_dir
 
           file = buildr_project.file("generated/domgen/#{name}/main/etc/keycloak")
