@@ -75,10 +75,8 @@ module BuildrPlus::Keycloak
       BuildrPlus::Keycloak.root_project.name == self.client_type
     end
 
-    attr_writer :name
-
     def name(environment = BuildrPlus::Config.environment)
-      @name || "#{BuildrPlus::Config.app_scope}#{BuildrPlus::Config.app_scope.nil? ? '' : '_'}#{BuildrPlus::Config.user || 'NOBODY'}_#{self.default? || self.external? ? '' : "#{Reality::Naming.uppercase_constantize(BuildrPlus::Keycloak.root_project.name)}_"}#{Reality::Naming.uppercase_constantize(self.client_type.to_s)}_#{BuildrPlus::Config.env_code(environment)}"
+      "#{BuildrPlus::Config.app_scope}#{BuildrPlus::Config.app_scope.nil? ? '' : '_'}#{BuildrPlus::Config.user || 'NOBODY'}_#{Reality::Naming.uppercase_constantize(self.key)}_#{BuildrPlus::Config.env_code(environment)}"
     end
 
     attr_writer :auth_client_type
