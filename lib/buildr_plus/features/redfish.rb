@@ -22,6 +22,15 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       (@domain_customizations ||= []).dup
     end
 
+    def database_libraries
+      if @database_libraries.nil?
+        @database_libraries = []
+        @database_libraries << :mssql if BuildrPlus::Db.mssql?
+        @database_libraries << :pgsql if BuildrPlus::Db.pgsql?
+      end
+      @database_libraries
+    end
+
     attr_writer :local_domain
 
     def local_domain?
@@ -246,13 +255,13 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
               domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
               BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)
             end
-            if BuildrPlus::FeatureManager.activated?(:db)
-              if BuildrPlus::Db.mssql?
+            BuildrPlus::Redfish.database_libraries.each do |variant|
+              if :mssql == variant
                 library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])
                 RedfishPlus.add_library_from_path(domain, 'jtds', library.to_s, true)
                 buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
               end
-              if BuildrPlus::Db.pgsql?
+              if :pgsql == variant
                 library = ::Buildr.artifact(BuildrPlus::Libs.postgresql[0])
                 RedfishPlus.add_library_from_path(domain, 'postgresql', library.to_s, true)
                 buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
