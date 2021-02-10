@@ -209,20 +209,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
-    def integration_qa_shared_generators
-      generators = [:ee_integration_provisioner]
-      generators.flatten
-    end
-
-    def integration_qa_support_generators
-      generators = [:ee_integration]
-      generators << [:jpa_application_orm_xml, :jpa_application_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:keycloak_main_integration_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
-      generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
-      generators += self.model_qa_support_main_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
-      generators.flatten
-    end
-
     def shared_deps
       dependencies = []
 
@@ -347,36 +333,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Mail.mail_qa, BuildrPlus::Libs.mustache, BuildrPlus::Libs.greenmail]) if BuildrPlus::FeatureManager.activated?(:mail)
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
-
-      dependencies.flatten
-    end
-
-    def integration_qa_shared_deps
-      dependencies = []
-
-      dependencies << model_qa_support_deps
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.glassfish_embedded])
-
-      dependencies.flatten
-    end
-
-    def integration_qa_support_deps
-      dependencies = []
-
-      dependencies << model_qa_support_deps
-      dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_rest_client, BuildrPlus::Syncrecord.syncrecord_server_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.glassfish_embedded])
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility) if BuildrPlus::FeatureManager.activated?(:jms)
-      if BuildrPlus::FeatureManager.activated?(:keycloak)
-        dependencies << Buildr.artifacts([BuildrPlus::Libs.keycloak_authfilter])
-      end
-      dependencies.flatten
-    end
-
-    def integration_deps
-      dependencies = []
-
-      dependencies << self.integration_qa_support_deps
 
       dependencies.flatten
     end

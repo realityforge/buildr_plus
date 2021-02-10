@@ -22,15 +22,7 @@ if File.exist?("#{base_directory}/shared")
   BuildrPlus::Roles.project('shared', :roles => [:shared], :parent => :container, :template => true, :description => 'Shared Components')
 end
 
-require_model = false
-if File.exist?("#{base_directory}/integration-qa-support") || File.exist?("#{base_directory}/integration-qa-shared") || File.exist?("#{base_directory}/integration-tests")
-  require_model = true
-  BuildrPlus::Roles.project('integration-qa-shared', :roles => [:integration_qa_shared], :parent => :container, :template => true, :description => 'Integration Test Infrastructure shared with external projects')
-  BuildrPlus::Roles.project('integration-qa-support', :roles => [:integration_qa_support], :parent => :container, :template => true, :description => 'Integration Test Infrastructure')
-  BuildrPlus::Roles.project('integration-tests', :roles => [:integration_tests], :parent => :container, :template => true, :description => 'Integration Tests')
-end
-
-if require_model || File.exist?("#{base_directory}/model") || File.exist?("#{base_directory}/model-qa-support")
+if File.exist?("#{base_directory}/model") || File.exist?("#{base_directory}/model-qa-support")
   BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
   if BuildrPlus::FeatureManager.activated?(:sync) && !BuildrPlus::Sync.standalone?
     BuildrPlus::Roles.project('sync_model', :roles => [:sync_model], :parent => :container, :template => true, :description => 'Shared Model used to write External synchronization services')
@@ -51,7 +43,6 @@ end
 
 if BuildrPlus::FeatureManager.activated?(:soap)
   BuildrPlus::Roles.project('soap-client', :roles => [:soap_client], :parent => :container, :template => true, :description => 'SOAP Client API')
-  BuildrPlus::Roles.project('soap-qa-support', :roles => [:soap_qa_support], :parent => :container, :template => true, :description => 'SOAP Test Infrastructure')
 end
 
 BuildrPlus::Roles.default_role = :container

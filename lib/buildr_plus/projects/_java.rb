@@ -15,4 +15,4 @@
 require 'buildr_plus/projects/_common'
 require 'buildr/jacoco'
 
-BuildrPlus::FeatureManager.activate_features([:spotbugs, :pmd, :checkstyle, :java, :testng, :ejb, :jaxrs, :guiceyloops])
+BuildrPlus::FeatureManager.activate_features([:spotbugs, :pmd, :checkstyle, :java, :testng, :ejb, :jaxrs])

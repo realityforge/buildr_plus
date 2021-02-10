@@ -250,10 +250,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('client.ioc', 'com.google.gwt.core.client.GWT', :rule_type => :class)
         r.subpackage_rule('client', 'com.google.gwt.core.client.GWT', :rule_type => :class, :local_only => true)
 
-        if BuildrPlus::FeatureManager.activated?(:role_integration_tests)
-          r.subpackage_rule('integration.test.util', 'org.realityforge.guiceyloops.server.glassfish.GlassFishContainer', :rule_type => :class)
-        end
-
         if BuildrPlus::FeatureManager.activated?(:keycloak)
           r.subpackage_rule('client', 'org.realityforge.gwt.keycloak.Keycloak', :rule_type => :class)
         end

@@ -19,21 +19,8 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
       default_testng_args << '-ea'
       default_testng_args << '-Xmx2024M'
 
-      if BuildrPlus::Roles.project_with_role?(:integration_tests) && project_descriptor && project_descriptor.in_any_role?([:integration_tests])
-        server_project = project.project(BuildrPlus::Roles.project_with_role(:server).name)
-        war_package = server_project.package(:war)
-        war_dir = File.dirname(war_package.to_s)
-
-        default_testng_args << "-Dembedded.glassfish.artifacts=#{BuildrPlus::Guiceyloops.glassfish_spec_list}"
-        default_testng_args << "-Dwar.dir=#{war_dir}"
-        BuildrPlus::Integration.additional_applications_to_deploy.each do |key, artifact|
-          default_testng_args << "-D#{key}.war.filename=#{Buildr.artifact(artifact).to_s}"
-        end
-        default_testng_args.concat(BuildrPlus::Glassfish.addtional_default_testng_args)
-      end
-
-      if BuildrPlus::FeatureManager.activated?(:db) && project_descriptor && project_descriptor.in_any_role?([:library, :server, :sync_model, :model, :model_qa, :integration_tests])
-        default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}" unless project_descriptor.in_any_role?([:integration_tests])
+      if BuildrPlus::FeatureManager.activated?(:db) && project_descriptor && project_descriptor.in_any_role?([:library, :server, :sync_model, :model, :model_qa])
+        default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}"
 
         if BuildrPlus::FeatureManager.activated?(:dbt)
           BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
@@ -50,7 +37,7 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
         end
       end
 
-      if BuildrPlus::FeatureManager.activated?(:keycloak) && project_descriptor && project_descriptor.in_any_role?([:server, :integration_tests])
+      if BuildrPlus::FeatureManager.activated?(:keycloak) && project_descriptor && project_descriptor.in_any_role?([:server])
         environment = BuildrPlus::Config.application_config.environment_by_key(:test)
         default_testng_args << "-Dkeycloak.server-url=#{environment.keycloak.base_url}"
         default_testng_args << "-Dkeycloak.public-key=#{environment.keycloak.public_key}"
