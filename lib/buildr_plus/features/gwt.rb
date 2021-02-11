@@ -152,7 +152,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson, :javascript]) do |
 
     def guess_gwt_module_name(suffix = '')
       p = self.root_project
-      "#{p.group_as_package}.#{p.name_as_class}#{suffix}"
+      "#{p.java_package_name}.#{p.name_as_class}#{suffix}"
     end
 
     def gwt_module?(module_name)
