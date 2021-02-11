@@ -207,7 +207,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 end
 
                 domgen_clients = r.keycloak.remote_clients.collect { |client| client.name.to_s }.sort.uniq
-                clients = BuildrPlus::Keycloak.remote_clients.collect{|c| c.client_type}.sort.uniq
+                clients = BuildrPlus::Keycloak.remote_clients.select{|c|c.application.nil?}.collect{|c| c.client_type}.sort.uniq
                 if clients != domgen_clients
                   raise "Domgen repository #{r.name} declares keycloak remote clients #{domgen_clients.inspect} while buildr is aware of #{clients.inspect}"
                 end
