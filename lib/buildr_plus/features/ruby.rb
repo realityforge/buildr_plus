@@ -19,4 +19,22 @@ BuildrPlus::FeatureManager.feature(:ruby) do |f|
       IO.read("#{base_directory}/.ruby-version").strip
     end
   end
+
+  f.enhance(:ProjectExtension) do
+    desc 'Check ruby matches expected version.'
+    task 'ruby:check' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      expected = BuildrPlus::Ruby.ruby_version
+      actual = IO.read("#{base_directory}/.ruby-version").strip
+      if expected != actual
+        raise '.ruby-version has not been normalized. Please run "buildr ruby:fix" and commit changes.'
+      end
+    end
+
+    desc 'Normalize .ruby-version.'
+    task 'ruby:fix' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      IO.write("#{base_directory}/.ruby-version", "#{BuildrPlus::Ruby.ruby_version}\n")
+    end
+  end
 end
