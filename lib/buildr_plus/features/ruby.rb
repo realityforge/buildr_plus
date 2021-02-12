@@ -15,8 +15,7 @@
 BuildrPlus::FeatureManager.feature(:ruby) do |f|
   f.enhance(:Config) do
     def ruby_version
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      IO.read("#{base_directory}/.ruby-version").strip
+      '2.6.6'
     end
   end
 
