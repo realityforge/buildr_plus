@@ -372,7 +372,7 @@ CONTENT
       end
 
       result = <<CONTENT
-    kinjen.run_in_container( this, 'stocksoftware/build', '#{BuildrPlus::Jenkins.container_options}' ) {
+    kinjen.run_in_container( this, 'stocksoftware/build:current', '#{BuildrPlus::Jenkins.container_options}' ) {
 #{c}
     }
 CONTENT
