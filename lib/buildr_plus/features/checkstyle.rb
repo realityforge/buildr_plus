@@ -411,37 +411,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
     end
 
     first_time do
-      require 'buildr/checkstyle'
-
-      class Buildr::Checkstyle::Config
-        def enabled?
-          project.ipr?
-        end
-      end
-
-      module ::Buildr::Checkstyle
-        class << self
-          # The specs for requirements
-          def dependencies
-            %w(
-              com.puppycrawl.tools:checkstyle:jar:8.40
-              org.antlr:antlr4-runtime:jar:4.9.1
-              antlr:antlr:jar:2.7.7
-
-              com.google.guava:guava:jar:30.0-jre
-              commons-beanutils:commons-beanutils:jar:1.9.4
-              commons-logging:commons-logging:jar:1.2
-              commons-collections:commons-collections:jar:3.2.2
-              info.picocli:picocli:jar:4.6.1
-              net.sf.saxon:Saxon-HE:jar:10.3
-              com.ibm.icu:icu4j:jar:63.1
-
-              org.javassist:javassist:jar:3.26.0-GA
-              org.reflections:reflections:jar:0.9.12
-            )
-          end
-        end
-      end
+      require 'buildr_plus/patches/checkstyle'
     end
 
     before_define do |project|
@@ -462,6 +432,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         project.checkstyle.suppressions_file = checkstyle_suppressions
         project.checkstyle.properties['checkstyle.suppressions.file'] = checkstyle_suppressions
         project.checkstyle.properties['checkstyle.import-control.file'] = checkstyle_import_rules
+        project.checkstyle.java_args = %w(-Xmx2G)
 
         t = task 'checkstyle:setup' do
           FileUtils.mkdir_p checkstyle_dir
