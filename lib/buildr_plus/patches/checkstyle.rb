@@ -19,29 +19,12 @@ module Buildr
   module Checkstyle
 
     class << self
-
-      # The specs for requirements
-      def dependencies
-        %w(
-            com.puppycrawl.tools:checkstyle:jar:8.40
-            org.antlr:antlr4-runtime:jar:4.9.1
-            antlr:antlr:jar:2.7.7
-
-            com.google.guava:guava:jar:30.0-jre
-            commons-beanutils:commons-beanutils:jar:1.9.4
-            commons-logging:commons-logging:jar:1.2
-            commons-collections:commons-collections:jar:3.2.2
-            info.picocli:picocli:jar:4.6.1
-            net.sf.saxon:Saxon-HE:jar:10.3
-            com.ibm.icu:icu4j:jar:63.1
-
-            org.javassist:javassist:jar:3.26.0-GA
-            org.reflections:reflections:jar:0.9.12
-          )
-      end
-
       def checkstyle(configuration_file, format, output_file, source_paths, options = {})
-        dependencies = self.dependencies + (options[:dependencies] || [])
+        version = '8.40'
+        artifact = Buildr.artifact("com.puppycrawl.tools:checkstyle-all:jar:#{version}")
+        Buildr.download(artifact => "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-#{version}/checkstyle-#{version}-all.jar")
+
+        dependencies = [artifact] + (options[:dependencies] || [])
         cp = Buildr.artifacts(dependencies).each { |a| a.invoke if a.respond_to?(:invoke) }.map(&:to_s)
 
         args = []
@@ -167,7 +150,6 @@ module Buildr
       def properties
         unless @properties
           @properties = {:basedir => self.project.base_dir}
-          @properties['checkstyle.config.dir'] = self.config_directory if File.directory?(self.config_directory)
           @properties['checkstyle.suppressions.file'] = self.suppressions_file if File.exist?(self.suppressions_file)
           @properties['checkstyle.import-control.file'] = self.import_control_file if File.exist?(self.import_control_file)
         end
@@ -179,9 +161,8 @@ module Buildr
       end
 
       def extra_dependencies
-        @extra_dependencies ||= [self.project.compile.dependencies, self.project.test.compile.dependencies].flatten
+        @extra_dependencies ||= []
       end
-
 
       # An array of additional java_args
       attr_writer :java_args
@@ -208,17 +189,6 @@ module Buildr
         paths.flatten.compact
       end
 
-      def complete_extra_dependencies
-        deps = self.extra_dependencies.dup
-
-        self.additional_project_names.each do |project_name|
-          p = self.project.project(project_name)
-          deps << [p.compile.dependencies, p.test.compile.dependencies].flatten.compact
-        end
-
-        deps.flatten.compact
-      end
-
       protected
 
       def initialize(project)
@@ -242,14 +212,16 @@ module Buildr
           project.task('checkstyle:xml') do
             puts 'Checkstyle: Analyzing source code...'
             mkdir_p File.dirname(project.checkstyle.xml_output_file)
+            source_paths = project.checkstyle.complete_source_paths.select{|p| !p.include?('/generated/')}
+            source_paths = source_paths.collect{|p|::Buildr::Util.relative_path(File.expand_path(p.to_s), project.base_dir)}
             Buildr::Checkstyle.checkstyle(project.checkstyle.configuration_file,
                                           project.checkstyle.format,
                                           project.checkstyle.xml_output_file,
-                                          project.checkstyle.complete_source_paths,
+                                          source_paths,
                                           :properties => project.checkstyle.properties,
                                           :java_args => project.checkstyle.java_args,
                                           :fail_on_error => project.checkstyle.fail_on_error?,
-                                          :dependencies => project.checkstyle.complete_extra_dependencies)
+                                          :dependencies => project.checkstyle.extra_dependencies.dup.flatten.compact)
           end
 
           if project.checkstyle.html_enabled?
