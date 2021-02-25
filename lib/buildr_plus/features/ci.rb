@@ -264,10 +264,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           end
         end
 
-        # Always run check and make sure file system state matches jenkins feature state
-        commit_actions << 'jenkins:check'
-        pull_request_actions << 'jenkins:check'
-
         desc 'Perform pre-commit checks and source code analysis'
         project.task ':ci:commit' => commit_actions
 
