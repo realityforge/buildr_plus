@@ -298,7 +298,6 @@ CONTENT
       options[:checkstyle] = true if BuildrPlus::FeatureManager.activated?(:checkstyle)
       options[:spotbugs] = true if BuildrPlus::FeatureManager.activated?(:spotbugs)
       options[:pmd] = true if BuildrPlus::FeatureManager.activated?(:pmd)
-      options[:jdepend] = true if BuildrPlus::FeatureManager.activated?(:jdepend)
       option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
       "        kinjen.commit_stage( this, '#{root_project.name}'#{option_string} )\n"
     end

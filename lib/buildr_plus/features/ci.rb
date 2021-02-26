@@ -278,7 +278,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
       end
 
       project.task(':ci:source_code_analysis') do
-        task("#{project.name}:jdepend:html").invoke if project.respond_to?(:jdepend) && project.jdepend.enabled?
         if project.respond_to?(:spotbugs) && project.spotbugs.enabled?
           task("#{project.name}:spotbugs:xml").invoke
           task("#{project.name}:spotbugs:html").invoke
