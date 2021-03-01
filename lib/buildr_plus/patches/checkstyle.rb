@@ -1,3 +1,5 @@
+raise 'Patch applied upstream' if Buildr::VERSION.to_s > '1.5.8'
+
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with this
 # work for additional information regarding copyright ownership.  The ASF
@@ -50,7 +52,7 @@ module Buildr
 
     class Config
       def enabled?
-        project.ipr?
+        File.exist?(self.configuration_file)
       end
 
       def html_enabled?
@@ -212,7 +214,7 @@ module Buildr
           project.task('checkstyle:xml') do
             puts 'Checkstyle: Analyzing source code...'
             mkdir_p File.dirname(project.checkstyle.xml_output_file)
-            source_paths = project.checkstyle.complete_source_paths.select{|p| !p.include?('/generated/')}
+            source_paths = project.checkstyle.complete_source_paths.select{|p| !p.start_with?(project._(:generated).to_s)}
             source_paths = source_paths.collect{|p|::Buildr::Util.relative_path(File.expand_path(p.to_s), project.base_dir)}
             Buildr::Checkstyle.checkstyle(project.checkstyle.configuration_file,
                                           project.checkstyle.format,
