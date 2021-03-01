@@ -52,7 +52,7 @@ module Buildr
 
       def spotbugs(output_file, source_paths, analyze_paths, options = {})
         plugins = self.fb_contrib_dependencies
-        cp = Buildr.artifacts(self.dependencies).each { |a| a.invoke if a.respond_to?(:invoke) }.map(&:to_s).join(File::PATH_SEPARATOR)
+        Buildr.artifacts(self.dependencies).each { |a| a.invoke if a.respond_to?(:invoke) }
 
         args = []
         args << '-textui'
