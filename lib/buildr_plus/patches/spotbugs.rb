@@ -1,4 +1,4 @@
-raise "Addon added upstream. Add buildr/spotbugs" if Buildr::VERSION.to_s > '1.5.8'
+raise 'Addon added upstream. Add buildr/spotbugs' if Buildr::VERSION.to_s > '1.5.8'
 
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with this
