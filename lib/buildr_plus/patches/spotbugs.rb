@@ -53,7 +53,6 @@ module Buildr
       def spotbugs(output_file, source_paths, analyze_paths, options = {})
         plugins = self.fb_contrib_dependencies
         cp = Buildr.artifacts(self.dependencies).each { |a| a.invoke if a.respond_to?(:invoke) }.map(&:to_s).join(File::PATH_SEPARATOR)
-        pluginList = Buildr.artifacts(plugins).map(&:to_s).join(File::PATH_SEPARATOR)
 
         args = []
         args << '-textui'
@@ -66,7 +65,7 @@ module Buildr
         args << ('html' == options[:output] ? '-html' : '-xml:withMessages')
         args << '-output' << output_file
         args << '-sourcepath' << source_paths.map(&:to_s).join(File::PATH_SEPARATOR)
-        args << '-pluginList' << pluginList
+        args << '-pluginList' << Buildr.artifacts(plugins).map(&:to_s).join(File::PATH_SEPARATOR)
 
         extra_dependencies = (options[:extra_dependencies] || []) + plugins
         if 0 != extra_dependencies.size
