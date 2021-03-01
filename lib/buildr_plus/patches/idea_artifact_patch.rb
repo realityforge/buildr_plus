@@ -1,3 +1,4 @@
+raise 'Patch applied upstream' if Buildr::VERSION.to_s > '1.5.8'
 
 class Buildr::IntellijIdea::IdeaProject
 
