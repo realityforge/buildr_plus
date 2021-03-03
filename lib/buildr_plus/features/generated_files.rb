@@ -28,7 +28,7 @@ BuildrPlus::FeatureManager.feature(:generated_files) do |f|
       BuildrPlus::GeneratedFiles.check_generated_files('*.xml', /^<!-- DO NOT EDIT\: File is auto-generated -->$/)
       BuildrPlus::GeneratedFiles.check_generated_files('*.rb', /^# DO NOT EDIT\: File is auto-generated$/)
       BuildrPlus::GeneratedFiles.check_generated_files('*.yaml', /^# DO NOT EDIT\: File is auto-generated$/)
-      BuildrPlus::GeneratedFiles.check_generated_files('*.yml', /^# DO NOT EDIT\: File is auto-generated$/, %w(.travis.yml .github/workflows/automerge.yml))
+      BuildrPlus::GeneratedFiles.check_generated_files('*.yml', /^# DO NOT EDIT\: File is auto-generated$/, %w(.github/workflows/automerge.yml))
     end
   end
 end

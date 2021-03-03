@@ -52,13 +52,12 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
     end
 
     def publish_task_type=(publish_task_type)
-      raise "Can not set publish task type to #{publish_task_type.inspect} as not one of expected values" unless [:oss, :external, :none].include?(publish_task_type)
+      raise "Can not set publish task type to #{publish_task_type.inspect} as not one of expected values" unless [:external, :none].include?(publish_task_type)
       @publish_task_type = publish_task_type
     end
 
     def publish_task_type
       return @publish_task_type unless @publish_task_type.nil?
-      return :oss if BuildrPlus::FeatureManager.activated?(:oss)
       :none
     end
 
@@ -130,13 +129,13 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
 
     def standard_build_scripts
       scripts = { 'Jenkinsfile' => jenkinsfile_content }
-      scripts['.jenkins/publish.groovy'] = publish_content(self.publish_task_type == :oss) unless self.publish_task_type == :none
+      scripts['.jenkins/publish.groovy'] = self.publish_content unless self.publish_task_type == :none
       scripts.merge!(additional_tasks)
       scripts
     end
 
-    def publish_content(oss)
-      content = "#{prepare_content(:exclude_artifacts => true)}\n        kinjen.publish_stage( this#{oss ? ", 'OSS_'" : ''} )\n"
+    def publish_content
+      content = "#{prepare_content(:exclude_artifacts => true)}\n        kinjen.publish_stage( this )\n"
       task_content(content, :always_run => true)
     end
 
