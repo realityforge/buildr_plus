@@ -22,7 +22,7 @@ unless Bundler::VERSION >= bundler_version || defined?(JRUBY_VERSION)
   raise "buildr_plus expected Bundler version #{bundler_version} but actual version is #{Bundler::VERSION}"
 end
 
-# Try ensure stdout is always emitted sychronously.
+# Try ensure stdout is always emitted synchronously.
 # This is particularly important when running in buffering Jenkins instance.
 STDOUT.sync=true
 
