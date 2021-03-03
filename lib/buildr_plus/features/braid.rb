@@ -37,6 +37,9 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
         end
       end
 
+      unless config.mirrors.include?('vendor/tools/buildr')
+        raise "Braid entry does not exists for path 'vendor/tools/buildr' as expected."
+      end
       unless config.mirrors.include?('vendor/tools/buildr_plus')
         raise "Braid entry does not exists for path 'vendor/tools/buildr_plus' as expected."
       end
@@ -56,6 +59,7 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
       if File.exist?("#{base_directory}/vendor/docs/way_of_stock") && !config.mirrors.include?('vendor/docs/way_of_stock')
         raise "Docs 'way_of_stock' is at path 'vendor/docs/way_of_stock' but is not braided in."
       end
+      raise "Vendor directory 'vendor/tools/buildr' expected to exist." unless File.exist?("#{base_directory}/vendor/tools/buildr")
       raise "Vendor directory 'vendor/tools/buildr_plus' expected to exist." unless File.exist?("#{base_directory}/vendor/tools/buildr_plus")
       %w(domgen dbt rptman redfish).each do |feature|
         if File.exist?("#{base_directory}/vendor/tools/#{feature}")

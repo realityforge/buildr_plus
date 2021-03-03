@@ -62,7 +62,7 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
 
       gems = {}
 
-      gem(gems, 'buildr', '1.5.8')
+      gem(gems, 'buildr', '1.5.9.dev', :path => 'vendor/tools/buildr')
       gem(gems, 'braid', '1.1.2')
 
       gem(gems, 'buildr_plus', '1.0.0', :path => 'vendor/tools/buildr_plus')
