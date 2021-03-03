@@ -84,7 +84,7 @@ BuildrPlus::FeatureManager.feature(:spotbugs) do |f|
 
   f.enhance(:ProjectExtension) do
     first_time do
-      require 'buildr_plus/patches/spotbugs'
+      require 'buildr/spotbugs'
     end
 
     before_define do |project|
