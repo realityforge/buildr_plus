@@ -69,7 +69,7 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
         config.mirrors.each do |mirror|
           local_changes = true unless `braid diff #{mirror}`.chomp.empty?
         end
-        raise "Braid directories have no local changes but buildr_plus is configured to allow local changes. Please change allow_local_changes setting." unless local_changes
+        raise "Braid directories have no local changes but buildr_plus is configured to allow local changes. Please remove allow_local_changes setting." unless local_changes
       else
         config.mirrors.each do |mirror|
           unless `braid diff #{mirror}`.chomp.empty?
