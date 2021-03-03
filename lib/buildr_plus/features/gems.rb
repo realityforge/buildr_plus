@@ -136,11 +136,21 @@ CONTENT
       if BuildrPlus::Gems.gemfile_needs_update?
         raise 'Gemfile has not been normalized. Please run "buildr gems:fix" and commit changes.'
       end
+      buildr_script = "#{File.dirname(Buildr.application.buildfile.to_s)}/buildr"
+      if !File.exist?(buildr_script) || !File.lstat('buildr').symlink?
+        raise 'Symlink of buildr script not present. Please run "buildr gems:fix" and commit changes.'
+      end
     end
 
     desc 'Normalize Gemfile.'
     task 'gems:fix' do
       BuildrPlus::Gems.process_gemfile(true)
+
+      buildr_script = "#{File.dirname(Buildr.application.buildfile.to_s)}/buildr"
+      target = "#{File.dirname(Buildr.application.buildfile.to_s)}/vendor/tools/buildr/bin/buildr"
+      if !File.exist?(buildr_script) || !File.lstat('buildr').symlink?
+        sh "cd #{File.dirname(Buildr.application.buildfile.to_s)} && ln -s vendor/tools/buildr/bin/buildr buildr && git add buildr"
+      end
     end
   end
 end
