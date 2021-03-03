@@ -428,6 +428,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         checkstyle_check_rules = "#{checkstyle_dir}/rules.xml"
         checkstyle_suppressions = "#{checkstyle_dir}/suppressions.xml"
 
+        project.checkstyle.enabled = true
         project.checkstyle.configuration_file = checkstyle_check_rules
         project.checkstyle.suppressions_file = checkstyle_suppressions
         project.checkstyle.properties['checkstyle.suppressions.file'] = checkstyle_suppressions
