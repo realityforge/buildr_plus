@@ -39,7 +39,6 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
     end
 
     first_time do
-      require 'buildr_plus/patches/idea_less_extension'
       require 'buildr_plus/patches/lessc'
     end
 

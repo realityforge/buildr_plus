@@ -35,10 +35,6 @@ require 'buildr_plus/util'
 # Patches that should always be applied
 require 'buildr_plus/patches/group_project_patch'
 require 'buildr_plus/patches/resources_filter_patch'
-require 'buildr_plus/patches/idea_patch'
-require 'buildr_plus/patches/idea_artifact_patch'
-require 'buildr_plus/patches/testng_patch'
-require 'buildr_plus/patches/transports_patch'
 require 'buildr_plus/patches/warn_patch'
 
 require 'buildr_plus/features/appconfig'
