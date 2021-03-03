@@ -283,8 +283,8 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           task("#{project.name}:spotbugs:html").invoke
         end
         if project.respond_to?(:pmd) && project.pmd.enabled?
-          task("#{project.name}:pmd:rule:html").invoke
-          task("#{project.name}:pmd:rule:xml").invoke
+          task("#{project.name}:pmd:html").invoke
+          task("#{project.name}:pmd:xml").invoke
         end
         if project.respond_to?(:checkstyle) && project.checkstyle.enabled?
           task("#{project.name}:checkstyle:xml").invoke
