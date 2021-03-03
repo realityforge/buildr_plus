@@ -68,6 +68,7 @@ BuildrPlus::Roles.role(:server) do
           next if f =~ /^.*\.br$/
           next if f.start_with?("#{project.assets.to_s}/WEB-INF")
           FileUtils.rm_f "#{f}.br" if File.exist?("#{f}.br")
+          puts "Pre-encoding asset #{f}" if trace?
           sh "brotli #{f}"
         end
         puts "Asset encoding complete"
