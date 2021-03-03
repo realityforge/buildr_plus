@@ -73,7 +73,7 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
       else
         config.mirrors.each do |mirror|
           unless `braid diff #{mirror}`.chomp.empty?
-            raise "Vendor directory '#{mirror}' has local changes but buildr_plus is configured to disallow local changes. Please push changes to upstream."
+            raise "Vendor directory '#{mirror}' has local changes but buildr_plus is configured to disallow local changes. Please push changes to upstream or set BuildrPlus::Braid.allow_local_changes = true."
           end
         end
       end
