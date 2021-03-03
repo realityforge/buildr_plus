@@ -411,7 +411,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
     end
 
     first_time do
-      require 'buildr_plus/patches/checkstyle'
+      require 'buildr/checkstyle'
     end
 
     before_define do |project|
