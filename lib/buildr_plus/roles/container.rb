@@ -112,6 +112,7 @@ BuildrPlus::Roles.role(:container) do
     iml.excluded_directories << project._('dataSources') if BuildrPlus::FeatureManager.activated?(:db)
     iml.excluded_directories << project._(:generated, :gwt) if BuildrPlus::FeatureManager.activated?(:gwt)
     iml.excluded_directories << project._('tmp')
+    iml.excluded_directories << project._('.shelf')
 
     BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
       gwt_modules = p.determine_top_level_gwt_modules('Dev')
