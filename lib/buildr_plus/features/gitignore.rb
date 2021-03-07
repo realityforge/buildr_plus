@@ -56,6 +56,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
       gitignores << '*.iml'
       gitignores << '/*.ipr'
       gitignores << '/*.iws'
+      gitignores << '/.shelf'
       if BuildrPlus::FeatureManager.activated?(:dbt)
         gitignores << '/*.ids'
         gitignores << '/.ideaDataSources'
