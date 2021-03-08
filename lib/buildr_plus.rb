@@ -12,11 +12,6 @@
 # limitations under the License.
 #
 
-expected_versions = %w(1.5.9.dev)
-unless expected_versions.include?(Buildr::VERSION.to_s)
-  raise "buildr_plus expected one of the Buildr versions #{expected_versions.join(', ')} but actual version is #{Buildr::VERSION}"
-end
-
 # Try ensure stdout is always emitted synchronously.
 # This is particularly important when running in buffering Jenkins instance.
 STDOUT.sync=true
