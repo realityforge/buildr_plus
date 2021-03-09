@@ -73,6 +73,12 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
     end
 
     attr_writer :enforce_postload_constraints
+
+    def enforce_package_name?
+      @enforce_package_name.nil? ? true : !!@enforce_package_name
+    end
+
+    attr_writer :enforce_package_name
   end
 
   f.enhance(:ProjectExtension) do
@@ -149,7 +155,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
 
             Domgen.repositories.each do |r|
               if r.java?
-                if r.java.base_package != project.java_package_name
+                if BuildrPlus::Domgen.enforce_package_name? && r.java.base_package != project.java_package_name
                   raise "Buildr projects package name '#{project.java_package_name}' (#{project.java_package_name? ? "explicitly specified via project.java_package_name" : "derived from group #{project.group}"}) expected to match domgens 'java.base_package' setting ('#{r.java.base_package}') but it does not."
                 end
               end
