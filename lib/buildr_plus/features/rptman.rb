@@ -22,36 +22,6 @@ BuildrPlus::FeatureManager.feature(:rptman => [:db]) do |f|
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
       if ::File.exist?(File.expand_path("#{base_directory}/config/ci-report-database.yml"))
-        desc 'Download reports from production environment'
-        task 'rptman:download_production_environment' do
-
-          old_environment = SSRS::Config.environment
-          old_filename = SSRS::Config.config_filename
-          begin
-            SSRS::Config.config_data = nil
-            SSRS::Config.environment = 'production'
-            SSRS::Config.config_filename = 'config/ci-report-database.yml'
-            task('rptman:ssrs:download').invoke
-
-            # Patch them assuming they were uploaded using old uploading code
-            Dir["#{SSRS::Config.reports_dir}/**/*.rdl"].each do |filename|
-              puts "Patching: #{filename}"
-              content = IO.read(filename)
-              File.open(filename, 'wb') do |file|
-                while content.gsub!(/(\<[^'\>]+)'/m, '\1"'); end
-                file.write content.
-                             gsub("\r\n", "\n").
-                             gsub("\n", "\r\n").
-                             gsub(/([^ ])[ ]*\/>/, '\1 />')
-              end
-            end
-          ensure
-            SSRS::Config.config_data = nil
-            SSRS::Config.environment = old_environment
-            SSRS::Config.config_filename = old_filename
-          end
-        end
-
         desc 'Uploads reports to production environment'
         task 'rptman:upload_to_production_environment' do
 
