@@ -145,11 +145,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           end
         end
 
-        if BuildrPlus::FeatureManager.activated?(:rptman) && ENV['RPTMAN'] != 'no'
-          commit_actions << 'rptman:setup'
-          pull_request_actions << 'rptman:setup'
-        end
-
         if BuildrPlus::FeatureManager.activated?(:domgen)
           commit_actions << 'domgen:all'
           pull_request_actions << 'domgen:all'
