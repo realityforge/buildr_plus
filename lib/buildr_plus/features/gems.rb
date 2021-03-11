@@ -121,6 +121,13 @@ CONTENT
             end
             FileUtils.rm_rf "#{filename}.lock"
             sh "bundler install --gemfile=#{filename}"
+            sh "bundle lock --gemfile=#{filename} --add-platform ruby"
+            # macOS Mojave 10.14
+            sh "bundle lock --gemfile=#{filename} --add-platform x86_64-darwin-18"
+            # macOS Catalina 10.15
+            sh "bundle lock --gemfile=#{filename} --add-platform x86_64-darwin-19"
+            # macOS Big Sur 11
+            sh "bundle lock --gemfile=#{filename} --add-platform x86_64-darwin-20"
           else
             puts 'Non-normalized Gemfile'
           end
