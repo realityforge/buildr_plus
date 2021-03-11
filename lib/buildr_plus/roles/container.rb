@@ -109,7 +109,10 @@ BuildrPlus::Roles.role(:container) do
       end
     end
 
-    iml.excluded_directories << project._('.ideaDataSources') if BuildrPlus::FeatureManager.activated?(:db)
+    if BuildrPlus::FeatureManager.activated?(:db)
+      iml.excluded_directories << project._('dataSources')
+      iml.excluded_directories << project._('.ideaDataSources')
+    end
     iml.excluded_directories << project._(:generated, :gwt) if BuildrPlus::FeatureManager.activated?(:gwt)
     iml.excluded_directories << project._('tmp')
     iml.excluded_directories << project._('.shelf')
