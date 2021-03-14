@@ -32,7 +32,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     attr_writer :enable_annotation_processor
 
     def enable_annotation_processor?
-      @enable_annotation_processor.nil? ? BuildrPlus::Java.enable_annotation_processor? : !!@enable_annotation_processor
+      @enable_annotation_processor.nil? ? true : !!@enable_annotation_processor
     end
 
     attr_writer :fail_on_compile_warning
