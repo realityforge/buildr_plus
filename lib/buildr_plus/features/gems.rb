@@ -62,23 +62,23 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
 
       gems = {}
 
-      gem(gems, 'realityforge-buildr', '1.5.10.dev', :path => 'vendor/tools/buildr')
+      gem(gems, 'realityforge-buildr', nil, :path => 'vendor/tools/buildr')
       gem(gems, 'braid', '1.1.2')
 
-      gem(gems, 'buildr_plus', '1.0.0', :path => 'vendor/tools/buildr_plus')
+      gem(gems, 'buildr_plus', nil, :path => 'vendor/tools/buildr_plus')
 
       if BuildrPlus::FeatureManager.activated?(:dbt)
-        gem(gems, 'dbt', '0.10.0.dev', :path => 'vendor/tools/dbt')
+        gem(gems, 'dbt', nil, :path => 'vendor/tools/dbt')
         gem(gems, 'maruku')
       end
       if BuildrPlus::FeatureManager.activated?(:domgen)
-        gem(gems, 'domgen', '0.19.0.dev', :path => 'vendor/tools/domgen')
+        gem(gems, 'domgen', nil, :path => 'vendor/tools/domgen')
       end
       if BuildrPlus::FeatureManager.activated?(:rptman)
-        gem(gems, 'rptman', '0.5', :path => 'vendor/tools/rptman')
+        gem(gems, 'rptman', nil, :path => 'vendor/tools/rptman')
       end
       if BuildrPlus::FeatureManager.activated?(:redfish)
-        gem(gems, 'redfish', '0.2.2.dev', :path => 'vendor/tools/redfish')
+        gem(gems, 'redfish', nil, :path => 'vendor/tools/redfish')
       end
       if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.tiny_tds_defined?
         gem(gems, 'tiny_tds', '2.1.3')
@@ -87,7 +87,7 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
         gem(gems, 'pg', '0.19.0')
       end
       if BuildrPlus::FeatureManager.activated?(:resgen)
-        gem(gems, 'resgen', '1.0.0', :path => 'vendor/tools/resgen')
+        gem(gems, 'resgen', nil, :path => 'vendor/tools/resgen')
         gem(gems, 'nokogiri', '1.7.2')
       end
       if BuildrPlus::FeatureManager.activated?(:sass)
