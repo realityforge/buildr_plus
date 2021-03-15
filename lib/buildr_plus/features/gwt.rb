@@ -55,7 +55,6 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson, :javascript]) do |
       end + project.iml.main_generated_source_directories.flatten.compact.collect do |a|
         a.is_a?(String) ? file(a) : a
       end
-      extra_deps += [project.file(project._(:target, 'generated/processors/main/java'))] if project.enable_annotation_processor?
       extra_deps
     end
 

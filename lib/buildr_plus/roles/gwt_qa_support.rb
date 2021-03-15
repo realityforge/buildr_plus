@@ -24,7 +24,7 @@ BuildrPlus::Roles.role(:gwt_qa_support, :requires => [:gwt]) do
   end
 
   compile.with BuildrPlus::Deps.gwt_qa_support_deps
-  project.processorpath << BuildrPlus::Deps.gwt_qa_support_processorpath
+  project.compile.options.processor_path << BuildrPlus::Deps.gwt_qa_support_processorpath
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :gwt)
 

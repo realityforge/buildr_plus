@@ -29,20 +29,10 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     end
   end
   f.enhance(:ProjectExtension) do
-    attr_writer :enable_annotation_processor
-
-    def enable_annotation_processor?
-      @enable_annotation_processor.nil? ? !self.processorpath.empty? : !!@enable_annotation_processor
-    end
-
     attr_writer :fail_on_compile_warning
 
     def fail_on_compile_warning?
       @fail_on_compile_warning.nil? ? BuildrPlus::Java.fail_on_compile_warning? : !!@fail_on_compile_warning
-    end
-
-    def processorpath
-      @processorpath ||= []
     end
 
     before_define do |project|
@@ -51,8 +41,6 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       project.compile.options.target = "1.#{BuildrPlus::Java.version}"
       project.compile.options.warnings = true
       project.compile.options[:other] = %w(-Xmaxerrs 10000 -Xmaxwarns 10000) + (project.fail_on_compile_warning? ? %w(-Werror) : [])
-      project.iml.instance_variable_set('@main_generated_source_directories', [])
-      project.iml.instance_variable_set('@processorpath', {})
       (project.test.options[:java_args] ||= []) << %w(-ea)
     end
 
@@ -71,69 +59,13 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       end
       project.task(':java:check').enhance([t.name])
 
-      if project.enable_annotation_processor
-        project.file(project._(:target, 'generated/processors/main/java')).enhance([project.compile])
-        project.file(project._(:target, 'generated/processors/test/java')).enhance([project.compile])
-        t = project.task('processors_setup') do
-          mkdir_p project._(:target, 'generated/processors/main/java')
-          mkdir_p project._(:target, 'generated/processors/test/java')
-        end
-        project.compile.enhance([t.name])
-        unless project.processorpath.empty?
-          processor_deps = Buildr.artifacts(project.processorpath)
-          project.compile.enhance(processor_deps)
-          processorpath = processor_deps.collect {|d| d.to_s}.join(File::PATH_SEPARATOR)
-          project.compile.options[:other] += ['-processorpath', processorpath, '-s', project._(:target, 'generated/processors/main/java')]
-          project.test.compile.options[:other] += ['-processorpath', processorpath, '-s', project._(:target, 'generated/processors/test/java')]
-        end
-        if project.iml?
-          project.iml.main_generated_source_directories << project._('generated/processors/main/java')
-          project.iml.test_generated_source_directories << project._('generated/processors/test/java')
-        end
-      else
-        project.compile.options[:other] += ['-proc:none']
-      end
-
-      if project.ipr? && BuildrPlus::Java.enable_annotation_processor?
+      if project.ipr? && project.compile.options.processor?
 
         # If an annotation processor fails it can result in lots of errors due to code not
         # being generated yet. So make sure the compiler reports all errors so can track down
         # the root cause
         project.ipr.add_component('JavacSettings') do |component|
           component.option(:name => 'ADDITIONAL_OPTIONS_STRING', :value => "-Xmaxerrs 10000 -Xmaxwarns 10000 -Xlint:all,-processing,-serial#{project.fail_on_compile_warning? ? ' -Werror' : ''}")
-        end
-
-        project.ipr.add_component('CompilerConfiguration') do |component|
-          component.annotationProcessing do |xml|
-            xml.profile(:default => true, :name => 'Default', :enabled => true) do
-              xml.sourceOutputDir :name => 'generated/processors/main/java'
-              xml.sourceTestOutputDir :name => 'generated/processors/test/java'
-              xml.outputRelativeToContentRoot :value => true
-              xml.processorPath :useClasspath => true
-            end
-            enabled = Buildr.projects(:no_invoke => true).select {|p| p.iml? && p.enable_annotation_processor? && !p.processorpath.empty?}
-            enabled.each do |prj|
-              xml.profile(:name => "#{prj.name}", :enabled => true) do
-                xml.sourceOutputDir :name => 'generated/processors/main/java'
-                xml.sourceTestOutputDir :name => 'generated/processors/test/java'
-                xml.outputRelativeToContentRoot :value => true
-                xml.module :name => prj.iml.name
-                xml.processorPath :useClasspath => false do
-                  Buildr.artifacts(prj.processorpath).each do |path|
-                    xml.entry :name => project.ipr.send(:resolve_path, path.to_s)
-                  end
-                end
-              end
-            end
-            disabled = Buildr.projects(:no_invoke => true).select {|p| p.iml? && !p.enable_annotation_processor}
-            unless disabled.empty?
-              xml.profile(:name => 'Disabled') do
-                disabled.each do |p|
-                  xml.module :name => p.iml.name
-                end
-              end
-            end
-          end
         end
       end
     end
