@@ -61,13 +61,10 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       end
       project.task(':java:check').enhance([t.name])
 
-      if project.ipr? && project.compile.options.processor?
-
-        # If an annotation processor fails it can result in lots of errors due to code not
-        # being generated yet. So make sure the compiler reports all errors so can track down
-        # the root cause
-        project.ipr.add_javac_settings("-Xmaxerrs 10000 -Xmaxwarns 10000 -Xlint:all,-processing,-serial#{project.fail_on_compile_warning? ? ' -Werror' : ''}")
-      end
+      # If an annotation processor fails it can result in lots of errors due to code not
+      # being generated yet. So make sure the compiler reports all errors so can track down
+      # the root cause
+      project.ipr.add_javac_settings("-Xmaxerrs 10000 -Xmaxwarns 10000 -Xlint:all,-processing,-serial#{project.fail_on_compile_warning? ? ' -Werror' : ''}") if project.ipr?
     end
 
     desc 'Check the directories in java source tree do not have . character'
