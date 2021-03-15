@@ -30,43 +30,8 @@ BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
       if project.ipr?
         project.ipr.add_component_from_artifact(BuildrPlus::IdeaCodestyle.codestyle)
 
-        project.ipr.add_component('JavaProjectCodeInsightSettings') do |xml|
-          xml.tag!('excluded-names') do
-            xml << '<name>com.sun.istack.NotNull</name>'
-            xml << '<name>com.sun.istack.Nullable</name>'
-            xml << '<name>com.sun.istack.internal.NotNull</name>'
-            xml << '<name>com.sun.istack.internal.Nullable</name>'
-            xml << '<name>org.jetbrains.annotations.Nullable</name>'
-            xml << '<name>org.jetbrains.annotations.NotNull</name>'
-            xml << '<name>org.testng.AssertJUnit</name>'
-            xml << '<name>graphql.Assert</name>'
-            xml << '<name>org.testng.internal.Nullable</name>'
-            xml << '<name>org.mockito.internal.matchers.NotNull</name>'
-            xml << '<name>edu.umd.cs.findbugs.annotations.Nonnull</name>'
-            xml << '<name>edu.umd.cs.findbugs.annotations.Nullable</name>'
-            xml << '<name>edu.umd.cs.findbugs.annotations.SuppressWarnings</name>'
-          end
-        end
-        project.ipr.add_component('NullableNotNullManager') do |component|
-          component.option :name => 'myDefaultNullable', :value => 'javax.annotation.Nullable'
-          component.option :name => 'myDefaultNotNull', :value => 'javax.annotation.Nonnull'
-          component.option :name => 'myNullables' do |option|
-            option.value do |value|
-              value.list :size => '2' do |list|
-                list.item :index => '0', :class => 'java.lang.String', :itemvalue => 'org.jetbrains.annotations.Nullable'
-                list.item :index => '1', :class => 'java.lang.String', :itemvalue => 'javax.annotation.Nullable'
-              end
-            end
-          end
-          component.option :name => 'myNotNulls' do |option|
-            option.value do |value|
-              value.list :size => '2' do |list|
-                list.item :index => '0', :class => 'java.lang.String', :itemvalue => 'org.jetbrains.annotations.NotNull'
-                list.item :index => '1', :class => 'java.lang.String', :itemvalue => 'javax.annotation.Nonnull'
-              end
-            end
-          end
-        end
+        project.ipr.add_code_insight_settings(:extra_excluded_names => %w(graphql.Assert))
+        project.ipr.add_nullable_manager
       end
     end
   end
