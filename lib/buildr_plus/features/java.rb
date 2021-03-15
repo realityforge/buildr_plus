@@ -45,6 +45,8 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     end
 
     after_define do |project|
+      project.compile.options.processor = false if project.compile.options.processor_path.nil? || project.compile.options.processor_path.empty?
+      project.test.compile.options.processor = false if project.test.compile.options.processor_path.nil? || project.test.compile.options.processor_path.empty?
       project.test.options[:properties].merge!('user.timezone' => 'Australia/Melbourne')
 
       t = project.task 'java:check' do
