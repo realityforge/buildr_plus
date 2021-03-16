@@ -30,10 +30,6 @@ BuildrPlus::FeatureManager.feature(:node) do |f|
       "#{base_directory}/yarn.lock"
     end
 
-    def node_version
-      IO.read(node_version_filename).strip
-    end
-
     def root_package_json_present?
       File.exist?(BuildrPlus::Node.package_json_filename)
     end
