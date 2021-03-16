@@ -107,6 +107,7 @@ CONTENT
       return unless manage_gemfile?
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/Gemfile"
+      lock_filename = "#{filename}.lock"
       if File.exist?(filename)
         original_content = IO.read(filename)
 
@@ -119,20 +120,35 @@ CONTENT
             File.open(filename, 'wb') do |out|
               out.write content
             end
-            FileUtils.rm_rf "#{filename}.lock"
+            FileUtils.rm_rf lock_filename
             sh "bundler install --gemfile=#{filename}"
-            sh "bundle lock --gemfile=#{filename} --add-platform ruby"
-            # macOS Mojave 10.14
-            sh "bundle lock --gemfile=#{filename} --add-platform x86_64-darwin-18"
-            # macOS Catalina 10.15
-            sh "bundle lock --gemfile=#{filename} --add-platform x86_64-darwin-19"
-            # macOS Big Sur 11
-            sh "bundle lock --gemfile=#{filename} --add-platform x86_64-darwin-20"
           else
             puts 'Non-normalized Gemfile'
           end
         end
-      end
+
+        if File.exist?(lock_filename)
+          platform_output = `cd #{base_directory} && bundle platform`
+          if !platform_output.include?('* ruby') || !platform_output.include?('* x86_64-darwin-18') || !platform_output.include?('* x86_64-darwin-19') || !platform_output.include?('* x86_64-darwin-20')
+            BuildrPlus::Gems.gemfile_needs_update = true
+            if apply_fix
+              puts 'Fixing: Gemfile'
+              sh "bundle lock --gemfile=#{filename} --add-platform ruby"
+              # macOS Mojave 10.14
+              sh "bundle lock --gemfile=#{filename} --add-platform x86_64-darwin-18"
+              # macOS Catalina 10.15
+              sh "bundle lock --gemfile=#{filename} --add-platform x86_64-darwin-19"
+              # macOS Big Sur 11
+              sh "bundle lock --gemfile=#{filename} --add-platform x86_64-darwin-20"
+            else
+              puts 'Non-normalized Gemfile.lock'
+            end
+          end
+          else
+            BuildrPlus::Gems.gemfile_needs_update = true
+            puts 'Gemfile.lock not present'
+          end
+        end
     end
   end
 
