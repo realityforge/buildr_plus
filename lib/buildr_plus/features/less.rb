@@ -48,7 +48,7 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
 
       if files.size > 0
         desc 'Preprocess Less files'
-        compile_task = project.task('lessc' => [files]) do
+        compile_task = project.task('lessc' => files) do
           command = []
           command << 'yarn'
           command << 'run'
