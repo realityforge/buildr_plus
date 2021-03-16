@@ -31,7 +31,7 @@ BuildrPlus::FeatureManager.feature(:node) do |f|
     end
 
     def root_package_json_present?
-      File.exist?(BuildrPlus::Node.package_json_filename)
+      File.exist?(package_json_filename)
     end
   end
 
