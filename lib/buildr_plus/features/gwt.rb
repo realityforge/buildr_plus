@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson, :javascript]) do |f|
+BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson]) do |f|
   f.enhance(:Config) do
     def gwt_test_options
       {'braincheck.environment' => 'development'}
