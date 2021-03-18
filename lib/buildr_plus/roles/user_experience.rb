@@ -43,7 +43,7 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
   project.publish = false
 
   compile.with BuildrPlus::Deps.user_experience_deps
-  project.compile.options.processor_path << BuildrPlus::Deps.user_experience_processorpath
+  compile.options.processor_path << BuildrPlus::Deps.user_experience_processorpath
   test.with BuildrPlus::Deps.user_experience_test_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
