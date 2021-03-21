@@ -21,6 +21,8 @@ module BuildrPlus::Keycloak
 
     attr_reader :client_type
     attr_accessor :application
+    attr_accessor :username
+    attr_accessor :password
 
     def default?
       self.client_type.to_s == self.application.to_s

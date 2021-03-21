@@ -238,8 +238,8 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       prefix = remote_client.redfish_config_prefix
       environment.setting("#{prefix}_REALM", environment.keycloak.realm) unless environment.setting?("#{prefix}_REALM")
       environment.setting("#{prefix}_SERVER_URL", environment.keycloak.base_url) unless environment.setting?("#{prefix}_SERVER_URL")
-      environment.setting("#{prefix}_USERNAME", environment.keycloak.service_username) unless environment.setting?("#{prefix}_USERNAME")
-      environment.setting("#{prefix}_PASSWORD", environment.keycloak.service_password) unless environment.setting?("#{prefix}_PASSWORD")
+      environment.setting("#{prefix}_USERNAME", remote_client.username || environment.keycloak.service_username) unless environment.setting?("#{prefix}_USERNAME")
+      environment.setting("#{prefix}_PASSWORD", remote_client.password || environment.keycloak.service_password) unless environment.setting?("#{prefix}_PASSWORD")
       environment.setting("#{prefix}_CLIENT_NAME", remote_client.name) unless environment.setting?("#{prefix}_CLIENT_NAME")
       environment.setting("#{prefix}_SECRET", remote_client.secret_value) unless environment.setting?("#{prefix}_SECRET")
     end
