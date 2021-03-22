@@ -34,7 +34,7 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
         :strict_math => true,
         :optimize => true,
         :strict_units => true,
-        :target_dir => project._(:generated, :less, :main, :webapp),
+        :target_dir => project._(:target, :generated, :less, :main, :webapp),
         :target_subdir => 'css',
         :source_dir => BuildrPlus::Less.default_less_path,
         :source_pattern => '**/[^_]*.less'

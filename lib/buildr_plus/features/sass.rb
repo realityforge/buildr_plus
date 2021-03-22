@@ -35,7 +35,7 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
     end
 
     def to_target_file(source_dir, sass_file)
-      target_dir = _(:generated, :sass, :main, :webapp)
+      target_dir = _(:target, :generated, :sass, :main, :webapp)
       "#{target_dir}/css/#{Buildr::Util.relative_path(sass_file, source_dir)[0...-5]}.css"
     end
 
@@ -65,11 +65,11 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
       end
 
       project.clean do
-        FileUtils.rm_rf project._(:generated, :sass, :main, :webapp)
+        FileUtils.rm_rf project._(:target, :generated, :sass, :main, :webapp)
       end
 
       project.assets.enhance([t.name])
-      project.assets.paths << project._(:generated, :sass, :main, :webapp)
+      project.assets.paths << project._(:target, :generated, :sass, :main, :webapp)
 
       desc 'Precompile all assets'
       project.task(':assets:precompile' => t.name)

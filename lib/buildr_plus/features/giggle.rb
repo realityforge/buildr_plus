@@ -18,7 +18,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
     def generate_giggle_java_server(project)
       raise "generate_giggle_java_server method invoked but the giggle feature is not enabled" unless BuildrPlus::FeatureManager.activated?(:giggle)
 
-      generated_dir = project._(:generated, 'giggle-server/src/java')
+      generated_dir = project._(:target, :generated, 'giggle-server/src/java')
       generate_task = project.task(generated_dir => [project.task(':domgen:all')]) do
         type_mapping_file = project._("generated/domgen/server/main/resources/#{project.group.gsub('.', '/')}/server/types.mapping")
         schema_pkg = project.project('graphqls').package(:graphqls)
@@ -37,7 +37,7 @@ BuildrPlus::FeatureManager.feature(:giggle => [:generate]) do |f|
       schema = options[:schema] || :default
       dir = options[:dir] || "**"
       package_name = options[:package_name] || "#{project.root_project.group}.server.api"
-      generated_dir = project._(:generated, "giggle-client#{schema == :default ? '' : '-' + schema.to_s}/src/java")
+      generated_dir = project._(:target, :generated, "giggle-client#{schema == :default ? '' : '-' + schema.to_s}/src/java")
 
       graphql_client_schema_name = BuildrPlus::GraphqlClient.graphql_schema_name(schema)
       keycloak_client = options[:keycloak_client] || graphql_client_schema_name

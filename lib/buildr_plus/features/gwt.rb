@@ -114,7 +114,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson]) do |f|
       project.compile.dependencies = Buildr.artifacts(project.compile.dependencies)
       Buildr.artifacts([artifacts]).each do |artifact|
         key = artifact.group + '_' + artifact.id
-        target_directory = _(:generated, 'deps', key)
+        target_directory = _(:target, :generated, 'deps', key)
         t = task(target_directory => [artifact]) do
           rm_rf target_directory
           unzip(target_directory => artifact).target.invoke

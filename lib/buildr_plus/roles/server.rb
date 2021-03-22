@@ -19,7 +19,7 @@ BuildrPlus::Roles.role(:server) do
   end
 
   if BuildrPlus::FeatureManager.activated?(:graphiql)
-    assets_dir = _(:generated, 'graphiql/src/webapp')
+    assets_dir = _(:target, :generated, 'graphiql/src/webapp')
     f = file(assets_dir) do
       BuildrPlus::Graphiql.setup_graphiql(assets_dir)
     end
