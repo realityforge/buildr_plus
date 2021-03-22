@@ -73,6 +73,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson]) do |f|
                       :java_args => BuildrPlus::Gwt.gwtc_java_args,
                       :dependencies => dependencies,
                       :gwtc_args => options[:gwtc_args],
+                      :skip_merge_gwt_dependencies => true,
                       :compile_report_dir => project._(:reports, :gwt, suffix),
                       :js_exports => BuildrPlus::Gwt.enable_gwt_js_exports?
                     }.merge(options))
