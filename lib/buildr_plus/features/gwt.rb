@@ -55,6 +55,11 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson]) do |f|
       end + project.iml.main_generated_source_directories.flatten.compact.collect do |a|
         a.is_a?(String) ? file(a) : a
       end
+
+      if !!project.compile.options[:processor] || (project.compile.options[:processor].nil? && !(project.compile.options[:processor_path] || []).empty?)
+        extra_deps += [file(project._(:target, :generated, 'processors/main/java'))]
+      end
+
       extra_deps
     end
 
