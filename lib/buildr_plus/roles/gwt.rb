@@ -41,6 +41,7 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
 
   compile.with BuildrPlus::Deps.gwt_deps
   compile.options.processor_path << BuildrPlus::Deps.gwt_processorpath
+  test.compile.options.processor_path << BuildrPlus::Deps.gwt_processorpath
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
 

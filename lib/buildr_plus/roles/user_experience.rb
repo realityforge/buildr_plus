@@ -44,6 +44,7 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
 
   compile.with BuildrPlus::Deps.user_experience_deps
   compile.options.processor_path << BuildrPlus::Deps.user_experience_processorpath
+  test.compile.options.processor_path << BuildrPlus::Deps.user_experience_processorpath
   test.with BuildrPlus::Deps.user_experience_test_deps
 
   BuildrPlus::Roles.merge_projects_with_role(project.compile, :shared)
