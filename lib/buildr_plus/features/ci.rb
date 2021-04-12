@@ -61,7 +61,7 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           end
           Buildr.repositories.release_to[:username] = ENV['UPLOAD_USER']
           Buildr.repositories.release_to[:password] = ENV['UPLOAD_PASSWORD']
-          ENV['TEST'] = 'all' unless ENV['TEST']
+          ENV['TEST'] ||= 'all'
           Dbt::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:dbt)
           SSRS::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:rptman)
           BuildrPlus::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:config)
