@@ -55,12 +55,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
     after_define do |project|
       if project.ipr?
         project.task ':ci:common_setup' do
-          if ENV['UPLOAD_REPO']
-            repo_suffix = ENV['GIT_PROJECT'] && ENV['UPLOAD_REPO'].include?('github') ? '/' + ENV['GIT_PROJECT'] : ''
-            Buildr.repositories.release_to[:url] = ENV['UPLOAD_REPO'] + repo_suffix
-          end
-          Buildr.repositories.release_to[:username] = ENV['UPLOAD_USER']
-          Buildr.repositories.release_to[:password] = ENV['UPLOAD_PASSWORD']
           ENV['TEST'] ||= 'all'
           Dbt::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:dbt)
           SSRS::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:rptman)
