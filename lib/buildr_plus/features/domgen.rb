@@ -122,7 +122,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
         database = Dbt.repository.database_for_key(:default)
         default_search_dirs = %W(#{BuildrPlus::Domgen.database_target_dir} database) + BuildrPlus::Domgen.dialect_specific_database_paths
         database.search_dirs = default_search_dirs unless database.search_dirs?
-        database.enable_domgen
+        database.enable_domgen(:perform_analysis_checks => BuildrPlus::FeatureManager.activated?(:sql_analysis))
       end
     end
 
