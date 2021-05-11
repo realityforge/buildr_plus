@@ -1,0 +1,348 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC "-//Puppy Crawl//DTD Check Configuration 1.3//EN" "https://checkstyle.org/dtds/configuration_1_3.dtd">
+
+<module name="Checker">
+  <!--
+      If you set the basedir property below, then all reported file
+      names will be relative to the specified directory. See
+      http://checkstyle.sourceforge.net/5.x/config.html#Checker
+  -->
+  <property name="basedir" value="${basedir}"/>
+
+  <module name="SuppressionFilter">
+    <property name="file" value="${checkstyle.suppressions.file}"/>
+  </module>
+  <module name="SuppressWarningsFilter"/>
+
+  <property name="fileExtensions" value="java"/>
+
+  <module name="UniqueProperties">
+    <property name="fileExtensions" value="properties"/>
+  </module>
+
+  <module name="RegexpSingleline">
+    <property name="id" value="useStandardCharsetsForUTF8"/>
+    <property name="format" value='\"UTF-8\"'/>
+    <property name="message" value="Use StandardCharsets.UTF_8.name() or StandardCharsets.UTF_8 rather than explicit charset string."/>
+  </module>
+  <module name="RegexpSingleline">
+    <property name="id" value="useStandardCharsetsForUSASCII"/>
+    <property name="format" value='\"US-ASCII\"'/>
+    <property name="message" value="Use StandardCharsets.US_ASCII.name() or StandardCharsets.US_ASCII rather than explicit charset string."/>
+  </module>
+  <module name="RegexpSingleline">
+    <property name="id" value="noMockitoAnnotations"/>
+    <property name="format" value="org\.mockito\.MockitoAnnotations"/>
+    <property name="message" value="Avoid the use of MockitoAnnotations, prefer explicit setup"/>
+  </module>
+  <module name="RegexpSingleline">
+    <property name="id" value="noAssertJUnitUsage"/>
+    <property name="format" value="org\.testng\.AssertJUnit"/>
+    <property name="message" value="Avoid the use of org.testng.AssertJUnit, prefer org.testng.Assert"/>
+  </module>
+  <module name="RegexpSingleline">
+    <property name="id" value="noJdkAssertInTests"/>
+    <property name="format" value=" *assert "/>
+    <property name="message" value="Avoid the use of JDK assert in tests. Expected to use assertTrue instead."/>
+  </module>
+  <module name="RegexpMultiline">
+    <property name="id" value="spaceInEmptyCall"/>
+    <property name="format" value="\( +\)"/>
+    <property name="message" value="Calls with zero parameters should not have a space between left ( and right )"/>
+  </module>
+  <!-- START_NEW_STYLE -->
+  <module name="RegexpMultiline">
+    <property name="id" value="idCorrectCase"/>
+    <property name="format" value=" (?!ZoneId)[_]?[a-z0-9A-Z]*[a-z0-9]ID[\:\; \(,\nA-Z0-9]"/>
+    <property name="message" value="Case of id in name component should be 'Id' not 'ID'"/>
+  </module>
+  <!-- END_NEW_STYLE -->
+  <!-- START_OLD_STYLE -->
+  <module name="RegexpMultiline">
+    <property name="id" value="idCorrectCase"/>
+    <property name="format" value=" (?!ZoneId)[_]?[a-z0-9A-Z]*[a-z0-9]Id[\:\; \(,\nA-Z0-9]"/>
+    <property name="message" value="Case of ID in name component should be 'ID' not 'Id'"/>
+  </module>
+  <!-- END_OLD_STYLE -->
+  <module name="RegexpMultiline">
+    <property name="format" value="\n([\t ])*\="/>
+    <property name="message" value="Assignment should be on previous line"/>
+  </module>
+  <module name="RegexpMultiline">
+    <property name="format" value="[\r]?\n([\t ])*[\r]?\n([\t ])*[\r]?\n"/>
+    <property name="message" value="Excess new lines"/>
+  </module>
+  <module name="RegexpMultiline">
+    <property name="format" value="\{[\r]?\n[ \t]*[\r]?\n[ \trailing]*[^\n]"/>
+    <property name="message" value="Excess new lines between block open and first statement"/>
+  </module>
+  <module name="RegexpMultiline">
+    <property name="format" value="[\r]?\n[ \t]*[\r]?\n\{"/>
+    <property name="message" value="Excess new lines before block open"/>
+  </module>
+  <module name="RegexpMultiline">
+    <property name="format" value="[\r]?\n[ \t]*[\r]?\n[ \t]*\}"/>
+    <property name="message" value="Excess new lines between last statement and block close"/>
+  </module>
+  <!-- No trailing whitespace -->
+  <module name="RegexpSingleline">
+    <property name="format" value="\s+$"/>
+    <property name="minimum" value="0"/>
+    <property name="maximum" value="0"/>
+    <property name="message" value="Line has trailing spaces."/>
+  </module>
+
+  <module name="NewlineAtEndOfFile">
+    <property name="fileExtensions" value="java, xml, rb"/>
+  </module>
+  <module name="FileTabCharacter"/>
+
+  <!-- Checks that property files contain the same keys.         -->
+  <!-- See http://checkstyle.sourceforge.net/config_misc.html#Translation -->
+  <module name="Translation"/>
+
+  <module name="TreeWalker">
+    <module name="SuppressWithNearbyCommentFilter">
+      <property name="commentFormat" value="CHECKSTYLE IGNORE (\w+) FOR NEXT (\d+) LINES"/>
+      <property name="checkFormat" value="$1"/>
+      <property name="influenceFormat" value="$2"/>
+    </module>
+
+    <module name="SuppressionCommentFilter">
+      <property name="offCommentFormat" value="CHECKSTYLE OFF\: ([\w\|]+)"/>
+      <property name="onCommentFormat" value="CHECKSTYLE ON\: ([\w\|]+)"/>
+      <property name="checkFormat" value="$1"/>
+    </module>
+
+    <module name="ImportControl">
+      <property name="file" value="${checkstyle.import-control.file}"/>
+    </module>
+
+    <!-- Checks for Naming Conventions.                  -->
+    <!-- See http://checkstyle.sourceforge.net/config_naming.html -->
+    <module name="ConstantName"/>
+    <module name="ClassTypeParameterName"/>
+    <!--<module name="AbbreviationAsWordInName"/>-->
+    <module name="LocalFinalVariableName"/>
+    <module name="LocalVariableName"/>
+    <module name="MemberName">
+      <property name="format" value="^_[a-zA-Z0-9]*$"/>
+    </module>
+    <module name="MethodName"/>
+    <module name="MethodTypeParameterName"/>
+    <module name="PackageName"/>
+    <module name="ParameterName"/>
+    <module name="StaticVariableName">
+      <property name="format" value="^c_[a-zA-Z0-9]*$"/>
+    </module>
+    <module name="TypeName"/>
+
+    <module name="AnnotationLocation"/>
+    <module name="AnnotationUseStyle"/>
+    <module name="MissingOverride"/>
+    <module name="PackageAnnotation"/>
+    <!--<module name="MissingDeprecated"/>-->
+    <module name="MissingOverride"/>
+    <module name="SuppressWarningsHolder"/>
+
+    <!-- Checks for Headers                                -->
+    <!-- See http://checkstyle.sourceforge.net/config_header.html   -->
+    <!-- <module name="Header">                            -->
+    <!-- The follow property value demonstrates the ability     -->
+    <!-- to have access to ANT properties. In this case it uses -->
+    <!-- the ${basedir} property to allow Checkstyle to be run  -->
+    <!-- from any directory within a project. See property      -->
+    <!-- expansion,                                             -->
+    <!-- http://checkstyle.sourceforge.net/config.html#properties        -->
+    <!-- <property                                              -->
+    <!--     name="headerFile"                                  -->
+    <!--     value="${basedir}/java.header"/>                   -->
+    <!-- </module> -->
+
+    <!-- Following interprets the header file as regular expressions. -->
+    <!-- <module name="RegexpHeader"/>                                -->
+
+    <module name="EqualsAvoidNull"/>
+
+    <!-- Checks for imports                              -->
+    <!-- See http://checkstyle.sourceforge.net/config_imports.html -->
+    <module name="AvoidStarImport">
+      <property name="excludes" value="org.awaitility.Awaitility.*,org.testng.Assert.*,org.mockito.Mockito.*,org.hamcrest.CoreMatchers.*,org.realityforge.braincheck.Guards.*,react4j.dom.DOM.*,*_.*"/>
+    </module>
+    <module name="AvoidStaticImport">
+      <property name="excludes" value="org.awaitility.Awaitility.*,org.testng.Assert.*,org.mockito.Mockito.*,org.hamcrest.CoreMatchers.*,org.realityforge.braincheck.Guards.*,react4j.dom.DOM.*,*_.*"/>
+    </module>
+    <module name="IllegalImport"/>
+    <!-- defaults to sun.* packages -->
+    <module name="RedundantImport"/>
+    <module name="UnusedImports"/>
+    <module name="ImportOrder"/>
+
+    <!-- Checks for Size Violations.                    -->
+    <!-- See http://checkstyle.sourceforge.net/config_sizes.html -->
+    <!--<module name="LineLength"/>-->
+    <module name="MethodLength"/>
+    <module name="ParameterNumber">
+      <property name="max" value="20"/>
+      <property name="tokens" value="CTOR_DEF"/>
+    </module>
+
+    <!-- Checks for whitespace                               -->
+    <!-- See http://checkstyle.sourceforge.net/config_whitespace.html -->
+    <module name="EmptyForIteratorPad"/>
+    <module name="EmptyForInitializerPad"/>
+    <module name="GenericWhitespace"/>
+    <module name="MethodParamPad">
+      <property name="option" value="nospace"/>
+      <property name="allowLineBreaks" value="false"/>
+    </module>
+    <module name="NoWhitespaceAfter">
+      <property name="tokens" value="BNOT, DEC, DOT, INC, LNOT, UNARY_MINUS, UNARY_PLUS"/>
+      <property name="allowLineBreaks" value="true"/>
+    </module>
+    <module name="NoWhitespaceBefore"/>
+    <!-- START_NEW_STYLE -->
+    <module name="NoWhitespaceAfter">
+      <property name="tokens" value="DOT"/>
+      <property name="allowLineBreaks" value="false"/>
+    </module>
+    <!-- END_NEW_STYLE -->
+    <!-- START_OLD_STYLE -->
+    <module name="NoWhitespaceBefore">
+      <property name="tokens" value="DOT"/>
+      <property name="allowLineBreaks" value="false"/>
+    </module>
+    <!-- END_OLD_STYLE -->
+    <module name="OperatorWrap">
+      <property name="option" value="eol"/>
+    </module>
+    <module name="TypecastParenPad"/>
+
+    <module name="WhitespaceAround">
+      <property name="allowEmptyConstructors" value="true"/>
+      <property name="allowEmptyMethods" value="true"/>
+      <property name="tokens"
+                value="ASSIGN, BAND, BAND_ASSIGN, BOR, BOR_ASSIGN, BSR, BSR_ASSIGN, BXOR, BXOR_ASSIGN, COLON, DIV, DIV_ASSIGN, DO_WHILE, EQUAL, GE, GT, LAND, LCURLY, LE, LITERAL_ASSERT, LITERAL_CATCH, LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_RETURN, LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, LOR, LT, MINUS, MINUS_ASSIGN, MOD, MOD_ASSIGN, NOT_EQUAL, PLUS, PLUS_ASSIGN, QUESTION, RCURLY, SL, SLIST, SL_ASSIGN, SR, SR_ASSIGN, STAR, STAR_ASSIGN, TYPE_EXTENSION_AND"/>
+    </module>
+
+    <module name="NoLineWrap"/>
+    <module name="EmptyLineSeparator">
+      <!--
+        It would be nice to include IMPORT but then checkstyle tries to force separation
+        between normal imports and static imports
+      -->
+      <property name="tokens" value="PACKAGE_DEF, CLASS_DEF, ENUM_DEF, INTERFACE_DEF, CTOR_DEF, METHOD_DEF, STATIC_INIT, INSTANCE_INIT, VARIABLE_DEF"/>
+      <property name="allowNoEmptyLineBetweenFields" value="true"/>
+    </module>
+
+    <module name="WhitespaceAfter">
+      <property name="tokens" value="COMMA, SEMI, TYPECAST"/>
+    </module>
+    <!--
+        <module name="Indentation">
+          <property name="basicOffset" value="2"/>
+          <property name="braceAdjustment" value="0"/>
+          <property name="caseIndent" value="2"/>
+        </module>
+    -->
+
+    <!-- Modifier Checks                                    -->
+    <!-- See http://checkstyle.sourceforge.net/config_modifiers.html -->
+    <module name="ModifierOrder"/>
+    <module name="RedundantModifier"/>
+
+    <!-- Checks for blocks. You know, those {}'s         -->
+    <!-- See http://checkstyle.sourceforge.net/config_blocks.html -->
+    <module name="EmptyBlock"/>
+    <module name="EmptyCatchBlock">
+      <property name="commentFormat" value="Ignore"/>
+      <property name="exceptionVariableName" value="expected|ignore"/>
+    </module>
+    <module name="LeftCurly">
+      <property name="option" value="nl"/>
+      <property name="tokens" value="ANNOTATION_DEF, CLASS_DEF, CTOR_DEF, ENUM_CONSTANT_DEF, ENUM_DEF, INTERFACE_DEF, LITERAL_CASE, LITERAL_CATCH, LITERAL_DEFAULT, LITERAL_DO, LITERAL_ELSE, LITERAL_FINALLY, LITERAL_FOR, LITERAL_IF, LITERAL_SWITCH, LITERAL_SYNCHRONIZED, LITERAL_TRY, LITERAL_WHILE, METHOD_DEF, OBJBLOCK, STATIC_INIT"/>
+    </module>
+    <module name="NeedBraces"/>
+    <module name="RightCurly">
+      <property name="option" value="alone"/>
+    </module>
+
+    <module name="ParenPad">
+      <property name="tokens" value="CTOR_CALL, METHOD_CALL, SUPER_CTOR_CALL"/>
+      <property name="option" value="space"/>
+    </module>
+
+    <module name="SeparatorWrap">
+      <!-- START_NEW_STYLE -->
+      <property name="option" value="nl"/>
+      <property name="tokens" value="DOT"/>
+      <!-- END_NEW_STYLE -->
+    </module>
+
+    <!-- Checks for common coding problems               -->
+    <!-- See http://checkstyle.sourceforge.net/config_coding.html -->
+    <!--<module name="AvoidInlineConditionals"/>-->
+    <!-- MY FAVOURITE -->
+    <module name="CovariantEquals"/>
+    <module name="EmptyStatement"/>
+    <module name="FinalLocalVariable"/>
+    <module name="EqualsHashCode"/>
+    <module name="HiddenField"/>
+    <module name="IllegalInstantiation"/>
+    <module name="InnerAssignment"/>
+    <module name="MagicNumber">
+      <property name="ignoreHashCodeMethod" value="true"/>
+    </module>
+    <module name="MissingSwitchDefault"/>
+    <module name="SimplifyBooleanExpression"/>
+    <module name="SimplifyBooleanReturn"/>
+    <module name="StringLiteralEquality"/>
+    <module name="ModifiedControlVariable"/>
+    <module name="VariableDeclarationUsageDistance"/>
+    <!-- RedundantThrow can not be enabled as not all class files will be present -->
+    <!--<module name="RedundantThrows"/>-->
+    <module name="NoFinalizer"/>
+    <module name="NoClone"/>
+    <module name="PackageDeclaration"/>
+    <module name="ParameterAssignment"/>
+    <module name="ExplicitInitialization"/>
+    <module name="DefaultComesLast"/>
+    <module name="FallThrough"/>
+    <!--<module name="MultipleStringLiterals"/>-->
+    <module name="MultipleVariableDeclarations"/>
+    <module name="OneStatementPerLine"/>
+    <!--<module name="DeclarationOrder"/>-->
+    <!--<module name="UnnecessaryParentheses"/>-->
+
+    <!-- Checks for class design                         -->
+    <!-- See http://checkstyle.sourceforge.net/config_design.html -->
+    <!--<module name="DesignForExtension"/>-->
+    <module name="FinalClass"/>
+    <module name="MutableException"/>
+    <module name="HideUtilityClassConstructor"/>
+    <module name="OneTopLevelClass"/>
+    <module name="InterfaceIsType"/>
+    <module name="VisibilityModifier">
+      <property name="packageAllowed" value="true"/>
+    </module>
+
+    <!-- Miscellaneous other checks.                   -->
+    <!-- See http://checkstyle.sourceforge.net/config_misc.html -->
+    <module name="ArrayTypeStyle"/>
+    <module name="AvoidEscapedUnicodeCharacters"/>
+    <module name="CommentsIndentation"/>
+    <module name="FinalParameters">
+      <property name="tokens" value="METHOD_DEF,CTOR_DEF,LITERAL_CATCH,FOR_EACH_CLAUSE"/>
+    </module>
+    <module name="UpperEll"/>
+    <module name="OuterTypeFilename"/>
+    <module name="TrailingComment">
+      <property name="format" value="^(?:.+?\bnative\b.+?|[\s\}\);]*)$"/>
+    </module>
+
+    <module name="UncommentedMain">
+      <property name="excludedClasses" value="\.Main$"/>
+    </module>
+
+  </module>
+</module>

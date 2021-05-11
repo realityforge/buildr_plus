@@ -175,16 +175,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       @modern_checkstyle_rule_type.nil? ? true : !!@modern_checkstyle_rule_type
     end
 
-    def default_checkstyle_rules
-      "au.com.stocksoftware.checkstyle:checkstyle#{modern_checkstyle_rule_type? ? '-ng' : ''}:xml:1.19"
-    end
-
-    def checkstyle_rules
-      @checkstyle_rules || self.default_checkstyle_rules
-    end
-
-    attr_writer :checkstyle_rules
-
     attr_accessor :additional_project_names
 
     def setup_checkstyle_import_rules(project, allow_any_imports)
@@ -446,9 +436,8 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
             file.write supressions
           end
 
-          a = Buildr.artifact(BuildrPlus::Checkstyle.checkstyle_rules)
-          a.invoke
-          rules = IO.read(a.to_s)
+          rules = IO.read("#{File.expand_path(File.dirname(__FILE__))}/checkstyle.xml")
+          rules = rules.gsub(/\n[^\n]+START_OLD_STYLE.*?END_OLD_STYLE[^\n]+\n/m, "\n") if BuildrPlus::Checkstyle.modern_checkstyle_rule_type?
           if BuildrPlus::FeatureManager.activated?(:timeservice)
             rules.gsub!("<module name=\"Checker\">\n", <<RULES)
 <module name="Checker">
