@@ -14,16 +14,6 @@
 
 BuildrPlus::FeatureManager.feature(:pmd) do |f|
   f.enhance(:Config) do
-    def default_pmd_rules
-      'au.com.stocksoftware.pmd:pmd:xml:1.9'
-    end
-
-    def pmd_rules
-      @pmd_rules || self.default_pmd_rules
-    end
-
-    attr_writer :pmd_rules
-
     attr_accessor :additional_project_names
   end
 
@@ -38,8 +28,7 @@ BuildrPlus::FeatureManager.feature(:pmd) do |f|
 
     after_define do |project|
       if project.ipr?
-        project.pmd.rule_set_artifacts << BuildrPlus::Pmd.pmd_rules
-        # TODO: Use project.pmd.exclude_paths rather than excluding projects
+        project.pmd.rule_set_artifacts << project.file("#{File.expand_path(File.dirname(__FILE__))}/pmd.xml")
 
         project.pmd.additional_project_names =
           BuildrPlus::Pmd.additional_project_names ||
