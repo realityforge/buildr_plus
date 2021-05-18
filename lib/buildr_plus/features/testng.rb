@@ -29,10 +29,18 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
           Dbt.database_keys.each do |database_key|
             next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
-            prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
             database = Dbt.configuration_for_key(database_key, :test)
-            default_testng_args << "-D#{prefix}test.db.url=#{database.build_jdbc_url(:credentials_inline => true)}"
-            default_testng_args << "-D#{prefix}test.db.name=#{database.catalog_name}"
+            jdbc_url = database.build_jdbc_url(:credentials_inline => true)
+
+            prefix = database_key
+            if Dbt::Config.default_database?(database_key)
+              default_testng_args << "-Dtest.db.url=#{jdbc_url}"
+              default_testng_args << "-Dtest.db.name=#{database.catalog_name}"
+              prefix = project.name.to_s
+            end
+
+            default_testng_args << "-D#{prefix}.test.db.url=#{jdbc_url}"
+            default_testng_args << "-D#{prefix}.test.db.name=#{database.catalog_name}"
           end
         end
       end

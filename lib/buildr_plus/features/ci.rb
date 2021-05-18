@@ -69,12 +69,21 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
             Dbt.database_keys.each do |database_key|
               next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
-              prefix = Dbt::Config.default_database?(database_key) ? '' : "#{database_key}."
               jdbc_url = Dbt.configuration_for_key(database_key).build_jdbc_url(:credentials_inline => true)
               catalog_name = Dbt.configuration_for_key(database_key).catalog_name
+
+              prefix = database_key
+              if Dbt::Config.default_database?(database_key)
+                Buildr.projects.each do |p|
+                  p.test.options[:properties].merge!('test.db.url' => jdbc_url)
+                  p.test.options[:properties].merge!('test.db.name' => catalog_name)
+                end
+                prefix = project.name.to_s
+              end
+
               Buildr.projects.each do |p|
-                p.test.options[:properties].merge!("#{prefix}test.db.url" => jdbc_url)
-                p.test.options[:properties].merge!("#{prefix}test.db.name" => catalog_name)
+                p.test.options[:properties].merge!("#{prefix}.test.db.url" => jdbc_url)
+                p.test.options[:properties].merge!("#{prefix}.test.db.name" => catalog_name)
               end
             end
           end
