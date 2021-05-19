@@ -136,6 +136,7 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
               define 'db' do
                 project.no_iml
                 project.publish = BuildrPlus::Artifacts.db?
+                pom.dependency_filter = Proc.new { |_| false }
                 Dbt.define_database_package(:default, :include_code => !BuildrPlus::Dbt.library?)
               end
             end
