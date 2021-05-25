@@ -109,7 +109,7 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
             name = v['name']
             puts "Dropping database #{name}"
             begin
-              Dbt.runtime.drop(database)
+              Dbt.runtime.query_in_control_database(database, "DROP DATABASE #{name}")
             rescue => e
               puts e
             end
