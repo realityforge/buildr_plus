@@ -27,8 +27,20 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     def fail_on_compile_warning?
       @fail_on_compile_warning.nil? ? true : !!@fail_on_compile_warning
     end
+
+    attr_writer :compile_with_linting_enabled
+
+    def compile_with_linting_enabled?
+      @compile_with_linting_enabled.nil? ? true : !!@compile_with_linting_enabled
+    end
   end
   f.enhance(:ProjectExtension) do
+    attr_writer :compile_with_linting_enabled
+
+    def compile_with_linting_enabled?
+      @compile_with_linting_enabled.nil? ? BuildrPlus::Java.compile_with_linting_enabled? : !!@compile_with_linting_enabled
+    end
+
     attr_writer :fail_on_compile_warning
 
     def fail_on_compile_warning?
@@ -36,7 +48,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     end
 
     before_define do |project|
-      project.compile.options.lint = 'all,-processing,-serial'
+      project.compile.options.lint = 'all,-processing,-serial' if project.compile_with_linting_enabled?
       project.compile.options.source = "1.#{BuildrPlus::Java.version}"
       project.compile.options.target = "1.#{BuildrPlus::Java.version}"
       project.compile.options.warnings = true
@@ -46,7 +58,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       # If an annotation processor fails it can result in lots of errors due to code not
       # being generated yet. So make sure the compiler reports all errors so can track down
       # the root cause
-      project.ipr.add_javac_settings("-Xmaxerrs 10000 -Xmaxwarns 10000 -Xlint:all,-processing,-serial#{project.fail_on_compile_warning? ? ' -Werror' : ''}") if project.ipr?
+      project.ipr.add_javac_settings("-Xmaxerrs 10000 -Xmaxwarns 10000#{project.compile_with_linting_enabled? ? ' -Xlint:all,-processing,-serial' : '' }#{project.fail_on_compile_warning? ? ' -Werror' : ''}") if project.ipr?
     end
 
     after_define do |project|
