@@ -103,14 +103,19 @@ JSON
 
     desc 'Recreate the .graphqlconfig file'
     task 'graphql_client:fix' do
+      filename = "#{File.dirname(Buildr.application.buildfile.to_s)}/.graphqlconfig"
       if BuildrPlus::FeatureManager.activated?(:graphql_client)
         if BuildrPlus::GraphqlClient.graphql_schemas.empty?
           raise 'The graphql_client feature is enabled but no client has been configured. Please add BuildrPlus::GraphqlClient.endpoint(:myclient, :myclient_schema) to the buildfile and commit changes.'
         else
-          filename = "#{File.dirname(Buildr.application.buildfile.to_s)}/.graphqlconfig"
-          IO.write(filename, BuildrPlus::GraphqlClient.generate)
-          sh "git add #{filename}"
+          content = BuildrPlus::GraphqlClient.generate
+          if content != IO.read(filename)
+            IO.write(filename, content)
+            sh "git add #{filename}"
+          end
         end
+      else
+        sh "git rm -f #{filename}" if File.exist?(filename)
       end
     end
   end
