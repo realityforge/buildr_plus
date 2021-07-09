@@ -122,9 +122,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         end
 
         desc 'Publish artifacts to repository'
-        project.task ':ci:publish' => %w(ci:setup publish)
-
-        desc 'Publish artifacts to repository'
         project.task ':ci:upload' => %w(ci:setup upload_published)
 
         commit_actions = %w(ci:no_test_setup)

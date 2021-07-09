@@ -21,13 +21,6 @@ BuildrPlus::FeatureManager.feature(:publish) do |f|
     end
 
     first_time do
-      desc 'Publish all specified artifacts'
-      task 'publish' do
-        Buildr.projects.each do |project|
-          project.task('publish').invoke if project.publish?
-        end
-      end
-
       desc 'List artifacts that will be published'
       task 'list_published' do
         Buildr.projects.each do |project|
@@ -49,24 +42,6 @@ BuildrPlus::FeatureManager.feature(:publish) do |f|
 
     after_define do |project|
       if project.publish?
-        desc 'Download and then upload publishable artifacts to repository'
-        project.task('publish') do
-          publish_version = ENV['PUBLISH_VERSION'] || (raise 'Must specify PUBLISH_VERSION environment variable to use publish task')
-          project.packages.each do |pkg|
-            a = Buildr.artifact(pkg.to_hash.merge(:version => publish_version))
-            a.invoke
-            a.upload
-
-            if BuildrPlus::Db.is_multi_database_project?
-              # Assume this is run with DB_TYPE as mssql or unset
-              group = "#{pkg.to_hash[:group]}#{BuildrPlus::Db.artifact_suffix(:pgsql)}"
-              a = Buildr.artifact(pkg.to_hash.merge(:version => publish_version, :group => group))
-              a.invoke
-              a.upload
-            end
-          end
-        end
-
         desc 'Upload artifacts marked as published to repository'
         task 'upload_published' do
           project.packages.each do |pkg|

@@ -51,16 +51,6 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       (@jenkins_build_scripts ||= standard_build_scripts).dup
     end
 
-    def publish_task_type=(publish_task_type)
-      raise "Can not set publish task type to #{publish_task_type.inspect} as not one of expected values" unless [:external, :none].include?(publish_task_type)
-      @publish_task_type = publish_task_type
-    end
-
-    def publish_task_type
-      return @publish_task_type unless @publish_task_type.nil?
-      :none
-    end
-
     def skip_stage?(stage)
       skip_stage_list.include?(stage)
     end
@@ -129,14 +119,8 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
 
     def standard_build_scripts
       scripts = { 'Jenkinsfile' => jenkinsfile_content }
-      scripts['.jenkins/publish.groovy'] = self.publish_content unless self.publish_task_type == :none
       scripts.merge!(additional_tasks)
       scripts
-    end
-
-    def publish_content
-      content = "#{prepare_content(:exclude_artifacts => true)}\n        kinjen.publish_stage( this )\n"
-      task_content(content, :always_run => true)
     end
 
     def buildr_task_content(label, task, options = {})
