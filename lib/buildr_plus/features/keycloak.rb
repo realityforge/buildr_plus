@@ -183,8 +183,18 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       options = options.dup
       options[:client_type] = name unless options[:client_type]
       client = BuildrPlus::Keycloak::KeycloakClient.new(name, options)
-      raise "Attempting to redefine client #{client.key}" if self.clients_map[client.key]
-      self.clients_map[client.key] = client
+      raise "Attempting to redefine client #{client.key}" if self.clients_map[client.key.to_s]
+      self.clients_map[client.key.to_s] = client
+      client
+    end
+
+    def client_by_key?(key)
+      !self.clients_map[key.to_s].nil?
+    end
+
+    def client_by_key(key)
+      client = self.clients_map[key.to_s]
+      raise "Unable to locate client #{key}. Existing clients include: #{self.clients_map.keys}" if client.nil?
       client
     end
 
