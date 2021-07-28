@@ -342,7 +342,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %W(
         org.realityforge.react4j:react4j-core:jar:#{react4j_version}
         org.realityforge.react4j:react4j-dom:jar:#{react4j_version}
-      ) + self.akasha + self.zemeckis_core
+      ) + self.akasha + self.zemeckis_core + self.jsinterop_base
     end
 
     def react4j_processor
