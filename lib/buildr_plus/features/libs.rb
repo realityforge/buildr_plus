@@ -97,7 +97,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def braincheck
-      %w(org.realityforge.braincheck:braincheck:jar:1.29.0)
+      %w(org.realityforge.braincheck:braincheck-core:jar:1.31.0)
     end
 
     def jsinterop
@@ -106,30 +106,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def jsinterop_base
       %w(com.google.jsinterop:base:jar:1.0.0) + self.jsinterop
-    end
-
-    def elemental2_version
-      '2.27'
-    end
-
-    def elemental2_group_id
-      'org.realityforge.com.google.elemental2'
-    end
-
-    def elemental2_core
-      %W(#{elemental2_group_id}:elemental2-core:jar:#{elemental2_version}) + self.jsinterop_base
-    end
-
-    def elemental2_dom
-      %W(#{elemental2_group_id}:elemental2-dom:jar:#{elemental2_version}) + self.elemental2_promise
-    end
-
-    def elemental2_promise
-      %W(#{elemental2_group_id}:elemental2-promise:jar:#{elemental2_version}) + self.elemental2_core
-    end
-
-    def elemental2_webstorage
-      %W(#{elemental2_group_id}:elemental2-webstorage:jar:#{elemental2_version}) + self.elemental2_dom
     end
 
     def gwt_user
@@ -230,7 +206,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def keycloak_gwt
-      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.9) + self.elemental2_webstorage
+      %w(org.realityforge.gwt.keycloak:gwt-keycloak:jar:0.12) + self.akasha
     end
 
     def keycloak_domgen_support
@@ -287,7 +263,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.192'
+      '0.198'
     end
 
     def arez
@@ -299,19 +275,19 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_spytools
-      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.120)
+      %w(org.realityforge.arez.spytools:arez-spytools:jar:0.129)
     end
 
     def arez_testng
-      %w(org.realityforge.arez.testng:arez-testng:jar:0.24)
+      %W(org.realityforge.arez:arez-extras-testng:jar:#{arez_version})
     end
 
     def arez_dom
-      %w(org.realityforge.arez.dom:arez-dom:jar:0.80)
+      %W(org.realityforge.arez:arez-extras-dom:jar:#{arez_version})
     end
 
     def arez_persist_version
-      '0.21'
+      '0.29'
     end
 
     def arez_persist_core
@@ -327,7 +303,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def router_fu_version
-      '0.31'
+      '0.34'
     end
 
     def router_fu
@@ -339,7 +315,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def sting_version
-      '0.16'
+      '0.20'
     end
 
     def sting_core
@@ -351,18 +327,22 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def zemeckis_core
-      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.08) + self.braincheck + self.jetbrains_annotations + self.grim_annotations
+      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.12) + self.braincheck + self.jetbrains_annotations + self.grim_annotations
+    end
+
+    def akasha
+      %w(org.realityforge.akasha:akasha-gwt:jar:0.15)
     end
 
     def react4j_version
-      '0.179'
+      '0.183'
     end
 
     def react4j
       %W(
         org.realityforge.react4j:react4j-core:jar:#{react4j_version}
         org.realityforge.react4j:react4j-dom:jar:#{react4j_version}
-      ) + self.elemental2_dom + self.zemeckis_core
+      ) + self.akasha + self.zemeckis_core
     end
 
     def react4j_processor
@@ -370,12 +350,12 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.105'
+      '6.108'
     end
 
     def replicant_client
       %W(org.realityforge.replicant:replicant-client:jar:#{replicant_version}) +
-        self.elemental2_webstorage +
+        self.akasha +
         self.zemeckis_core
     end
 
