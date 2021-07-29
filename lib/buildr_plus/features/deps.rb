@@ -251,6 +251,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_user)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.braincheck)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.jsinterop_base) if BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
       dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.arez_spytools) if BuildrPlus::FeatureManager.activated?(:arez)
