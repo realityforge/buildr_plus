@@ -36,7 +36,7 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
             if Dbt::Config.default_database?(database_key)
               default_testng_args << "-Dtest.db.url=#{jdbc_url}"
               default_testng_args << "-Dtest.db.name=#{database.catalog_name}"
-              prefix = project.name.to_s
+              prefix = project.root_project.name.to_s
             end
 
             default_testng_args << "-D#{prefix}.test.db.url=#{jdbc_url}"
