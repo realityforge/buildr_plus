@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:checks) do |f|
   f.enhance(:ProjectExtension) do
     always_fix_features = %w(graphql_client)
-    fixable_features = always_fix_features + %w(ruby gitignore jenkins gems zapwhite github)
+    fixable_features = always_fix_features + %w(ruby gitignore jenkins gems zapwhite)
     features = fixable_features + %w(braid java assets generated_files)
 
     desc 'Perform basic checks on formats of local files'
