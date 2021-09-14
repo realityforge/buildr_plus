@@ -331,7 +331,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def akasha
-      %w(org.realityforge.akasha:akasha-gwt:jar:0.23)
+      %w(org.realityforge.akasha:akasha-gwt:jar:0.24)
     end
 
     def react4j_version
