@@ -189,13 +189,14 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def populate_configuration(config)
-      %w(development test).each do |environment_key|
+      %w(development remote test).each do |environment_key|
         config.environment(environment_key) unless config.environment_by_key?(environment_key)
         populate_environment_configuration(config.environment_by_key(environment_key), false)
       end
       copy_development_settings(config.environment_by_key('development'), config.environment_by_key('test'))
+      copy_development_settings(config.environment_by_key('development'), config.environment_by_key('remote'))
       config.environments.each do |environment|
-        unless %w(development test).include?(environment.key.to_s)
+        unless %w(development remote test).include?(environment.key.to_s)
           populate_environment_configuration(environment, true)
         end
       end
