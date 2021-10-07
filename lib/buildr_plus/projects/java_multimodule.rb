@@ -16,7 +16,9 @@ require 'buildr_plus/projects/_java_multimodule_common'
 
 base_directory = File.dirname(Buildr.application.buildfile.to_s)
 
-BuildrPlus::Roles.project('server', :roles => [:server], :parent => :container, :template => true, :description => 'Server Archive')
+if File.exist?("#{base_directory}/server")
+  BuildrPlus::Roles.project('server', :roles => [:server], :parent => :container, :template => true, :description => 'Server Archive')
+end
 
 if File.exist?("#{base_directory}/user-experience")
   BuildrPlus::Roles.project('user-experience', :roles => [:user_experience], :parent => :container, :template => true, :description => 'GWT Client-side UI')
