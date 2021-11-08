@@ -263,7 +263,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.199'
+      '0.200'
     end
 
     def arez
@@ -287,7 +287,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_persist_version
-      '0.31'
+      '0.32'
     end
 
     def arez_persist_core
@@ -303,7 +303,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def router_fu_version
-      '0.34'
+      '0.35'
     end
 
     def router_fu
@@ -327,15 +327,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def zemeckis_core
-      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.12) + self.braincheck + self.jetbrains_annotations + self.grim_annotations
+      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.13) + self.braincheck + self.jetbrains_annotations + self.grim_annotations
     end
 
     def akasha
-      %w(org.realityforge.akasha:akasha-gwt:jar:0.27)
+      %w(org.realityforge.akasha:akasha-gwt:jar:0.29)
     end
 
     def react4j_version
-      '0.184'
+      '0.185'
     end
 
     def react4j
@@ -350,7 +350,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.113'
+      '6.114'
     end
 
     def replicant_client
