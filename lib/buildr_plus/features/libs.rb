@@ -263,7 +263,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.200'
+      '0.201'
     end
 
     def arez
@@ -299,11 +299,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def grim_annotations
-      %w(org.realityforge.grim:grim-annotations:jar:0.04)
+      %w(org.realityforge.grim:grim-annotations:jar:0.06)
     end
 
     def router_fu_version
-      '0.35'
+      '0.36'
     end
 
     def router_fu
@@ -315,7 +315,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def sting_version
-      '0.20'
+      '0.21'
     end
 
     def sting_core
@@ -335,7 +335,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def react4j_version
-      '0.185'
+      '0.186'
     end
 
     def react4j
