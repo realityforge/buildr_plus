@@ -31,8 +31,5 @@ BuildrPlus::Roles.role(:model) do
   package(:jar)
   package(:sources)
 
-  if BuildrPlus::FeatureManager.activated?(:db)
-    iml.add_jpa_facet
-    iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
-  end
+  iml.add_jpa_facet if BuildrPlus::FeatureManager.activated?(:db)
 end

@@ -76,7 +76,6 @@ BuildrPlus::Roles.role(:server) do
     end
   end
 
-  project.iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
   webroots = {}
   webroots[_(:source, :main, :webapp)] = '/'
   if BuildrPlus::FeatureManager.activated?(:role_user_experience)

@@ -45,6 +45,4 @@ BuildrPlus::Roles.role(:library) do
       jar.merge(dep.package(:jar))
     end
   end
-
-  iml.add_ejb_facet if BuildrPlus::FeatureManager.activated?(:ejb)
 end
