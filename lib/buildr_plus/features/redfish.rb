@@ -140,6 +140,8 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         properties["#{constant_prefix}_MAIL_FROM"] = "#{domain.name}@example.com"
       end
 
+      database_name_keys = domain.environment_vars.keys.select{|k| k =~ /_DATABASE_NAME$/}.collect{|k|k[0...-14]}
+
       environment.databases.each do |database|
         prefixes = self.database_config_prefix_map[database.key.to_s] || [constant_prefix]
         prefixes.each do |prefix|
@@ -152,6 +154,13 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           properties["#{db_prefix}_DB_DATABASE"] = database.database.to_s
           properties["#{db_prefix}_DB_USERNAME"] = database.admin_username.to_s
           properties["#{db_prefix}_DB_PASSWORD"] = database.admin_password.to_s
+          database_name_keys.each do |database_name_key|
+            if database_name_key =~ /^#{db_prefix}_/
+              other_key = Reality::Naming.underscore(database_name_key[(db_prefix.length + 1)...10000000])
+              candidates = environment.databases.select{|d|d.key.to_s == other_key || (d.key.to_s == 'default' && other_key == domain.name.to_s)}
+              properties["#{database_name_key}_DATABASE_NAME"] = database.database.to_s
+            end
+          end
         end
       end
 
