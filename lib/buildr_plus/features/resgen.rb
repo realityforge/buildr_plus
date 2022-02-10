@@ -30,8 +30,7 @@ BuildrPlus::FeatureManager.feature(:resgen => [:generate]) do |f|
       task('resgen:postload') do
         facet_mapping =
           {
-            :gwt => :gwt,
-            :react4j => :react4j,
+            :gwt => :gwt
           }
 
         Resgen.repositories.each do |r|
