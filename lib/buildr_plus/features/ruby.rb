@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:ruby) do |f|
   f.enhance(:Config) do
     def ruby_version
-      '3.1.0'
+      '2.7.2'
     end
   end
 
