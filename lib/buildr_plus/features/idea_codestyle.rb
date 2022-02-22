@@ -13,22 +13,10 @@
 #
 
 BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
-  f.enhance(:Config) do
-    def default_codestyle
-      'au.com.stocksoftware.idea.codestyle:idea-codestyle:xml:1.17'
-    end
-
-    def codestyle
-      @codestyle || self.default_codestyle
-    end
-
-    attr_writer :codestyle
-  end
-
   f.enhance(:ProjectExtension) do
     after_define do |project|
       if project.ipr?
-        project.ipr.add_component_from_artifact(BuildrPlus::IdeaCodestyle.codestyle)
+        project.ipr.add_component_from_file("#{File.expand_path(File.dirname(__FILE__))}/idea_codestyle.xml")
 
         project.ipr.add_code_insight_settings(:extra_excluded_names => %w(graphql.Assert))
         project.ipr.add_nullable_manager
