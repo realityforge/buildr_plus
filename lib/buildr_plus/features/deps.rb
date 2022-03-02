@@ -362,7 +362,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_scalars)
       end
       if BuildrPlus::FeatureManager.activated?(:keycloak)
-        dependencies << (BuildrPlus::Keycloak.keycloak_version == '11' ? Buildr.artifacts(BuildrPlus::Libs.keycloak_v11) : Buildr.artifacts(BuildrPlus::Libs.keycloak))
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service)
         if BuildrPlus::FeatureManager.activated?(:gwt)
           dependencies << Buildr.artifacts(BuildrPlus::Libs.proxy_servlet)

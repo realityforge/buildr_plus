@@ -133,18 +133,8 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
       Buildr.projects.first.root_project
     end
 
-    def keycloak_version=(keycloak_version)
-      valid_versions = %w(5 11)
-      raise "Invalid keycloak version #{keycloak_version}. Valid versions include #{valid_versions}" unless valid_versions.include?(keycloak_version.to_s)
-      @keycloak_version = keycloak_version
-    end
-
-    def keycloak_version
-      @keycloak_version.nil? ? '5' : @keycloak_version
-    end
-
     def keycloak_converger
-      self.keycloak_version == '5' ? 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.8' : 'org.realityforge.keycloak.converger:keycloak-converger:jar:1.13'
+      'org.realityforge.keycloak.converger:keycloak-converger:jar:1.13'
     end
 
     def local_application_url
@@ -274,9 +264,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           args << a.to_s
           args << '-v'
           args << '-d' << base_dir
-          unless BuildrPlus::Keycloak.keycloak_version == '5'
-            args << '--secrets-dir' << buildr_project._('config/secrets')
-          end
+          args << '--secrets-dir' << buildr_project._('config/secrets')
 
           args << "--server-url=#{BuildrPlus::Config.environment_config.keycloak.base_url}"
           args << "--realm-name=#{BuildrPlus::Config.environment_config.keycloak.realm}"

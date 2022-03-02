@@ -228,10 +228,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 end
               end
 
-              if r.keycloak? && r.keycloak.keycloak_version != BuildrPlus::Keycloak.keycloak_version
-                BuildrPlus.error("BuildrPlus setting BuildrPlus::Keycloak.keycloak_version (#{BuildrPlus::Keycloak.keycloak_version}) does not match equivalent domgen setting repository.keycloak.keycloak_version (#{r.keycloak.keycloak_version}).")
-              end
-
               if r.sync? && r.sync.standalone? && !BuildrPlus::Sync.standalone?
                 raise "Domgen repository #{r.name} declares repository.sync.standalone = true while in BuildrPlus BuildrPlus::Sync.standalone? is false"
               elsif r.sync? && !r.sync.standalone? && BuildrPlus::Sync.standalone?
