@@ -18,12 +18,6 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson]) do |f|
       {'braincheck.environment' => 'development'}
     end
 
-    attr_writer :enable_gwt_js_exports
-
-    def enable_gwt_js_exports?
-      @enable_gwt_js_exports.nil? ? false : !!@enable_gwt_js_exports
-    end
-
     attr_writer :code_server_port
 
     def code_server_port
@@ -75,7 +69,6 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson]) do |f|
                       :gwtc_args => options[:gwtc_args],
                       :skip_merge_gwt_dependencies => true,
                       :compile_report_dir => project._(:reports, :gwt, suffix),
-                      :js_exports => BuildrPlus::Gwt.enable_gwt_js_exports?
                     }.merge(options))
       end
     end
