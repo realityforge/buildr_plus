@@ -122,9 +122,6 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
       if buildr_project.ipr?
         BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
 
-        # Make sure all the data sources in the configuration file are mapped to idea project
-        Dbt::Buildr.add_idea_data_sources_from_configuration_file(buildr_project)
-
         Dbt.repository.database_keys.each do |key|
           Dbt.repository.database_for_key(key).database_environment_filter = true
         end
