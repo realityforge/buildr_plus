@@ -157,8 +157,8 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           database_name_keys.each do |database_name_key|
             if database_name_key =~ /^#{db_prefix}_/
               other_key = Reality::Naming.underscore(database_name_key[(db_prefix.length + 1)...10000000])
-              candidates = environment.databases.select{|d|d.key.to_s == other_key || (d.key.to_s == 'default' && other_key == domain.name.to_s)}
-              properties["#{database_name_key}_DATABASE_NAME"] = database.database.to_s
+              candidate = environment.databases.select{|d|d.key.to_s == other_key || (d.key.to_s == 'default' && other_key == domain.name.to_s)}.first
+              properties["#{database_name_key}_DATABASE_NAME"] = candidate.database.to_s if candidate
             end
           end
         end
