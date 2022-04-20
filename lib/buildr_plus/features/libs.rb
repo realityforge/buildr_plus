@@ -376,11 +376,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def glassfish_timers_domain
-      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-domain:json:0.7)
+      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-domain:json:#{glassfish_timers_version})
     end
 
     def glassfish_timers_db
-      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-db:jar:0.7)
+      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-db:jar:#{glassfish_timers_version})
+    end
+
+    def glassfish_timers_version
+      8 == BuildrPlus::Java.version ? '0.7' : '0.8'
     end
 
     def slf4j
