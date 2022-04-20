@@ -364,7 +364,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def testng
-      %w(org.testng:testng:jar:7.4.0 com.beust:jcommander:jar:1.78 org.webjars:jquery:jar:3.5.1)
+      %W(org.testng:testng:jar:#{testng_version} com.beust:jcommander:jar:1.78 org.webjars:jquery:jar:3.5.1)
     end
 
     def jndikit
