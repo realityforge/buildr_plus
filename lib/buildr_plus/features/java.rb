@@ -14,7 +14,7 @@
 BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
   f.enhance(:Config) do
     def version=(version)
-      raise "Invalid java version #{version}" unless [7, 8].include?(version)
+      raise "Invalid java version #{version}" unless [8, 11, 17].include?(version)
       @version = version
     end
 
