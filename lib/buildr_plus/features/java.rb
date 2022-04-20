@@ -49,8 +49,9 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
 
     before_define do |project|
       project.compile.options.lint = 'all,-processing,-serial' if project.compile_with_linting_enabled?
-      project.compile.options.source = "1.#{BuildrPlus::Java.version}"
-      project.compile.options.target = "1.#{BuildrPlus::Java.version}"
+      java_version_spec = 8 == BuildrPlus::Java.version ? '1.8' : BuildrPlus::Java.version.to_s
+      project.compile.options.source = java_version_spec
+      project.compile.options.target = java_version_spec
       project.compile.options.warnings = true
       project.compile.options[:other] = %w(-Xmaxerrs 10000 -Xmaxwarns 10000) + (project.fail_on_compile_warning? ? %w(-Werror) : [])
       (project.test.options[:java_args] ||= []) << %w(-ea)
