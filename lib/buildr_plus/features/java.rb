@@ -85,7 +85,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
       t = project.task 'java:check' do
         (project.test.compile.sources + project.compile.sources).each do |src|
           Dir.glob("#{src}/**/*").select {|f| File.directory? f}.each do |d|
-            dir = d[src.size + 1, 10000000]
+            dir = d[src.to_s.size + 1, 10000000]
             if dir.include?('.')
               raise "The directory #{d} included in java source path has a path component that includes the '.' character. This violates package name conventions."
             end
