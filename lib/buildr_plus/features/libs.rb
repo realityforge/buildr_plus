@@ -73,7 +73,12 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def mockito
-      %w(org.mockito:mockito-all:jar:1.10.19)
+      %w(
+        org.mockito:mockito-core:jar:4.5.1
+        net.bytebuddy:byte-buddy:jar:1.12.9
+        org.objenesis:objenesis:jar:3.2
+        org.hamcrest:hamcrest:jar:2.2
+      )
     end
 
     def jackson_annotations
