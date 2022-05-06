@@ -63,7 +63,7 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
       gems = {}
 
       gem(gems, 'realityforge-buildr', nil, :path => 'vendor/tools/buildr')
-      gem(gems, 'braid', '1.1.5')
+      gem(gems, 'braid', '1.1.6')
 
       gem(gems, 'buildr_plus', nil, :path => 'vendor/tools/buildr_plus')
 
