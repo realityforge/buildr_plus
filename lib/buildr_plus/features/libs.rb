@@ -68,10 +68,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(fish.payara.extras:payara-embedded-all:jar:5.2020.3)
     end
 
-    def eclipselink
-      'org.eclipse.persistence:eclipselink:jar:2.7.4'
-    end
-
     def mockito
       # TODO: hamcrest only seems to be used by AbstractDatabaseTest across systems so we just decouple the dependency
       %w(
