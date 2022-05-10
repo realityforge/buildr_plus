@@ -20,8 +20,6 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
       default_testng_args << '-Xmx2024M'
 
       if BuildrPlus::FeatureManager.activated?(:db) && project_descriptor && project_descriptor.in_any_role?([:library, :server, :sync_model, :model, :model_qa])
-        default_testng_args << "-javaagent:#{Buildr.artifact(BuildrPlus::Libs.eclipselink).to_s}"
-
         if BuildrPlus::FeatureManager.activated?(:dbt)
           BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
           Dbt.repository.load_configuration_data
