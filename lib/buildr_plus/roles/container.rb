@@ -120,12 +120,14 @@ BuildrPlus::Roles.role(:container) do
     BuildrPlus::Roles.buildr_projects_with_role(:user_experience).each do |p|
       gwt_modules = p.determine_top_level_gwt_modules('Dev')
       gwt_modules.each do |gwt_module|
-        short_name = gwt_module.gsub(/.*\.([^.]+)Dev$/, '\1')
-        path = short_name.gsub(/^#{Reality::Naming.pascal_case(project.name)}/, '')
-        if path.size > 0
+        local_module = gwt_module.gsub(/.*\.([^.]+)$/, '\1')
+        path = local_module.gsub(/^#{Reality::Naming.pascal_case(project.name)}/, '')
+        if 'Dev' == path
+          path = ''
+        else
           server_project = project(BuildrPlus::Roles.project_with_role(:server).name)
           %w(html jsp).each do |extension|
-            candidate = "#{Reality::Naming.underscore(path)}.#{extension}"
+            candidate = "#{Reality::Naming.underscore(local_module)}.#{extension}"
             path = candidate if File.exist?(server_project._(:source, :main, :webapp_local, candidate))
           end
         end
