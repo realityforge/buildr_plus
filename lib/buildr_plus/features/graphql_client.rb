@@ -109,7 +109,7 @@ JSON
           raise 'The graphql_client feature is enabled but no client has been configured. Please add BuildrPlus::GraphqlClient.endpoint(:myclient, :myclient_schema) to the buildfile and commit changes.'
         else
           content = BuildrPlus::GraphqlClient.generate
-          if content != IO.read(filename)
+          if !File.exist?(filename) || content != IO.read(filename)
             IO.write(filename, content)
             sh "git add #{filename}"
           end
