@@ -81,7 +81,7 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
         gem(gems, 'redfish', nil, :path => 'vendor/tools/redfish')
       end
       if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.tiny_tds_defined?
-        gem(gems, 'tiny_tds', '2.1.3')
+        gem(gems, 'tiny_tds', '2.1.5')
       end
       if BuildrPlus::FeatureManager.activated?(:db) && BuildrPlus::Db.pg_defined?
         gem(gems, 'pg', '0.19.0')
