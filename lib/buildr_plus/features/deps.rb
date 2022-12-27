@@ -213,6 +213,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_annotations)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
 
       dependencies.flatten
     end
