@@ -15,10 +15,6 @@
 BuildrPlus::FeatureManager.feature(:libs) do |f|
   f.enhance(:Config) do
 
-    def giggle
-      'org.realityforge.giggle:giggle-compiler:jar:all:0.13'
-    end
-
     def mustache
       %w(com.github.spullara.mustache.java:compiler:jar:0.9.6) + self.guava
     end
@@ -143,28 +139,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def timeservice
       %w(org.realityforge.timeservice:timeservice:jar:0.02)
-    end
-
-    def graphql_java
-      %w(com.graphql-java:graphql-java:jar:13.0) + self.slf4j + self.antlr4_runtime + self.graphql_java_dataloader
-    end
-
-    def graphql_java_dataloader
-      %w(com.graphql-java:java-dataloader:jar:2.1.1 org.reactivestreams:reactive-streams:jar:1.0.2)
-    end
-
-    def graphql_java_servlet
-      %w(com.graphql-java-kickstart:graphql-java-servlet:jar:8.0.0) +
-        self.graphql_java +
-        self.jackson_annotations +
-        self.jackson_core +
-        self.jackson_databind +
-        self.jackson_datatype_jdk8 +
-        self.guava # Expected 24.1.1-jre
-    end
-
-    def graphql_java_scalars
-      %w(org.realityforge.graphql.scalars:graphql-java-scalars:jar:0.01)
     end
 
     def antlr4_runtime

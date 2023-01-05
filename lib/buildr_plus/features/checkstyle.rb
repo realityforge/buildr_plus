@@ -201,15 +201,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       r.subpackage_rule('server', 'java.nio.charset.StandardCharsets', :rule_type => :class)
       r.subpackage_rule('server', 'java.time')
 
-      if BuildrPlus::FeatureManager.activated?(:graphql)
-        r.subpackage_rule('server.service', 'graphql.schema')
-        r.subpackage_rule('server.service', 'graphql.servlet.config.GraphQLSchemaProvider', :rule_type => :class)
-      end
-
-      if BuildrPlus::FeatureManager.activated?(:giggle)
-        r.subpackage_rule('server.service', "#{g}.server.graphql")
-      end
-
       if BuildrPlus::FeatureManager.activated?(:appconfig)
         r.rule("#{g}.shared.#{project.name_as_class}FeatureFlags", :rule_type => :class)
       end

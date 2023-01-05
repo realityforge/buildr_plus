@@ -18,7 +18,6 @@ BuildrPlus::FeatureManager.feature(:idea_codestyle) do |f|
       if project.ipr?
         project.ipr.add_component_from_file("#{File.expand_path(File.dirname(__FILE__))}/idea_codestyle.xml")
 
-        project.ipr.add_code_insight_settings(:extra_excluded_names => %w(graphql.Assert))
         project.ipr.add_nullable_manager
       end
     end
