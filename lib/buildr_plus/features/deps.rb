@@ -88,8 +88,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
       end
 
-      generators << [:graphql_endpoint] if BuildrPlus::FeatureManager.activated?(:graphql)
-      generators << [:giggle] if BuildrPlus::FeatureManager.activated?(:giggle)
       generators << [:robots] if BuildrPlus::Artifacts.war?
       generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
@@ -358,10 +356,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
-      if BuildrPlus::FeatureManager.activated?(:graphql)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_servlet)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.graphql_java_scalars)
-      end
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.simple_keycloak_service)

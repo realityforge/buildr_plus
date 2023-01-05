@@ -135,14 +135,11 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
               {
                 :sql_analysis => :sql_analysis,
                 :arez => :arez,
-                :graphql => :graphql,
                 :redfish => :redfish,
                 :iris_audit => :iris_audit,
                 :jackson => :jackson,
                 :keycloak => :keycloak,
                 :jms => :jms,
-                # Giggle support can be client-side caller and thus can not require domgen to support it
-                #:giggle => :giggle,
                 :mail => :mail,
                 :soap => :jws,
                 :gwt => :gwt,
@@ -200,11 +197,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 if !BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && r.facet_enabled?(domgen_facet)
                   BuildrPlus.error("Domgen facet '#{domgen_facet}' requires that buildrPlus feature '#{buildr_plus_facet}' is enabled but it is not.")
                 end
-              end
-              if BuildrPlus::FeatureManager.activated?(:graphiql) && !r.graphql.graphiql?
-                BuildrPlus.error("BuildrPlus feature 'graphiql' requires that domgen setting repository.graphql.graphiql = true.")
-              elsif !BuildrPlus::FeatureManager.activated?(:graphiql) && r.graphql? && r.graphql.graphiql?
-                BuildrPlus.error("Domgen setting repository.graphql.graphiql = true requires BuildrPlus feature 'graphiql' to be enabled.")
               end
               if BuildrPlus::FeatureManager.activated?(:keycloak)
                 domgen_clients = r.keycloak.clients.collect { |client| client.key.to_s }.sort.uniq

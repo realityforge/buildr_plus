@@ -17,7 +17,6 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
     task 'generate:all' do
       task('domgen:all').invoke if BuildrPlus::FeatureManager.activated?(:domgen)
       task('resgen:all').invoke if BuildrPlus::FeatureManager.activated?(:resgen)
-      task('giggle:generate').invoke if BuildrPlus::FeatureManager.activated?(:giggle)
     end
   end
 end
