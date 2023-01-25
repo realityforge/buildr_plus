@@ -19,7 +19,7 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     end
 
     def version
-      @version || 8
+      @version || 17
     end
 
     attr_writer :fail_on_compile_warning
