@@ -60,6 +60,24 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(javax:javaee-api:jar:8.0.1) + self.spotbugs_provided + self.jetbrains_annotations
     end
 
+    def jakarta_xml_bind_api
+      %w(jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3)
+    end
+
+    def jakarta_xml_ws
+      %w(
+         jakarta.xml.ws:jakarta.xml.ws-api:jar:2.3.3
+         jakarta.jws:jakarta.jws-api:jar:2.1.0
+         jakarta.xml.soap:jakarta.xml.soap-api:jar:1.4.2
+        ) +
+        self.jakarta_xml_bind_api +
+        self.jakarta_xml_ws_runtime
+    end
+
+    def jakarta_xml_ws_runtime
+      %w(com.sun.xml.ws:jaxws-rt:jar:2.3.3)
+    end
+
     def glassfish_embedded
       %w(fish.payara.extras:payara-embedded-all:jar:5.2020.3)
     end
