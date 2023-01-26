@@ -85,7 +85,7 @@ BuildrPlus::Roles.role(:container) do
 
     if BuildrPlus::Glassfish.support_remote_configuration?
       ipr.add_glassfish_remote_configuration(project,
-                                             :server_name => 'GlassFish 5.2020.3',
+                                             :server_name => 'GlassFish 5.2022.5',
                                              :artifacts => { war_name => context_root },
                                              :packaged => BuildrPlus::Glassfish.remote_only_packaged_apps.dup.merge(BuildrPlus::Glassfish.packaged_apps))
     end
@@ -95,15 +95,15 @@ BuildrPlus::Roles.role(:container) do
       local_packaged_apps['greenmail'] = BuildrPlus::Libs.greenmail_server if BuildrPlus::FeatureManager.activated?(:mail)
 
       ipr.add_glassfish_configuration(project,
-                                      :server_name => 'GlassFish 5.2020.3',
+                                      :server_name => 'GlassFish 5.2022.5',
                                       :exploded => {exploded_war_name => context_root},
                                       :packaged => local_packaged_apps)
 
       if BuildrPlus::Glassfish.support_app_only_configuration?
         only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
         ipr.add_glassfish_configuration(project,
-                                        :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 5.2020.3",
-                                        :server_name => 'GlassFish 5.2020.3',
+                                        :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 5.2022.5",
+                                        :server_name => 'GlassFish 5.2022.5',
                                         :exploded => {exploded_war_name => context_root},
                                         :packaged => only_packaged_apps)
       end
