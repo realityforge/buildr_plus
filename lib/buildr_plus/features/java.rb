@@ -25,7 +25,9 @@ BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
     attr_writer :fail_on_compile_warning
 
     def fail_on_compile_warning?
-      @fail_on_compile_warning.nil? ? true : !!@fail_on_compile_warning
+      # Defaults to false as projects with arez/sting/react4j will fail in java 17 as annotation processor
+      # does not run processors in test package which results in warnings for unexpected annotation options
+      @fail_on_compile_warning.nil? ? false : !!@fail_on_compile_warning
     end
 
     attr_writer :compile_with_linting_enabled
