@@ -79,7 +79,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def glassfish_embedded
-      %w(fish.payara.extras:payara-embedded-all:jar:5.2020.3)
+      %w(fish.payara.extras:payara-embedded-all:jar:5.2022.5)
     end
 
     def mockito
