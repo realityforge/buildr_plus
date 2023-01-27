@@ -23,6 +23,9 @@ BuildrPlus::Roles.role(:shared) do
   project.publish = BuildrPlus::Artifacts.model? || BuildrPlus::Artifacts.gwt?
 
   compile.with BuildrPlus::Deps.shared_deps
+  # Lock down to Java 11 as this is the latest language level supported by GWT 2.10.0
+  project.compile.options.source = '11'
+  project.compile.options.target = '11'
   test.with BuildrPlus::Deps.shared_test_deps
 
   package(:jar)
