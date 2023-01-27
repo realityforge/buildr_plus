@@ -26,6 +26,7 @@ BuildrPlus::Roles.role(:shared) do
   # Lock down to Java 11 as this is the latest language level supported by GWT 2.10.0
   project.compile.options.source = '11'
   project.compile.options.target = '11'
+  project.iml.jdk_version = '17'
   test.with BuildrPlus::Deps.shared_test_deps
 
   package(:jar)

@@ -125,15 +125,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_user
-      %w(com.google.gwt:gwt-user:jar:2.9.0 org.w3c.css:sac:jar:1.3) + self.jsinterop
+      %w(org.gwtproject:gwt-user:jar:2.10.0 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end
 
     def gwt_servlet
-      %w(com.google.gwt:gwt-servlet:jar:2.9.0)
+      %w(org.gwtproject:gwt-servlet:jar:2.10.0)
     end
 
     def gwt_dev
-      'com.google.gwt:gwt-dev:jar:2.9.0'
+      'org.gwtproject:gwt-dev:jar:2.10.0'
     end
 
     def javax_inject
