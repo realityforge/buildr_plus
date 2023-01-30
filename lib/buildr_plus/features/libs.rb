@@ -346,7 +346,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guice
-      %w(aopalliance:aopalliance:jar:1.0 org.ow2.asm:asm:jar:7.1 au.com.stocksoftware.com.google.inject:guice:jar:4.1.1-stock)
+      %w(aopalliance:aopalliance:jar:1.0 org.ow2.asm:asm:jar:9.2 com.google.inject:guice:jar:5.1.0)
     end
 
     def awaitility
@@ -366,7 +366,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops
-      self.mockito + self.testng + %w(org.realityforge.guiceyloops:guiceyloops:jar:0.111) + self.guice + self.glassfish_embedded
+      self.mockito + self.testng + %w(org.realityforge.guiceyloops:guiceyloops:jar:0.112) + self.guice + self.glassfish_embedded
     end
 
     def glassfish_timers_domain
