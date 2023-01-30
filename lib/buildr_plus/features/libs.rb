@@ -237,7 +237,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guava
-      %w(com.google.guava:guava:jar:27.1-jre)
+      %w(com.google.guava:guava:jar:30.1-jre com.google.guava:failureaccess:jar:1.0.1)
     end
 
     def arez_version
