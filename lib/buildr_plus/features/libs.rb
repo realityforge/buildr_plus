@@ -362,7 +362,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jndikit
-      %w(org.realityforge.jndikit:jndikit:jar:1.4)
+      %w(org.realityforge.jndikit:jndikit:jar:1.5)
     end
 
     def guiceyloops
