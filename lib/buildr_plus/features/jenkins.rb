@@ -41,6 +41,12 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       !!@manual_configuration
     end
 
+    attr_writer :image_version
+
+    def image_version
+      @image_version || 'current'
+    end
+
     attr_writer :container_options
 
     def container_options
@@ -358,7 +364,7 @@ CONTENT
       end
 
       result = <<CONTENT
-    kinjen.run_in_container( this, 'stocksoftware/build:current', '#{BuildrPlus::Jenkins.container_options}' ) {
+    kinjen.run_in_container( this, 'stocksoftware/build:#{BuildrPlus::Jenkins.image_version}', '#{BuildrPlus::Jenkins.container_options}' ) {
 #{c}
     }
 CONTENT
