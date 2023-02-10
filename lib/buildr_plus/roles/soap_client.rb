@@ -14,7 +14,7 @@
 
 BuildrPlus::Roles.role(:soap_client, :requires => [:soap]) do
 
-  if BuildrPlus::FeatureManager.activated?(:domgen)
+  if BuildrPlus::FeatureManager.activated?(:domgen) && 8 == BuildrPlus::Java.version
     generators = [:jws_client, :jws_shared]
     generators += [:jackson_date_util] if BuildrPlus::FeatureManager.activated?(:jackson)
 
