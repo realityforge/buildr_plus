@@ -16,7 +16,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
   f.enhance(:Config) do
 
     def mustache
-      %w(com.github.spullara.mustache.java:compiler:jar:0.9.6) + self.guava
+      %w(com.github.jknack:handlebars:jar:4.3.1) + self.guava
     end
 
     def javacsv
