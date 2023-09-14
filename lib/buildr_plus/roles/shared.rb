@@ -18,6 +18,7 @@ BuildrPlus::Roles.role(:shared) do
     Domgen::Build.define_generate_task(generators.flatten,
                                        :buildr_project => project,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
+      BuildrPlus::Generate.generated_directories << t.target_dir
       t.filter = project.domgen_filter
     end
   end

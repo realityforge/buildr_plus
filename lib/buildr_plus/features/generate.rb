@@ -22,6 +22,10 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
     def clean_generated_files?
       !commit_generated_files?
     end
+
+    def generated_directories
+      @generated_directories ||= []
+    end
   end
 
   f.enhance(:ProjectExtension) do

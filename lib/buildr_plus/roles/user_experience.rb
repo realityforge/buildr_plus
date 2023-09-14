@@ -19,6 +19,7 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
     Domgen::Build.define_generate_task(generators,
                                        :buildr_project => project,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
+      BuildrPlus::Generate.generated_directories << t.target_dir
       t.filter = Proc.new do |artifact_type, artifact|
         # Non message
         artifact_type != :message ||
@@ -37,13 +38,16 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
     Resgen::Build.define_generate_task(generators,
                                        :buildr_project => project,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
+      BuildrPlus::Generate.generated_directories << t.target_dir
       t.filter = Resgen::Filters.include_catalog_below(project._(:source, :main))
     end
     if BuildrPlus::FeatureManager.activated?(:react4j)
       Resgen::Build.define_generate_task([:react4j_components],
                                          :key => :react4j,
                                          :buildr_project => project,
-                                         :clean_generated_files => BuildrPlus::Generate.clean_generated_files?)
+                                         :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
+        BuildrPlus::Generate.generated_directories << t.target_dir
+      end
     end
   end
 

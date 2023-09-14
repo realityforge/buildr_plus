@@ -26,6 +26,7 @@ BuildrPlus::Roles.role(:container) do
                                        :buildr_project => project,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       t.filter = project.domgen_filter
+      BuildrPlus::Generate.generated_directories << t.target_dir
     end unless generators.empty?
   end
 

@@ -14,7 +14,10 @@
 BuildrPlus::FeatureManager.feature(:generated_files) do |f|
   f.enhance(:Config) do
     def check_generated_files(pattern, auto_generated_regex, exceptions = [])
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
       `git ls-files '#{pattern}' | grep -v vendor/`.split("\n").each do |file|
+        ffile = "#{base_directory}/#{file}"
+        next if BuildrPlus::Generate.generated_directories.any?{|d| ffile.start_with?(d)}
         if File.file?(file) && !exceptions.include?(file) && IO.read(file) =~ auto_generated_regex
           raise "The file #{file} has a comment indicating it is generated but it is checked into the source tree."
         end
