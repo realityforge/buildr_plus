@@ -27,10 +27,10 @@ BuildrPlus::FeatureManager.feature(:generated_files) do |f|
   f.enhance(:ProjectExtension) do
     desc 'Check the directories in java source tree do not have . character'
     task 'generated_files:check' do
-      BuildrPlus::GeneratedFiles.check_generated_files('*.java', /^\/\* DO NOT EDIT\: File is auto-generated \*\/$/)
-      BuildrPlus::GeneratedFiles.check_generated_files('*.xml', /^<!-- DO NOT EDIT\: File is auto-generated -->$/)
-      BuildrPlus::GeneratedFiles.check_generated_files('*.rb', /^# DO NOT EDIT\: File is auto-generated$/)
-      BuildrPlus::GeneratedFiles.check_generated_files('*.yaml', /^# DO NOT EDIT\: File is auto-generated$/)
+      BuildrPlus::GeneratedFiles.check_generated_files('*.java', /^\/\* DO NOT EDIT: File is auto-generated \*\/$/)
+      BuildrPlus::GeneratedFiles.check_generated_files('*.xml', /^<!-- DO NOT EDIT: File is auto-generated -->$/)
+      BuildrPlus::GeneratedFiles.check_generated_files('*.rb', /^# DO NOT EDIT: File is auto-generated$/)
+      BuildrPlus::GeneratedFiles.check_generated_files('*.yaml', /^# DO NOT EDIT: File is auto-generated$/)
     end
   end
 end
