@@ -92,6 +92,7 @@ BuildrPlus::FeatureManager.feature(:less) do |f|
     end
 
     before_define do |project|
+      project.clean { rm_rf project._(:target, :generated, :less) }
       if project.lessc_required?
         BuildrPlus::Less.define_lessc_task(project, BuildrPlus::Less.options)
         task(':domgen:all').enhance(["#{project.name}:lessc"])

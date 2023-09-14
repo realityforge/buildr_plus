@@ -96,6 +96,10 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting, :jackson]) do |f|
       require 'buildr/gwt'
     end
 
+    before_define do |project|
+      project.clean { rm_rf project._(:target, :generated, :deps) }
+    end
+
     def top_level_gwt_modules
       @top_level_gwt_modules ||= []
     end

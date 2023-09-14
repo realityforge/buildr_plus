@@ -113,9 +113,7 @@ BuildrPlus::FeatureManager.feature(:spotbugs) do |f|
 
         project.task(':domgen:all').enhance([t.name])
 
-        project.clean do
-          FileUtils.rm_rf project._(:target, :generated, :spotbugs)
-        end
+        project.clean { rm_rf project._(:target, :generated, :spotbugs) }
       end
     end
 

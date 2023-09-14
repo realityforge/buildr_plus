@@ -64,9 +64,7 @@ BuildrPlus::FeatureManager.feature(:sass) do |f|
         end
       end
 
-      project.clean do
-        FileUtils.rm_rf project._(:target, :generated, :sass, :main, :webapp)
-      end
+      project.clean { rm_rf project._(:target, :generated, :sass) }
 
       project.assets.enhance([t.name])
       project.assets.paths << project._(:target, :generated, :sass, :main, :webapp)
