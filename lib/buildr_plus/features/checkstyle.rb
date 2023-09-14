@@ -465,7 +465,7 @@ RULES
         project.task(':domgen:all').enhance([t.name])
 
         project.clean do
-          FileUtils.rm_rf project._(:target, :generated, 'checkstyle')
+          FileUtils.rm_rf project._(:target, :generated, :checkstyle)
         end
 
         project.checkstyle.properties['checkstyle.import-control.file'] = checkstyle_import_rules
