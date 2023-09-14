@@ -152,6 +152,11 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           package_no_test_actions << 'domgen:all'
         end
 
+        if BuildrPlus::FeatureManager.activated?(:generate)
+          commit_actions << 'generate:check_generated_source_code_committed'
+          pull_request_actions << 'generate:check_generated_source_code_committed'
+        end
+
         database_drops = []
 
         if BuildrPlus::FeatureManager.activated?(:dbt)
