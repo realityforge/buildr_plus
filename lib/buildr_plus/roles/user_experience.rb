@@ -16,7 +16,9 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
 
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = BuildrPlus::Deps.user_experience_generators + project.additional_domgen_generators
-    Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
+    Domgen::Build.define_generate_task(generators,
+                                       :buildr_project => project,
+                                       :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
         # Non message
         artifact_type != :message ||
@@ -32,11 +34,16 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
   if BuildrPlus::FeatureManager.activated?(:resgen)
     generators = [:mvp_abstract_uibinder_component, :gwt_abstract_uibinder_component, :gwt_client_bundle, :assets]
     generators += project.additional_resgen_generators
-    Resgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
+    Resgen::Build.define_generate_task(generators,
+                                       :buildr_project => project,
+                                       :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       t.filter = Resgen::Filters.include_catalog_below(project._(:source, :main))
     end
     if BuildrPlus::FeatureManager.activated?(:react4j)
-      Resgen::Build.define_generate_task([:react4j_components], :key => :react4j, :buildr_project => project)
+      Resgen::Build.define_generate_task([:react4j_components],
+                                         :key => :react4j,
+                                         :buildr_project => project,
+                                         :clean_generated_files => BuildrPlus::Generate.clean_generated_files?)
     end
   end
 

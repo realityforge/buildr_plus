@@ -12,6 +12,18 @@
 # limitations under the License.
 #
 BuildrPlus::FeatureManager.feature(:generate) do |f|
+  f.enhance(:Config) do
+    attr_writer :commit_generated_files
+
+    def commit_generated_files?
+      @commit_generated_files.nil? ? false : !!@commit_generated_files
+    end
+
+    def clean_generated_files?
+      !commit_generated_files?
+    end
+  end
+
   f.enhance(:ProjectExtension) do
     desc 'Generate the source code and pre-compile artifacts required to build application'
     task 'generate:all' do

@@ -16,7 +16,9 @@ BuildrPlus::Roles.role(:model_qa) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = BuildrPlus::Deps.model_qa_generators + project.additional_domgen_generators
 
-    Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project) do |t|
+    Domgen::Build.define_generate_task(generators.flatten,
+                                       :buildr_project => project,
+                                       :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       t.filter = project.domgen_filter
     end
   end

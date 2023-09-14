@@ -61,7 +61,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
     end
 
     def database_target_dir
-      @database_target_dir || 'database/generated'
+      @database_target_dir || BuildrPlus::Generate.commit_generated_files? ? 'database/srcgen' : 'database/generated'
     end
 
     def database_target_dir=(database_target_dir)
@@ -116,7 +116,10 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
           generators << (BuildrPlus::Db.mssql? ? :appconfig_mssql : :appconfig_pgsql)
         end
         generators << :syncrecord_sql if BuildrPlus::FeatureManager.activated?(:syncrecord)
-        Domgen::Build.define_generate_task(generators, :key => :sql, :target_dir => BuildrPlus::Domgen.database_target_dir) do |t|
+        Domgen::Build.define_generate_task(generators,
+                                           :key => :sql,
+                                           :target_dir => BuildrPlus::Domgen.database_target_dir,
+                                           :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
           t.verbose  = 'true' == ENV['DEBUG_DOMGEN']
         end
 

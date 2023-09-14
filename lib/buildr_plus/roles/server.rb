@@ -15,7 +15,9 @@
 BuildrPlus::Roles.role(:server) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = BuildrPlus::Deps.server_generators + project.additional_domgen_generators
-    Domgen::Build.define_generate_task(generators.flatten, :buildr_project => project)
+    Domgen::Build.define_generate_task(generators.flatten,
+                                       :buildr_project => project,
+                                       :clean_generated_files => BuildrPlus::Generate.clean_generated_files?)
   end
 
   project.publish = true

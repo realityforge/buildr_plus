@@ -17,7 +17,9 @@ BuildrPlus::Roles.role(:sync_model, :requires => [:sync]) do
   if BuildrPlus::FeatureManager.activated?(:domgen)
     generators = [:sync_master_ejb_impl, :ejb_services, :sync_remote_sync_service]
     generators += project.additional_domgen_generators
-    Domgen::Build.define_generate_task(generators, :buildr_project => project) do |t|
+    Domgen::Build.define_generate_task(generators,
+                                       :buildr_project => project,
+                                       :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       t.filter = Proc.new do |artifact_type, artifact|
         Domgen::Filters.is_in_data_modules?([:Master], artifact_type, artifact) &&
           (artifact_type != :service || artifact.name == :SyncTempPopulationService)
