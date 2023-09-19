@@ -366,7 +366,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def guiceyloops
-      self.mockito + self.testng + %w(org.realityforge.guiceyloops:guiceyloops:jar:0.113) + self.guice + self.glassfish_embedded
+      self.mockito + self.testng + %w(org.realityforge.guiceyloops:guiceyloops:jar:0.113) + self.guice + self.glassfish_embedded + self.guava
     end
 
     def glassfish_timers_domain
