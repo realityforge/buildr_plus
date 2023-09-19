@@ -393,6 +393,23 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
     first_time do
       require 'buildr/checkstyle'
+
+      class ::Buildr::Checkstyle::Config
+        def complete_source_paths
+          paths = self.source_paths.dup
+
+          self.additional_project_names.each do |project_name|
+            p = self.project.project(project_name)
+            paths << [p.compile.sources, p.test.compile.sources].flatten.compact
+          end
+
+          paths = paths.flatten.compact
+          paths =          paths.reject{|p| BuildrPlus::Generate.generated_directories.any?{|g|p.start_with?(g.to_s)}}
+          puts paths
+          paths
+
+        end
+      end
     end
 
     before_define do |project|
