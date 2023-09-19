@@ -18,7 +18,8 @@ BuildrPlus::FeatureManager.feature(:zapwhite) do |f|
     end
 
     def zapwhite_command
-      "bundle exec zapwhite -d #{File.dirname(Buildr.application.buildfile.to_s)} #{BuildrPlus::Generate.generated_directories.collect{|d| "--exclude-pattern '#{d}/.*'"}.join(" ")} #{additional_rules.collect{|r| "--rule \"#{r}\""}.join(' ')}"
+      workspace_dir = File.dirname(Buildr.application.buildfile.to_s).to_s
+      "bundle exec zapwhite -d #{File.dirname(Buildr.application.buildfile.to_s)} #{BuildrPlus::Generate.generated_directories.collect{|d| "--exclude-pattern '#{::Buildr::Util.relative_path(d, workspace_dir)}/.*'"}.join(" ")} #{additional_rules.collect{|r| "--rule \"#{r}\""}.join(' ')}"
     end
   end
 
@@ -34,6 +35,7 @@ BuildrPlus::FeatureManager.feature(:zapwhite) do |f|
 
     desc 'Run zapwhite to ensure that the .gitattribute file and file whitespace is normalized.'
     task 'zapwhite:fix' do
+      puts BuildrPlus::Zapwhite.zapwhite_command
       output = `#{BuildrPlus::Zapwhite.zapwhite_command}`
       puts output unless output.empty?
     end
