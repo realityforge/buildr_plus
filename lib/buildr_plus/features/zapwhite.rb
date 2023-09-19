@@ -18,7 +18,7 @@ BuildrPlus::FeatureManager.feature(:zapwhite) do |f|
     end
 
     def zapwhite_command
-      "bundle exec zapwhite -d #{File.dirname(Buildr.application.buildfile.to_s)} #{additional_rules.collect{|r| "--rule \"#{r}\""}.join(' ')}"
+      "bundle exec zapwhite -d #{File.dirname(Buildr.application.buildfile.to_s)} #{BuildrPlus::Generate.generated_directories.collect{|d| "--exclude-pattern '#{d}/.*'"}.join(" ")} #{additional_rules.collect{|r| "--rule \"#{r}\""}.join(' ')}"
     end
   end
 
