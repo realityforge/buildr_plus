@@ -20,6 +20,7 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
     generators = BuildrPlus::Deps.gwt_generators + project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators,
                                        :buildr_project => project,
+                                       :keep_file_patterns => BuildrPlus::Generate.keep_file_patterns,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       BuildrPlus::Generate.generated_directories << t.target_dir
       t.filter = Proc.new do |artifact_type, artifact|
@@ -38,6 +39,7 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
     generators += project.additional_resgen_generators
     Resgen::Build.define_generate_task(generators,
                                        :buildr_project => project,
+                                       :keep_file_patterns => BuildrPlus::Generate.keep_file_patterns,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       BuildrPlus::Generate.generated_directories << t.target_dir
       t.filter = Resgen::Filters.include_catalog_below(project._(:source, :main),

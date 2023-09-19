@@ -26,6 +26,11 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
     def generated_directories
       @generated_directories ||= []
     end
+
+    # Patterns for files to match to keep in generated directories
+    def keep_file_patterns
+      @keep_file_patterns ||= []
+    end
   end
 
   f.enhance(:ProjectExtension) do

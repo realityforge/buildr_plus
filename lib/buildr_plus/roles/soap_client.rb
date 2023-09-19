@@ -21,6 +21,7 @@ BuildrPlus::Roles.role(:soap_client, :requires => [:soap]) do
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators,
                                        :buildr_project => project,
+                                       :keep_file_patterns => BuildrPlus::Generate.keep_file_patterns,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       BuildrPlus::Generate.generated_directories << t.target_dir
       t.filter = project.domgen_filter

@@ -120,6 +120,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
         Domgen::Build.define_generate_task(generators,
                                            :key => :sql,
                                            :target_dir => BuildrPlus::Domgen.database_target_dir,
+                                           :keep_file_patterns => BuildrPlus::Generate.keep_file_patterns,
                                            :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
           t.verbose  = 'true' == ENV['DEBUG_DOMGEN']
           BuildrPlus::Generate.generated_directories << t.target_dir
