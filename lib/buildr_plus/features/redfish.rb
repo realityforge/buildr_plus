@@ -246,7 +246,12 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           domain.complete = false
           domain.local = false
           if BuildrPlus::FeatureManager.activated?(:domgen)
-            file = buildr_project._("generated/domgen/#{buildr_project.name}/main/etc/#{buildr_project.name_as_class}.redfish.fragment.json")
+            base_path =
+              BuildrPlus::Generate.clean_generated_files? ?
+                buildr_project._(:target, :generated, 'domgen', buildr_project.name) :
+                buildr_project._(:srcgen, 'domgen', buildr_project.name)
+
+            file = buildr_project._("#{base_path}/main/etc/#{buildr_project.name_as_class}.redfish.fragment.json")
             domain.pre_artifacts << file
             buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
             buildr_project.file(file => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
