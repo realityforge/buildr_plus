@@ -222,7 +222,10 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           rm_rf base_dir
           mkdir_p base_dir
 
-          file = buildr_project.file("generated/domgen/#{name}/main/etc/keycloak")
+          file =
+            BuildrPlus::Generate.clean_generated_files? ?
+              buildr_project._(:target, :generated, 'domgen', name, 'main/etc/keycloak') :
+              buildr_project._(:srcgen, 'domgen', name, 'main/etc/keycloak')
           file.invoke
 
           BuildrPlus::Keycloak.clients.select { |c| !c.external? }.each do |client|
@@ -308,7 +311,12 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
                   package(type).enhance do |t|
                     project.task(':domgen:all').invoke
                     mkdir_p File.dirname(t.to_s)
-                    cp "generated/domgen/#{buildr_project.root_project.name}/main/etc/keycloak/#{client.client_type}.json", t.to_s
+                    base_path =
+                      BuildrPlus::Generate.clean_generated_files? ?
+                        buildr_project._(:target, :generated, 'domgen') :
+                        buildr_project._(:srcgen, 'domgen')
+
+                    cp "#{base_path}/#{buildr_project.root_project.name}/main/etc/keycloak/#{client.client_type}.json", t.to_s
                   end
                 end
               end
