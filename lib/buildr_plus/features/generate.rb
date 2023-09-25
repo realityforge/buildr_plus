@@ -44,7 +44,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
     task 'generate:check_generated_source_code_committed' do
       unless BuildrPlus::Generate.generated_directories.empty?
         status_output = `git status --porcelain #{BuildrPlus::Generate.generated_directories.join(' ')} 2>&1`.strip
-        raise "Uncommitted changes in generated source trees but BuildrPlus::Generate.commit_generated_files? returns true. Commit the files or change the setting.\n-----\n#{status_output}\n-----\n" if 0 != status_output.size
+        raise "Uncommitted changes in generated source trees but BuildrPlus::Generate.commit_generated_files? returns true. Commit the files or change the setting.\n-----\n#{status_output}\n-----\n#{`git status #{BuildrPlus::Generate.generated_directories.join(' ')} 2>&1`}" if 0 != status_output.size
       end
     end
   end
