@@ -222,10 +222,11 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           rm_rf base_dir
           mkdir_p base_dir
 
-          file =
+          filename =
             BuildrPlus::Generate.clean_generated_files? ?
               buildr_project._(:target, :generated, 'domgen', name, 'main/etc/keycloak') :
               buildr_project._(:srcgen, 'domgen', name, 'main/etc/keycloak')
+          file = buildr_project.file(filename)
           file.invoke
 
           BuildrPlus::Keycloak.clients.select { |c| !c.external? }.each do |client|
