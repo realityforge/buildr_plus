@@ -404,7 +404,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           end
 
           paths = paths.flatten.compact
-          paths.reject { |p| BuildrPlus::Generate.generated_directories.any? { |g| p.start_with?(g.to_s) } }
+          paths.reject { |p| BuildrPlus::Generate.generated_directories.any? { |g| p.to_s.start_with?(g.to_s) } }
         end
       end
     end
