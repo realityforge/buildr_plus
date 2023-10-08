@@ -118,7 +118,7 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
 
   f.enhance(:ProjectExtension) do
     desc 'Check bazel files are valid.'
-    task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check)
+    task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check bazel_standard_files:check)
 
     desc 'Check .bazelignore has been normalized.'
     task 'bazelignore:check' do
@@ -150,6 +150,14 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       actual_content = IO.read(filename)
       if "#{BuildrPlus::Bazel.bazel_version}\n" != actual_content
         raise ".bazelversion is not uptodate. Please run 'bazel bazelversion:fix'."
+      end
+    end
+
+    desc 'Check presence of standard bazel files'
+    task 'bazel_standard_files:check' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      %W(#{base_directory}/.bazelrc #{base_directory}/WORKSPACE.bazel #{base_directory}/BUILD.bazel).each do |filename|
+        raise "Bazel file '#{filename}' missing. Please fix." unless File.exist?(filename)
       end
     end
 
