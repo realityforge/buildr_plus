@@ -112,7 +112,7 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
 
   f.enhance(:ProjectExtension) do
     desc 'Check bazel files are valid.'
-    task 'bazel:check' => %w(bazelignore:check)
+    task 'bazel:check' => %w(bazelignore:check bazelw:check)
 
     desc 'Check .bazelignore has been normalized.'
     task 'bazelignore:check' do
@@ -122,12 +122,35 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       end
     end
 
+    desc 'Normalize bazelw'
+    task 'bazelw:check' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      filename = "#{base_directory}/bazelw"
+
+      raise "Bazelw file '#{filename}' missing. Please run 'bazel bazelw:fix'." unless File.exist?(filename)
+      actual_content = IO.read(filename)
+      expected_content = IO.read("#{File.dirname(__FILE__)}/bazelw")
+      if actual_content != expected_content || !File.executable?(filename)
+        raise "Bazelw is not uptodate. Please run 'bazel bazelw:fix'."
+      end
+    end
+
     desc 'Normalize bazel files.'
     task 'bazel:fix' => %w(bazelignore:fix)
 
     desc 'Normalize .bazelignore.'
     task 'bazelignore:fix' do
       BuildrPlus::Bazel.process_bazelignore_file(true)
+    end
+
+    desc 'Normalize bazel.'
+    task 'bazelw:fix' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      filename = "#{base_directory}/bazelw"
+
+      content = IO.read("#{File.dirname(__FILE__)}/bazelw")
+      IO.write(filename, content)
+      File.chmod(0755, filename)
     end
   end
 end
