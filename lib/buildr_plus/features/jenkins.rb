@@ -362,7 +362,7 @@ CONTENT
 
     def bazel_command(args, options = {})
       xvfb = options[:xvfb].nil? ? true : !!options[:xvfb]
-      "#{xvfb ? 'xvfb-run -a ' : ''}bazelw #{args}"
+      "#{xvfb ? 'xvfb-run -a ' : ''}./bazelw #{args}"
     end
 
     def buildr_command(args, options = {})
