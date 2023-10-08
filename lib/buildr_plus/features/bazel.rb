@@ -14,6 +14,12 @@
 
 BuildrPlus::FeatureManager.feature(:bazel) do |f|
   f.enhance(:Config) do
+    def bazel_version
+      @bazel_version ||= '6.3.2'
+    end
+
+    attr_writer :bazel_version
+
     def additional_bazelignores
       @additional_bazelignores ||= []
     end
@@ -112,7 +118,7 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
 
   f.enhance(:ProjectExtension) do
     desc 'Check bazel files are valid.'
-    task 'bazel:check' => %w(bazelignore:check bazelw:check)
+    task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check)
 
     desc 'Check .bazelignore has been normalized.'
     task 'bazelignore:check' do
@@ -122,7 +128,7 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       end
     end
 
-    desc 'Normalize bazelw'
+    desc 'Check bazelw has been normalized'
     task 'bazelw:check' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/bazelw"
@@ -135,15 +141,27 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       end
     end
 
+    desc 'Check .bazelversion has been normalized'
+    task 'bazelversion:check' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      filename = "#{base_directory}/.bazelversion"
+
+      raise ".bazelversion file '#{filename}' missing. Please run 'bazel bazelversion:fix'." unless File.exist?(filename)
+      actual_content = IO.read(filename)
+      if "#{BuildrPlus::Bazel.bazel_version}\n" != actual_content
+        raise ".bazelversion is not uptodate. Please run 'bazel bazelversion:fix'."
+      end
+    end
+
     desc 'Normalize bazel files.'
-    task 'bazel:fix' => %w(bazelignore:fix)
+    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazel_version:fix)
 
     desc 'Normalize .bazelignore.'
     task 'bazelignore:fix' do
       BuildrPlus::Bazel.process_bazelignore_file(true)
     end
 
-    desc 'Normalize bazel.'
+    desc 'Normalize bazelw'
     task 'bazelw:fix' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/bazelw"
@@ -151,6 +169,14 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       content = IO.read("#{File.dirname(__FILE__)}/bazelw")
       IO.write(filename, content)
       File.chmod(0755, filename)
+    end
+
+    desc 'Normalize .bazelversion'
+    task 'bazel_version:fix' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      filename = "#{base_directory}/.bazelversion"
+
+      IO.write(filename, "#{BuildrPlus::Bazel.bazel_version}\n")
     end
   end
 end
