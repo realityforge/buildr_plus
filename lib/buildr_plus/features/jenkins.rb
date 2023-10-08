@@ -73,6 +73,10 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       additional_tasks[".jenkins/#{key}.groovy"] = buildr_task_content(label, task, options)
     end
 
+    def add_pre_commit_buildr_stage(label, buildr_task, options = {})
+      self.pre_commit_stages << buildr_stage_content(label, buildr_task, options)
+    end
+
     def add_pre_package_buildr_stage(label, buildr_task, options = {})
       self.pre_package_stages << buildr_stage_content(label, buildr_task, options)
     end
@@ -83,6 +87,10 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
 
     def add_post_import_buildr_stage(label, buildr_task, options = {})
       self.post_import_stages << buildr_stage_content(label, buildr_task, options)
+    end
+
+    def pre_commit_stages
+      @pre_commit_stages ||= []
     end
 
     def pre_package_stages
@@ -195,6 +203,10 @@ CONTENT
 
       content += prepare_content(:include_node => BuildrPlus::FeatureManager.activated?(:node),
                                  :exclude_yarn => !BuildrPlus::Node.root_package_json_present?)
+
+      pre_commit_stages.each do |stage_content|
+        content += stage_content
+      end
 
       content += commit_stage(root_project)
 
