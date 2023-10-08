@@ -89,6 +89,22 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       self.post_import_stages << buildr_stage_content(label, buildr_task, options)
     end
 
+    def add_pre_commit_bazel_stage(label, bazel_command, options = {})
+      self.pre_commit_stages << bazel_stage_content(label, bazel_command, options)
+    end
+
+    def add_pre_package_bazel_stage(label, bazel_command, options = {})
+      self.pre_package_stages << bazel_stage_content(label, bazel_command, options)
+    end
+
+    def add_post_package_bazel_stage(label, bazel_command, options = {})
+      self.post_package_stages << bazel_stage_content(label, bazel_command, options)
+    end
+
+    def add_post_import_bazel_stage(label, bazel_command, options = {})
+      self.post_import_stages << bazel_stage_content(label, bazel_command, options)
+    end
+
     def pre_commit_stages
       @pre_commit_stages ||= []
     end
@@ -119,6 +135,17 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       <<-CONTENT
         stage('#{label}') {
           sh '#{docker ? docker_setup : ''}#{buildr_command(buildr_task, options)}'#{suffix}
+        }
+      CONTENT
+    end
+
+    def bazel_stage_content(label, bazel_command, options = {})
+      docker = options[:docker].nil? ? true : !!options[:docker]
+      suffix = options[:additional_steps].nil? ? '' : "\n          #{options[:additional_steps]}"
+
+      <<-CONTENT
+        stage('#{label}') {
+          sh '#{docker ? docker_setup : ''}#{bazel_command(bazel_command, options)}'#{suffix}
         }
       CONTENT
     end
@@ -206,6 +233,10 @@ CONTENT
 
       pre_commit_stages.each do |stage_content|
         content += stage_content
+      end
+
+      if BuildrPlus::FeatureManager.activated?(:bazel)
+        content += bazel_stage_content('BazelBuild', 'build :all')
       end
 
       content += commit_stage(root_project)
@@ -327,6 +358,11 @@ CONTENT
 
     def docker_setup
       BuildrPlus::FeatureManager.activated?(:docker) ? 'export DOCKER_HOST=${env.DOCKER_HOST}; export DOCKER_TLS_VERIFY=${env.DOCKER_TLS_VERIFY}; ' : ''
+    end
+
+    def bazel_command(args, options = {})
+      xvfb = options[:xvfb].nil? ? true : !!options[:xvfb]
+      "#{xvfb ? 'xvfb-run -a ' : ''}bazelw #{args}"
     end
 
     def buildr_command(args, options = {})

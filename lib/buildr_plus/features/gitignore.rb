@@ -63,6 +63,10 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         gitignores << '/dataSources'
       end
 
+      if BuildrPlus::FeatureManager.activated?(:bazel)
+        gitignores << '/bazel-*'
+      end
+
       if BuildrPlus::FeatureManager.activated?(:node)
         gitignores << '/node_modules'
       end
