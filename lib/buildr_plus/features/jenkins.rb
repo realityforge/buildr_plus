@@ -236,7 +236,7 @@ CONTENT
       end
 
       if BuildrPlus::FeatureManager.activated?(:bazel)
-        content += bazel_stage_content('BazelBuild', 'build :all')
+        content += bazel_stage_content('BazelBuild', 'build //...')
       end
 
       content += commit_stage(root_project)
