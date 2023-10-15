@@ -15,6 +15,10 @@
 BuildrPlus::FeatureManager.feature(:libs) do |f|
   f.enhance(:Config) do
 
+    def bazel_depgen
+      'org.realityforge.bazel.depgen:bazel-depgen:jar:all:0.17'
+    end
+
     def mustache
       %w(com.github.jknack:handlebars:jar:4.3.1) + self.guava
     end

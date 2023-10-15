@@ -20,6 +20,28 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
 
     attr_writer :bazel_version
 
+    attr_writer :tolerate_invalid_poms
+
+    def tolerate_invalid_poms?
+      @tolerate_invalid_poms.nil? ? false : !!@tolerate_invalid_poms
+    end
+
+    attr_writer :tolerate_missing_poms
+
+    def tolerate_missing_poms?
+      @tolerate_missing_poms.nil? ? false : !!@tolerate_missing_poms
+    end
+
+    attr_writer :tolerate_missing_poms
+
+    def artifacts_missing_source_prefixes
+      @artifacts_missing_source_prefixes ||= %w()
+    end
+
+    def local_artifact_prefixes
+      @local_artifact_prefixes ||= %w(iris. au.gov.vic.dse. mercury.)
+    end
+
     def additional_bazelignores
       @additional_bazelignores ||= []
     end
@@ -36,7 +58,7 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       if File.exist?(filename)
         original_content = IO.read(filename)
 
-        content = "# DO NOT EDIT: File is auto-generated\n" + bazelignores.sort.uniq.collect {|v| "#{v}"}.join("\n") + "\n"
+        content = "# DO NOT EDIT: File is auto-generated\n" + bazelignores.sort.uniq.collect { |v| "#{v}" }.join("\n") + "\n"
 
         if content != original_content
           BuildrPlus::Bazel.bazelignore_needs_update = true
@@ -50,6 +72,77 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
           end
         end
       end
+    end
+
+    def generate_dependencies_yml
+
+      artifacts_map = {}
+      packages = Buildr.projects.collect { |project| project.packages }.flatten.collect { |p| p.to_s }
+      Buildr.projects.each do |project|
+        (project.compile.dependencies + project.test.compile.dependencies).each do |dep|
+          if dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)
+            hash = dep.to_spec_hash
+            spec = "#{hash[:group]}:#{hash[:id]}:#{hash[:version]}"
+            (artifacts_map[spec] ||= []) << project.name
+          end
+        end
+      end
+
+      repositories = Buildr.repositories.remote.select { |r| r != 'https://repo.maven.apache.org/maven2' }
+      if repositories.size > 1
+        raise "Bazel plugin does not currently support multiple local repositories. Current local repositories: #{repositories}"
+      end
+
+      content = <<HEADER
+# DO NOT EDIT: File is auto-generated
+
+repositories:
+  - name: central
+    url: https://repo.maven.apache.org/maven2
+HEADER
+      if repositories.size > 0
+        content += <<HEADER
+  - name: local
+    url: #{repositories[0]}
+    searchByDefault: false
+HEADER
+      end
+      content += <<HEADER
+options:
+  workspaceDirectory: ../..
+  aliasStrategy: ArtifactId
+HEADER
+
+      if BuildrPlus::Bazel.tolerate_missing_poms?
+        content += <<HEADER
+  failOnMissingPom: false
+HEADER
+      end
+      if BuildrPlus::Bazel.tolerate_invalid_poms?
+        content += <<HEADER
+  failOnInvalidPom: false
+HEADER
+      end
+
+      content += <<HEADER
+
+artifacts:
+HEADER
+
+      artifacts_map.keys.each do |spec|
+        content += "  - coord: #{spec}\n"
+        # Artifacts that we know have no source, either because the origin
+        if BuildrPlus::Bazel.artifacts_missing_source_prefixes.any? { |prefix| spec.start_with?(prefix) }
+          content += "    includeSource: false\n"
+        end
+        content += "    excludes:\n"
+        content += "      - '*:*'\n"
+        if BuildrPlus::Bazel.local_artifact_prefixes.any? { |prefix| spec.start_with?(prefix) }
+          content += "    repositories:\n"
+          content += "      - local\n"
+        end
+      end
+      content
     end
 
     private
@@ -118,7 +211,7 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
 
   f.enhance(:ProjectExtension) do
     desc 'Check bazel files are valid.'
-    task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check bazel_standard_files:check)
+    task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check bazel_standard_files:check bazel_dependencies:check)
 
     desc 'Check .bazelignore has been normalized.'
     task 'bazelignore:check' do
@@ -161,8 +254,20 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       end
     end
 
+    desc 'Check dependencies.yml is up to date'
+    task 'bazel_dependencies:check' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      filename = "#{base_directory}/third_party/java/dependencies.yml"
+
+      content = BuildrPlus::Bazel.generate_dependencies_yml
+      actual_content = File.exist?(filename) ? IO.read(filename) : ''
+      if content != actual_content
+        raise "Bazel's dependencies.yml is not uptodate. Please run 'bazel bazel_dependencies:fix'."
+      end
+    end
+
     desc 'Normalize bazel files.'
-    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazel_version:fix)
+    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazel_version:fix bazel_dependencies:fix)
 
     desc 'Normalize .bazelignore.'
     task 'bazelignore:fix' do
@@ -185,6 +290,39 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       filename = "#{base_directory}/.bazelversion"
 
       IO.write(filename, "#{BuildrPlus::Bazel.bazel_version}\n")
+    end
+
+    desc 'Normalize dependencies.yml'
+    task 'bazel_dependencies:fix' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      filename = "#{base_directory}/third_party/java/dependencies.yml"
+
+      content = BuildrPlus::Bazel.generate_dependencies_yml
+
+      actual_content = File.exist?(filename) ? IO.read(filename) : ''
+      if content != actual_content
+        IO.write(filename, content)
+        puts 'Regenerated dependencies.yml'
+        bazel_depgen = ::Buildr.artifact(BuildrPlus::Libs.bazel_depgen)
+        bazel_depgen.invoke
+
+        args = []
+        args << Java::Commands.path_to_bin('java')
+        args << '-jar'
+        args << bazel_depgen.to_s
+        args << '--config-file'
+        args << filename
+        args << '--verbose'
+        args << 'generate'
+
+        begin
+          sh args.join(' ')
+        rescue Exception => e
+          # Append to the end to ensure it get's rewritten next time
+          IO.write(filename, content + "\n# File failed to be processed")
+          raise e
+        end
+      end
     end
   end
 end
