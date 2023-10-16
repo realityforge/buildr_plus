@@ -117,6 +117,12 @@ BuildrPlus::Roles.role(:container) do
       iml.excluded_directories << project._('dataSources')
       iml.excluded_directories << project._('.ideaDataSources')
     end
+    if BuildrPlus::FeatureManager.activated?(:bazel)
+      iml.excluded_directories << project._('bazel-bin')
+      iml.excluded_directories << project._('bazel-out')
+      iml.excluded_directories << project._("bazel-#{project.name}")
+      iml.excluded_directories << project._('bazel-testlogs')
+    end
     iml.excluded_directories << project._(:target, :generated, :gwt) if BuildrPlus::FeatureManager.activated?(:gwt)
     iml.excluded_directories << project._('tmp')
     iml.excluded_directories << project._('.shelf')
