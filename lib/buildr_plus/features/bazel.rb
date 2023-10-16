@@ -94,7 +94,7 @@ HEADER
         unless compile_deps.empty?
           content += <<CONTENT
 #{prefix}_COMPILE_DEPS = [
-    #{compile_deps.collect{|s|"\"#{s}\""}.sort.join(",\n    ")}
+    #{compile_deps.collect{|s|"\"#{s}\","}.sort.join("\n    ")}
 ]
 CONTENT
         end
@@ -107,7 +107,7 @@ CONTENT
         unless test_deps.empty?
           content += <<CONTENT
 #{prefix}_TEST_DEPS = [
-    #{test_deps.collect{|s|"\"#{s}\""}.sort.join(",\n    ")}
+    #{test_deps.collect{|s|"\"#{s}\","}.sort.join("\n    ")}
 ]
 CONTENT
         end
