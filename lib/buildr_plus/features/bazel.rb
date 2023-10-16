@@ -83,7 +83,7 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
 HEADER
 
       packages = Buildr.projects.collect { |project| project.packages }.flatten.collect { |p| p.to_s }
-      Buildr.projects.select{|project| project.iml?}.each do |project|
+      Buildr.projects.select{|project| project.iml? && project.generate_bazel_dep_group?}.each do |project|
         prefix = Reality::Naming.uppercase_constantize(project.name.gsub(/^#{project.root_project.name}:/, '')).gsub(':', '_')
         compile_deps = []
         project.compile.dependencies.each do |dep|
@@ -253,6 +253,13 @@ HEADER
   end
 
   f.enhance(:ProjectExtension) do
+
+    attr_writer :generate_bazel_dep_group
+
+    def generate_bazel_dep_group?
+      @generate_bazel_dep_group.nil? ? true : !!@generate_bazel_dep_group
+    end
+
     desc 'Check bazel files are valid.'
     task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check bazel_standard_files:check bazel_dependencies:check bazel_groups:check)
 
