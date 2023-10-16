@@ -88,7 +88,7 @@ HEADER
         compile_deps = []
         project.compile.dependencies.each do |dep|
           if dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)
-            compile_deps << "//third_party/java:#{dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_')}"
+            compile_deps << "//third_party/java:#{dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_').gsub('-', '_')}"
           end
         end
         unless compile_deps.empty?
@@ -101,7 +101,7 @@ CONTENT
         test_deps = []
         project.test.compile.dependencies.each do |dep|
           if dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)
-            test_deps << "//third_party/java:#{dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_')}"
+            test_deps << "//third_party/java:#{dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_').gsub('-', '_')}"
           end
         end
         unless test_deps.empty?
