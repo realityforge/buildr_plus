@@ -142,9 +142,11 @@ repositories:
     url: https://repo.maven.apache.org/maven2
 HEADER
       if repositories.size > 0
+        repo = URI(repositories[0])
+        repo.userinfo = ''
         content += <<HEADER
   - name: local
-    url: #{repositories[0]}
+    url: #{repo}
     searchByDefault: false
 HEADER
       end

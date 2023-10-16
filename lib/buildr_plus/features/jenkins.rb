@@ -231,6 +231,19 @@ CONTENT
       content += prepare_content(:include_node => BuildrPlus::FeatureManager.activated?(:node),
                                  :exclude_yarn => !BuildrPlus::Node.root_package_json_present?)
 
+      auth_info = Buildr.repositories.remote.select { |r| '' != URI(r).userinfo.to_s }.collect{|r|URI(r).userinfo}.first
+
+      if auth_info
+        auth = auth_info.split(':', 2)
+        content += <<JENKINS
+        stage('AuthSetup') {
+          sh "echo \"machine api.github.com login #{auth[0]} password #{auth[1]}\" >> ~/.netrc"
+          sh "chmod 0600 ~/.netrc"
+          sh "mkdir ~/.m2"
+          sh "echo \"<settings><servers><server><id>local</id><username>#{auth[0]}</username><password>#{auth[1]}</password></server></servers></settings>\" > ~/.m2/settings.xml"
+        }
+JENKINS
+      end
       pre_commit_stages.each do |stage_content|
         content += stage_content
       end
