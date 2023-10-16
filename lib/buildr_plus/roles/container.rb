@@ -123,6 +123,9 @@ BuildrPlus::Roles.role(:container) do
       iml.excluded_directories << project._("bazel-#{project.name}")
       iml.excluded_directories << project._('bazel-testlogs')
     end
+    if BuildrPlus::FeatureManager.activated?(:redfish)
+      iml.excluded_directories << project._('volumes')
+    end
     iml.excluded_directories << project._(:target, :generated, :gwt) if BuildrPlus::FeatureManager.activated?(:gwt)
     iml.excluded_directories << project._('tmp')
     iml.excluded_directories << project._('.shelf')
