@@ -19,9 +19,10 @@ BuildrPlus::Roles.role(:sync_model, :requires => [:sync]) do
     generators += project.additional_domgen_generators
     Domgen::Build.define_generate_task(generators,
                                        :buildr_project => project,
-                                       :keep_file_patterns => BuildrPlus::Generate.keep_file_patterns,
+                                       :keep_file_patterns => project.all_keep_file_patterns,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       BuildrPlus::Generate.generated_directories << t.target_dir
+      t.mark_as_generated_in_ide = !project.inline_generated_source?
       t.filter = Proc.new do |artifact_type, artifact|
         Domgen::Filters.is_in_data_modules?([:Master], artifact_type, artifact) &&
           (artifact_type != :service || artifact.name == :SyncTempPopulationService)

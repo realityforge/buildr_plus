@@ -24,8 +24,9 @@ BuildrPlus::Roles.role(:container) do
 
     Domgen::Build.define_generate_task(generators.flatten,
                                        :buildr_project => project,
-                                       :keep_file_patterns => BuildrPlus::Generate.keep_file_patterns,
+                                       :keep_file_patterns => project.all_keep_file_patterns,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
+      t.mark_as_generated_in_ide = !project.inline_generated_source?
       t.filter = project.domgen_filter
       BuildrPlus::Generate.generated_directories << t.target_dir
     end unless generators.empty?

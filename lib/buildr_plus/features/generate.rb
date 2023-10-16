@@ -34,6 +34,20 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
   end
 
   f.enhance(:ProjectExtension) do
+
+    attr_writer :inline_generated_source
+    def inline_generated_source?
+      @inline_generated_source.nil? ? false : !!@inline_generated_source
+    end
+
+    def keep_file_patterns
+      @keep_file_patterns ||= []
+    end
+
+    def all_keep_file_patterns
+      BuildrPlus::Generate.keep_file_patterns + self.keep_file_patterns
+    end
+
     desc 'Generate the source code and pre-compile artifacts required to build application'
     task 'generate:all' do
       task('domgen:all').invoke if BuildrPlus::FeatureManager.activated?(:domgen)
