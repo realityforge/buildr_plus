@@ -16,7 +16,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
   f.enhance(:Config) do
 
     def bazel_depgen
-      'org.realityforge.bazel.depgen:bazel-depgen:jar:all:0.17'
+      'org.realityforge.bazel.depgen:bazel-depgen:jar:all:0.18'
     end
 
     def mustache
