@@ -312,7 +312,7 @@ HEADER
       content = BuildrPlus::Bazel.generate_dependencies_yml
       actual_content = File.exist?(filename) ? IO.read(filename) : ''
       if content != actual_content
-        raise "Bazel's dependencies.yml is not uptodate. Please run 'bazel bazel_dependencies:fix'."
+        raise "Bazel's dependencies.yml is not uptodate. Please run 'buildr bazel_dependencies:fix'."
       end
     end
 
