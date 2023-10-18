@@ -312,6 +312,11 @@ HEADER
       content = BuildrPlus::Bazel.generate_dependencies_yml
       actual_content = File.exist?(filename) ? IO.read(filename) : ''
       if content != actual_content
+        temp = Tempfile.new('dependencies.yml')
+        temp_filename = temp.filename
+        temp.write(content)
+        temp.close
+        sh "diff #{filename} #{temp_filename}"
         raise "Bazel's dependencies.yml is not uptodate. Please run 'buildr bazel_dependencies:fix'."
       end
     end
