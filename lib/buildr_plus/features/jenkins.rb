@@ -239,7 +239,7 @@ CONTENT
         stage('AuthSetup') {
           sh "echo \\"machine api.github.com login #{auth[0]} password #{auth[1]}\\" >> ~/.netrc"
           sh "chmod 0600 ~/.netrc"
-          sh "mkdir ~/.m2"
+          sh "mkdir -p ~/.m2"
           sh "echo \\"<settings><servers><server><id>local</id><username>#{auth[0]}</username><password>#{auth[1]}</password></server></servers></settings>\\" > ~/.m2/settings.xml"
         }
 JENKINS
