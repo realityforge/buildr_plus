@@ -172,7 +172,7 @@ HEADER
 artifacts:
 HEADER
 
-      artifacts_map.keys.each do |spec|
+      artifacts_map.keys.sort.each do |spec|
         content += "  - coord: #{spec}\n"
         # Artifacts that we know have no source, either because the origin
         if BuildrPlus::Bazel.artifacts_missing_source_prefixes.any? { |prefix| spec.start_with?(prefix) }
