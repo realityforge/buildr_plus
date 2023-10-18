@@ -83,13 +83,16 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
 HEADER
 
       packages = Buildr.projects.collect { |project| project.packages }.flatten.collect { |p| p.to_s }
-      Buildr.projects.select{|project| project.iml? && project.generate_bazel_dep_group?}.each do |project|
+      Buildr.projects.select{|project| project.iml? && project.generate_bazel_dep_group?}.sort_by{|project|project.name}.each do |project|
         prefix = Reality::Naming.uppercase_constantize(project.name.gsub(/^#{project.root_project.name}:/, '')).gsub(':', '_')
         compile_deps = []
-        project.compile.dependencies.each do |dep|
-          if dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)
-            compile_deps << "//third_party/java:#{dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_').gsub('-', '_')}"
-          end
+        project.
+          compile.
+          dependencies.
+          select{|dep|dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)}.
+          collect{|dep| dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_').gsub('-', '_')}.
+          each do |dep_spec|
+            compile_deps << "//third_party/java:#{dep_spec}"
         end
         unless compile_deps.empty?
           content += <<CONTENT
