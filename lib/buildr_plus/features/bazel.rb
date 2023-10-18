@@ -313,7 +313,7 @@ HEADER
       actual_content = File.exist?(filename) ? IO.read(filename) : ''
       if content != actual_content
         temp = Tempfile.new('dependencies.yml')
-        temp_filename = temp.filename
+        temp_filename = temp.to_s
         temp.write(content)
         temp.close
         sh "diff #{filename} #{temp_filename}"
