@@ -231,16 +231,18 @@ CONTENT
       content += prepare_content(:include_node => BuildrPlus::FeatureManager.activated?(:node),
                                  :exclude_yarn => !BuildrPlus::Node.root_package_json_present?)
 
-      auth_info = Buildr.repositories.remote.select { |r| '' != URI(r).userinfo.to_s }.collect{|r|URI(r).userinfo}.first
+      auth_info = Buildr.repositories.remote.select { |r| '' != URI(r).userinfo.to_s }.collect{|r|u = URI(r); [u.host, u.userinfo]}.first
 
       if auth_info
-        auth = auth_info.split(':', 2)
+        host = auth_info[0]
+        auth = auth_info[1].split(':', 2)
+
         content += <<JENKINS
         stage('AuthSetup') {
-          sh "echo \\"machine api.github.com login #{auth[0]} password #{auth[1]}\\" >> ~/.netrc"
+          sh "echo \\"machine #{host} login #{auth[0]} password #{auth[1]}\\" >> ~/.netrc"
           sh "chmod 0600 ~/.netrc"
           sh "mkdir -p ~/.m2"
-          sh "echo \\"<settings><servers><server><id>local</id><username>#{auth[0]}</username><password>#{auth[1]}</password></server></servers></settings>\\" > ~/.m2/settings.xml"
+          sh "echo \\"<settings xmlns=\\"http://maven.apache.org/POM/4.0.0\\"><servers><server><id>local</id><username>#{auth[0]}</username><password>#{auth[1]}</password></server></servers></settings>\\" > ~/.m2/settings.xml"
         }
 JENKINS
       end
