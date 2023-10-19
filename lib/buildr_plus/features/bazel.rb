@@ -102,10 +102,14 @@ HEADER
 CONTENT
         end
         test_deps = []
-        project.test.compile.dependencies.each do |dep|
-          if dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)
-            test_deps << "//third_party/java:#{dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_').gsub('-', '_')}"
-          end
+        project.
+          test.
+          compile.
+          dependencies.
+          select{|dep|dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)}.
+          collect{|dep| dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_').gsub('-', '_')}.
+          each do |dep_spec|
+          test_deps << "//third_party/java:#{dep_spec}"
         end
         unless test_deps.empty?
           content += <<CONTENT
@@ -332,7 +336,12 @@ HEADER
       content = BuildrPlus::Bazel.generate_dependency_groups_bzl
       actual_content = File.exist?(filename) ? IO.read(filename) : ''
       if content != actual_content
-        raise "Bazel's dep_groups.bzl is not uptodate. Please run 'bazel bazel_groups:fix'."
+        temp = Tempfile.new('dep_groups.bzl')
+        temp_filename = temp.path
+        temp.write(content)
+        temp.close
+        sh "diff #{filename} #{temp_filename}"
+        raise "Bazel's dep_groups.bzl is not uptodate. Please run 'buildr bazel_groups:fix'."
       end
     end
 
