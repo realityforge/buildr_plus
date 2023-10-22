@@ -20,6 +20,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators += [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
       generators += [:syncrecord_datasources] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators += [:keycloak_client_definitions] if BuildrPlus::FeatureManager.activated?(:keycloak)
+      generators << [:jws_shared] if BuildrPlus::FeatureManager.activated?(:soap)
       generators.flatten
     end
 
@@ -33,7 +34,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators << [:xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:jms_model] if BuildrPlus::FeatureManager.activated?(:jms)
-      generators << [:jws_shared] if BuildrPlus::FeatureManager.activated?(:soap)
 
       generators << [:jackson_date_util] if BuildrPlus::FeatureManager.activated?(:jackson)
 
