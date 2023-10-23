@@ -19,6 +19,7 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
     Domgen::Build.define_generate_task(generators,
                                        :buildr_project => project,
                                        :keep_file_patterns => project.all_keep_file_patterns,
+                                       :keep_file_names => project.keep_file_names,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       BuildrPlus::Generate.generated_directories << t.target_dir
       t.mark_as_generated_in_ide = !project.inline_generated_source?
@@ -40,6 +41,7 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
     Resgen::Build.define_generate_task(generators,
                                        :buildr_project => project,
                                        :keep_file_patterns => project.all_keep_file_patterns,
+                                       :keep_file_names => project.keep_file_names,
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       BuildrPlus::Generate.generated_directories << t.target_dir
       t.mark_as_generated_in_ide = !project.inline_generated_source?
@@ -50,6 +52,7 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
                                          :key => :react4j,
                                          :buildr_project => project,
                                          :keep_file_patterns => project.all_keep_file_patterns,
+                                         :keep_file_names => project.keep_file_names,
                                          :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
         BuildrPlus::Generate.generated_directories << t.target_dir
         t.mark_as_generated_in_ide = !project.inline_generated_source?
