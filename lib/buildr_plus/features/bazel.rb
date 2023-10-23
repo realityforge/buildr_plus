@@ -203,6 +203,7 @@ HEADER
       base_directory = File.expand_path(File.dirname(Buildr.application.buildfile.to_s))
 
       # All projects have IDEA configured
+      bazelignores << 'target'
       bazelignores << '*.iml'
       bazelignores << '/*.ipr'
       bazelignores << '/*.iws'
