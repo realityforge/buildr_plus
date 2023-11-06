@@ -78,7 +78,11 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
       end
 
       project.task(':domgen:load').enhance([t.name])
+      project.task(':generate:keep_files').enhance([t.name])
     end
+
+    desc 'Generate the keep files'
+    task 'generate:keep_files'
 
     desc 'Generate the source code and pre-compile artifacts required to build application'
     task 'generate:all' do
