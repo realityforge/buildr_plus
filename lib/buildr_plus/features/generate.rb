@@ -73,7 +73,13 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
               files << ::Buildr::Util.relative_path(file_name, target_dir)
             end
           end
-          IO.write("#{target_dir}/keep_files.txt", files.sort.join("\n") + "\n")
+          new_content = files.sort.join("\n") + "\n"
+
+          existing = IO.read("#{target_dir}/keep_files.txt") rescue ''
+          if existing != new_content
+            IO.write("#{target_dir}/keep_files.txt", new_content)
+            Domgen.error("Regenerated keep files, try again")
+          end
         end
       end
 
