@@ -41,6 +41,10 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
       @inline_generated_source.nil? ? false : !!@inline_generated_source
     end
 
+    def extra_keep_file_names
+      @extra_keep_file_names ||= []
+    end
+
     def keep_file_patterns
       @keep_file_patterns ||= []
     end
@@ -73,6 +77,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
               files << ::Buildr::Util.relative_path(file_name, target_dir)
             end
           end
+          files += project.extra_keep_file_names
           new_content = files.sort.join("\n") + "\n"
 
           existing = IO.read("#{target_dir}/keep_files.txt") rescue ''
