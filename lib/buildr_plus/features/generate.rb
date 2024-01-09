@@ -82,6 +82,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
 
           existing = IO.read("#{target_dir}/keep_files.txt") rescue ''
           if existing != new_content
+            FileUtils.mkdir_p target_dir
             IO.write("#{target_dir}/keep_files.txt", new_content)
             Domgen.error("Regenerated keep files, try again")
           end
