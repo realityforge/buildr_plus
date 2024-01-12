@@ -269,7 +269,7 @@ HEADER
     end
 
     desc 'Check bazel files are valid.'
-    task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check bazel_standard_files:check bazel_dependencies:check bazel_groups:check)
+    task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check bazel_standard_files:check bazel_dependencies:check bazel_groups:check buildifier:check)
 
     desc 'Check .bazelignore has been normalized.'
     task 'bazelignore:check' do
@@ -346,8 +346,15 @@ HEADER
       end
     end
 
+
+    desc 'Run buildifier across build files'
+    task 'buildifier:check' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      sh "cd #{base_directory} && ./bazelw run //:buildifier_check"
+    end
+
     desc 'Normalize bazel files.'
-    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazel_version:fix bazel_dependencies:fix bazel_groups:fix)
+    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazel_version:fix bazel_dependencies:fix bazel_groups:fix buildifier:fix)
 
     desc 'Normalize .bazelignore.'
     task 'bazelignore:fix' do
@@ -415,6 +422,12 @@ HEADER
       if content != actual_content
         IO.write(filename, content)
       end
+    end
+
+    desc 'Run buildifier across build files'
+    task 'buildifier:fix' do
+      base_directory = File.dirname(Buildr.application.buildfile.to_s)
+      sh "cd #{base_directory} && ./bazelw run //:buildifier"
     end
   end
 end
