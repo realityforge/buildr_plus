@@ -58,7 +58,16 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       if File.exist?(filename)
         original_content = IO.read(filename)
 
-        content = "# DO NOT EDIT: File is auto-generated\n" + bazelignores.sort.uniq.collect { |v| "#{v}" }.join("\n") + "\n"
+        content = <<-HEADER
+# DO NOT EDIT: File is auto-generated
+
+# Bazel does not yet support wildcards or other .gitignore semantics for
+# .bazelignore. Two issues for this feature request are outstanding:
+# https://github.com/bazelbuild/bazel/issues/7093
+# https://github.com/bazelbuild/bazel/issues/8106
+
+        HEADER
+        content += bazelignores.sort.uniq.collect { |v| "#{v}" }.join("\n") + "\n"
 
         if content != original_content
           BuildrPlus::Bazel.bazelignore_needs_update = true
@@ -202,56 +211,54 @@ HEADER
 
       base_directory = File.expand_path(File.dirname(Buildr.application.buildfile.to_s))
 
+      bazelignores << 'artifacts'
+      bazelignores << '.git'
+
       # All projects have IDEA configured
       bazelignores << 'target'
-      bazelignores << '*.iml'
-      bazelignores << '/*.ipr'
-      bazelignores << '/*.iws'
-      bazelignores << '/.shelf'
+      bazelignores << '.shelf'
       if BuildrPlus::FeatureManager.activated?(:dbt)
-        bazelignores << '/*.ids'
-        bazelignores << '/.ideaDataSources'
-        bazelignores << '/dataSources'
+        bazelignores << '.ideaDataSources'
+        bazelignores << 'dataSources'
       end
 
       if BuildrPlus::FeatureManager.activated?(:node)
-        bazelignores << '/node_modules'
+        bazelignores << 'node_modules'
       end
 
-      bazelignores << '/config/secrets' if BuildrPlus::FeatureManager.activated?(:keycloak)
+      bazelignores << 'config/secrets' if BuildrPlus::FeatureManager.activated?(:keycloak)
 
-      bazelignores << '/config/database.yml' if BuildrPlus::FeatureManager.activated?(:dbt)
+      bazelignores << 'config/database.yml' if BuildrPlus::FeatureManager.activated?(:dbt)
 
-      bazelignores << '/volumes' if BuildrPlus::FeatureManager.activated?(:redfish)
+      bazelignores << 'volumes' if BuildrPlus::FeatureManager.activated?(:redfish)
 
-      bazelignores << '/config/application.yml' if BuildrPlus::FeatureManager.activated?(:dbt) ||
+      bazelignores << 'config/application.yml' if BuildrPlus::FeatureManager.activated?(:dbt) ||
         BuildrPlus::FeatureManager.activated?(:rptman) ||
         BuildrPlus::FeatureManager.activated?(:jms) ||
         BuildrPlus::FeatureManager.activated?(:redfish)
 
       if BuildrPlus::FeatureManager.activated?(:rptman)
-        bazelignores << '/' + ::Buildr::Util.relative_path(File.expand_path(SSRS::Config.projects_dir), base_directory)
-        bazelignores << "/#{::Buildr::Util.relative_path(File.expand_path(SSRS::Config.reports_dir), base_directory)}/**/*.rdl.data"
+        bazelignores << ::Buildr::Util.relative_path(File.expand_path(SSRS::Config.projects_dir), base_directory)
       end
 
       if BuildrPlus::Artifacts.war?
-        bazelignores << '/artifacts'
+        bazelignores << 'artifacts'
       end
 
-      bazelignores << '/reports'
-      bazelignores << '/target'
-      bazelignores << '/tmp'
+      bazelignores << 'reports'
+      bazelignores << 'target'
+      bazelignores << 'tmp'
 
       if BuildrPlus::FeatureManager.activated?(:domgen) || BuildrPlus::FeatureManager.activated?(:checkstyle) || BuildrPlus::FeatureManager.activated?(:config)
-        bazelignores << '**/generated'
+        bazelignores << 'generated'
       end
 
       if BuildrPlus::FeatureManager.activated?(:sass)
-        bazelignores << '/.sass-cache'
+        bazelignores << '.sass-cache'
         Buildr.projects.each do |project|
           BuildrPlus::Sass.target_css_files(project).each do |css_file|
             css_file = ::Buildr::Util.relative_path(File.expand_path(css_file), base_directory)
-            bazelignores << '/' + css_file unless css_file =~ /^generated\//
+            bazelignores << css_file unless css_file =~ /^generated\//
           end
         end
       end
