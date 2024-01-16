@@ -83,54 +83,6 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       end
     end
 
-    def generate_dependency_groups_bzl
-      content = <<HEADER
-# DO NOT EDIT: File is auto-generated
-
-# This file contains the mappings from buildr projects to dependencies and is useful as a kickstarter for conversion
-
-HEADER
-
-      packages = Buildr.projects.collect { |project| project.packages }.flatten.collect { |p| p.to_s }
-      Buildr.projects.select{|project| project.iml? && project.generate_bazel_dep_group?}.sort_by{|project|project.name}.each do |project|
-        prefix = Reality::Naming.uppercase_constantize(project.name.gsub(/^#{project.root_project.name}:/, '')).gsub(':', '_')
-        compile_deps = []
-        project.
-          compile.
-          dependencies.
-          select{|dep|dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)}.
-          collect{|dep| dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_').gsub('-', '_')}.
-          each do |dep_spec|
-            compile_deps << "//third_party/java:#{dep_spec}"
-        end
-        unless compile_deps.empty?
-          content += <<CONTENT
-#{prefix}_COMPILE_DEPS = [
-    #{compile_deps.collect{|s|"\"#{s}\","}.sort.join("\n    ")}
-]
-CONTENT
-        end
-        test_deps = []
-        project.
-          test.
-          compile.
-          dependencies.
-          select{|dep|dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)}.
-          collect{|dep| dep.to_spec_hash[:id].gsub(':', '_').gsub('.', '_').gsub('-', '_')}.
-          each do |dep_spec|
-          test_deps << "//third_party/java:#{dep_spec}"
-        end
-        unless test_deps.empty?
-          content += <<CONTENT
-#{prefix}_TEST_DEPS = [
-    #{test_deps.collect{|s|"\"#{s}\","}.sort.join("\n    ")}
-]
-CONTENT
-        end
-      end
-      content
-    end
-
     def generate_dependencies_yml
 
       artifacts_map = {}
@@ -269,14 +221,8 @@ HEADER
 
   f.enhance(:ProjectExtension) do
 
-    attr_writer :generate_bazel_dep_group
-
-    def generate_bazel_dep_group?
-      @generate_bazel_dep_group.nil? ? true : !!@generate_bazel_dep_group
-    end
-
     desc 'Check bazel files are valid.'
-    task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check bazel_standard_files:check bazel_dependencies:check bazel_groups:check buildifier:check)
+    task 'bazel:check' => %w(bazelignore:check bazelw:check bazelversion:check bazel_standard_files:check bazel_dependencies:check buildifier:check)
 
     desc 'Check .bazelignore has been normalized.'
     task 'bazelignore:check' do
@@ -336,24 +282,6 @@ HEADER
       end
     end
 
-    desc 'Check dependencies.yml is up to date'
-    task 'bazel_groups:check' do
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      filename = "#{base_directory}/third_party/java/dep_groups.bzl"
-
-      content = BuildrPlus::Bazel.generate_dependency_groups_bzl
-      actual_content = File.exist?(filename) ? IO.read(filename) : ''
-      if content != actual_content
-        temp = Tempfile.new('dep_groups.bzl')
-        temp_filename = temp.path
-        temp.write(content)
-        temp.close
-        sh "diff #{filename} #{temp_filename}"
-        raise "Bazel's dep_groups.bzl is not uptodate. Please run 'buildr bazel_groups:fix'."
-      end
-    end
-
-
     desc 'Run buildifier across build files'
     task 'buildifier:check' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
@@ -361,7 +289,7 @@ HEADER
     end
 
     desc 'Normalize bazel files.'
-    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazel_version:fix bazel_dependencies:fix bazel_groups:fix buildifier:fix)
+    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazel_version:fix bazel_dependencies:fix buildifier:fix)
 
     desc 'Normalize .bazelignore.'
     task 'bazelignore:fix' do
@@ -416,18 +344,6 @@ HEADER
           IO.write(filename, content + "\n# File failed to be processed")
           raise e
         end
-      end
-    end
-
-    desc 'Normalize dependencies.yml'
-    task 'bazel_groups:fix' do
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      filename = "#{base_directory}/third_party/java/dep_groups.bzl"
-      content = BuildrPlus::Bazel.generate_dependency_groups_bzl
-
-      actual_content = File.exist?(filename) ? IO.read(filename) : ''
-      if content != actual_content
-        IO.write(filename, content)
       end
     end
 
