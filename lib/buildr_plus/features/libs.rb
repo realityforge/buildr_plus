@@ -97,15 +97,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jackson_annotations
-      %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.10.4)
+      %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.12.1)
     end
 
     def jackson_core
-      %w(com.fasterxml.jackson.core:jackson-core:jar:2.10.4)
+      %w(com.fasterxml.jackson.core:jackson-core:jar:2.12.1)
     end
 
     def jackson_databind
-      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.10.4) + self.jackson_core + self.jackson_annotations
+      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.12.1) + self.jackson_core + self.jackson_annotations
     end
 
     def jackson_datatype_jdk8
