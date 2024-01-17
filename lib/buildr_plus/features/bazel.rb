@@ -88,7 +88,12 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       artifacts_map = {}
       packages = Buildr.projects.collect { |project| project.packages }.flatten.collect { |p| p.to_s }
       Buildr.projects.each do |project|
-        (project.compile.dependencies + project.test.compile.dependencies).each do |dep|
+        (project.compile.dependencies +
+          project.test.compile.dependencies +
+          (project.compile.options.processor_path || []) +
+          (project.test.compile.options.processor_path || [])).
+          flatten.
+          each do |dep|
           if dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)
             hash = dep.to_spec_hash
             spec = "#{hash[:group]}:#{hash[:id]}:#{hash[:version]}"
