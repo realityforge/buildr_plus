@@ -126,7 +126,7 @@ HEADER
       content += <<HEADER
 options:
   workspaceDirectory: ../..
-  aliasStrategy: ArtifactId
+  nameStrategy: ArtifactId
 HEADER
 
       if BuildrPlus::Bazel.tolerate_missing_poms?
