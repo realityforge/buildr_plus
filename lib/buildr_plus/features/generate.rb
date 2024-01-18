@@ -97,11 +97,13 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
           files += project.extra_keep_file_names
           new_content = files.sort.join("\n") + "\n"
 
+          keep_files_regenerated = false
+
           existing = IO.read("#{target_dir}/keep_files.txt") rescue ''
           if existing != new_content
             FileUtils.mkdir_p target_dir
             IO.write("#{target_dir}/keep_files.txt", new_content)
-            Domgen.error("Regenerated keep files, try again")
+            keep_files_regenerated = true
           end
 
           if project.name.to_s.end_with?(':user-experience')
@@ -119,9 +121,11 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
             if existing != new_content
               FileUtils.mkdir_p target_dir
               IO.write("#{target_dir}/resgen_keep_files.txt", new_content)
-              Domgen.error("Regenerated resgen keep files, try again")
+              keep_files_regenerated = true
             end
           end
+
+          Domgen.error("Regenerated keep files, aborting build to ensure no files are accidentally deleted. Please try build again") if keep_files_regenerated
         end
       end
 
