@@ -195,10 +195,7 @@ CONTENT
     def automerge_prelude
       <<CONTENT
       env.AUTO_MERGE_TARGET_BRANCH = kinjen.extract_auto_merge_target( this )
-      if ( '' != env.AUTO_MERGE_TARGET_BRANCH )
-      {
-        kinjen.kill_previous_builds( this );
-      }
+      kinjen.kill_previous_builds( this );
 CONTENT
     end
 

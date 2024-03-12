@@ -396,6 +396,9 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
       class ::Buildr::Checkstyle::Config
         def complete_source_paths
+          paths = keep_file_source_paths
+          return paths unless paths.empty?
+
           paths = self.source_paths.dup
 
           self.additional_project_names.each do |project_name|
@@ -405,6 +408,17 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
           paths = paths.flatten.compact
           paths.reject { |p| BuildrPlus::Generate.generated_directories.any? { |g| p.to_s.start_with?(g.to_s) } }
+        end
+
+        def keep_file_source_paths
+          paths = self.project.keep_file_names.dup
+
+          self.additional_project_names.each do |project_name|
+            p = self.project.project(project_name)
+            paths << [p.keep_file_names].flatten.compact
+          end
+
+          paths.flatten.compact
         end
       end
     end
