@@ -255,7 +255,7 @@ HEADER
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/.bazelversion"
 
-      raise ".bazelversion file '#{filename}' missing. Please run 'bazel bazelversion:fix'." unless File.exist?(filename)
+      raise ".bazelversion file '#{filename}' missing. Please run 'buildr bazelversion:fix'." unless File.exist?(filename)
       actual_content = IO.read(filename)
       if "#{BuildrPlus::Bazel.bazel_version}\n" != actual_content
         raise ".bazelversion is not uptodate. Please run 'bazel bazelversion:fix'."
@@ -312,7 +312,7 @@ HEADER
     end
 
     desc 'Normalize .bazelversion'
-    task 'bazel_version:fix' do
+    task 'bazelversion:fix' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
       filename = "#{base_directory}/.bazelversion"
 
