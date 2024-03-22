@@ -129,6 +129,19 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
         end
       end
 
+      t2 = project.task('remove_generated') do
+        if project.inline_generated_source?
+          target_dir = File.expand_path(project._('src'))
+
+          Dir["#{target_dir}/**/*"].each do |file_name|
+            if !File.directory?(file_name) && IO.read(file_name).include?('DO NOT EDIT: File is auto-generated')
+              FileUtils.rm_f(file_name)
+            end
+          end
+        end
+      end.enhance([t.name])
+
+      project.task(':generate:all').enhance([t2.name])
       project.task(':domgen:load').enhance([t.name])
       project.task(':resgen:load').enhance([t.name])
       project.task(':generate:keep_files').enhance([t.name])
