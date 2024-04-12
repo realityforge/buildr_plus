@@ -90,10 +90,11 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       Buildr.projects.each do |project|
         (project.compile.dependencies +
           project.test.compile.dependencies +
-          (project.compile.options.processor_path || []) +
-          (project.test.compile.options.processor_path || [])).
+          (project.compile.options[:processor_path] || []) +
+          (project.test.compile.options[:processor_path] || [])).
           flatten.
           each do |dep|
+          dep = ::Buildr.artifact(dep) if dep.is_a?(String)
           if dep.respond_to?(:to_spec_hash) && !packages.include?(dep.to_s)
             hash = dep.to_spec_hash
             spec = "#{hash[:group]}:#{hash[:id]}:#{hash[:version]}"
