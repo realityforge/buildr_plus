@@ -83,6 +83,13 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
       File.expand_path(project._('src')) + "/resgen_keep_files.txt"
     end
 
+    first_time do
+      namespace 'domgen' do
+        task 'pre_generate' do
+        end
+      end
+    end
+
     before_define do |project|
       desc 'Collect the files that will be kept and not cleaned by resgen/domgen clean processes'
       t = project.task 'collect_keep_files' do
@@ -142,7 +149,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
       end.enhance([t.name])
 
       project.task(':generate:all').enhance([t2.name])
-      project.task(':domgen:load').enhance([t.name])
+      project.task(':domgen:pre_generate').enhance([t.name])
       project.task(':resgen:load').enhance([t.name])
       project.task(':generate:keep_files').enhance([t.name])
     end
