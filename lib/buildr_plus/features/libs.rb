@@ -121,7 +121,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jsinterop
-      %w(com.google.jsinterop:jsinterop-annotations:jar:2.0.0)
+      %w(com.google.jsinterop:jsinterop-annotations:jar:2.1.0)
     end
 
     def jsinterop_base
@@ -129,15 +129,15 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def gwt_user
-      %w(org.gwtproject:gwt-user:jar:2.10.0 org.w3c.css:sac:jar:1.3) + self.jsinterop
+      %w(org.gwtproject:gwt-user:jar:2.11.0 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end
 
     def gwt_servlet
-      %w(org.gwtproject:gwt-servlet:jar:2.10.0)
+      %w(org.gwtproject:gwt-servlet:jar:2.11.0)
     end
 
     def gwt_dev
-      'org.gwtproject:gwt-dev:jar:2.10.0'
+      'org.gwtproject:gwt-dev:jar:2.11.0'
     end
 
     def javax_inject
