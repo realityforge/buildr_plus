@@ -295,7 +295,7 @@ HEADER
     end
 
     desc 'Normalize bazel files.'
-    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazel_version:fix bazel_dependencies:fix buildifier:fix)
+    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazelversion:fix bazel_dependencies:fix buildifier:fix)
 
     desc 'Normalize .bazelignore.'
     task 'bazelignore:fix' do
