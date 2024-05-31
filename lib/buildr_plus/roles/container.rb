@@ -151,7 +151,7 @@ BuildrPlus::Roles.role(:container) do
                                   :gwt_module => gwt_module,
                                   :start_javascript_debugger => false,
                                   :open_in_browser => false,
-                                  :vm_parameters => '-Xmx3G',
+                                  :vm_parameters => '-Xmx4G',
                                   :shell_parameters => "-codeServerPort #{BuildrPlus::Gwt.code_server_port} -bindAddress 0.0.0.0 -deploy #{_(:target, :generated, :gwt, 'deploy')} -extra #{_(:target, :generated, :gwt, 'extra')} -war #{_(:target, :generated, :gwt, 'war')} -style PRETTY -XmethodNameDisplayMode FULL -noincremental -logLevel INFO -strict -nostartServer",
                                   :launch_page => "http://127.0.0.1:8080/#{p.root_project.name}/#{path}")
       end
