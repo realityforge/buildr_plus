@@ -104,7 +104,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         end
       end
 
-      generators << [:ee_exceptions, :ejb_service_facades, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
+      generators << [:ee_exceptions, :ejb_service_facades, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
       generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
@@ -140,7 +140,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         end
       end
 
-      generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ee_filter, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
+      generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
       generators << [:jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
       generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
