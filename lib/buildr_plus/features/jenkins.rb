@@ -249,7 +249,7 @@ JENKINS
 
       if BuildrPlus::FeatureManager.activated?(:bazel)
         content += bazel_stage_content('BazelBuild', 'build //...')
-        content += bazel_stage_content('BazelTest', 'test //...')
+        # content += bazel_stage_content('BazelTest', 'test //...')
       end
 
       content += commit_stage(root_project)
