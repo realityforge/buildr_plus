@@ -97,23 +97,31 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def jackson_annotations
-      %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.12.1)
+      %w(com.fasterxml.jackson.core:jackson-annotations:jar:2.17.2)
     end
 
     def jackson_core
-      %w(com.fasterxml.jackson.core:jackson-core:jar:2.12.1)
+      %w(com.fasterxml.jackson.core:jackson-core:jar:2.17.2)
     end
 
     def jackson_databind
-      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.12.1) + self.jackson_core + self.jackson_annotations
+      %w(com.fasterxml.jackson.core:jackson-databind:jar:2.17.2) + self.jackson_core + self.jackson_annotations
     end
 
     def jackson_datatype_jdk8
-      %w(com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.9.9)
+      %w(com.fasterxml.jackson.datatype:jackson-datatype-jdk8:jar:2.17.2)
     end
 
     def jackson_datatype_jsr310
-      %w(com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.9.9)
+      %w(com.fasterxml.jackson.datatype:jackson-datatype-jsr310:jar:2.17.2)
+    end
+
+    def jackson_dataformat_yaml
+      %w(com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:jar:2.17.2) + self.jackson_databind + self.snakeyaml
+    end
+
+    def snakeyaml
+      %w(org.yaml:snakeyaml:jar:2.2)
     end
 
     def braincheck
@@ -391,11 +399,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def json_schema_validator
       %w(
-          com.networknt:json-schema-validator:jar:1.0.43
-          org.apache.commons:commons-lang3:jar:3.5
-          org.jruby.joni:joni:jar:2.1.31
+          com.ethlo.time:itu:jar:1.10.2
+          com.networknt:json-schema-validator:jar:1.5.0
+          org.jruby.joni:joni:jar:2.2.1
           org.jruby.jcodings:jcodings:jar:1.0.46
-      ) + self.jackson_databind + self.slf4j
+      ) + self.jackson_dataformat_yaml + self.slf4j
     end
 
     def pdfbox
