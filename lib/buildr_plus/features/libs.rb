@@ -83,7 +83,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def glassfish_embedded
-      %w(fish.payara.extras:payara-embedded-all:jar:5.2022.5 org.eclipse.persistence:org.eclipse.persistence.core:jar:2.7.11)
+      %w(fish.payara.extras:payara-embedded-all:jar:5.2022.5) + self.eclipse_persistence_core
+    end
+
+    def eclipse_persistence_core
+      %w(org.eclipse.persistence:org.eclipse.persistence.core:jar:2.7.11)
     end
 
     def mockito
