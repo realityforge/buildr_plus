@@ -38,6 +38,10 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       @artifacts_missing_source_prefixes ||= %w()
     end
 
+    def additional_artifacts
+      @additional_artifacts ||= []
+    end
+
     def local_artifact_prefixes
       @local_artifact_prefixes ||= %w(iris. au.gov.vic.dse. mercury.)
     end
@@ -89,6 +93,7 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       packages = Buildr.projects.collect { |project| project.packages }.flatten.collect { |p| p.to_s }
       Buildr.projects.each do |project|
         (project.compile.dependencies +
+          BuildrPlus::Bazel.additional_artifacts +
           project.test.compile.dependencies +
           (project.compile.options[:processor_path] || []) +
           (project.test.compile.options[:processor_path] || [])).
