@@ -68,6 +68,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(jakarta.xml.bind:jakarta.xml.bind-api:jar:2.3.3)
     end
 
+    def com_sun_xml_bind_jaxb_impl
+      %w(com.sun.xml.bind:jaxb-impl:jar:2.3.3)
+    end
+
     def jakarta_xml_ws
       %w(
          jakarta.xml.ws:jakarta.xml.ws-api:jar:2.3.3
@@ -75,6 +79,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
          jakarta.xml.soap:jakarta.xml.soap-api:jar:1.4.2
         ) +
         self.jakarta_xml_bind_api +
+        self.com_sun_xml_bind_jaxb_impl +
         self.jakarta_xml_ws_runtime
     end
 
