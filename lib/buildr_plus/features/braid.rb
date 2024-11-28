@@ -30,7 +30,7 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
       filename = "#{base_directory}/#{Braid::CONFIG_FILE}"
 
       raise "Braid file '#{filename}' missing." unless File.exist?(filename)
-      config = Braid::Config.new(filename)
+      config = Braid::Config.new(:config_file => filename)
       config.mirrors.each do |path|
         unless File.exist?(path)
           raise "Braid entry exists for path '#{path}' but path does not exist on the filesystem"
