@@ -53,6 +53,12 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       @container_options || ''
     end
 
+    attr_writer :require_pull_request_to_build
+
+    def require_pull_request_to_build?
+      !!@require_pull_request_to_build
+    end
+
     def jenkins_build_scripts
       (@jenkins_build_scripts ||= standard_build_scripts).dup
     end
@@ -214,19 +220,22 @@ CONTENT
 CONTENT
     end
 
-    def prepare_content(options = {})
+    def prepare_content(root_project, options = {})
       params = {}
+      params['require_pull_request'] = 'true' if options[:require_pull_request]
       params['buildr'] = 'false' if options[:exclude_artifacts]
       params['node'] = 'true' if options[:include_node]
       params['yarn'] = 'false' if options[:include_node] && options[:exclude_yarn]
-      "        kinjen.prepare_stage( this#{params.empty? ? '' : ", [#{params.collect{|k,v| "#{k}: #{v}"}.join(', ')}]"} )\n"
+      "        kinjen.prepare_stage( this, '#{root_project.name}'#{params.empty? ? '' : ", [#{params.collect{|k,v| "#{k}: #{v}"}.join(', ')}]"} )\n"
     end
 
     def main_content(root_project)
       content = automerge_prepare
 
-      content += prepare_content(:include_node => BuildrPlus::FeatureManager.activated?(:node),
-                                 :exclude_yarn => !BuildrPlus::Node.root_package_json_present?)
+      content += prepare_content(root_project,
+                                 :include_node => BuildrPlus::FeatureManager.activated?(:node),
+                                 :exclude_yarn => !BuildrPlus::Node.root_package_json_present?,
+                                 :require_pull_request => BuildrPlus::Jenkins.require_pull_request_to_build?)
 
       auth_info = Buildr.repositories.remote.select { |r| '' != URI(r).userinfo.to_s }.collect{|r|u = URI(r); [u.host, u.userinfo]}.first
 
