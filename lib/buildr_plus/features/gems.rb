@@ -88,7 +88,6 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
       end
       if BuildrPlus::FeatureManager.activated?(:resgen)
         gem(gems, 'resgen', nil, :path => 'vendor/tools/resgen')
-        gem(gems, 'nokogiri', '1.7.2')
       end
       if BuildrPlus::FeatureManager.activated?(:sass)
         gem(gems, 'sass', '3.4.24')
