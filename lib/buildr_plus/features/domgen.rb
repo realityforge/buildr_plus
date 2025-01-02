@@ -143,7 +143,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 :sql_analysis => :sql_analysis,
                 :arez => :arez,
                 :redfish => :redfish,
-                :iris_audit => :iris_audit,
                 :jackson => :jackson,
                 :keycloak => :keycloak,
                 :jms => :jms,

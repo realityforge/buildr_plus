@@ -113,7 +113,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:mail_mail_queue, :mail_test_module] if BuildrPlus::FeatureManager.activated?(:mail)
       generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators << [:keycloak_filter, :keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
-      generators << [:iris_audit_server] if BuildrPlus::FeatureManager.activated?(:iris_audit)
 
       generators += self.model_generators unless BuildrPlus::FeatureManager.activated?(:role_model)
       generators += self.model_qa_support_test_generators unless BuildrPlus::FeatureManager.activated?(:role_model_qa_support)
@@ -164,7 +163,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_generators
       generators = [:ce_data_types, :gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
-      generators += [:iris_audit_client] if BuildrPlus::FeatureManager.activated?(:iris_audit)
       generators += [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
       if BuildrPlus::FeatureManager.activated?(:replicant)
         generators += [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt, :imit_client_service]
@@ -252,7 +250,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts(BuildrPlus::Libs.braincheck)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.jsinterop_base) if BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
-      dependencies << Buildr.artifacts([:iris_audit_gwt]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.arez_spytools) if BuildrPlus::FeatureManager.activated?(:arez)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client) if BuildrPlus::FeatureManager.activated?(:replicant)
       if BuildrPlus::FeatureManager.activated?(:react4j)
@@ -271,7 +268,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       dependencies << self.shared_test_deps
       dependencies << self.gwt_deps
-      dependencies << Buildr.artifacts([:iris_audit_gwt_qa_support]) if BuildrPlus::FeatureManager.activated?(:iris_audit)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_testng) if BuildrPlus::FeatureManager.activated?(:arez)
 
       dependencies.flatten
@@ -370,8 +366,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
           dependencies << BuildrPlus::Libs.keycloak_authfilter
         end
       end
-
-      dependencies << Buildr.artifacts(:iris_audit_server) if BuildrPlus::FeatureManager.activated?(:iris_audit)
 
       dependencies << Buildr.artifacts(Object.const_get(:PACKAGED_DEPS)) if Object.const_defined?(:PACKAGED_DEPS)
       dependencies << Buildr.artifacts(Object.const_get(:LIBRARY_DEPS)) if Object.const_defined?(:LIBRARY_DEPS)

@@ -235,10 +235,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('client', 'org.realityforge.gwt.keycloak.Keycloak', :rule_type => :class)
         end
 
-        if BuildrPlus::FeatureManager.activated?(:iris_audit)
-          r.subpackage_rule('client.ioc', 'iris.audit.client.ioc.AuditGwtRpcServicesFragment', :rule_type => :class)
-        end
-
         if BuildrPlus::FeatureManager.activated?(:arez)
           r.subpackage_rule('client', 'javax.xml.ws.Action', :rule_type => :class, :disallow => true)
         end
