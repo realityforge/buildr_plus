@@ -91,6 +91,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:robots] if BuildrPlus::Artifacts.war?
       generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators << [:action_server] if BuildrPlus::FeatureManager.activated?(:action)
 
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         generators << [:keycloak_config_service, :keycloak_js_service] if BuildrPlus::FeatureManager.activated?(:gwt)
