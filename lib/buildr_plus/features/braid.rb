@@ -44,7 +44,6 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
         raise "Braid entry does not exists for path 'vendor/tools/buildr_plus' as expected."
       end
       {
-        'action' => 'action',
         'domgen' => 'domgen',
         'dbt' => 'dbt',
         'rptman' => 'rptman',

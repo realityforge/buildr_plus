@@ -145,6 +145,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
               {
                 :sql_analysis => :sql_analysis,
                 :arez => :arez,
+                :action => :action,
                 :redfish => :redfish,
                 :jackson => :jackson,
                 :keycloak => :keycloak,
