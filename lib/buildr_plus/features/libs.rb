@@ -330,7 +330,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def zemeckis_core
-      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.13) + self.braincheck + self.jetbrains_annotations + self.grim_annotations
+      %w(org.realityforge.zemeckis:zemeckis-core:jar:0.14) + self.braincheck + self.jetbrains_annotations + self.grim_annotations
     end
 
     def akasha
