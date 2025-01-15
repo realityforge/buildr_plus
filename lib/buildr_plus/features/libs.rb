@@ -302,7 +302,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def grim_annotations
-      %w(org.realityforge.grim:grim-annotations:jar:0.06)
+      %w(org.realityforge.grim:grim-annotations:jar:0.09)
     end
 
     def router_fu_version
