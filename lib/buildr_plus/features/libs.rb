@@ -28,7 +28,34 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def aws_s3
-      %w(org.slf4j:slf4j-api:jar:2.0.9 software.amazon.awssdk:s3:jar:2.29.45 software.amazon.awssdk:third-party-jackson-core:jar:2.29.45 software.amazon.awssdk:json-utils:jar:2.29.45 software.amazon.awssdk:aws-json-protocol:jar:2.29.45 software.amazon.awssdk:checksums:jar:2.29.45 software.amazon.awssdk:checksums-spi:jar:2.29.45 software.amazon.awssdk:protocol-core:jar:2.29.45 software.amazon.awssdk:aws-xml-protocol:jar:2.29.45 software.amazon.awssdk:aws-query-protocol:jar:2.29.45 software.amazon.awssdk:metrics-spi:jar:2.29.45 software.amazon.awssdk:http-auth:jar:2.29.45 software.amazon.awssdk:apache-client:jar:2.29.45 software.amazon.awssdk:http-auth-spi:jar:2.29.45 software.amazon.awssdk:http-auth-aws:jar:2.29.45 software.amazon.awssdk:retries-spi:jar:2.29.45 software.amazon.awssdk:retries:jar:2.29.45 software.amazon.awssdk:endpoints-spi:jar:2.29.45 software.amazon.awssdk:profiles:jar:2.29.45 software.amazon.awssdk:identity-spi:jar:2.29.45 software.amazon.awssdk:utils:jar:2.29.45 software.amazon.awssdk:aws-core:jar:2.29.45 software.amazon.awssdk:sdk-core:jar:2.29.45 software.amazon.awssdk:auth:jar:2.29.45 software.amazon.awssdk:http-client-spi:jar:2.29.45 software.amazon.awssdk:regions:jar:2.29.45)
+      # org.slf4j:slf4j-api:jar:2.0.9
+      %w(
+        software.amazon.awssdk:s3:jar:2.29.45
+        software.amazon.awssdk:third-party-jackson-core:jar:2.29.45
+        software.amazon.awssdk:json-utils:jar:2.29.45
+        software.amazon.awssdk:aws-json-protocol:jar:2.29.45
+        software.amazon.awssdk:checksums:jar:2.29.45
+        software.amazon.awssdk:checksums-spi:jar:2.29.45
+        software.amazon.awssdk:protocol-core:jar:2.29.45
+        software.amazon.awssdk:aws-xml-protocol:jar:2.29.45
+        software.amazon.awssdk:aws-query-protocol:jar:2.29.45
+        software.amazon.awssdk:metrics-spi:jar:2.29.45
+        software.amazon.awssdk:http-auth:jar:2.29.45
+        software.amazon.awssdk:apache-client:jar:2.29.45
+        software.amazon.awssdk:http-auth-spi:jar:2.29.45
+        software.amazon.awssdk:http-auth-aws:jar:2.29.45
+        software.amazon.awssdk:retries-spi:jar:2.29.45
+        software.amazon.awssdk:retries:jar:2.29.45
+        software.amazon.awssdk:endpoints-spi:jar:2.29.45
+        software.amazon.awssdk:profiles:jar:2.29.45
+        software.amazon.awssdk:identity-spi:jar:2.29.45
+        software.amazon.awssdk:utils:jar:2.29.45
+        software.amazon.awssdk:aws-core:jar:2.29.45
+        software.amazon.awssdk:sdk-core:jar:2.29.45
+        software.amazon.awssdk:auth:jar:2.29.45
+        software.amazon.awssdk:http-client-spi:jar:2.29.45
+        software.amazon.awssdk:regions:jar:2.29.45
+      ) + self.slf4j
     end
 
     def geotools_for_geolatte
