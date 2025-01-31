@@ -15,7 +15,7 @@
 BuildrPlus::FeatureManager.feature(:bazel) do |f|
   f.enhance(:Config) do
     def bazel_version
-      @bazel_version ||= '7.4.1'
+      @bazel_version ||= '7.5.0'
     end
 
     attr_writer :bazel_version
