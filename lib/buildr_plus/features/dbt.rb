@@ -62,6 +62,8 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
     first_time do
       require 'dbt'
 
+      Dbt::Config.dynamic_property_provider = Proc.new {|key| ENV[key]}
+
       Dbt::Config.driver = 'postgres' if BuildrPlus::Db.pgsql?
       if Dbt.repository.database_for_key?(:default)
         database = Dbt.repository.database_for_key(:default)
