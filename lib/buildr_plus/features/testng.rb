@@ -71,6 +71,8 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
               BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
               Dbt.repository.load_configuration_data
 
+              FileUtils.mkdir_p File.dirname(filename)
+
               trace("Generating testng properties in #{filename}")
               File.open(filename, 'wb') do |file|
                 file.write "# DO NOT EDIT: File is auto-generated\n"
