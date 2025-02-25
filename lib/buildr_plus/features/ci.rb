@@ -152,13 +152,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           package_no_test_actions << 'domgen:all'
         end
 
-        if BuildrPlus::FeatureManager.activated?(:resgen)
-          commit_actions << 'resgen:all'
-          pull_request_actions << 'resgen:all'
-          package_actions << 'resgen:all'
-          package_no_test_actions << 'resgen:all'
-        end
-
         if BuildrPlus::FeatureManager.activated?(:generate)
           commit_actions << 'generate:check_generated_source_code_committed'
           pull_request_actions << 'generate:check_generated_source_code_committed'

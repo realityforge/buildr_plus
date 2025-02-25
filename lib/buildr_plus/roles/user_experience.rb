@@ -36,20 +36,6 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
     end
   end
 
-  if BuildrPlus::FeatureManager.activated?(:resgen)
-    generators = [:mvp_abstract_uibinder_component, :gwt_abstract_uibinder_component, :gwt_client_bundle, :assets]
-    generators += project.additional_resgen_generators
-    Resgen::Build.define_generate_task(generators,
-                                       :buildr_project => project,
-                                       :keep_file_patterns => project.all_resgen_keep_file_patterns,
-                                       :keep_file_names => project.resgen_keep_file_names,
-                                       :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
-      BuildrPlus::Generate.generated_directories << t.target_dir
-      t.mark_as_generated_in_ide = !project.inline_generated_source?
-      t.filter = Resgen::Filters.include_catalog_below(project._(:source, :main))
-    end
-  end
-
   project.publish = false
 
   compile.with BuildrPlus::Deps.user_experience_deps
