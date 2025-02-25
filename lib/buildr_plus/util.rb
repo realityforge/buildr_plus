@@ -53,10 +53,6 @@ module BuildrPlus
         is_gem_present?('domgen','Domgen')
       end
 
-      def is_resgen_gem_present?
-        is_gem_present?('resgen','Resgen')
-      end
-
       def subprojects(project)
         Buildr.projects(:scope => project.name).collect { |p| p.name }
       end

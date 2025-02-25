@@ -37,21 +37,6 @@ BuildrPlus::Roles.role(:gwt, :requires => [:gwt]) do
     end
   end
 
-  if BuildrPlus::FeatureManager.activated?(:resgen)
-    generators = [:mvp_abstract_uibinder_component, :gwt_abstract_uibinder_component, :gwt_client_bundle, :assets]
-    generators += project.additional_resgen_generators
-    Resgen::Build.define_generate_task(generators,
-                                       :buildr_project => project,
-                                       :keep_file_patterns => project.all_keep_file_patterns,
-                                       :keep_file_names => project.keep_file_names,
-                                       :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
-      BuildrPlus::Generate.generated_directories << t.target_dir
-      t.mark_as_generated_in_ide = !project.inline_generated_source?
-      t.filter = Resgen::Filters.include_catalog_below(project._(:source, :main),
-                                                       project.root_project._(:vendor))
-    end
-  end
-
   compile.with BuildrPlus::Deps.gwt_deps
   # Lock down to Java 11 as this is the latest language level supported by GWT 2.10.0
   project.compile.options.source = '11'

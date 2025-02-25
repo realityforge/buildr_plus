@@ -48,7 +48,6 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
         'dbt' => 'dbt',
         'rptman' => 'rptman',
         'redfish' => 'redfish',
-        'resgen' => 'resgen',
         'kinjen' => 'jenkins'
       }.each_pair do |path, feature|
         path = "vendor/tools/#{path}"
