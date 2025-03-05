@@ -89,6 +89,7 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
       if BuildrPlus::FeatureManager.activated?(:sass)
         gem(gems, 'sass', '3.4.24')
       end
+      gem(gems, 'json', '2.8.2')
 
       gems.merge!(additional_gems)
 
