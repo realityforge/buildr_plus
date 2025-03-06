@@ -256,12 +256,12 @@ JENKINS
         content += stage_content
       end
 
+      content += commit_stage(root_project)
+
       if BuildrPlus::FeatureManager.activated?(:bazel)
         content += bazel_stage_content('BazelBuild', 'build //...')
         # content += bazel_stage_content('BazelTest', 'test //...')
       end
-
-      content += commit_stage(root_project)
 
       pre_package_stages.each do |stage_content|
         content += stage_content
