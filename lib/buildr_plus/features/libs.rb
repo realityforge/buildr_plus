@@ -176,6 +176,10 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(com.google.jsinterop:base:jar:1.0.0) + self.jsinterop
     end
 
+    def javaemul
+      %w(org.realityforge.javaemul.internal.annotations:javaemul.internal.annotations:jar:0.01)
+    end
+
     def gwt_user
       %w(org.gwtproject:gwt-user:jar:2.11.0 org.w3c.css:sac:jar:1.3) + self.jsinterop
     end

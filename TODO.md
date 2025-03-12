@@ -12,7 +12,6 @@ actions should be taken:
 
 * Role should become a model object.
   - The domgen facet on the role should list the generators run by role. (And this is derived from facets)
-  - The resgen facet on the role should list the generators run by role. (And this is derived from facets)
   - The dependencies facet on the role should list the dependencies required by role. (And this is derived from facets)
   - The buildr facet on the role can declare additional custom actions.
 * Roles should declare dependencies. Some dependencies are merely optional. If present they will be linked to.

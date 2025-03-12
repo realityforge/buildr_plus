@@ -247,6 +247,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def gwt_compile_deps
       dependencies = []
 
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.javaemul)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_user)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.braincheck)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.jsinterop_base) if BuildrPlus::FeatureManager.activated?(:gwt)
