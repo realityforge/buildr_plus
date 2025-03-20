@@ -222,14 +222,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 end
               end
 
-              if BuildrPlus::FeatureManager.activated?(:replicant)
-                if BuildrPlus::Replicant.enable_entity_broker? && !r.imit.enable_entity_broker?
-                  BuildrPlus.error("BuildrPlus setting BuildrPlus::Replicant.enable_entity_broker = true while domgen setting repository.imit.enable_entity_broker = false.")
-                elsif !BuildrPlus::Replicant.enable_entity_broker? && r.imit.enable_entity_broker?
-                  BuildrPlus.error("BuildrPlus setting BuildrPlus::Replicant.enable_entity_broker = false while domgen setting repository.imit.enable_entity_broker = true.")
-                end
-              end
-
               if r.sync? && r.sync.standalone? && !BuildrPlus::Sync.standalone?
                 raise "Domgen repository #{r.name} declares repository.sync.standalone = true while in BuildrPlus BuildrPlus::Sync.standalone? is false"
               elsif r.sync? && !r.sync.standalone? && BuildrPlus::Sync.standalone?

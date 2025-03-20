@@ -20,11 +20,5 @@ BuildrPlus::FeatureManager.feature(:replicant => [:gwt, :arez]) do |f|
         'replicant.environment' => 'development'
       }
     end
-
-    attr_writer :enable_entity_broker
-
-    def enable_entity_broker?
-      @enable_entity_broker.nil? ? false : !!@enable_entity_broker
-    end
   end
 end
