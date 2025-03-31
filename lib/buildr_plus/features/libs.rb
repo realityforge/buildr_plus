@@ -297,7 +297,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_version
-      '0.215'
+      '0.218'
     end
 
     def arez
@@ -321,7 +321,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def arez_persist_version
-      '0.50'
+      '0.53'
     end
 
     def arez_persist_core
@@ -384,7 +384,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.139'
+      '6.139-arez_0.218'
     end
 
     def replicant_client
