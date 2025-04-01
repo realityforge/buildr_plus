@@ -384,7 +384,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.139-arez_0.218'
+      '6.141'
     end
 
     def replicant_client
