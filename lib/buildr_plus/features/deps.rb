@@ -89,7 +89,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       end
 
       generators << [:robots] if BuildrPlus::Artifacts.war?
-      generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators << [:action_server] if BuildrPlus::FeatureManager.activated?(:action)
 
@@ -129,7 +128,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
       end
 
-      generators << [:gwt_rpc_shared, :gwt_rpc_server] if BuildrPlus::FeatureManager.activated?(:gwt)
       generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       if BuildrPlus::FeatureManager.activated?(:sync)
@@ -189,7 +187,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def gwt_qa_test_generators
-      generators = [:gwt_rpc_test_qa_external]
       generators += [:gwt_client_test_jso_qa_support]
       generators += [:imit_client_test_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators += [:keycloak_gwt_test_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
