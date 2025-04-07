@@ -160,7 +160,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def gwt_generators
-      generators = [:ce_data_types, :gwt, :gwt_rpc_shared, :gwt_rpc_client_service, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
+      generators = [:ce_data_types, :gwt, :gwt_rpc_client_service, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
       if BuildrPlus::FeatureManager.activated?(:replicant)
@@ -187,7 +187,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def gwt_qa_test_generators
-      generators += [:gwt_client_test_jso_qa_support]
+      generators = [:gwt_client_test_jso_qa_support]
       generators += [:imit_client_test_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators += [:keycloak_gwt_test_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_test_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
