@@ -33,7 +33,7 @@ BuildrPlus::Roles.role(:soap_client, :requires => [:soap]) do
 
   project.publish = true
 
-  compile.with Buildr.artifacts([BuildrPlus::Libs.jackson_databind, BuildrPlus::Libs.jakarta_xml_ws]) if BuildrPlus::FeatureManager.activated?(:jackson)
+  compile.with Buildr.artifacts([BuildrPlus::Libs.jakarta_xml_ws])
 
   package(:jar)
   package(:sources)

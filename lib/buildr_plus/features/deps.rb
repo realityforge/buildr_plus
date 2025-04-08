@@ -89,7 +89,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       end
 
       generators << [:robots] if BuildrPlus::Artifacts.war?
-      generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators << [:imit_metadata, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators << [:action_server] if BuildrPlus::FeatureManager.activated?(:action)
 
       if BuildrPlus::FeatureManager.activated?(:keycloak)
@@ -128,7 +128,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
       end
 
-      generators << [:imit_shared, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators << [:imit_metadata, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
 
       if BuildrPlus::FeatureManager.activated?(:sync)
         if BuildrPlus::Sync.standalone?
@@ -160,11 +160,11 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def gwt_generators
-      generators = [:ce_data_types, :gwt, :gwt_rpc_client_service, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
+      generators = [:ce_data_types, :gwt, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
       if BuildrPlus::FeatureManager.activated?(:replicant)
-        generators += [:imit_shared, :imit_client_entity, :ce_data_types, :imit_client_entity_gwt, :imit_client_service]
+        generators += [:imit_metadata, :imit_client_entity, :ce_data_types, :imit_client_service]
         generators += [:imit_client_react4j_support] if BuildrPlus::FeatureManager.activated?(:react4j)
       end
 
@@ -180,7 +180,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators += [:imit_client_main_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators += [:keycloak_gwt_main_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
-      generators += [:gwt_rpc_main_qa_external]
       generators += [:gwt_client_main_jso_qa_support]
 
       generators.flatten
@@ -350,7 +349,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Mail.mail_server, BuildrPlus::Libs.mustache, BuildrPlus::Libs.slf4j]) if BuildrPlus::FeatureManager.activated?(:mail)
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_rpc) if BuildrPlus::FeatureManager.activated?(:gwt)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)

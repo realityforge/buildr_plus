@@ -394,11 +394,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_server
-      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version}) + self.gwt_rpc
-    end
-
-    def gwt_rpc
-      self.jackson_databind + self.gwt_servlet
+      %W(org.realityforge.replicant:replicant-server:jar:#{replicant_version})
     end
 
     def guice
