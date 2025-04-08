@@ -295,7 +295,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       # Our JPA beans are occasionally generated with eclipselink specific artifacts
       dependencies << Buildr.artifacts(BuildrPlus::Libs.eclipse_persistence_core) if BuildrPlus::FeatureManager.activated?(:db)
 
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.jakarta_xml_bind_api) if BuildrPlus::FeatureManager.activated?(:jackson)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.jakarta_xml_bind_api) if BuildrPlus::FeatureManager.activated?(:xml)
 
       dependencies << Buildr.artifacts([BuildrPlus::Libs.db_drivers]) if BuildrPlus::FeatureManager.activated?(:db)
 
