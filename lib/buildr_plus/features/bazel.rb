@@ -12,6 +12,16 @@
 # limitations under the License.
 #
 
+module Buildr #:nodoc:
+  module ActsAsArtifact
+    def pom
+      return self if type == :pom
+      return nil if BuildrPlus::Bazel.artifacts_missing_pom_prefixes.any? { |prefix| group.start_with?(prefix) }
+      Buildr.artifact(:group => group, :id => id, :version => version, :type => :pom)
+    end
+  end
+end
+
 BuildrPlus::FeatureManager.feature(:bazel) do |f|
   f.enhance(:Config) do
     def bazel_version
@@ -33,6 +43,10 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
     end
 
     attr_writer :tolerate_missing_poms
+
+    def artifacts_missing_pom_prefixes
+      @artifacts_missing_pom_prefixes ||= %w()
+    end
 
     def artifacts_missing_source_prefixes
       @artifacts_missing_source_prefixes ||= %w()
@@ -365,4 +379,3 @@ HEADER
     end
   end
 end
-
