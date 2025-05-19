@@ -384,7 +384,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.142'
+      '6.143'
     end
 
     def replicant_client
