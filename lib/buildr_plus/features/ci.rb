@@ -207,7 +207,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         package_actions << 'test'
         pull_request_actions << 'test'
-        package_no_test_actions << 'test'
 
         package_actions << 'package'
         pull_request_actions << 'package'

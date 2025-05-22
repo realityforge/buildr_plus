@@ -36,6 +36,18 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       @tolerate_invalid_poms.nil? ? false : !!@tolerate_invalid_poms
     end
 
+    attr_writer :startup_options
+
+    def startup_options
+      @startup_options ||= ''
+    end
+
+    attr_writer :command_options
+
+    def command_options
+      @command_options ||= ''
+    end
+
     attr_writer :tolerate_missing_poms
 
     def tolerate_missing_poms?
@@ -310,7 +322,7 @@ HEADER
     desc 'Run buildifier across build files'
     task 'buildifier:check' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      sh "cd #{base_directory} && ./bazelw run //:buildifier_check"
+      sh "cd #{base_directory} && ./bazelw #{BuildrPlus::Bazel.startup_options} run #{BuildrPlus::Bazel.command_options} //:buildifier_check"
     end
 
     desc 'Normalize bazel files.'
@@ -375,7 +387,7 @@ HEADER
     desc 'Run buildifier across build files'
     task 'buildifier:fix' do
       base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      sh "cd #{base_directory} && ./bazelw run //:buildifier"
+      sh "cd #{base_directory} && ./bazelw #{BuildrPlus::Bazel.startup_options} run #{BuildrPlus::Bazel.command_options} //:buildifier"
     end
   end
 end
