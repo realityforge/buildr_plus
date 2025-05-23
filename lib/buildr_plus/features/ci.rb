@@ -278,14 +278,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
       end
 
       project.task(':ci:source_code_analysis') do
-        if project.respond_to?(:spotbugs) && project.spotbugs.enabled?
-          task("#{project.name}:spotbugs:xml").invoke
-          task("#{project.name}:spotbugs:html").invoke
-        end
-        if project.respond_to?(:pmd) && project.pmd.enabled?
-          task("#{project.name}:pmd:html").invoke
-          task("#{project.name}:pmd:xml").invoke
-        end
         if project.respond_to?(:checkstyle) && project.checkstyle.enabled?
           task("#{project.name}:checkstyle:xml").invoke
           task("#{project.name}:checkstyle:html").invoke

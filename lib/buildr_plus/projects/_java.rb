@@ -14,4 +14,4 @@
 
 require 'buildr_plus/projects/_common'
 
-BuildrPlus::FeatureManager.activate_features([:spotbugs, :pmd, :checkstyle, :java, :testng, :ejb, :jaxrs])
+BuildrPlus::FeatureManager.activate_features([:checkstyle, :java, :testng, :ejb, :jaxrs])

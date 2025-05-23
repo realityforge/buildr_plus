@@ -126,7 +126,6 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting]) do |f|
         project.iml.main_generated_source_directories << target_directory
         project.compile.from(target_directory)
         project.compile.dependencies.delete_if{|a| a.to_s == artifact.to_s}
-        project.root_project.pmd.exclude_paths << target_directory
 
         desc 'Expand all GWT deps so they are accessible to GWT compiler'
         expand_task = task('gwt:expand_deps').enhance([t.name])

@@ -87,12 +87,8 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(org.realityforge.javax.annotation:javax.annotation:jar:1.0.1)
     end
 
-    def spotbugs_provided
-      %w(com.github.spotbugs:spotbugs-annotations:jar:3.1.5 net.jcip:jcip-annotations:jar:1.0) + self.javax_annotations
-    end
-
     def ee_provided
-      %w(javax:javaee-api:jar:8.0.1) + self.spotbugs_provided + self.jetbrains_annotations
+      %w(javax:javaee-api:jar:8.0.1) + self.javax_annotations + self.jetbrains_annotations
     end
 
     def jakarta_xml_bind_api

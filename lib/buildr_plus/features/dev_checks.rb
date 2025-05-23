@@ -26,7 +26,7 @@ BuildrPlus::FeatureManager.feature(:dev_checks) do |f|
       os = RbConfig::CONFIG['host_os']
       is_unix = os =~ /(aix|linux|(net|free|open)bsd|cygwin|solaris|irix|hpux)/i
 
-      %w(checkstyle/checkstyle.html pmd/pmd.html spotbugs/spotbugs.html pmd/cpd.text).each do |file|
+      %w(checkstyle/checkstyle.html).each do |file|
         f = top_level_projects[0]._(:reports, file)
         if File.exist?(f)
           puts "Opening #{f}"

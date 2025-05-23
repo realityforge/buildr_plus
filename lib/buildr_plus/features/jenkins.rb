@@ -353,8 +353,6 @@ JENKINS
       return '' if skip_stage?('Commit')
       options = {}
       options[:checkstyle] = true if BuildrPlus::FeatureManager.activated?(:checkstyle)
-      options[:spotbugs] = true if BuildrPlus::FeatureManager.activated?(:spotbugs)
-      options[:pmd] = true if BuildrPlus::FeatureManager.activated?(:pmd)
       option_string = options.empty? ? '' : ", [#{options.collect { |k, v| "#{k}: #{v}" }.join(', ')}]"
       "        kinjen.commit_stage( this, '#{root_project.name}'#{option_string} )\n"
     end

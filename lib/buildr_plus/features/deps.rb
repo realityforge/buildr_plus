@@ -224,7 +224,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.spotbugs_provided)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_annotations)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_core) if BuildrPlus::FeatureManager.activated?(:sting)
 
       dependencies.flatten

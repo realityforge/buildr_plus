@@ -502,8 +502,7 @@ RULES
         BuildrPlus::Checkstyle.setup_checkstyle_import_rules(project, !import_control_present)
         BuildrPlus::Checkstyle::Parser.merge_existing_import_control_file(project) if import_control_present
 
-        project.checkstyle.additional_project_names =
-          BuildrPlus::Spotbugs.additional_project_names || BuildrPlus::Util.subprojects(project)
+        project.checkstyle.additional_project_names = BuildrPlus::Util.subprojects(project)
       end
     end
   end
