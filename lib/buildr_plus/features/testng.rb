@@ -58,6 +58,8 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
   f.enhance(:ProjectExtension) do
     after_define do |project|
 
+      attr_accessor :testng_suite_filename
+
       if project.ipr?
         project.task(':generate:all' => ['config:emit_test_properties']) if BuildrPlus::FeatureManager.activated?(:generate)
 
