@@ -28,9 +28,6 @@ module BuildrPlus #nodoc
           database(database_key, config)
         end
 
-        ssrs = options.delete('ssrs')
-        ssrs(ssrs) if ssrs
-
         (options.delete('settings') || {}).each_pair do |setting_key, value|
           setting(setting_key, value)
         end
@@ -99,20 +96,6 @@ module BuildrPlus #nodoc
         @databases[key.to_s] = type.new(key, config, &block)
       end
 
-      def ssrs?
-        !@ssrs.nil?
-      end
-
-      def ssrs(options = {}, &block)
-        if @ssrs.nil?
-          @ssrs = BuildrPlus::Config::SsrsConfig.new(options, &block)
-        else
-          @ssrs.options = options
-          yield @ssrs if block_given?
-        end
-        @ssrs
-      end
-
       def broker?
         !@broker.nil?
       end
@@ -150,7 +133,6 @@ module BuildrPlus #nodoc
             results['databases'][db.key.to_s] = db.to_h
           end
         end
-        results['ssrs'] = self.ssrs.to_h if self.ssrs?
         results['settings'] = self.settings unless self.settings.empty?
         results['volumes'] = self.volumes unless self.volumes.empty?
         results['broker'] = self.broker.to_h if self.broker?

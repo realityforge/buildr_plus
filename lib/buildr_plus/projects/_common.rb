@@ -42,7 +42,6 @@ BuildrPlus::FeatureManager.activate_features([
 
 BuildrPlus::FeatureManager.activate_feature(:dbt) if BuildrPlus::Util.is_dbt_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:domgen) if BuildrPlus::Util.is_domgen_gem_present?
-BuildrPlus::FeatureManager.activate_feature(:rptman) if BuildrPlus::Util.is_rptman_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:redfish) if BuildrPlus::Util.is_redfish_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:braid) if BuildrPlus::Util.is_braid_gem_present?
 BuildrPlus::FeatureManager.activate_feature(:node) if File.exist?("#{File.dirname(::Buildr.application.buildfile.to_s)}/.node-version")

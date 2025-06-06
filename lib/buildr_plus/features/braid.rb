@@ -46,7 +46,6 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
       {
         'domgen' => 'domgen',
         'dbt' => 'dbt',
-        'rptman' => 'rptman',
         'redfish' => 'redfish',
         'kinjen' => 'jenkins'
       }.each_pair do |path, feature|
@@ -57,7 +56,7 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
       end
       raise "Vendor directory 'vendor/tools/buildr' expected to exist." unless File.exist?("#{base_directory}/vendor/tools/buildr")
       raise "Vendor directory 'vendor/tools/buildr_plus' expected to exist." unless File.exist?("#{base_directory}/vendor/tools/buildr_plus")
-      %w(domgen dbt rptman redfish).each do |feature|
+      %w(domgen dbt redfish).each do |feature|
         if File.exist?("#{base_directory}/vendor/tools/#{feature}")
           raise "Vendor directory 'vendor/tools/#{feature}' exists but buildr_plus '#{feature}' feature is not enabled." unless BuildrPlus::FeatureManager.activated?(feature)
         elsif !File.exist?("#{base_directory}/vendor/tools/#{feature}")

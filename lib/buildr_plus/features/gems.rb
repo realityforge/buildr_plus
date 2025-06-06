@@ -74,9 +74,6 @@ BuildrPlus::FeatureManager.feature(:gems) do |f|
       if BuildrPlus::FeatureManager.activated?(:domgen)
         gem(gems, 'domgen', nil, :path => 'vendor/tools/domgen')
       end
-      if BuildrPlus::FeatureManager.activated?(:rptman)
-        gem(gems, 'rptman', nil, :path => 'vendor/tools/rptman')
-      end
       if BuildrPlus::FeatureManager.activated?(:redfish)
         gem(gems, 'redfish', nil, :path => 'vendor/tools/redfish')
       end

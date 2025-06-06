@@ -57,7 +57,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         project.task ':ci:common_setup' do
           ENV['TEST'] ||= 'all'
           Dbt::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:dbt)
-          SSRS::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:rptman)
           BuildrPlus::Config.environment = 'test' if BuildrPlus::FeatureManager.activated?(:config)
         end
 
@@ -189,11 +188,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           end
         end
 
-        if BuildrPlus::FeatureManager.activated?(:rptman) && ENV['RPTMAN'] != 'no'
-          commit_actions << 'rptman:ssrs:upload'
-          pull_request_actions << 'rptman:ssrs:upload'
-        end
-
         if BuildrPlus::FeatureManager.activated?(:keycloak)
           package_actions << 'keycloak:create'
         end
@@ -235,11 +229,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         if BuildrPlus::FeatureManager.activated?(:keycloak)
           package_actions << 'keycloak:destroy'
-        end
-
-        if BuildrPlus::FeatureManager.activated?(:rptman) && ENV['RPTMAN'] != 'no'
-          commit_actions << 'rptman:ssrs:delete'
-          pull_request_actions << 'rptman:ssrs:delete'
         end
 
         database_drops = database_drops.reverse

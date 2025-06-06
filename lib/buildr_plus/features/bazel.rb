@@ -222,13 +222,8 @@ HEADER
       bazelignores << 'volumes' if BuildrPlus::FeatureManager.activated?(:redfish)
 
       bazelignores << 'config/application.yml' if BuildrPlus::FeatureManager.activated?(:dbt) ||
-        BuildrPlus::FeatureManager.activated?(:rptman) ||
         BuildrPlus::FeatureManager.activated?(:jms) ||
         BuildrPlus::FeatureManager.activated?(:redfish)
-
-      if BuildrPlus::FeatureManager.activated?(:rptman)
-        bazelignores << ::Buildr::Util.relative_path(File.expand_path(SSRS::Config.projects_dir), base_directory)
-      end
 
       if BuildrPlus::Artifacts.war?
         bazelignores << 'artifacts'

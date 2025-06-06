@@ -41,10 +41,6 @@ module BuildrPlus
         is_gem_present?('dbt','Dbt')
       end
 
-      def is_rptman_gem_present?
-        is_gem_present?('rptman','SSRS')
-      end
-
       def is_sass_gem_present?
         is_gem_present?('sass','Sass')
       end
