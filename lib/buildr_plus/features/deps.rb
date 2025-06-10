@@ -96,14 +96,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         generators << [:keycloak_config_service, :keycloak_js_service] if BuildrPlus::FeatureManager.activated?(:gwt)
       end
 
-      if BuildrPlus::FeatureManager.activated?(:sync)
-        if BuildrPlus::Sync.standalone?
-          generators << [:sync_ejb]
-        else
-          generators << [:sync_core_ejb]
-        end
-      end
-
       generators << [:ee_exceptions, :ejb_service_facades, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
       generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
@@ -129,14 +121,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       end
 
       generators << [:imit_metadata, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-      if BuildrPlus::FeatureManager.activated?(:sync)
-        if BuildrPlus::Sync.standalone?
-          generators << [:sync_ejb]
-        else
-          generators << [:sync_core_ejb]
-        end
-      end
 
       generators << [:ee_messages, :ee_exceptions, :ejb_service_facades, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 

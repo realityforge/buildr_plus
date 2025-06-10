@@ -24,9 +24,6 @@ end
 
 if File.exist?("#{base_directory}/model") || File.exist?("#{base_directory}/model-qa-support")
   BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
-  if BuildrPlus::FeatureManager.activated?(:sync) && !BuildrPlus::Sync.standalone?
-    BuildrPlus::Roles.project('sync_model', :roles => [:sync_model], :parent => :container, :template => true, :description => 'Shared Model used to write External synchronization services')
-  end
   BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :parent => :container, :template => true, :description => 'Model Test Infrastructure')
 end
 if File.exist?("#{base_directory}/model-qa")

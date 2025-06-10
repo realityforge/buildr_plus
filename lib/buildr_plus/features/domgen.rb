@@ -111,10 +111,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
         if BuildrPlus::FeatureManager.activated?(:sql_analysis)
           generators << :action_types_mssql
         end
-        if BuildrPlus::FeatureManager.activated?(:sync)
-          generators << :sync_db_common
-          generators << (BuildrPlus::Db.mssql? ? :sync_sql : :sync_pgsql)
-        end
         if BuildrPlus::FeatureManager.activated?(:appconfig)
           generators << (BuildrPlus::Db.mssql? ? :appconfig_mssql : :appconfig_pgsql)
         end
@@ -153,7 +149,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 :mail => :mail,
                 :soap => :jws,
                 :gwt => :gwt,
-                :sync => :sync,
                 :replicant => :imit,
                 :gwt_cache_filter => :gwt_cache_filter,
                 :appconfig => :appconfig,
@@ -220,12 +215,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 if clients != domgen_clients
                   raise "Domgen repository #{r.name} declares keycloak remote clients #{domgen_clients.inspect} while buildr is aware of #{clients.inspect}"
                 end
-              end
-
-              if r.sync? && r.sync.standalone? && !BuildrPlus::Sync.standalone?
-                raise "Domgen repository #{r.name} declares repository.sync.standalone = true while in BuildrPlus BuildrPlus::Sync.standalone? is false"
-              elsif r.sync? && !r.sync.standalone? && BuildrPlus::Sync.standalone?
-                raise "Domgen repository #{r.name} declares repository.sync.standalone = false while in BuildrPlus BuildrPlus::Sync.standalone? is true"
               end
 
               if !r.robots? && BuildrPlus::Artifacts.war?
