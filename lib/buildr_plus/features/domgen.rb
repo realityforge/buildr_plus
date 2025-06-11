@@ -146,7 +146,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 :jackson => :jackson,
                 :keycloak => :keycloak,
                 :jms => :jms,
-                :mail => :mail,
                 :soap => :jws,
                 :gwt => :gwt,
                 :replicant => :imit,

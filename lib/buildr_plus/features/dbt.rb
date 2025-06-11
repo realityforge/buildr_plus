@@ -76,9 +76,6 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
           if BuildrPlus::FeatureManager.activated?(:syncrecord) && BuildrPlus::Syncrecord.include_db_artifact?
             BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Syncrecord.syncrecord_db)
           end
-          if BuildrPlus::FeatureManager.activated?(:mail) && BuildrPlus::Mail.include_db_artifact?
-            BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Mail.mail_db)
-          end
         end
       end
 

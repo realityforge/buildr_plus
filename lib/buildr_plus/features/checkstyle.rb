@@ -182,8 +182,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       g = project.java_package_name
       c = project.name_as_class
       r.rule('.*', :regex => true, :rule_type => :class) if allow_any_imports
-      r.rule('edu.umd.cs.findbugs.annotations.SuppressFBWarnings', :rule_type => :class)
-      r.rule('edu.umd.cs.findbugs.annotations.SuppressWarnings', :rule_type => :class, :disallow => true)
       r.rule('org.jetbrains.annotations.NotNull', :rule_type => :class, :disallow => true)
       r.rule('org.jetbrains.annotations.Nullable', :rule_type => :class, :disallow => true)
       r.rule('org.testng.internal.Nullable', :rule_type => :class, :disallow => true)
@@ -192,8 +190,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       r.rule('com.sun.istack.internal.NotNull', :rule_type => :class, :disallow => true)
       r.rule('com.sun.istack.internal.Nullable', :rule_type => :class, :disallow => true)
       r.rule('org.mockito.internal.matchers.NotNull', :rule_type => :class, :disallow => true)
-      r.rule('edu.umd.cs.findbugs.annotations.Nonnull', :rule_type => :class, :disallow => true)
-      r.rule('edu.umd.cs.findbugs.annotations.Nullable', :rule_type => :class, :disallow => true)
       r.rule('javax.faces.bean', :disallow => true)
       r.rule('org.hamcrest', :disallow => true)
 
@@ -206,20 +202,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:gwt)
-        # If arez is enabled then we assume we are using modern GWT, otherwise we can use the old stuff
-        if BuildrPlus::FeatureManager.activated?(:arez)
-          r.subpackage_rule('client', 'com.google.inject', :disallow => true)
-          r.subpackage_rule('client', 'com.google.gwt', :disallow => true)
-        end
-
         r.subpackage_rule('client', 'com.google.gwt.user.client.rpc.AsyncCallback', :rule_type => :class)
-
-        # TODO: Remove this next line when we figure out the solution
-        r.subpackage_rule('client', 'com.google.gwt.i18n.shared.DateTimeFormat', :rule_type => :class)
-        r.subpackage_rule('client', 'com.google.gwt.i18n.client.DateTimeFormat', :rule_type => :class)
-
-        # We will keep this rule until we figure out a way ala GWT 3 for resources
-        r.subpackage_rule('client', 'com.google.gwt.resources.client')
 
         r.subpackage_rule('client', 'sting.Injectable', :rule_type => :class)
         r.subpackage_rule('client', 'sting.Fragment', :rule_type => :class)
@@ -228,7 +211,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('client.ioc', 'sting')
 
         # TODO: Remove this once we move to GWT 3
-        r.subpackage_rule('client.ioc', 'com.google.gwt.core.client.GWT', :rule_type => :class)
         r.subpackage_rule('client', 'com.google.gwt.core.client.GWT', :rule_type => :class, :local_only => true)
 
         if BuildrPlus::FeatureManager.activated?(:keycloak)
@@ -287,11 +269,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('client.entity', 'org.realityforge.guiceyloops.shared.ValueUtil', :rule_type => :class)
         end
 
-        if BuildrPlus::FeatureManager.activated?(:mail)
-          r.subpackage_rule('server.service', 'javax.mail')
-          r.subpackage_rule('server.service', 'iris.mail.server.data_type')
-          r.subpackage_rule('server.service', 'iris.mail.server.service')
-        end
         if BuildrPlus::FeatureManager.activated?(:appconfig)
           r.subpackage_rule('server.service', 'iris.appconfig.server.entity')
           r.subpackage_rule('server.service', 'iris.appconfig.server.service')
@@ -366,12 +343,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.test.util', 'iris.appconfig.server.entity')
         r.subpackage_rule('server.test.util', 'iris.appconfig.server.service')
         r.subpackage_rule('server.test.util', 'iris.appconfig.server.test.util')
-      end
-      if BuildrPlus::FeatureManager.activated?(:mail)
-        r.subpackage_rule('server.test.util', 'javax.mail')
-        r.subpackage_rule('server.test.util', 'iris.mail.server.entity')
-        r.subpackage_rule('server.test.util', 'iris.mail.server.service')
-        r.subpackage_rule('server.test.util', 'iris.mail.server.test.util')
       end
       if BuildrPlus::FeatureManager.activated?(:syncrecord)
         r.subpackage_rule('server.test.util', 'iris.syncrecord.server.data_type')

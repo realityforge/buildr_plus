@@ -134,12 +134,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         end
       end
 
-      if BuildrPlus::FeatureManager.activated?(:mail)
-        properties["#{constant_prefix}_MAIL_HOST"] = '127.0.0.1'
-        properties["#{constant_prefix}_MAIL_USER"] = domain.name
-        properties["#{constant_prefix}_MAIL_FROM"] = "#{domain.name}@example.com"
-      end
-
       database_name_keys = domain.environment_vars.keys.select{|k| k =~ /_DATABASE_NAME$/}.collect{|k|k[0...-14]}
 
       environment.databases.each do |database|
@@ -288,9 +282,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
             end
             if BuildrPlus::Redfish.local_domain_update_only?
               domain.complete = false
-            end
-            if BuildrPlus::FeatureManager.activated?(:mail)
-              RedfishPlus.configure_local_mail_port(domain)
             end
             if BuildrPlus::FeatureManager.activated?(:replicant)
               RedfishPlus.custom_resource(domain, "#{buildr_project.name}/env/disable_session_service_protection", true, 'java.lang.Boolean')

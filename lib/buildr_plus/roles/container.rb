@@ -100,7 +100,6 @@ BuildrPlus::Roles.role(:container) do
 
     unless BuildrPlus::Redfish.local_domain_update_only?
       local_packaged_apps = BuildrPlus::Glassfish.non_remote_only_packaged_apps.dup.merge(BuildrPlus::Glassfish.packaged_apps)
-      local_packaged_apps['greenmail'] = BuildrPlus::Libs.greenmail_server if BuildrPlus::FeatureManager.activated?(:mail)
 
       ipr.add_glassfish_configuration(project,
                                       :server_name => 'GlassFish 5.2022.5',
