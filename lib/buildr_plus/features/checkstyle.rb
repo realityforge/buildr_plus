@@ -202,8 +202,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:gwt)
-        r.subpackage_rule('client', 'com.google.gwt.user.client.rpc.AsyncCallback', :rule_type => :class)
-
         r.subpackage_rule('client', 'sting.Injectable', :rule_type => :class)
         r.subpackage_rule('client', 'sting.Fragment', :rule_type => :class)
         r.subpackage_rule('client', "#{g}.shared")
