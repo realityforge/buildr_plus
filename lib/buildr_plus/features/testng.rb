@@ -50,6 +50,13 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
           end
         end
       end
+      project.extra_testng_props.each_pair do |k, v|
+        default_testng_args << "-D#{k}=#{v}"
+      end
+
+      project.extra_testng_args.each do |arg|
+        default_testng_args << arg
+      end
 
       default_testng_args
     end
@@ -59,6 +66,14 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
     after_define do |project|
 
       attr_accessor :testng_suite_filename
+
+      def extra_testng_props
+        @extra_testng_props ||= {}
+      end
+
+      def extra_testng_args
+        @extra_testng_args ||= []
+      end
 
       if project.ipr?
         project.task(':generate:all' => ['config:emit_test_properties']) if BuildrPlus::FeatureManager.activated?(:generate)

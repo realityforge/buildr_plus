@@ -30,10 +30,6 @@ BuildrPlus::FeatureManager.feature(:glassfish) do |f|
       @non_remote_only_packaged_apps ||= {}
     end
 
-    def addtional_default_testng_args
-      @addtional_default_testng_args ||= []
-    end
-
     attr_writer :support_remote_configuration
 
     def support_remote_configuration?
