@@ -25,8 +25,7 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
 
     def library?
       if @library.nil?
-        @library = BuildrPlus::FeatureManager.activated?(:role_soap_client) ||
-          BuildrPlus::FeatureManager.activated?(:role_gwt) ||
+        @library = BuildrPlus::FeatureManager.activated?(:role_gwt) ||
           BuildrPlus::FeatureManager.activated?(:role_library)
       end
       !!@library

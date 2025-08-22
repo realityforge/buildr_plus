@@ -20,7 +20,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators += [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
       generators += [:syncrecord_datasources] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators += [:keycloak_client_definitions] if BuildrPlus::FeatureManager.activated?(:keycloak)
-      generators << [:jws_shared] if BuildrPlus::FeatureManager.activated?(:soap)
       generators.flatten
     end
 
@@ -73,7 +72,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators = []
       generators << [:ee_test_qa, :ee_test_qa_aggregate]
       generators << [:jpa_dao_test, :jpa_application_orm_xml, :jpa_application_persistence_xml, :jpa_test_orm_xml, :jpa_test_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:jaxb_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
 
       generators.flatten
@@ -99,7 +97,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:ee_exceptions, :ejb_services, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
       generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
-      generators << [:jws_server, :ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:soap)
+      generators << [:ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:ejb)
       generators << [:jms_services, :jms_qa_support] if BuildrPlus::FeatureManager.activated?(:jms)
       generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
       generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)

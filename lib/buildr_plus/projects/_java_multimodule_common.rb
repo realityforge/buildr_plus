@@ -38,8 +38,4 @@ if File.exist?("#{base_directory}/gwt") || File.exist?("#{base_directory}/gwt-qa
   end
 end
 
-if BuildrPlus::FeatureManager.activated?(:soap)
-  BuildrPlus::Roles.project('soap-client', :roles => [:soap_client], :parent => :container, :template => true, :description => 'SOAP Client API')
-end
-
 BuildrPlus::Roles.default_role = :container
