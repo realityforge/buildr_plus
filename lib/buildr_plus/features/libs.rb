@@ -125,8 +125,9 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     def mockito
       # TODO: hamcrest only seems to be used by AbstractDatabaseTest across systems so we just decouple the dependency
       %w(
-        org.mockito:mockito-core:jar:4.5.1
-        net.bytebuddy:byte-buddy:jar:1.12.9
+        org.mockito:mockito-core:jar:5.2.0
+        net.bytebuddy:byte-buddy:jar:1.17.7
+        net.bytebuddy:byte-buddy-agent:jar:1.17.7
         org.objenesis:objenesis:jar:3.2
         org.hamcrest:hamcrest:jar:2.2
       )
