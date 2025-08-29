@@ -23,12 +23,6 @@ BuildrPlus::FeatureManager.feature(:jenkins) do |f|
       @auto_deploy.nil? ? (BuildrPlus::Artifacts.war? || (BuildrPlus::Artifacts.db? && !BuildrPlus::Dbt.library?)) : !!@auto_deploy
     end
 
-    attr_writer :auto_zim
-
-    def auto_zim?
-      @auto_zim.nil? ? BuildrPlus::Artifacts.library? : !!@auto_zim
-    end
-
     attr_writer :deployment_environment
 
     def deployment_environment
@@ -289,7 +283,7 @@ JENKINS
 
       content = automerge_prelude + inside_try_catch(content, true, true, true, false)
 
-      if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
+      if BuildrPlus::Jenkins.auto_deploy?
         content += <<-CONTENT
       kinjen.complete_build( this ) {
         CONTENT
@@ -303,10 +297,7 @@ JENKINS
         content += deploy_stage(@jenkins_deploy_name.nil? ? root_project.name : @jenkins_deploy_name)
       end
 
-      if BuildrPlus::Jenkins.auto_zim?
-        content += zim_stage(root_project)
-      end
-      if BuildrPlus::Jenkins.auto_deploy? || BuildrPlus::Jenkins.auto_zim?
+      if BuildrPlus::Jenkins.auto_deploy?
         content += <<-CONTENT
       }
         CONTENT
@@ -318,35 +309,6 @@ JENKINS
       <<-DEPLOY_STEP
         kinjen.deploy_stage( this, '#{jenkins_name}', '#{deployment_environment}' )
       DEPLOY_STEP
-    end
-
-    def zim_stage(root_project)
-      return '' if skip_stage?('Zim')
-      dependencies = []
-      ([root_project] + root_project.projects).each do |p|
-        next unless p.publish?
-        p.packages.each do |pkg|
-          spec = pkg.to_hash
-          group = spec[:group].to_s.gsub(/\.pg$/, '')
-          if BuildrPlus::Db.pg_defined?
-            dependencies << "#{group}.pg:#{spec[:id]}:#{spec[:type]}"
-          end
-          if BuildrPlus::Db.tiny_tds_defined?
-            dependencies << "#{group}:#{spec[:id]}:#{spec[:type]}"
-          end
-          if !BuildrPlus::Db.pg_defined? && !BuildrPlus::Db.tiny_tds_defined?
-            dependencies << "#{group}:#{spec[:id]}:#{spec[:type]}"
-          end
-        end
-      end
-
-      dependencies = dependencies.sort.uniq.join(',')
-
-      name = root_project.group.to_s.gsub(/\.pg$/, '')
-
-      <<-ZIM_STEP
-        kinjen.zim_stage( this, '#{name}', '#{dependencies}' )
-      ZIM_STEP
     end
 
     def commit_stage(root_project)
