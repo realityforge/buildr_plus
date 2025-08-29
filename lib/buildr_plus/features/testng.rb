@@ -65,8 +65,6 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
   f.enhance(:ProjectExtension) do
     after_define do |project|
 
-      attr_accessor :testng_suite_filename
-
       def extra_testng_props
         @extra_testng_props ||= {}
       end
