@@ -187,12 +187,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 raise "Domgen declared 'repository.application.db_deployable = false' but buildr configured 'BuildrPlus::Dbt.library = false'."
               end
 
-              if r.application? && r.application.service_library? && !BuildrPlus::FeatureManager.activated?(:role_library)
-                raise "Domgen declared 'repository.application.service_library = true' but buildr is not configured as a library."
-              elsif r.application? && !r.application.service_library? && BuildrPlus::FeatureManager.activated?(:role_library)
-                raise "Domgen declared 'repository.application.service_library = false' but buildr is configured as a library."
-              end
-
               facet_mapping.each_pair do |buildr_plus_facet, domgen_facet|
                 if BuildrPlus::FeatureManager.activated?(buildr_plus_facet) && !r.facet_enabled?(domgen_facet)
                   BuildrPlus.error("BuildrPlus feature '#{buildr_plus_facet}' requires that domgen facet '#{domgen_facet}' is enabled but it is not.")

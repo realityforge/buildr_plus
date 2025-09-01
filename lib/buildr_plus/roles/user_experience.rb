@@ -24,15 +24,6 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
                                        :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
       BuildrPlus::Generate.generated_directories << t.target_dir
       t.mark_as_generated_in_ide = !project.inline_generated_source?
-      t.filter = Proc.new do |artifact_type, artifact|
-        # Non message
-        artifact_type != :message ||
-          # Or message has non standard types
-          (artifact.any_non_standard_types? &&
-          # And message is not replication subscription message
-          !(artifact.imit? && artifact.imit.subscription_message?) )
-
-      end if BuildrPlus::FeatureManager.activated?(:role_gwt)
     end
   end
 

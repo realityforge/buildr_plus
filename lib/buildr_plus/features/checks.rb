@@ -26,13 +26,7 @@ BuildrPlus::FeatureManager.feature(:checks) do |f|
       end
       root_project = Buildr.projects[0].root_project
       if root_project.name.include?('-') && BuildrPlus::Artifacts.war?
-        raise "Root project name '#{root_project.name}' has a '-' character and is configured to produce a war which can cause downstrem issues when deploying to GlassFish."
-      end
-      if BuildrPlus::FeatureManager.activated?(:serviceworker) && BuildrPlus::FeatureManager.activated?(:role_library)
-        raise "Can not enable the BuildrPlus 'serviceworker' feature for libraries"
-      end
-      if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter) && BuildrPlus::FeatureManager.activated?(:role_library)
-        raise "Can not enable the BuildrPlus 'gwt_cache_filter' feature for libraries"
+        raise "Root project name '#{root_project.name}' has a '-' character and is configured to produce a war which can cause downstream issues when deploying to GlassFish."
       end
     end
 

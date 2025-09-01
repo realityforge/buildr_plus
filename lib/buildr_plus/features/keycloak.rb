@@ -204,11 +204,8 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
   f.enhance(:ProjectExtension) do
     before_define do |buildr_project|
       if buildr_project.ipr?
-        # Libraries integrate with their host application so we can exclude them
-        unless BuildrPlus::FeatureManager.activated?(:role_library)
-          BuildrPlus::Keycloak.client(buildr_project.root_project.name)
-          BuildrPlus::Keycloak.client('api') if BuildrPlus::Keycloak.include_api_client?
-        end
+        BuildrPlus::Keycloak.client(buildr_project.root_project.name)
+        BuildrPlus::Keycloak.client('api') if BuildrPlus::Keycloak.include_api_client?
       end
     end
 

@@ -24,11 +24,7 @@ BuildrPlus::FeatureManager.feature(:artifacts) do |f|
     attr_writer :library
 
     def library?
-      if @library.nil?
-        @library = BuildrPlus::FeatureManager.activated?(:role_gwt) ||
-          BuildrPlus::FeatureManager.activated?(:role_library)
-      end
-      !!@library
+      @library.nil? ? false : !!@library
     end
 
     attr_writer :model
