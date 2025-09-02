@@ -114,7 +114,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
         if BuildrPlus::FeatureManager.activated?(:appconfig)
           generators << (BuildrPlus::Db.mssql? ? :appconfig_mssql : :appconfig_pgsql)
         end
-        generators << :syncrecord_sql if BuildrPlus::FeatureManager.activated?(:syncrecord)
 
         Domgen::Build.define_generate_task(generators,
                                            :key => :sql,
@@ -150,7 +149,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 :replicant => :imit,
                 :gwt_cache_filter => :gwt_cache_filter,
                 :appconfig => :appconfig,
-                :syncrecord => :syncrecord,
                 :serviceworker => :serviceworker
               }
 

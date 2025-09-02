@@ -18,7 +18,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def shared_generators
       generators = []
       generators += [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
-      generators += [:syncrecord_datasources] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators += [:keycloak_client_definitions] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators.flatten
     end
@@ -100,7 +99,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators << [:ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:ejb)
       generators << [:jms_services, :jms_qa_support] if BuildrPlus::FeatureManager.activated?(:jms)
       generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
-      generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators << [:keycloak_filter, :keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
       generators << [:sql_analysis_test_qa]
@@ -125,7 +123,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators << [:jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
       generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
-      generators << [:syncrecord_abstract_service, :syncrecord_control_rest_service] if BuildrPlus::FeatureManager.activated?(:syncrecord)
       generators << [:keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
       generators += self.model_generators
@@ -310,7 +307,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops])
       dependencies << model_deps
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
-      dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_qa]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
 
       dependencies.flatten
     end
@@ -329,7 +325,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << model_compile_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_cache_filter]) if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
-      dependencies << Buildr.artifacts([BuildrPlus::Syncrecord.syncrecord_server, BuildrPlus::Syncrecord.syncrecord_rest_client]) if BuildrPlus::FeatureManager.activated?(:syncrecord)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
@@ -355,7 +350,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << self.model_qa_support_deps
-      dependencies << Buildr.artifacts(BuildrPlus::Syncrecord.syncrecord_server_qa) if BuildrPlus::FeatureManager.activated?(:syncrecord)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility)
 
       dependencies.flatten

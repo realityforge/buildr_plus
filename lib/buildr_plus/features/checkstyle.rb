@@ -271,12 +271,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.service', 'iris.appconfig.server.entity')
           r.subpackage_rule('server.service', 'iris.appconfig.server.service')
         end
-        if BuildrPlus::FeatureManager.activated?(:syncrecord)
-          r.subpackage_rule('server.service', 'iris.syncrecord.server.data_type')
-          r.subpackage_rule('server.service', 'iris.syncrecord.server.entity')
-          r.subpackage_rule('server.service', 'iris.syncrecord.server.service')
-          r.subpackage_rule('server.service', 'iris.syncrecord.client.rest')
-        end
       end
 
       if BuildrPlus::FeatureManager.activated?(:jaxrs)
@@ -298,11 +292,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
           r.subpackage_rule('server.rest', 'iris.appconfig.server.rest')
           r.subpackage_rule('server.rest', 'iris.appconfig.server.entity')
           r.subpackage_rule('server.rest', 'iris.appconfig.server.service')
-        end
-        if BuildrPlus::FeatureManager.activated?(:syncrecord)
-          r.subpackage_rule('server.rest', 'iris.syncrecord.server.data_type')
-          r.subpackage_rule('server.rest', 'iris.syncrecord.server.rest')
-          r.subpackage_rule('server.rest', 'iris.syncrecord.server.entity')
         end
 
         if BuildrPlus::FeatureManager.activated?(:keycloak)
@@ -341,12 +330,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.test.util', 'iris.appconfig.server.entity')
         r.subpackage_rule('server.test.util', 'iris.appconfig.server.service')
         r.subpackage_rule('server.test.util', 'iris.appconfig.server.test.util')
-      end
-      if BuildrPlus::FeatureManager.activated?(:syncrecord)
-        r.subpackage_rule('server.test.util', 'iris.syncrecord.server.data_type')
-        r.subpackage_rule('server.test.util', 'iris.syncrecord.server.entity')
-        r.subpackage_rule('server.test.util', 'iris.syncrecord.server.service')
-        r.subpackage_rule('server.test.util', 'iris.syncrecord.server.test.util')
       end
     end
   end
