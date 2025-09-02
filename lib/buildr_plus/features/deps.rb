@@ -78,7 +78,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     end
 
     def server_generators
-      generators = [:ee_beans_xml, :ee_messages, :ee_messages_qa]
+      generators = [:ee_beans_xml, :ee_exception_util, :ee_messages, :ee_messages_qa]
 
       generators << [:ee_web_xml] if BuildrPlus::Artifacts.war?
       if BuildrPlus::FeatureManager.activated?(:db)
