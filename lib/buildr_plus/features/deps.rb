@@ -23,67 +23,35 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
-    def model_generators
-      generators = [:ee_data_types, :ee_constants]
-      if BuildrPlus::FeatureManager.activated?(:db)
-        generators << [:jpa_model, :jpa_ejb_dao, :jpa_template_persistence_xml, :jpa_template_orm_xml, :jpa_model_persistence_xml, :jpa_model_orm_xml]
-        generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
-        generators << [:imit_server_entity_listener] if BuildrPlus::FeatureManager.activated?(:replicant)
-      end
-
-      generators << [:xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
-      generators << [:jms_model] if BuildrPlus::FeatureManager.activated?(:jms)
-
-      generators << [:jackson_date_util] if BuildrPlus::FeatureManager.activated?(:jackson)
-
-      generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
-
-      generators.flatten
-    end
-
-    def model_only_generators
-      generators = []
-
-      generators << [:ee_model_beans_xml]
-
-      generators.flatten
-    end
-
-    def model_qa_support_main_generators
-      generators = []
-      generators << [:jpa_main_qa, :jpa_main_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:sql_analysis_main_qa] if BuildrPlus::FeatureManager.activated?(:sql_analysis)
-      generators << [:ejb_main_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
-      generators << [:imit_server_main_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-      generators.flatten
-    end
-
-    def model_qa_support_test_generators
-      generators = []
-      generators << [:jpa_test_qa, :jpa_test_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:ejb_test_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
-      generators << [:imit_server_test_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-      generators.flatten
-    end
-
-    def model_qa_generators
-      generators = []
-      generators << [:ee_test_qa, :ee_test_qa_aggregate]
-      generators << [:jpa_dao_test, :jpa_application_orm_xml, :jpa_application_persistence_xml, :jpa_test_orm_xml, :jpa_test_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
-
-      generators.flatten
-    end
-
     def server_generators
-      generators = [:ee_beans_xml, :ee_exception_util, :ee_messages, :ee_messages_qa]
+      generators = [
+        :ee_beans_xml,
+        :ee_exception_util,
+        :ee_messages,
+        :ee_messages_qa,
+        :ee_data_types,
+        :ee_constants,
+        :ee_test_qa,
+        :ee_test_qa_aggregate,
+        :sql_analysis_test_qa
+      ]
 
       generators << [:ee_web_xml] if BuildrPlus::Artifacts.war?
       if BuildrPlus::FeatureManager.activated?(:db)
-        generators << [:jpa_application_orm_xml, :jpa_application_persistence_xml, :jpa_test_orm_xml, :jpa_test_persistence_xml]
-        generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
+        generators << [
+          :jpa_application_orm_xml,
+          :jpa_application_persistence_xml,
+          :jpa_test_orm_xml,
+          :jpa_test_persistence_xml,
+          :jpa_model,
+          :jpa_ejb_dao,
+          :jpa_template_persistence_xml,
+          :jpa_template_orm_xml,
+          :jpa_model_persistence_xml,
+          :jpa_model_orm_xml
+        ]
+        generators << [:imit_server_entity_replication, :imit_server_entity_listener] if BuildrPlus::FeatureManager.activated?(:replicant)
+        generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
       end
 
       generators << [:robots] if BuildrPlus::Artifacts.war?
@@ -97,23 +65,31 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators << [:ee_exceptions, :ejb_services, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
 
-      generators << [:xml_public_xsd_webapp] if BuildrPlus::FeatureManager.activated?(:xml)
       generators << [:ejb_glassfish_config_assets] if BuildrPlus::FeatureManager.activated?(:ejb)
       generators << [:jms_services, :jms_qa_support] if BuildrPlus::FeatureManager.activated?(:jms)
       generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
       generators << [:keycloak_filter, :keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
 
-      generators << [:sql_analysis_test_qa]
+      generators << [:xml_public_xsd_webapp, :xml_xsd_resources] if BuildrPlus::FeatureManager.activated?(:xml)
+      generators << [:jms_model] if BuildrPlus::FeatureManager.activated?(:jms)
 
-      generators += self.model_generators
-      generators += self.model_qa_support_test_generators
-      generators += self.model_qa_generators
+      generators << [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
+
+      generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
+
+      generators << [:jpa_test_qa, :jpa_test_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
+      generators << [:ejb_test_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
+      generators << [:imit_server_test_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+
+      generators << [:jpa_dao_test, :jpa_application_orm_xml, :jpa_application_persistence_xml, :jpa_test_orm_xml, :jpa_test_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
+      generators << [:jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
 
       generators.flatten
     end
 
-    def gwt_generators
-      generators = [:ce_data_types, :gwt, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
+    def user_experience_generators
+      generators = [:gwt_client_app, :gwt_client_gwt_modules]
+      generators += [:ce_data_types, :gwt, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
       if BuildrPlus::FeatureManager.activated?(:replicant)
@@ -124,35 +100,10 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
 
-      generators.flatten
-    end
-
-    def gwt_qa_generators
-      generators = []
-
-      generators += [:arez_main_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
-      generators += [:imit_client_main_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
-      generators += [:keycloak_gwt_main_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
-
-      generators += [:gwt_client_main_jso_qa_support]
-
-      generators.flatten
-    end
-
-    def gwt_qa_test_generators
-      generators = [:gwt_client_test_jso_qa_support]
+      generators += [:gwt_client_test_jso_qa_support]
       generators += [:imit_client_test_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators += [:keycloak_gwt_test_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_test_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
-
-      generators.flatten
-    end
-
-    def user_experience_generators
-      generators = [:gwt_client_app, :gwt_client_gwt_modules]
-      generators += self.gwt_generators
-      generators += self.gwt_qa_test_generators
-
       generators.flatten
     end
 
@@ -174,74 +125,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
-    def gwt_provided_deps
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_annotations)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_core) if BuildrPlus::FeatureManager.activated?(:sting)
-
-      dependencies.flatten
-    end
-
-    def gwt_processorpath
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_processor) if BuildrPlus::FeatureManager.activated?(:sting)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_processor) if BuildrPlus::FeatureManager.activated?(:arez)
-      dependencies << BuildrPlus::Libs.react4j_processor if BuildrPlus::FeatureManager.activated?(:react4j)
-
-      dependencies.flatten
-    end
-
-    def gwt_compile_deps
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.javaemul)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_user)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.braincheck)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.jsinterop_base) if BuildrPlus::FeatureManager.activated?(:gwt)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.arez_spytools) if BuildrPlus::FeatureManager.activated?(:arez)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client) if BuildrPlus::FeatureManager.activated?(:replicant)
-      if BuildrPlus::FeatureManager.activated?(:react4j)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j)
-      end
-
-      dependencies.flatten
-    end
-
-    def gwt_deps
-      self.gwt_provided_deps + self.gwt_compile_deps
-    end
-
-    def gwt_qa_support_deps
-      dependencies = []
-
-      dependencies << self.shared_test_deps
-      dependencies << self.gwt_deps
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_testng) if BuildrPlus::FeatureManager.activated?(:arez)
-
-      dependencies.flatten
-    end
-
-    def gwt_qa_support_processorpath
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_processor) if BuildrPlus::FeatureManager.activated?(:sting)
-
-      dependencies.flatten
-    end
-
-    def gwt_qa_processorpath
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_processor) if BuildrPlus::FeatureManager.activated?(:sting)
-
-      dependencies.flatten
-    end
-
-    def model_provided_deps
+    def server_provided_deps
       dependencies = []
 
       dependencies << Buildr.artifacts(BuildrPlus::Libs.ee_provided)
@@ -256,7 +140,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies.flatten
     end
 
-    def model_compile_deps
+    def server_compile_deps
       dependencies = []
 
       if BuildrPlus::FeatureManager.activated?(:geolatte)
@@ -267,36 +151,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       end
       dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_databind]) if BuildrPlus::FeatureManager.activated?(:jackson)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.timeservice) if BuildrPlus::FeatureManager.activated?(:timeservice)
-
-      dependencies.flatten
-    end
-
-    def model_deps
-      model_provided_deps + model_compile_deps
-    end
-
-    def model_qa_support_deps
-      dependencies = []
-
-      dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops])
-      dependencies << model_deps
-      dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
-
-      dependencies.flatten
-    end
-
-    def server_provided_deps
-      dependencies = []
-
-      dependencies << self.model_provided_deps
-
-      dependencies.flatten
-    end
-
-    def server_compile_deps
-      dependencies = []
-
-      dependencies << model_compile_deps
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_cache_filter]) if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
       dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
@@ -323,7 +177,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def server_test_deps
       dependencies = []
 
-      dependencies << self.model_qa_support_deps
+      dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops])
+      dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility)
 
       dependencies.flatten
@@ -336,7 +191,20 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def user_experience_deps
       dependencies = []
 
-      dependencies << self.gwt_deps
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_annotations)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_core) if BuildrPlus::FeatureManager.activated?(:sting)
+
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.javaemul)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.gwt_user)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.braincheck)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.jsinterop_base) if BuildrPlus::FeatureManager.activated?(:gwt)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak_gwt) if BuildrPlus::FeatureManager.activated?(:keycloak)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez + BuildrPlus::Libs.arez_spytools) if BuildrPlus::FeatureManager.activated?(:arez)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_client) if BuildrPlus::FeatureManager.activated?(:replicant)
+      if BuildrPlus::FeatureManager.activated?(:react4j)
+        dependencies << Buildr.artifacts(BuildrPlus::Libs.react4j)
+      end
       dependencies << Buildr::GWT.dependencies(Buildr::GWT.version)
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_serviceworker, BuildrPlus::Libs.zemeckis_core]) if BuildrPlus::FeatureManager.activated?(:serviceworker)
 
@@ -346,7 +214,9 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def user_experience_processorpath
       dependencies = []
 
-      dependencies << self.gwt_processorpath
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.sting_processor) if BuildrPlus::FeatureManager.activated?(:sting)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_processor) if BuildrPlus::FeatureManager.activated?(:arez)
+      dependencies << BuildrPlus::Libs.react4j_processor if BuildrPlus::FeatureManager.activated?(:react4j)
 
       dependencies.flatten
     end
@@ -354,7 +224,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def user_experience_test_deps
       dependencies = []
 
-      dependencies << self.gwt_qa_support_deps
+      dependencies << self.shared_test_deps
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_testng) if BuildrPlus::FeatureManager.activated?(:arez)
 
       dependencies.flatten
     end
