@@ -17,6 +17,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
     def shared_generators
       generators = []
+      generators << [:imit_metadata] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators += [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
       generators += [:keycloak_client_definitions] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators.flatten
@@ -86,7 +87,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       end
 
       generators << [:robots] if BuildrPlus::Artifacts.war?
-      generators << [:imit_metadata, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
+      generators << [:imit_metadata] if BuildrPlus::FeatureManager.activated?(:replicant) && !BuildrPlus::FeatureManager.activated?(:role_shared)
+      generators << [:imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators << [:action_server] if BuildrPlus::FeatureManager.activated?(:action)
 
       if BuildrPlus::FeatureManager.activated?(:keycloak)
@@ -110,41 +112,13 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       generators.flatten
     end
 
-    def library_generators
-      generators = [:ee_messages, :ee_messages_qa]
-      if BuildrPlus::FeatureManager.activated?(:db)
-        generators << [:jpa_dao_test, :jpa_test_orm_xml, :jpa_test_persistence_xml]
-        generators << [:imit_server_entity_replication] if BuildrPlus::FeatureManager.activated?(:replicant)
-      end
-
-      generators << [:imit_metadata, :imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
-
-      generators << [:ee_messages, :ee_exceptions, :ejb_services, :ejb_test_qa, :ejb_test_service_test] if BuildrPlus::FeatureManager.activated?(:ejb)
-
-      generators << [:jms_services] if BuildrPlus::FeatureManager.activated?(:jms)
-      generators << [:jaxrs] if BuildrPlus::FeatureManager.activated?(:jaxrs)
-      generators << [:keycloak_auth_service, :keycloak_auth_service_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
-
-      generators += self.model_generators
-      generators += self.model_qa_support_test_generators
-
-      generators.flatten
-    end
-
-    def library_qa_support_generators
-      generators = []
-      generators << [:jpa_test_orm_xml, :jpa_test_persistence_xml] if BuildrPlus::FeatureManager.activated?(:db)
-      generators << [:ee_messages_qa, :ejb_test_qa, :ejb_test_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
-
-      generators.flatten
-    end
-
     def gwt_generators
       generators = [:ce_data_types, :gwt, :gwt_client_jso, :gwt_client_module, :gwt_client_gwt_model_module]
       generators += [:keycloak_gwt_jso] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_entity] if BuildrPlus::FeatureManager.activated?(:arez)
       if BuildrPlus::FeatureManager.activated?(:replicant)
-        generators += [:imit_metadata, :imit_client_entity, :ce_data_types, :imit_client_service]
+        generators << [:imit_metadata] unless BuildrPlus::FeatureManager.activated?(:role_shared)
+        generators += [:imit_client_entity, :ce_data_types, :imit_client_service]
         generators += [:imit_client_react4j_support] if BuildrPlus::FeatureManager.activated?(:react4j)
       end
 
