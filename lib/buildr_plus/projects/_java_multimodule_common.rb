@@ -22,20 +22,4 @@ if File.exist?("#{base_directory}/shared")
   BuildrPlus::Roles.project('shared', :roles => [:shared], :parent => :container, :template => true, :description => 'Shared Components')
 end
 
-if File.exist?("#{base_directory}/model") || File.exist?("#{base_directory}/model-qa-support")
-  BuildrPlus::Roles.project('model', :roles => [:model], :parent => :container, :template => true, :description => 'Persistent Entities, Messages and Data Structures')
-  BuildrPlus::Roles.project('model-qa-support', :roles => [:model_qa_support], :parent => :container, :template => true, :description => 'Model Test Infrastructure')
-end
-if File.exist?("#{base_directory}/model-qa")
-  BuildrPlus::Roles.project('model-qa', :roles => [:model_qa], :parent => :container, :template => true, :description => 'Model Tests')
-end
-
-if File.exist?("#{base_directory}/gwt") || File.exist?("#{base_directory}/gwt-qa-support") || File.exist?("#{base_directory}/gwt-qa")
-  BuildrPlus::Roles.project('gwt', :roles => [:gwt], :parent => :container, :template => true, :description => 'GWT Library')
-  BuildrPlus::Roles.project('gwt-qa-support', :roles => [:gwt_qa_support], :parent => :container, :template => true, :description => 'GWT Test Infrastructure')
-  if File.exist?("#{base_directory}/gwt-qa")
-    BuildrPlus::Roles.project('gwt-qa', :roles => [:gwt_qa], :parent => :container, :template => true, :description => 'GWT Model Tests')
-  end
-end
-
 BuildrPlus::Roles.default_role = :container
