@@ -381,7 +381,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def replicant_version
-      '6.151'
+      '6.152'
     end
 
     def replicant_client
@@ -502,10 +502,6 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
 
     def greenmail
       %w(com.icegreen:greenmail:jar:1.4.1) + self.slf4j
-    end
-
-    def greenmail_server
-      'com.icegreen:greenmail-webapp:war:1.4.1'
     end
 
     def jtds

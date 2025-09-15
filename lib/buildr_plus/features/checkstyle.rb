@@ -220,8 +220,8 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         end
 
         if BuildrPlus::FeatureManager.activated?(:replicant)
-          r.subpackage_rule('client', 'org.realityforge.replicant.shared')
-          r.subpackage_rule('client', 'org.realityforge.replicant.client')
+          r.subpackage_rule('client', 'replicant.shared')
+          r.subpackage_rule('client', 'replicant.client')
         end
       end
 
@@ -258,9 +258,9 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         if BuildrPlus::FeatureManager.activated?(:replicant)
           r.subpackage_rule('server.net', "#{g}.shared.net")
           r.subpackage_rule('server.service', "#{g}.server.net")
-          r.subpackage_rule('server.service', 'org.realityforge.replicant.server.transport.ReplicantSession', :rule_type => :class)
-          r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessage', :rule_type => :class)
-          r.subpackage_rule('server.service', 'org.realityforge.replicant.server.EntityMessageSet', :rule_type => :class)
+          r.subpackage_rule('server.service', 'replicant.server.transport.ReplicantSession', :rule_type => :class)
+          r.subpackage_rule('server.service', 'replicant.server.EntityMessage', :rule_type => :class)
+          r.subpackage_rule('server.service', 'replicant.server.EntityMessageSet', :rule_type => :class)
 
           # The following is for test infrastructure
           r.subpackage_rule('client.entity', 'com.google.inject.Injector', :rule_type => :class)
@@ -284,7 +284,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.rest', "#{g}.server.service")
         r.subpackage_rule('server.rest', "#{g}.server.rest")
         if BuildrPlus::FeatureManager.activated?(:replicant)
-          r.subpackage_rule('server.rest', 'org.realityforge.replicant.server.ee.rest')
+          r.subpackage_rule('server.rest', 'replicant.server.ee.rest')
         end
 
         if BuildrPlus::FeatureManager.activated?(:appconfig)
