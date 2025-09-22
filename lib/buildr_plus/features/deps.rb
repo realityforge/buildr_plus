@@ -50,7 +50,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
           :jpa_model_persistence_xml,
           :jpa_model_orm_xml
         ]
-        generators << [:imit_server_entity_replication, :imit_server_entity_listener] if BuildrPlus::FeatureManager.activated?(:replicant)
+        generators << [:imit_server_entity_listener] if BuildrPlus::FeatureManager.activated?(:replicant)
         generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
       end
 

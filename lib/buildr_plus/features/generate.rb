@@ -99,22 +99,6 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
           Domgen.error("Regenerated keep files, aborting build to ensure no files are accidentally deleted. Please try build again") if keep_files_regenerated
         end
       end
-
-      t2 = project.task('remove_generated') do
-        if project.inline_generated_source?
-          target_dir = File.expand_path(project._('src'))
-
-          Dir["#{target_dir}/**/*"].each do |file_name|
-            if !File.directory?(file_name) && IO.read(file_name).include?('DO NOT EDIT: File is auto-generated')
-              FileUtils.rm_f(file_name)
-            end
-          end
-        end
-      end.enhance([t.name])
-
-      project.task(':generate:all').enhance([t2.name])
-      project.task(':domgen:pre_generate').enhance([t.name])
-      project.task(':generate:keep_files').enhance([t.name])
     end
 
     desc 'Generate the keep files'
