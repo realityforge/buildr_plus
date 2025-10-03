@@ -99,6 +99,8 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
           Domgen.error("Regenerated keep files, aborting build to ensure no files are accidentally deleted. Please try build again") if keep_files_regenerated
         end
       end
+      project.task(':domgen:load').enhance([t.name])
+      project.task(':generate:keep_files').enhance([t.name])
     end
 
     desc 'Generate the keep files'
