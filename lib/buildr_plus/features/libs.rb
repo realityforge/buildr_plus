@@ -162,7 +162,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def braincheck
-      %w(org.realityforge.braincheck:braincheck-core:jar:1.31.0)
+      %w(org.realityforge.braincheck:braincheck-core:jar:1.32.0)
     end
 
     def jsinterop
