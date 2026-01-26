@@ -46,8 +46,7 @@ BuildrPlus::FeatureManager.feature(:braid) do |f|
       {
         'domgen' => 'domgen',
         'dbt' => 'dbt',
-        'redfish' => 'redfish',
-        'kinjen' => 'jenkins'
+        'redfish' => 'redfish'
       }.each_pair do |path, feature|
         path = "vendor/tools/#{path}"
         if BuildrPlus::FeatureManager.activated?(feature) && !config.mirrors.include?(path)
