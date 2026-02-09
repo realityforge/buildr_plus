@@ -18,7 +18,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def shared_generators
       generators = []
       generators << [:imit_metadata] if BuildrPlus::FeatureManager.activated?(:replicant)
-      generators += [:appconfig_feature_flag_container] if BuildrPlus::FeatureManager.activated?(:appconfig)
       generators += [:keycloak_client_definitions] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators.flatten
     end
@@ -151,7 +150,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_databind]) if BuildrPlus::FeatureManager.activated?(:jackson)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.timeservice) if BuildrPlus::FeatureManager.activated?(:timeservice)
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_cache_filter]) if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)
-      dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.replicant_server) if BuildrPlus::FeatureManager.activated?(:replicant)
       if BuildrPlus::FeatureManager.activated?(:keycloak)
         dependencies << Buildr.artifacts(BuildrPlus::Libs.keycloak)
@@ -177,7 +175,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
       dependencies = []
 
       dependencies << Buildr.artifacts([BuildrPlus::Libs.guiceyloops])
-      dependencies << Buildr.artifacts([BuildrPlus::Appconfig.appconfig_server, BuildrPlus::Appconfig.appconfig_qa, BuildrPlus::Libs.field_filter]) if BuildrPlus::FeatureManager.activated?(:appconfig)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.awaitility)
 
       dependencies.flatten

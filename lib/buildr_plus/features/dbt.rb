@@ -68,12 +68,6 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
       if Dbt.repository.database_for_key?(:default)
         database = Dbt.repository.database_for_key(:default)
         database.search_dirs = %w(database) if !database.search_dirs? && !BuildrPlus::FeatureManager.activated?(:domgen)
-
-        if BuildrPlus::Dbt.add_dependent_artifacts?
-          if BuildrPlus::FeatureManager.activated?(:appconfig) && BuildrPlus::Appconfig.include_db_artifact?
-            BuildrPlus::Dbt.add_artifact_unless_present(database, BuildrPlus::Appconfig.appconfig_db)
-          end
-        end
       end
 
       if BuildrPlus::FeatureManager.activated?(:timers)

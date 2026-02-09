@@ -111,9 +111,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
         if BuildrPlus::FeatureManager.activated?(:sql_analysis)
           generators << :action_types_mssql
         end
-        if BuildrPlus::FeatureManager.activated?(:appconfig)
-          generators << (BuildrPlus::Db.mssql? ? :appconfig_mssql : :appconfig_pgsql)
-        end
 
         Domgen::Build.define_generate_task(generators,
                                            :key => :sql,
@@ -148,7 +145,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 :gwt => :gwt,
                 :replicant => :imit,
                 :gwt_cache_filter => :gwt_cache_filter,
-                :appconfig => :appconfig,
                 :serviceworker => :serviceworker
               }
 
