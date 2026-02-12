@@ -60,21 +60,20 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
             generators << :action_types_mssql
           end
 
-          target_db_dir = project.inline_generated_source? ? 'database' : BuildrPlus::Generate.commit_generated_files? ? 'database/srcgen' : 'database/generated'
           Domgen::Build.define_generate_task(generators,
                                              :buildr_project => project,
                                              :keep_file_patterns => project.all_keep_file_patterns,
                                              :keep_file_names => project.keep_file_names,
                                              :pre_generate_task => 'domgen:pre_generate',
-                                             :clean_generated_files => BuildrPlus::Generate.clean_generated_files?,
-                                             :target_dir => target_db_dir) do |t|
+                                             :clean_generated_files => false,
+                                             :target_dir => 'database') do |t|
             t.verbose  = 'true' == ENV['DEBUG_DOMGEN']
-            t.mark_as_generated_in_ide = !project.inline_generated_source?
+            t.mark_as_generated_in_ide = false
             BuildrPlus::Generate.generated_directories << t.target_dir
           end
 
           database = Dbt.repository.database_for_key(:default)
-          database.search_dirs = %W(#{target_db_dir} database).uniq unless database.search_dirs?
+          database.search_dirs = %w(database).uniq unless database.search_dirs?
           database.enable_domgen(:perform_analysis_checks => BuildrPlus::FeatureManager.activated?(:sql_analysis))
         end
 

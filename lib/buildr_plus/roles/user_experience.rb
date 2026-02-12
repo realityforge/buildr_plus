@@ -21,9 +21,9 @@ BuildrPlus::Roles.role(:user_experience, :requires => [:gwt]) do
                                        :keep_file_patterns => project.all_keep_file_patterns,
                                        :keep_file_names => project.keep_file_names,
                                        :pre_generate_task => 'domgen:pre_generate',
-                                       :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
+                                       :clean_generated_files => false) do |t|
       BuildrPlus::Generate.generated_directories << t.target_dir
-      t.mark_as_generated_in_ide = !project.inline_generated_source?
+      t.mark_as_generated_in_ide = false
     end
   end
 

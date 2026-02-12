@@ -13,16 +13,6 @@
 #
 BuildrPlus::FeatureManager.feature(:generate) do |f|
   f.enhance(:Config) do
-    attr_writer :commit_generated_files
-
-    def commit_generated_files?
-      @commit_generated_files.nil? ? false : !!@commit_generated_files
-    end
-
-    def clean_generated_files?
-      !commit_generated_files?
-    end
-
     def generated_directories
       @generated_directories ||= []
     end
@@ -34,12 +24,6 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
   end
 
   f.enhance(:ProjectExtension) do
-
-    attr_writer :inline_generated_source
-
-    def inline_generated_source?
-      @inline_generated_source.nil? ? false : !!@inline_generated_source
-    end
 
     attr_writer :generated_source_bases
 
@@ -80,9 +64,9 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
     before_define do |project|
       desc 'Collect the files that will be kept and not cleaned by domgen clean processes'
       t = project.task 'collect_keep_files' do
-        if project.inline_generated_source?
-          keep_files_regenerated = false
+        keep_files_regenerated = false
 
+        if project.roles.include?(:container) || project.roles.include?(:server) || project.roles.include?(:user_experience) || project.roles.include?(:shared)
           project.generated_source_bases.collect do |target_dir|
             files = []
             Dir["#{target_dir}/**/*"].each do |file_name|
@@ -95,6 +79,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
 
             existing = IO.read("#{target_dir}/keep_files.txt") rescue ''
             if existing != new_content
+              puts "Generating keep_files.txt in #{target_dir} for #{project.name}"
               FileUtils.mkdir_p target_dir
               IO.write("#{target_dir}/keep_files.txt", new_content)
               IO.write("#{target_dir}/.gitattributes", new_content.split("\n").collect{|line| "#{line} linguist-generated"}.join("\n") + "\n")
@@ -122,7 +107,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
       unless BuildrPlus::Generate.generated_directories.empty?
         status_output = `git status --porcelain #{BuildrPlus::Generate.generated_directories.join(' ')} 2>&1`.strip
         diff_output = `git diff #{BuildrPlus::Generate.generated_directories.join(' ')} 2>&1`.strip
-        raise "Uncommitted changes in generated source trees but BuildrPlus::Generate.commit_generated_files? returns true. Commit the files or change the setting.\n-----\n#{diff_output}\n-----\n#{`git status #{BuildrPlus::Generate.generated_directories.join(' ')} 2>&1`}" if 0 != status_output.size
+        raise "Uncommitted changes in generated source trees. Commit the files.\n-----\n#{diff_output}\n-----\n#{`git status #{BuildrPlus::Generate.generated_directories.join(' ')} 2>&1`}" if 0 != status_output.size
       end
     end
   end

@@ -197,10 +197,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           # Setup application domain
           if BuildrPlus::FeatureManager.activated?(:domgen)
             domain = Redfish.domain_by_key(buildr_project.name)
-            base_path =
-              BuildrPlus::Generate.clean_generated_files? ?
-                buildr_project._(:target, :generated, 'domgen', buildr_project.name) :
-                buildr_project._(:srcgen, 'domgen', buildr_project.name)
+            base_path = buildr_project._(:generated, 'domgen', buildr_project.name)
 
             file = buildr_project._("#{base_path}/main/etc/#{buildr_project.name_as_class}.redfish.fragment.json")
             domain.pre_artifacts << file
