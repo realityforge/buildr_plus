@@ -53,22 +53,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       (@local_domain_customizations ||= []).dup
     end
 
-    attr_writer :docker_domain
-
-    def docker_domain?
-      @docker_domain.nil? ? BuildrPlus::FeatureManager.activated?(:docker) : @docker_domain
-    end
-
-    def customize_docker_domain(&block)
-      raise 'Attempting to customize docker domain when docker domain disabled' unless docker_domain?
-      (@docker_domain_customizations ||= []) << block
-    end
-
-    def docker_domain_customizations
-      raise 'Attempting to access docker domain configurations when docker domain disabled' unless docker_domain?
-      (@docker_domain_customizations ||= []).dup
-    end
-
     def define_database_config_prefixes(database_key, *prefixes)
       prefix_map = self.database_config_prefix_map
       raise "Prefixes for key #{database_key} already defined as #{prefix_map[database_key.to_s].inspect}" if prefix_map[database_key.to_s]
@@ -106,11 +90,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
     def configure_domain_for_environment(domain, environment)
       domain.checkpoint_data!
       configure_system_settings(domain, environment)
-
-      unless domain.docker_dns
-        dns = BuildrPlus::Config.domain_environment_var(domain, 'DOCKER_DNS')
-        domain.docker_dns = dns if dns
-      end
     end
 
     def build_property_set(domain, environment)
@@ -194,14 +173,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
       return addresses[0] unless addresses.empty?
       raise "Unable to determine ip address of #{name}. Are you connected to the correct networks?"
-    end
-
-    def docker_ip
-      if ENV['DOCKER_HOST']
-        ENV['DOCKER_HOST'].gsub(/:\d+$/, '').gsub(/^.*:\/\//, '')
-      else
-        host_ip
-      end
     end
 
     def host_ip
@@ -292,17 +263,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           end
           Redfish::Config.default_domain_key = 'local'
         end
-
-        if BuildrPlus::Redfish.docker_domain? && !Redfish.domain_by_key?('docker')
-          Redfish.domain('docker', :extends => buildr_project.name) do |domain|
-            RedfishPlus.setup_for_docker(domain, :features => BuildrPlus::Redfish.features)
-            RedfishPlus.deploy_application(domain, buildr_project.name, '/', "{{file:#{buildr_project.name}}}")
-            domain.base_image_name = "stocksoftware/redfish:java-#{BuildrPlus::Java.version}_payara-4.1.1.164"
-            BuildrPlus::Redfish.docker_domain_customizations.each do |customization|
-              customization.call(domain)
-            end
-          end
-        end
       end
     end
 
@@ -310,7 +270,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       if buildr_project.ipr?
 
         Redfish.domains.each do |domain|
-          if domain.dockerize? || domain.local?
+          if domain.local?
             buildr_project.task(":#{domain.task_prefix}:config" => ["#{domain.task_prefix}:setup_env_vars"])
 
             buildr_project.task(":#{domain.task_prefix}:setup_env_vars") do
@@ -324,21 +284,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           end
         end
 
-        if Redfish.domain_by_key?('docker')
-          domain = Redfish.domain_by_key('docker')
-          prj = nil
-          prj = buildr_project if buildr_project.roles.empty?
-          [:server].each do |role|
-            prj = Buildr.project(BuildrPlus::Roles.buildr_project_with_role(role).name) if BuildrPlus::Roles.project_with_role?(role)
-          end
-
-          if prj
-            buildr_project.task(":#{domain.task_prefix}:pre_build" => [prj.package(:war).to_s])
-            domain.file(buildr_project.name, prj.package(:war).to_s)
-          end
-        end
-
-        unless BuildrPlus::Util.subprojects(buildr_project).any? {|p| p == "#{buildr_project.name}:domains"}
+        unless BuildrPlus::Util.subprojects(buildr_project).any? { |p| p == "#{buildr_project.name}:domains" }
           buildr_project.instance_eval do
             desc 'Redfish Domain Definitions'
             define 'domains' do

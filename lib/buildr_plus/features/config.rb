@@ -329,9 +329,6 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def populate_broker_configuration(environment, check_only)
-      if BuildrPlus::FeatureManager.activated?(:jms) && BuildrPlus::FeatureManager.activated?(:docker)
-        BuildrPlus::Jms.link_container_to_configuration(BuildrPlus::Config.get_buildr_project, environment)
-      end
       if !environment.broker? && !check_only
         host = BuildrPlus::Config.environment_var('OPENMQ_HOST', 'localhost')
         port = BuildrPlus::Config.environment_var('OPENMQ_PORT', 7676)

@@ -133,17 +133,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
           pull_request_actions << 'checks:check'
         end
 
-        if BuildrPlus::FeatureManager.activated?(:redfish) && BuildrPlus::FeatureManager.activated?(:docker)
-          Redfish.domains.each do |domain|
-            next unless domain.enable_rake_integration?
-            next unless domain.dockerize?
-            taskname = "#{domain.task_prefix}:docker:rm_all"
-            pull_request_actions << taskname
-            package_actions << taskname
-            package_no_test_actions << taskname
-          end
-        end
-
         if BuildrPlus::FeatureManager.activated?(:domgen)
           commit_actions << 'domgen:all'
           pull_request_actions << 'domgen:all'
@@ -204,25 +193,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
 
         pull_request_actions.concat(BuildrPlus::Ci.additional_pull_request_actions)
 
-        if BuildrPlus::FeatureManager.activated?(:redfish) && BuildrPlus::FeatureManager.activated?(:docker)
-          if BuildrPlus::FeatureManager.activated?(:jms)
-            package_actions << 'openmq:start'
-          end
-
-          Redfish.domains.each do |domain|
-            next unless domain.enable_rake_integration?
-            next unless domain.dockerize?
-            taskname = "#{domain.task_prefix}:docker:build"
-            pull_request_actions << taskname
-            package_actions << taskname
-            package_no_test_actions << taskname
-          end
-
-          if BuildrPlus::FeatureManager.activated?(:jms)
-            package_actions << 'openmq:stop'
-          end
-        end
-
         if BuildrPlus::FeatureManager.activated?(:keycloak)
           package_actions << 'keycloak:destroy'
         end
@@ -236,17 +206,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
         if BuildrPlus::Ci.perform_publish?
           package_actions << 'ci:upload'
           package_no_test_actions << 'ci:upload'
-        end
-
-        if BuildrPlus::FeatureManager.activated?(:redfish) && BuildrPlus::FeatureManager.activated?(:docker)
-          Redfish.domains.each do |domain|
-            next unless domain.enable_rake_integration?
-            next unless domain.dockerize?
-            taskname = "#{domain.task_prefix}:docker:rm"
-            pull_request_actions << taskname
-            package_actions << taskname
-            package_no_test_actions << taskname
-          end
         end
 
         desc 'Perform pre-commit checks and source code analysis'
