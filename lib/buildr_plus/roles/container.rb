@@ -97,24 +97,6 @@ BuildrPlus::Roles.role(:container) do
                                              :packaged => BuildrPlus::Glassfish.remote_only_packaged_apps.dup.merge(BuildrPlus::Glassfish.packaged_apps))
     end
 
-    unless BuildrPlus::Redfish.local_domain_update_only?
-      local_packaged_apps = BuildrPlus::Glassfish.non_remote_only_packaged_apps.dup.merge(BuildrPlus::Glassfish.packaged_apps)
-
-      ipr.add_glassfish_configuration(project,
-                                      :server_name => 'GlassFish 5.2022.5',
-                                      :exploded => {exploded_war_name => context_root},
-                                      :packaged => local_packaged_apps)
-
-      if BuildrPlus::Glassfish.support_app_only_configuration?
-        only_packaged_apps = BuildrPlus::Glassfish.only_only_packaged_apps.dup
-        ipr.add_glassfish_configuration(project,
-                                        :configuration_name => "#{Reality::Naming.pascal_case(project.name)} Only - GlassFish 5.2022.5",
-                                        :server_name => 'GlassFish 5.2022.5',
-                                        :exploded => {exploded_war_name => context_root},
-                                        :packaged => only_packaged_apps)
-      end
-    end
-
     if BuildrPlus::FeatureManager.activated?(:db)
       iml.excluded_directories << project._('dataSources')
       iml.excluded_directories << project._('.ideaDataSources')
