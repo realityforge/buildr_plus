@@ -97,6 +97,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
             if existing != new_content
               FileUtils.mkdir_p target_dir
               IO.write("#{target_dir}/keep_files.txt", new_content)
+              IO.write("#{target_dir}/.gitattributes", new_content.split("\n").collect{|line| "#{line} linguist-generated"}.join("\n") + "\n")
               keep_files_regenerated = true
             end
           end
