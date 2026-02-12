@@ -23,12 +23,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
     end
 
     def database_libraries
-      if @database_libraries.nil?
-        @database_libraries = []
-        @database_libraries << :mssql if BuildrPlus::Db.mssql?
-        @database_libraries << :pgsql if BuildrPlus::Db.pgsql?
-      end
-      @database_libraries
+      @database_libraries ||= [:mssql]
     end
 
     attr_writer :local_domain
@@ -235,21 +230,9 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
               BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)
             end
             BuildrPlus::Redfish.database_libraries.each do |variant|
-              if :mssql == variant
-                library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])
-                RedfishPlus.add_library_from_path(domain, 'jtds', library.to_s, true)
-                buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
-              end
-              if :pgsql == variant
-                library = ::Buildr.artifact(BuildrPlus::Libs.postgresql[0])
-                RedfishPlus.add_library_from_path(domain, 'postgresql', library.to_s, true)
-                buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
-                if BuildrPlus::FeatureManager.activated?(:geolatte)
-                  library = ::Buildr.artifact(BuildrPlus::Libs.postgis[0])
-                  RedfishPlus.add_library_from_path(domain, 'postgis', library.to_s, true)
-                  buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
-                end
-              end
+              library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])
+              RedfishPlus.add_library_from_path(domain, 'jtds', library.to_s, true)
+              buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
             end
             if BuildrPlus::Redfish.local_domain_update_only?
               domain.complete = false

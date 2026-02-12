@@ -18,11 +18,6 @@ class Buildr::Project
     Reality::Naming.pascal_case(project.name)
   end
 
-  def base_group
-    suffix = BuildrPlus::Db.artifact_suffix
-    project.group[0,project.group.length - suffix.length]
-  end
-
   attr_writer :java_package_name
 
   def java_package_name?
@@ -34,10 +29,10 @@ class Buildr::Project
   end
 
   def group_as_package
-    base_group
+    project.group
   end
 
   def group_as_path
-    base_group.gsub('.', '/')
+    project.group.gsub('.', '/')
   end
 end

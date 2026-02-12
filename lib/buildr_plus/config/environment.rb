@@ -91,7 +91,7 @@ module BuildrPlus #nodoc
         raise "Attempting to redefine database with key '#{key}'." if @databases[key.to_s]
         config = config.dup
 
-        dialect = config.delete('driver') || (BuildrPlus::Db.mssql? ? 'sql_server' : 'postgres')
+        dialect = config.delete('driver') || 'sql_server'
         type = dialect == 'sql_server' ? BuildrPlus::Config::MssqlDatabaseConfig : BuildrPlus::Config::PostgresDatabaseConfig
         @databases[key.to_s] = type.new(key, config, &block)
       end

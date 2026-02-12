@@ -64,7 +64,6 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
 
       Dbt::Config.dynamic_property_provider = Proc.new {|key| ENV[key]}
 
-      Dbt::Config.driver = 'postgres' if BuildrPlus::Db.pgsql?
       if Dbt.repository.database_for_key?(:default)
         database = Dbt.repository.database_for_key(:default)
         database.search_dirs = %w(database) if !database.search_dirs? && !BuildrPlus::FeatureManager.activated?(:domgen)
@@ -74,7 +73,7 @@ BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
         Dbt.add_artifact_based_database(:timers, BuildrPlus::Libs.glassfish_timers_db[0])
       end
 
-      if BuildrPlus::Db.mssql? && Dbt.repository.database_for_key?(:default) && BuildrPlus::FeatureManager.activated?(:config)
+      if Dbt.repository.database_for_key?(:default) && BuildrPlus::FeatureManager.activated?(:config)
         database = Dbt.repository.database_for_key(:default)
 
         desc 'Show all owned databases'

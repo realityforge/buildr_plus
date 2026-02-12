@@ -14,48 +14,6 @@
 
 BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
   f.enhance(:Config) do
-    def default_pgsql_generators
-      [:pgsql]
-    end
-
-    def default_mssql_generators
-      [:mssql]
-    end
-
-    def additional_pgsql_generators
-      @additional_pgsql_generators || []
-    end
-
-    def additional_pgsql_generators=(generators)
-      unless generators.is_a?(Array) && generators.all? { |e| e.is_a?(Symbol) }
-        raise "additional_pgsql_generators parameter '#{generators.inspect}' is not an array of symbols"
-      end
-      @additional_pgsql_generators = generators
-    end
-
-    def additional_mssql_generators
-      @additional_mssql_generators || []
-    end
-
-    def additional_mssql_generators=(generators)
-      unless generators.is_a?(Array) && generators.all? { |e| e.is_a?(Symbol) }
-        raise "additional_mssql_generators parameter '#{generators.inspect}' is not an array of symbols"
-      end
-      @additional_mssql_generators = generators
-    end
-
-    def mssql_generators
-      self.default_mssql_generators + self.additional_mssql_generators
-    end
-
-    def pgsql_generators
-      self.default_pgsql_generators + self.additional_pgsql_generators
-    end
-
-    def db_generators
-      BuildrPlus::Db.mssql? ? self.mssql_generators : BuildrPlus::Db.pgsql? ? pgsql_generators : []
-    end
-
     def enforce_postload_constraints?
       @enforce_postload_constraints.nil? ? true : !!@enforce_postload_constraints
     end
@@ -94,7 +52,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
     after_define do |project|
       if project.ipr?
         if BuildrPlus::FeatureManager.activated?(:dbt) && Dbt.repository.database_for_key?(:default)
-          generators = BuildrPlus::Domgen.db_generators
+          generators = [:mssql]
           if BuildrPlus::FeatureManager.activated?(:sql_analysis)
             generators << :sql_analysis_sql
           end

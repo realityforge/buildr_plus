@@ -419,11 +419,11 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
     end
 
     def glassfish_timers_domain
-      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-domain:json:#{glassfish_timers_version})
+      %W(org.realityforge.glassfish.timers:glassfish-timers-domain:json:#{glassfish_timers_version})
     end
 
     def glassfish_timers_db
-      %W(org.realityforge.glassfish.timers#{BuildrPlus::Db.pgsql? ? '.pg' : ''}:glassfish-timers-db:jar:#{glassfish_timers_version})
+      %W(org.realityforge.glassfish.timers:glassfish-timers-db:jar:#{glassfish_timers_version})
     end
 
     def glassfish_timers_version
@@ -508,18 +508,8 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
       %w(net.sourceforge.jtds:jtds:jar:1.3.1)
     end
 
-    def postgresql
-      %w(org.postgresql:postgresql:jar:9.2-1003-jdbc4)
-    end
-
-    def postgis
-      %w(org.postgis:postgis-jdbc:jar:1.3.3)
-    end
-
     def db_drivers
-      return self.jtds if BuildrPlus::Db.mssql?
-      return self.postgresql + (BuildrPlus::FeatureManager.activated?(:geolatte) ? self.postgis : []) if BuildrPlus::Db.pgsql?
-      []
+      return self.jtds
     end
   end
 end
