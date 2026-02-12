@@ -56,18 +56,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
       BuildrPlus::Db.mssql? ? self.mssql_generators : BuildrPlus::Db.pgsql? ? pgsql_generators : []
     end
 
-    def dialect_specific_database_paths
-      BuildrPlus::Db.mssql? ? %w(database/mssql) : BuildrPlus::Db.pgsql? ? %w(database/pgsql) : []
-    end
-
-    def database_target_dir
-      @database_target_dir || BuildrPlus::Generate.commit_generated_files? ? 'database/srcgen' : 'database/generated'
-    end
-
-    def database_target_dir=(database_target_dir)
-      @database_target_dir = database_target_dir
-    end
-
     def enforce_postload_constraints?
       @enforce_postload_constraints.nil? ? true : !!@enforce_postload_constraints
     end
@@ -101,36 +89,37 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
         end
       end
 
-      Domgen::Build.define_generate_xmi_task
-
-      if BuildrPlus::FeatureManager.activated?(:dbt) && Dbt.repository.database_for_key?(:default)
-        generators = BuildrPlus::Domgen.db_generators
-        if BuildrPlus::FeatureManager.activated?(:sql_analysis)
-          generators << :sql_analysis_sql
-        end
-        if BuildrPlus::FeatureManager.activated?(:sql_analysis)
-          generators << :action_types_mssql
-        end
-
-        Domgen::Build.define_generate_task(generators,
-                                           :key => :sql,
-                                           :target_dir => BuildrPlus::Domgen.database_target_dir,
-                                           :keep_file_patterns => BuildrPlus::Generate.keep_file_patterns,
-                                           :pre_generate_task => 'domgen:pre_generate',
-                                           :clean_generated_files => BuildrPlus::Generate.clean_generated_files?) do |t|
-          t.verbose  = 'true' == ENV['DEBUG_DOMGEN']
-          BuildrPlus::Generate.generated_directories << t.target_dir
-        end
-
-        database = Dbt.repository.database_for_key(:default)
-        default_search_dirs = %W(#{BuildrPlus::Domgen.database_target_dir} database) + BuildrPlus::Domgen.dialect_specific_database_paths
-        database.search_dirs = default_search_dirs unless database.search_dirs?
-        database.enable_domgen(:perform_analysis_checks => BuildrPlus::FeatureManager.activated?(:sql_analysis))
-      end
     end
 
     after_define do |project|
       if project.ipr?
+        if BuildrPlus::FeatureManager.activated?(:dbt) && Dbt.repository.database_for_key?(:default)
+          generators = BuildrPlus::Domgen.db_generators
+          if BuildrPlus::FeatureManager.activated?(:sql_analysis)
+            generators << :sql_analysis_sql
+          end
+          if BuildrPlus::FeatureManager.activated?(:sql_analysis)
+            generators << :action_types_mssql
+          end
+
+          target_db_dir = project.inline_generated_source? ? 'database' : BuildrPlus::Generate.commit_generated_files? ? 'database/srcgen' : 'database/generated'
+          Domgen::Build.define_generate_task(generators,
+                                             :buildr_project => project,
+                                             :keep_file_patterns => project.all_keep_file_patterns,
+                                             :keep_file_names => project.keep_file_names,
+                                             :pre_generate_task => 'domgen:pre_generate',
+                                             :clean_generated_files => BuildrPlus::Generate.clean_generated_files?,
+                                             :target_dir => target_db_dir) do |t|
+            t.verbose  = 'true' == ENV['DEBUG_DOMGEN']
+            t.mark_as_generated_in_ide = !project.inline_generated_source?
+            BuildrPlus::Generate.generated_directories << t.target_dir
+          end
+
+          database = Dbt.repository.database_for_key(:default)
+          database.search_dirs = %W(#{target_db_dir} database).uniq unless database.search_dirs?
+          database.enable_domgen(:perform_analysis_checks => BuildrPlus::FeatureManager.activated?(:sql_analysis))
+        end
+
         project.task(':domgen:postload') do
           if BuildrPlus::Domgen.enforce_postload_constraints?
             facet_mapping =

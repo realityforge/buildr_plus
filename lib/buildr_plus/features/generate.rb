@@ -44,7 +44,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
     attr_writer :generated_source_bases
 
     def generated_source_bases
-      @generated_source_bases.nil? ? [File.expand_path(project._('src'))] : @generated_source_bases
+      @generated_source_bases ||= [File.expand_path(project._('src'))]
     end
 
     def extra_keep_file_names
