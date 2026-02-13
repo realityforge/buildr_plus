@@ -180,7 +180,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
     def setup_checkstyle_import_rules(project, allow_any_imports)
       r = project.import_rules
       g = project.group
-      c = project.name_as_class
+      c = Reality::Naming.pascal_case(project.name)
       r.rule('.*', :regex => true, :rule_type => :class) if allow_any_imports
       r.rule('org.jetbrains.annotations.NotNull', :rule_type => :class, :disallow => true)
       r.rule('org.jetbrains.annotations.Nullable', :rule_type => :class, :disallow => true)

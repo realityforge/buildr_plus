@@ -152,7 +152,7 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting]) do |f|
 
     def guess_gwt_module_name(suffix = '')
       p = self.root_project
-      "#{p.group}.#{p.name_as_class}#{suffix}"
+      "#{p.group}.#{Reality::Naming.pascal_case(p.name)}#{suffix}"
     end
 
     def gwt_module?(module_name)
