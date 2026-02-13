@@ -235,16 +235,6 @@ HEADER
         bazelignores << 'generated'
       end
 
-      if BuildrPlus::FeatureManager.activated?(:sass)
-        bazelignores << '.sass-cache'
-        Buildr.projects.each do |project|
-          BuildrPlus::Sass.target_css_files(project).each do |css_file|
-            css_file = ::Buildr::Util.relative_path(File.expand_path(css_file), base_directory)
-            bazelignores << css_file unless css_file =~ /^generated\//
-          end
-        end
-      end
-
       bazelignores
     end
   end

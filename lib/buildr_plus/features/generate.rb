@@ -25,6 +25,12 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
 
   f.enhance(:ProjectExtension) do
 
+    attr_writer :contains_generated_code
+
+    def contains_generated_code?
+      @contains_generated_code.nil? ? false : !!@contains_generated_code
+    end
+
     attr_writer :generated_source_bases
 
     def generated_source_bases
@@ -66,7 +72,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
       t = project.task 'collect_keep_files' do
         keep_files_regenerated = false
 
-        if project.roles.include?(:container) || project.roles.include?(:server) || project.roles.include?(:user_experience) || project.roles.include?(:shared)
+        if project.contains_generated_code?
           project.generated_source_bases.collect do |target_dir|
             files = []
             Dir["#{target_dir}/**/*"].each do |file_name|

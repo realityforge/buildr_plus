@@ -31,10 +31,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
 
     attr_accessor :domgen_filter
 
-    def additional_domgen_generators
-      @additional_domgen_generators ||= []
-    end
-
     first_time do
       require 'domgen'
 
@@ -46,7 +42,8 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
           t.verbose = 'true' == ENV['DEBUG_DOMGEN']
         end
       end
-
+      database = Dbt.repository.database_for_key(:default)
+      database.enable_domgen(:perform_analysis_checks => BuildrPlus::FeatureManager.activated?(:sql_analysis))
     end
 
     after_define do |project|
@@ -73,8 +70,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
           end
 
           database = Dbt.repository.database_for_key(:default)
-          database.search_dirs = %w(database).uniq unless database.search_dirs?
-          database.enable_domgen(:perform_analysis_checks => BuildrPlus::FeatureManager.activated?(:sql_analysis))
+          database.search_dirs = %w(database)
         end
 
         project.task(':domgen:postload') do
@@ -109,12 +105,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
 
               if r.application? && r.application.db_deployable? && BuildrPlus::Dbt.library?
                 raise "Domgen declared 'repository.application.db_deployable = true' but buildr configured 'BuildrPlus::Dbt.library = true'."
-              end
-
-              if r.application? && r.application.user_experience? && !BuildrPlus::FeatureManager.activated?(:role_user_experience)
-                raise "Domgen declared 'repository.application.user_experience = true' but buildr has not configured user_experience role."
-              elsif r.application? && !r.application.user_experience? && BuildrPlus::FeatureManager.activated?(:role_user_experience)
-                raise "Domgen declared 'repository.application.user_experience = false' but buildr has configured user_experience role."
               end
 
               if r.application? && r.sql? && !r.application.db_deployable? && !BuildrPlus::Dbt.library?

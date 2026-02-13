@@ -146,7 +146,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
     attr_writer :include_api_client
 
     def include_api_client?
-      @include_api_client.nil? ? BuildrPlus::FeatureManager.activated?(:role_user_experience) : !!@include_api_client
+      @include_api_client.nil? ? true : !!@include_api_client
     end
 
     def remote_client(client_type, options = {})

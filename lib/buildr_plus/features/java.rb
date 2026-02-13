@@ -11,7 +11,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-BuildrPlus::FeatureManager.feature(:java => [:ruby]) do |f|
+BuildrPlus::FeatureManager.feature(:java) do |f|
   f.enhance(:Config) do
     def version=(version)
       raise "Invalid java version #{version}" unless [8, 11, 17].include?(version)

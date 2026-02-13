@@ -15,40 +15,6 @@
 module BuildrPlus
   class Util
     class << self
-      def is_addon_loaded?(addon)
-        $LOADED_FEATURES.any? { |f| f =~ /\/addon\/buildr\/#{addon}\.rb$/ }
-      end
-
-      def is_gem_present?(require_file, symbol)
-        begin
-          require require_file
-        rescue LoadError
-          # Ignored
-        end
-
-        Object.const_defined?(symbol.to_s)
-      end
-
-      def is_braid_gem_present?
-        is_gem_present?('braid','Braid')
-      end
-
-      def is_redfish_gem_present?
-        is_gem_present?('redfish','Redfish')
-      end
-
-      def is_dbt_gem_present?
-        is_gem_present?('dbt','Dbt')
-      end
-
-      def is_sass_gem_present?
-        is_gem_present?('sass','Sass')
-      end
-
-      def is_domgen_gem_present?
-        is_gem_present?('domgen','Domgen')
-      end
-
       def subprojects(project)
         Buildr.projects(:scope => project.name).collect { |p| p.name }
       end
