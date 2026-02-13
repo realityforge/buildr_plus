@@ -14,10 +14,6 @@
 
 BuildrPlus::FeatureManager.feature(:gwt => [:sting]) do |f|
   f.enhance(:Config) do
-    def gwt_test_options
-      {'braincheck.environment' => 'development'}
-    end
-
     attr_writer :code_server_port
 
     def code_server_port

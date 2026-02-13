@@ -12,10 +12,4 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:arez) do |f|
-  f.enhance(:Config) do
-    def arez_test_options
-      {'arez.environment' => 'development'}
-    end
-  end
-end
+BuildrPlus::FeatureManager.feature(:arez)
