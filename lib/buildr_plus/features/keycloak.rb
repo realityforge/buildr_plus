@@ -306,8 +306,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
                   package(type).enhance do |t|
                     project.task(':domgen:all').invoke
                     mkdir_p File.dirname(t.to_s)
-                    base_path = buildr_project._(:target, :generated, 'domgen')
-                    cp "#{base_path}/#{buildr_project.root_project.name}/main/etc/keycloak/#{client.client_type}.json", t.to_s
+                    cp buildr_project._("src/main/etc/keycloak/#{client.client_type}.json"), t.to_s
                   end
                 end
               end

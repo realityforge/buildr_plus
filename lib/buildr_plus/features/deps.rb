@@ -15,13 +15,6 @@
 BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
   f.enhance(:Config) do
 
-    def shared_generators
-      generators = []
-      generators << [:imit_metadata] if BuildrPlus::FeatureManager.activated?(:replicant)
-      generators += [:keycloak_client_definitions] if BuildrPlus::FeatureManager.activated?(:keycloak)
-      generators.flatten
-    end
-
     def server_generators
       generators = [
         :ee_beans_xml,
@@ -73,8 +66,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
 
       generators << [:jackson_date_util, :jackson_marshalling_tests] if BuildrPlus::FeatureManager.activated?(:jackson)
 
-      generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
-
       generators << [:jpa_test_qa, :jpa_test_qa_external] if BuildrPlus::FeatureManager.activated?(:db)
       generators << [:ejb_test_qa_external] if BuildrPlus::FeatureManager.activated?(:ejb)
       generators << [:imit_server_test_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
@@ -96,31 +87,11 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         generators += [:imit_client_react4j_support] if BuildrPlus::FeatureManager.activated?(:react4j)
       end
 
-      generators += self.shared_generators unless BuildrPlus::FeatureManager.activated?(:role_shared)
-
       generators += [:gwt_client_test_jso_qa_support]
       generators += [:imit_client_test_qa_external] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators += [:keycloak_gwt_test_qa] if BuildrPlus::FeatureManager.activated?(:keycloak)
       generators += [:arez_test_qa_external] if BuildrPlus::FeatureManager.activated?(:arez)
       generators.flatten
-    end
-
-    def shared_deps
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.javax_annotations)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.jetbrains_annotations)
-
-      dependencies.flatten
-    end
-
-    def shared_test_deps
-      dependencies = []
-
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.mockito)
-      dependencies << Buildr.artifacts(BuildrPlus::Libs.testng)
-
-      dependencies.flatten
     end
 
     def server_provided_deps
@@ -214,7 +185,8 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def user_experience_test_deps
       dependencies = []
 
-      dependencies << self.shared_test_deps
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.mockito)
+      dependencies << Buildr.artifacts(BuildrPlus::Libs.testng)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.arez_testng) if BuildrPlus::FeatureManager.activated?(:arez)
 
       dependencies.flatten

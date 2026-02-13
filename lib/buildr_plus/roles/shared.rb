@@ -13,35 +13,4 @@
 #
 
 BuildrPlus::Roles.role(:shared) do
-  if BuildrPlus::FeatureManager.activated?(:domgen)
-    generators = BuildrPlus::Deps.shared_generators + project.additional_domgen_generators
-    Domgen::Build.define_generate_task(generators.flatten,
-                                       :buildr_project => project,
-                                       :keep_file_patterns => project.all_keep_file_patterns,
-                                       :keep_file_names => project.keep_file_names,
-                                       :pre_generate_task => 'domgen:pre_generate',
-                                       :clean_generated_files => false) do |t|
-      BuildrPlus::Generate.generated_directories << t.target_dir
-      t.mark_as_generated_in_ide = false
-      t.filter = project.domgen_filter
-    end
-  end
-
-  project.publish = BuildrPlus::Artifacts.model? || BuildrPlus::Artifacts.gwt?
-
-  compile.with BuildrPlus::Deps.shared_deps
-  # Lock down to Java 11 as this is the latest language level supported by GWT 2.10.0
-  project.compile.options.source = '11'
-  project.compile.options.target = '11'
-  project.iml.jdk_version = '17'
-  test.with BuildrPlus::Deps.shared_test_deps
-
-  package(:jar)
-  package(:sources)
-
-  if BuildrPlus::FeatureManager.activated?(:gwt)
-    BuildrPlus::Gwt.add_source_to_jar(project)
-
-    BuildrPlus::Gwt.define_gwt_idea_facet(project)
-  end
 end
