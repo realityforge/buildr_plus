@@ -203,8 +203,25 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
             domain.pre_artifacts << file
             buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
             buildr_project.file(file => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
+            domain.checkpoint_data!
           end
-          domain.checkpoint_data!
+
+          Redfish.domain('local', :extends => buildr_project.name) do |domain|
+            RedfishPlus.setup_for_local_development(domain, :features => [:jms, :jdbc])
+            if BuildrPlus::FeatureManager.activated?(:timers)
+              domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
+              BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)
+            end
+            BuildrPlus::Redfish.database_libraries.each do |variant|
+              library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])
+              RedfishPlus.add_library_from_path(domain, 'jtds', library.to_s, true)
+              buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
+            end
+            if BuildrPlus::FeatureManager.activated?(:replicant)
+              RedfishPlus.custom_resource(domain, "#{buildr_project.name}/env/disable_session_service_protection", true, 'java.lang.Boolean')
+            end
+          end
+          Redfish::Config.default_domain_key = 'local'
         end
 
         Redfish.domains.each do |domain|

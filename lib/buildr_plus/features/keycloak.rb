@@ -219,7 +219,7 @@ BuildrPlus::FeatureManager.feature(:keycloak) do |f|
           rm_rf base_dir
           mkdir_p base_dir
 
-          filename = buildr_project._(:target, :generated, 'domgen', name, 'main/etc/keycloak')
+          filename = buildr_project._('src/main/etc/keycloak')
           file = buildr_project.file(filename)
           file.invoke
 
