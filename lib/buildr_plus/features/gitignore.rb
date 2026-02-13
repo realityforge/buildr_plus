@@ -81,10 +81,7 @@ BuildrPlus::FeatureManager.feature(:gitignore) do |f|
         BuildrPlus::FeatureManager.activated?(:jms) ||
         BuildrPlus::FeatureManager.activated?(:redfish)
 
-      if BuildrPlus::Artifacts.war?
-        gitignores << '/artifacts'
-      end
-
+      gitignores << '/artifacts'
       gitignores << '/reports'
       gitignores << '/target'
       gitignores << '/tmp'

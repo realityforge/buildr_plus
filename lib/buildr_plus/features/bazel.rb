@@ -225,9 +225,7 @@ HEADER
         BuildrPlus::FeatureManager.activated?(:jms) ||
         BuildrPlus::FeatureManager.activated?(:redfish)
 
-      if BuildrPlus::Artifacts.war?
-        bazelignores << 'artifacts'
-      end
+      bazelignores << 'artifacts'
 
       bazelignores << 'reports'
       bazelignores << 'target'

@@ -88,15 +88,6 @@ BuildrPlus::Roles.role(:container) do
                          :jpa_module_names => jpa_module_names,
                          :ejb_module_names => ejb_module_names)
 
-    context_root = BuildrPlus::Glassfish.context_root || project.iml.id
-
-    if BuildrPlus::Glassfish.support_remote_configuration?
-      ipr.add_glassfish_remote_configuration(project,
-                                             :server_name => 'GlassFish 5.2022.5',
-                                             :artifacts => { war_name => context_root },
-                                             :packaged => BuildrPlus::Glassfish.remote_only_packaged_apps.dup.merge(BuildrPlus::Glassfish.packaged_apps))
-    end
-
     if BuildrPlus::FeatureManager.activated?(:db)
       iml.excluded_directories << project._('dataSources')
       iml.excluded_directories << project._('.ideaDataSources')

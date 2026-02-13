@@ -24,10 +24,6 @@ BuildrPlus::FeatureManager.feature(:checks) do |f|
           task("#{feature}:check").invoke
         end
       end
-      root_project = Buildr.projects[0].root_project
-      if root_project.name.include?('-') && BuildrPlus::Artifacts.war?
-        raise "Root project name '#{root_project.name}' has a '-' character and is configured to produce a war which can cause downstream issues when deploying to GlassFish."
-      end
     end
 
     desc 'Apply basic fixes on formats of local files'

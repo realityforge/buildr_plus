@@ -23,7 +23,6 @@ BuildrPlus::FeatureManager.activate_features([
                                                :checks,
                                                :assets,
                                                :generated_files,
-                                               :artifacts,
                                                :idea,
                                                :idea_codestyle,
                                                :roles,

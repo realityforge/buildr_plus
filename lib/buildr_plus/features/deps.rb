@@ -28,7 +28,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         :sql_analysis_test_qa
       ]
 
-      generators << [:ee_web_xml] if BuildrPlus::Artifacts.war?
+      generators << [:ee_web_xml]
       if BuildrPlus::FeatureManager.activated?(:db)
         generators << [
           :jpa_application_orm_xml,
@@ -45,7 +45,7 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
         generators << [:jpa_ejb_dao] if BuildrPlus::FeatureManager.activated?(:ejb)
       end
 
-      generators << [:robots] if BuildrPlus::Artifacts.war?
+      generators << [:robots]
       generators << [:imit_metadata] if BuildrPlus::FeatureManager.activated?(:replicant) && !BuildrPlus::FeatureManager.activated?(:role_shared)
       generators << [:imit_server_service, :imit_server_qa] if BuildrPlus::FeatureManager.activated?(:replicant)
       generators << [:action_server] if BuildrPlus::FeatureManager.activated?(:action)

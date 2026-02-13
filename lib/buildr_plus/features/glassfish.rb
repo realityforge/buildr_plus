@@ -30,20 +30,6 @@ BuildrPlus::FeatureManager.feature(:glassfish) do |f|
       @non_remote_only_packaged_apps ||= {}
     end
 
-    attr_writer :support_remote_configuration
-
-    def support_remote_configuration?
-      @support_remote_configuration.nil? ? false : !!@support_remote_configuration
-    end
-
-    attr_writer :support_app_only_configuration
-
-    def support_app_only_configuration?
-      @support_app_only_configuration.nil? ?
-        (!BuildrPlus::Glassfish.non_remote_only_packaged_apps.empty? || !BuildrPlus::Glassfish.packaged_apps.empty?) :
-        !!@support_app_only_configuration
-    end
-
     attr_accessor :context_root
   end
 end

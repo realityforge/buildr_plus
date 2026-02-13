@@ -143,12 +143,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
                 end
               end
 
-              if !r.robots? && BuildrPlus::Artifacts.war?
-                raise "Domgen repository #{r.name} should enable robots facet as BuildrPlus BuildrPlus::Artifacts.war? is true"
-              elsif r.robots? && !BuildrPlus::Artifacts.war?
-                raise "Domgen repository #{r.name} should disable robots facet as BuildrPlus BuildrPlus::Artifacts.war? is false"
-              end
-
               if r.jpa?
                 if r.jpa.include_default_unit? && !Dbt.database_for_key?(:default)
                   raise "Domgen repository #{r.name} includes a default jpa persistence unit but there is no Dbt database with key :default"
