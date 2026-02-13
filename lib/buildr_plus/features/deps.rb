@@ -141,12 +141,6 @@ BuildrPlus::FeatureManager.feature(:deps => [:libs]) do |f|
     def server_compile_deps
       dependencies = []
 
-      if BuildrPlus::FeatureManager.activated?(:geolatte)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_support)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.geotools_for_geolatte) if BuildrPlus::FeatureManager.activated?(:geotools)
-        dependencies << Buildr.artifacts(BuildrPlus::Libs.geolatte_geom_jpa) if BuildrPlus::FeatureManager.activated?(:db)
-      end
       dependencies << Buildr.artifacts([BuildrPlus::Libs.jackson_databind]) if BuildrPlus::FeatureManager.activated?(:jackson)
       dependencies << Buildr.artifacts(BuildrPlus::Libs.timeservice) if BuildrPlus::FeatureManager.activated?(:timeservice)
       dependencies << Buildr.artifacts([BuildrPlus::Libs.gwt_cache_filter]) if BuildrPlus::FeatureManager.activated?(:gwt_cache_filter)

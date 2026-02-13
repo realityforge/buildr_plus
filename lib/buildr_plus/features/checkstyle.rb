@@ -242,10 +242,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server', 'javax.ejb.EJB', :rule_type => :class, :disallow => true)
         r.subpackage_rule('server', 'javax.ejb.Asynchronous', :rule_type => :class, :disallow => true)
 
-        if BuildrPlus::FeatureManager.activated?(:geolatte)
-          r.subpackage_rule('server', 'org.geolatte.geom')
-        end
-
         r.subpackage_rule('server.service', "#{g}.server.data_type")
         r.subpackage_rule('server.service', "#{g}.server.entity")
         r.subpackage_rule('server.service', "#{g}.server.service")

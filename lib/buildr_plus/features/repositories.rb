@@ -15,9 +15,6 @@
 BuildrPlus::FeatureManager.feature(:repositories) do |f|
   f.enhance(:ProjectExtension) do
     first_time do
-      if BuildrPlus::FeatureManager.activated?(:geolatte)
-        Buildr.repositories.remote.unshift('http://download.osgeo.org/webdav/geotools')
-      end
       Buildr.repositories.remote.unshift('https://repo.maven.apache.org/maven2')
       Buildr.repositories.remote.unshift(ENV['DOWNLOAD_REPO']) if ENV['DOWNLOAD_REPO']
     end
