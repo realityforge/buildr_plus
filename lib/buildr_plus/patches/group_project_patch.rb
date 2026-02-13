@@ -18,21 +18,7 @@ class Buildr::Project
     Reality::Naming.pascal_case(project.name)
   end
 
-  attr_writer :java_package_name
-
-  def java_package_name?
-    !@java_package_name.nil?
-  end
-
   def java_package_name
-    @java_package_name || group_as_package
-  end
-
-  def group_as_package
     project.group
-  end
-
-  def group_as_path
-    project.group.gsub('.', '/')
   end
 end

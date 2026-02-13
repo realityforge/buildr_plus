@@ -95,12 +95,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
               }
 
             Domgen.repositories.each do |r|
-              if r.java?
-                if BuildrPlus::Domgen.enforce_package_name? && r.java.base_package != project.java_package_name
-                  raise "Buildr projects package name '#{project.java_package_name}' (#{project.java_package_name? ? "explicitly specified via project.java_package_name" : "derived from group #{project.group}"}) expected to match domgens 'java.base_package' setting ('#{r.java.base_package}') but it does not."
-                end
-              end
-
               unless BuildrPlus::FeatureManager.activated?(:timers)
                 r.data_modules.select(&:ejb?).each do |data_module|
                   data_module.services.select(&:ejb?).each do |service|

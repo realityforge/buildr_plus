@@ -179,7 +179,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
     def setup_checkstyle_import_rules(project, allow_any_imports)
       r = project.import_rules
-      g = project.java_package_name
+      g = project.group
       c = project.name_as_class
       r.rule('.*', :regex => true, :rule_type => :class) if allow_any_imports
       r.rule('org.jetbrains.annotations.NotNull', :rule_type => :class, :disallow => true)
@@ -314,7 +314,7 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
 
   f.enhance(:ProjectExtension) do
     def import_rules
-      @import_rules ||= BuildrPlus::Checkstyle::Subpackage.new(nil, self.root_project.java_package_name)
+      @import_rules ||= BuildrPlus::Checkstyle::Subpackage.new(nil, self.root_project.group)
     end
 
     first_time do
