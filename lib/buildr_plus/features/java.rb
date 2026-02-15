@@ -71,19 +71,6 @@ BuildrPlus::FeatureManager.feature(:java) do |f|
 
       project.compile.options.processor_options ||= {}
 
-      if BuildrPlus::FeatureManager.activated?(:arez)
-        project.compile.options.processor_options['arez.debug'] = 'false'
-        project.compile.options.processor_options['arez.profile'] = 'false'
-      end
-      if BuildrPlus::FeatureManager.activated?(:react4j)
-        project.compile.options.processor_options['react4j.debug'] = 'false'
-        project.compile.options.processor_options['react4j.profile'] = 'false'
-      end
-      if BuildrPlus::FeatureManager.activated?(:sting)
-        project.compile.options.processor_options['sting.debug'] = 'false'
-        project.compile.options.processor_options['sting.profile'] = 'false'
-      end
-
       t = project.task 'java:check' do
         (project.test.compile.sources + project.compile.sources).each do |src|
           Dir.glob("#{src}/**/*").select {|f| File.directory? f}.each do |d|
