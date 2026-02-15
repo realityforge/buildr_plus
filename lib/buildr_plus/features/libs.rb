@@ -438,7 +438,7 @@ BuildrPlus::FeatureManager.feature(:libs) do |f|
         de.rototor.pdfbox:graphics2d:jar:0.26
         com.openhtmltopdf:openhtmltopdf-core:jar:1.0.4
         com.openhtmltopdf:openhtmltopdf-svg-support:jar:1.0.4
-      ) + BuildrPlus::Libs.xmlgraphics + BuildrPlus::Libs.pdfbox
+      ) + self.xmlgraphics + self.pdfbox
     end
 
     def xmlgraphics
