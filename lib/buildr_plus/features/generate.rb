@@ -74,21 +74,36 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
 
         if project.contains_generated_code?
           project.generated_source_bases.collect do |target_dir|
-            files = []
+            keep_files = []
+            generated_files = []
+            extra_keep_file_names = project.extra_keep_file_names
             Dir["#{target_dir}/**/*"].each do |file_name|
-              if !File.directory?(file_name) && !IO.read(file_name).include?('DO NOT EDIT: File is auto-generated')
-                files << ::Buildr::Util.relative_path(file_name, target_dir)
+              unless File.directory?(file_name)
+                relative_path = ::Buildr::Util.relative_path(file_name, target_dir)
+                if IO.read(file_name).include?('DO NOT EDIT: File is auto-generated') ||
+                   extra_keep_file_names.include?(relative_path)
+                  generated_files << relative_path
+                else
+                  keep_files << relative_path
+                end
               end
             end
-            files += project.extra_keep_file_names
-            new_content = files.sort.join("\n") + "\n"
+            keep_files += project.extra_keep_file_names + %w(.gitattributes keep_files.txt)
+            new_keep_files_content = keep_files.sort.uniq.join("\n") + "\n"
+            generated_files += %w(.gitattributes keep_files.txt)
+            new_gitattributes_content = "# DO NOT EDIT: File is auto-generated\n" + generated_files.sort.uniq.collect{|line| "#{line} linguist-generated"}.join("\n") + "\n"
 
-            existing = IO.read("#{target_dir}/keep_files.txt") rescue ''
-            if existing != new_content
+            existing_keep_files_content = IO.read("#{target_dir}/keep_files.txt") rescue ''
+            if existing_keep_files_content != new_keep_files_content
               puts "Generating keep_files.txt in #{target_dir} for #{project.name}"
               FileUtils.mkdir_p target_dir
-              IO.write("#{target_dir}/keep_files.txt", new_content)
-              IO.write("#{target_dir}/.gitattributes", new_content.split("\n").collect{|line| "#{line} linguist-generated"}.join("\n") + "\n")
+              IO.write("#{target_dir}/keep_files.txt", new_keep_files_content)
+              keep_files_regenerated = true
+            end
+            existing_gitattributes_content = IO.read("#{target_dir}/.gitattributes") rescue ''
+            if existing_gitattributes_content != new_gitattributes_content
+              puts "Generating gitattributes in #{target_dir} for #{project.name}"
+              IO.write("#{target_dir}/.gitattributes", new_gitattributes_content)
               keep_files_regenerated = true
             end
           end
