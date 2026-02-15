@@ -236,26 +236,13 @@ HEADER
   f.enhance(:ProjectExtension) do
 
     desc 'Check bazel files are valid.'
-    task 'bazel:check' => %w(bazelignore:check bazelw:check bazel_standard_files:check bazel_dependencies:check buildifier:check)
+    task 'bazel:check' => %w(bazelignore:check bazel_standard_files:check bazel_dependencies:check buildifier:check)
 
     desc 'Check .bazelignore has been normalized.'
     task 'bazelignore:check' do
       BuildrPlus::Bazel.process_bazelignore_file(false)
       if BuildrPlus::Bazel.bazelignore_needs_update?
         raise '.bazelignore has not been normalized. Please run "buildr bazelignore:fix" and commit changes.'
-      end
-    end
-
-    desc 'Check bazelw has been normalized'
-    task 'bazelw:check' do
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      filename = "#{base_directory}/bazelw"
-
-      raise "Bazelw file '#{filename}' missing. Please run 'bazel bazelw:fix'." unless File.exist?(filename)
-      actual_content = IO.read(filename)
-      expected_content = IO.read("#{File.dirname(__FILE__)}/bazelw")
-      if actual_content != expected_content || !File.executable?(filename)
-        raise "Bazelw is not uptodate. Please run 'bazel bazelw:fix'."
       end
     end
 
@@ -291,21 +278,11 @@ HEADER
     end
 
     desc 'Normalize bazel files.'
-    task 'bazel:fix' => %w(bazelignore:fix bazelw:fix bazel_dependencies:fix buildifier:fix)
+    task 'bazel:fix' => %w(bazelignore:fix bazel_dependencies:fix buildifier:fix)
 
     desc 'Normalize .bazelignore.'
     task 'bazelignore:fix' do
       BuildrPlus::Bazel.process_bazelignore_file(true)
-    end
-
-    desc 'Normalize bazelw'
-    task 'bazelw:fix' do
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      filename = "#{base_directory}/bazelw"
-
-      content = IO.read("#{File.dirname(__FILE__)}/bazelw")
-      IO.write(filename, content)
-      File.chmod(0755, filename)
     end
 
     desc 'Normalize dependencies.yml'
