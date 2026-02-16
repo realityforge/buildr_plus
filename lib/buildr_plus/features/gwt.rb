@@ -14,16 +14,6 @@
 
 BuildrPlus::FeatureManager.feature(:gwt => [:sting]) do |f|
   f.enhance(:Config) do
-    attr_writer :code_server_port
-
-    def code_server_port
-      @code_server_port.nil? ? 8889 : @code_server_port
-    end
-
-    def gwtc_java_args
-      %w(-ea -Djava.awt.headless=true -Dgwt.watchFileChanges=false -Xms512M -Xmx6G)
-    end
-
     def add_source_to_jar(project)
       project.package(:jar).tap do |jar|
         project.compile.sources.each do |src|
@@ -51,39 +41,6 @@ BuildrPlus::FeatureManager.feature(:gwt => [:sting]) do |f|
       end
 
       extra_deps
-    end
-
-    def define_gwt_task(project, suffix = '', options = {})
-      extra_deps = generated_source_deps(project)
-
-      dependencies = project.compile.dependencies + [project.compile.target] + extra_deps
-      if ENV['GWT'].nil? || ENV['GWT'] == project.name
-        project.gwt(project.determine_top_level_gwt_modules(suffix),
-                    {
-                      :java_args => BuildrPlus::Gwt.gwtc_java_args,
-                      :dependencies => dependencies,
-                      :gwtc_args => options[:gwtc_args],
-                      :skip_merge_gwt_dependencies => true,
-                      :compile_report_dir => project._(:reports, :gwt, suffix),
-                    }.merge(options))
-      end
-    end
-
-    def define_gwt_idea_facet(project)
-      gwt_modules = project.gwt_modules
-      module_config = {}
-      gwt_modules.each do |m|
-        module_config[m] = false
-      end
-      if gwt_modules.empty?
-        message = "No gwt modules defined for project '#{project.name}'"
-        puts message
-        raise message
-      end
-      project.iml.add_gwt_facet(module_config,
-                                :settings => { :compilerMaxHeapSize => '1024' },
-                                :gwt_dev_artifact => BuildrPlus::Libs.gwt_dev)
-
     end
   end
 
