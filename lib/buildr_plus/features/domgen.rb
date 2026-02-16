@@ -67,9 +67,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
               :jackson => :jackson,
               :keycloak => :keycloak,
               :jms => :jms,
-              :gwt => :gwt,
-              :gwt_cache_filter => :gwt_cache_filter,
-              :serviceworker => :serviceworker
+              :gwt => :gwt
             }
 
           Domgen.repositories.each do |r|
