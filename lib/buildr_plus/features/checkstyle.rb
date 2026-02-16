@@ -210,15 +210,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         if BuildrPlus::FeatureManager.activated?(:keycloak)
           r.subpackage_rule('client', 'org.realityforge.gwt.keycloak.Keycloak', :rule_type => :class)
         end
-
-        if BuildrPlus::FeatureManager.activated?(:arez)
-          r.subpackage_rule('client', 'javax.xml.ws.Action', :rule_type => :class, :disallow => true)
-        end
-
-        if BuildrPlus::FeatureManager.activated?(:replicant)
-          r.subpackage_rule('client', 'replicant.shared')
-          r.subpackage_rule('client', 'replicant.client')
-        end
       end
 
       if BuildrPlus::FeatureManager.activated?(:keycloak)
@@ -247,17 +238,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.service', "#{g}.server.service")
         r.subpackage_rule('server.service', 'javax.persistence')
         r.subpackage_rule('server.service', 'javax.validation')
-        if BuildrPlus::FeatureManager.activated?(:replicant)
-          r.subpackage_rule('server.net', "#{g}.shared.net")
-          r.subpackage_rule('server.service', "#{g}.server.net")
-          r.subpackage_rule('server.service', 'replicant.server.transport.ReplicantSession', :rule_type => :class)
-          r.subpackage_rule('server.service', 'replicant.server.EntityMessage', :rule_type => :class)
-          r.subpackage_rule('server.service', 'replicant.server.EntityMessageSet', :rule_type => :class)
-
-          # The following is for test infrastructure
-          r.subpackage_rule('client.entity', 'com.google.inject.Injector', :rule_type => :class)
-          r.subpackage_rule('client.entity', 'org.realityforge.guiceyloops.shared.ValueUtil', :rule_type => :class)
-        end
       end
 
       if BuildrPlus::FeatureManager.activated?(:jaxrs)
@@ -270,9 +250,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
         r.subpackage_rule('server.rest', "#{g}.server.entity")
         r.subpackage_rule('server.rest', "#{g}.server.service")
         r.subpackage_rule('server.rest', "#{g}.server.rest")
-        if BuildrPlus::FeatureManager.activated?(:replicant)
-          r.subpackage_rule('server.rest', 'replicant.server.ee.rest')
-        end
 
         if BuildrPlus::FeatureManager.activated?(:keycloak)
           r.subpackage_rule('server.filter', 'org.realityforge.keycloak.domgen.KeycloakUrlFilter', :rule_type => :class)
@@ -300,11 +277,6 @@ BuildrPlus::FeatureManager.feature(:checkstyle) do |f|
       r.subpackage_rule('server.test.util', 'org.realityforge.guiceyloops')
       r.subpackage_rule('server.test.util', 'com.google.inject')
       r.subpackage_rule('server.test.util', 'javax.persistence')
-
-      if BuildrPlus::FeatureManager.activated?(:replicant)
-        r.subpackage_rule('server.test.util', "#{g}.server.net")
-        r.subpackage_rule('server.test.util', 'javax.transaction.TransactionSynchronizationRegistry', :rule_type => :class)
-      end
     end
   end
 

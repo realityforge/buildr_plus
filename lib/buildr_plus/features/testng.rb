@@ -13,58 +13,8 @@
 #
 
 BuildrPlus::FeatureManager.feature(:testng) do |f|
-  f.enhance(:Config) do
-    def default_testng_args(project = nil, project_descriptor = nil)
-      default_testng_args = []
-      default_testng_args << '-ea'
-      default_testng_args << '-Xmx2024M'
-
-      if BuildrPlus::FeatureManager.activated?(:db) && project_descriptor && project_descriptor.in_any_role?([:library, :server, :sync_model, :model, :model_qa])
-        if BuildrPlus::FeatureManager.activated?(:dbt)
-          default_testng_args << "-Dtest.db.property_file=#{project.root_project._('generated/buildr_plus/config/testng.properties')}"
-        end
-      end
-
-      if BuildrPlus::FeatureManager.activated?(:keycloak) && project_descriptor && project_descriptor.in_any_role?([:server])
-        environment = BuildrPlus::Config.application_config.environment_by_key(:test)
-        default_testng_args << "-Dkeycloak.server-url=#{environment.keycloak.base_url}"
-        default_testng_args << "-Dkeycloak.public-key=#{environment.keycloak.public_key}"
-        default_testng_args << "-Dkeycloak.realm=#{environment.keycloak.realm}"
-        default_testng_args << "-Dkeycloak.service_username=#{environment.keycloak.service_username}"
-        default_testng_args << "-Dkeycloak.service_password=#{environment.keycloak.service_password}"
-      end
-
-      if BuildrPlus::FeatureManager.activated?(:gwt) && project_descriptor && project_descriptor.in_any_role?([:gwt, :gwt_qa, :user_experience])
-        default_testng_args << '-Dbraincheck.environment=development'
-      end
-
-      if BuildrPlus::FeatureManager.activated?(:arez) && project_descriptor && project_descriptor.in_any_role?([:gwt, :gwt_qa, :user_experience])
-        default_testng_args << '-Darez.environment=development'
-        default_testng_args << '-Dreplicant.environment=development' if BuildrPlus::FeatureManager.activated?(:replicant)
-      end
-      project.extra_testng_props.each_pair do |k, v|
-        default_testng_args << "-D#{k}=#{v}"
-      end
-
-      project.extra_testng_args.each do |arg|
-        default_testng_args << arg
-      end
-
-      default_testng_args
-    end
-  end
-
   f.enhance(:ProjectExtension) do
     after_define do |project|
-
-      def extra_testng_props
-        @extra_testng_props ||= {}
-      end
-
-      def extra_testng_args
-        @extra_testng_args ||= []
-      end
-
       if project.ipr?
         project.task(':generate:all' => ['config:emit_test_properties']) if BuildrPlus::FeatureManager.activated?(:generate)
 
@@ -105,12 +55,6 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
           end
         end
       end
-    end
-
-    attr_writer :idea_testng_configuration_created
-
-    def idea_testng_configuration_created?
-      @idea_testng_configuration_created.nil? ? false : !!@idea_testng_configuration_created
     end
 
     Buildr.settings.build['testng'] = BuildrPlus::Libs.testng_version

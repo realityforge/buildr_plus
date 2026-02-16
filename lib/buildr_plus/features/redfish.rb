@@ -217,9 +217,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
               RedfishPlus.add_library_from_path(domain, 'jtds', library.to_s, true)
               buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
             end
-            if BuildrPlus::FeatureManager.activated?(:replicant)
-              RedfishPlus.custom_resource(domain, "#{buildr_project.name}/env/disable_session_service_protection", true, 'java.lang.Boolean')
-            end
           end
           Redfish::Config.default_domain_key = 'local'
         end
