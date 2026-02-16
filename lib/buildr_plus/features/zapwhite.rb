@@ -13,31 +13,59 @@
 #
 BuildrPlus::FeatureManager.feature(:zapwhite) do |f|
   f.enhance(:Config) do
-    def additional_rules
-      @additional_rules ||= []
-    end
-
-    def zapwhite_command
+    def zapwhite(check_only)
+      extension_patterns = [/.*\.bazel$/, /.*\.bzl$/,  /.*\.html$/, /.*\.json$/, /.*\.md$/, /.*\.rake$/,
+                            /.*\.rb$/, /.*\.sh$/, /.*\.sql$/, /.*\.xml$/, /.*\.yaml$/, /.*\.yml$/, /.bazelrc$/,
+                            /.bazelversion$/, /.gitattributes$/, /.gitignore$/, /.ruby-version$/, /Gemfile$/,
+                            /Jenkinsfile$/,  /buildfile$/]
       workspace_dir = File.dirname(Buildr.application.buildfile.to_s).to_s
-      "bundle exec zapwhite -d #{File.dirname(Buildr.application.buildfile.to_s)} #{BuildrPlus::Generate.generated_directories.collect{|d| "--exclude-pattern '#{::Buildr::Util.relative_path(d, workspace_dir)}/.*'"}.join(" ")} #{additional_rules.collect{|r| "--rule \"#{r}\""}.join(' ')}"
+      `cd #{workspace_dir} && git ls-files`.
+          split("\n").
+          filter { |filename| !filename.end_with?('vendor/') }.
+          each do |filename|
+        next unless extension_patterns.any?{|p| p =~ filename}
+
+        full_filename = "#{workspace_dir}/#{filename}"
+        original_bin_content = File.binread(full_filename)
+        allow_empty = full_filename.end_with?('.bazel')
+
+        content = File.read(full_filename, :encoding => 'bom|utf-8')
+        begin
+          content.gsub!(/\r\n/, "\n")
+          content.gsub!(/[ \t]+\n/, "\n")
+          content.gsub!(/[ \r\t\n]+\Z/, '')
+          content += "\n"
+        rescue
+          puts "Skipping whitespace cleanup: #{filename}"
+        end
+        content = '' if allow_empty && 0 == content.strip.length
+
+        while content.gsub!(/\n\n\n/, "\n\n")
+          # Keep removing duplicate new lines till they have gone
+        end
+        if content.bytes != original_bin_content.bytes
+          if check_only
+            puts "Non-normalized whitespace in #{filename}"
+          else
+            puts "Fixing: #{filename}"
+            File.open(full_filename, 'wb') do |out|
+              out.write content
+            end
+          end
+        end
+      end
     end
   end
 
   f.enhance(:ProjectExtension) do
-    desc 'Run zapwhite to check that the .gitattribute file and file whitespace is normalized.'
+    desc 'Run zapwhite to check that the file whitespace is normalized.'
     task 'zapwhite:check' do
-      output = `#{BuildrPlus::Zapwhite.zapwhite_command} --check-only`
-      unless $?.exitstatus == 0
-        puts output
-        raise 'Whitespace has not been normalized. Please run "buildr zapwhite:fix" and commit changes.'
-      end
+      BuildrPlus::Zapwhite.zapwhite(true)
     end
 
-    desc 'Run zapwhite to ensure that the .gitattribute file and file whitespace is normalized.'
+    desc 'Run zapwhite to ensure that the file whitespace is normalized.'
     task 'zapwhite:fix' do
-      puts BuildrPlus::Zapwhite.zapwhite_command
-      output = `#{BuildrPlus::Zapwhite.zapwhite_command}`
-      puts output unless output.empty?
+      BuildrPlus::Zapwhite.zapwhite(false)
     end
   end
 end
