@@ -66,49 +66,7 @@ BuildrPlus::FeatureManager.feature(:bazel) do |f|
       @local_artifact_prefixes ||= %w(iris. au.gov.vic.dse. mercury.)
     end
 
-    def additional_bazelignores
-      @additional_bazelignores ||= []
-    end
-
-    attr_writer :bazelignore_needs_update
-
-    def bazelignore_needs_update?
-      @bazelignore_needs_update.nil? ? false : !!@bazelignore_needs_update
-    end
-
-    def process_bazelignore_file(apply_fix)
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      filename = "#{base_directory}/.bazelignore"
-      if File.exist?(filename)
-        original_content = IO.read(filename)
-
-        content = <<-HEADER
-# DO NOT EDIT: File is auto-generated
-
-# Bazel does not yet support wildcards or other .gitignore semantics for
-# .bazelignore. Two issues for this feature request are outstanding:
-# https://github.com/bazelbuild/bazel/issues/7093
-# https://github.com/bazelbuild/bazel/issues/8106
-
-        HEADER
-        content += bazelignores.sort.uniq.collect { |v| "#{v}" }.join("\n") + "\n"
-
-        if content != original_content
-          BuildrPlus::Bazel.bazelignore_needs_update = true
-          if apply_fix
-            puts 'Fixing: .bazelignore'
-            File.open(filename, 'wb') do |out|
-              out.write content
-            end
-          else
-            puts 'Non-normalized .bazelignore'
-          end
-        end
-      end
-    end
-
     def generate_dependencies_yml
-
       artifacts_map = {}
       packages = Buildr.projects.collect { |project| project.packages }.flatten.collect { |p| p.to_s }
       Buildr.projects.each do |project|
@@ -186,73 +144,12 @@ HEADER
       end
       content
     end
-
-    private
-
-    def bazelignores
-      bazelignores = additional_bazelignores.dup
-
-      base_directory = File.expand_path(File.dirname(Buildr.application.buildfile.to_s))
-
-      bazelignores << 'artifacts'
-      bazelignores << '.git'
-
-      # All projects have IDEA configured
-      bazelignores << 'target'
-      bazelignores << '.shelf'
-      if BuildrPlus::FeatureManager.activated?(:dbt)
-        bazelignores << '.ideaDataSources'
-        bazelignores << 'dataSources'
-      end
-
-      if BuildrPlus::FeatureManager.activated?(:node)
-        bazelignores << 'node_modules'
-      end
-
-      bazelignores << 'config/secrets' if BuildrPlus::FeatureManager.activated?(:keycloak)
-
-      bazelignores << 'config/database.yml' if BuildrPlus::FeatureManager.activated?(:dbt)
-
-      bazelignores << 'volumes' if BuildrPlus::FeatureManager.activated?(:redfish)
-
-      bazelignores << 'config/application.yml' if BuildrPlus::FeatureManager.activated?(:dbt) ||
-        BuildrPlus::FeatureManager.activated?(:jms) ||
-        BuildrPlus::FeatureManager.activated?(:redfish)
-
-      bazelignores << 'artifacts'
-
-      bazelignores << 'reports'
-      bazelignores << 'target'
-      bazelignores << 'tmp'
-
-      if BuildrPlus::FeatureManager.activated?(:domgen) || BuildrPlus::FeatureManager.activated?(:checkstyle) || BuildrPlus::FeatureManager.activated?(:config)
-        bazelignores << 'generated'
-      end
-
-      bazelignores
-    end
   end
 
   f.enhance(:ProjectExtension) do
 
     desc 'Check bazel files are valid.'
-    task 'bazel:check' => %w(bazelignore:check bazel_standard_files:check bazel_dependencies:check buildifier:check)
-
-    desc 'Check .bazelignore has been normalized.'
-    task 'bazelignore:check' do
-      BuildrPlus::Bazel.process_bazelignore_file(false)
-      if BuildrPlus::Bazel.bazelignore_needs_update?
-        raise '.bazelignore has not been normalized. Please run "buildr bazelignore:fix" and commit changes.'
-      end
-    end
-
-    desc 'Check presence of standard bazel files'
-    task 'bazel_standard_files:check' do
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-      %W(#{base_directory}/.bazelrc #{base_directory}/WORKSPACE.bazel #{base_directory}/BUILD.bazel).each do |filename|
-        raise "Bazel file '#{filename}' missing. Please fix." unless File.exist?(filename)
-      end
-    end
+    task 'bazel:check' => %w(bazel_dependencies:check buildifier:check)
 
     desc 'Check dependencies.yml is up to date'
     task 'bazel_dependencies:check' do
@@ -278,12 +175,7 @@ HEADER
     end
 
     desc 'Normalize bazel files.'
-    task 'bazel:fix' => %w(bazelignore:fix bazel_dependencies:fix buildifier:fix)
-
-    desc 'Normalize .bazelignore.'
-    task 'bazelignore:fix' do
-      BuildrPlus::Bazel.process_bazelignore_file(true)
-    end
+    task 'bazel:fix' => %w(bazel_dependencies:fix buildifier:fix)
 
     desc 'Normalize dependencies.yml'
     task 'bazel_dependencies:fix' do
