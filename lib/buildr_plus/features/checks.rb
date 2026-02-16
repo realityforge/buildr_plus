@@ -14,7 +14,7 @@
 
 BuildrPlus::FeatureManager.feature(:checks) do |f|
   f.enhance(:ProjectExtension) do
-    fixable_features = %w(bazel gems)
+    fixable_features = %w(bazel)
     features = fixable_features + %w(braid java assets generated_files)
 
     desc 'Perform basic checks on formats of local files'
