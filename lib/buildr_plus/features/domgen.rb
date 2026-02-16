@@ -36,12 +36,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
       if project.ipr?
         if BuildrPlus::FeatureManager.activated?(:dbt) && Dbt.repository.database_for_key?(:default)
           generators = [:mssql]
-          if BuildrPlus::FeatureManager.activated?(:sql_analysis)
-            generators << :sql_analysis_sql
-          end
-          if BuildrPlus::FeatureManager.activated?(:sql_analysis)
-            generators << :action_types_mssql
-          end
+          generators += [:sql_analysis_sql, :action_types_mssql] if BuildrPlus::FeatureManager.activated?(:sql_analysis)
 
           Domgen::Build.define_generate_task(generators,
                                              :buildr_project => project,
