@@ -29,16 +29,13 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
         end
       end
       database = Dbt.repository.database_for_key(:default)
-      database.enable_domgen(:perform_analysis_checks => BuildrPlus::FeatureManager.activated?(:sql_analysis))
+      database.enable_domgen(:perform_analysis_checks => true)
     end
 
     after_define do |project|
       if project.ipr?
         if BuildrPlus::FeatureManager.activated?(:dbt) && Dbt.repository.database_for_key?(:default)
-          generators = [:mssql]
-          generators += [:sql_analysis_sql, :action_types_mssql] if BuildrPlus::FeatureManager.activated?(:sql_analysis)
-
-          Domgen::Build.define_generate_task(generators,
+          Domgen::Build.define_generate_task([:mssql, :sql_analysis_sql, :action_types_mssql],
                                              :buildr_project => project,
                                              :keep_file_patterns => project.all_keep_file_patterns,
                                              :keep_file_names => project.keep_file_names,
@@ -57,7 +54,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
         project.task(':domgen:postload') do
           facet_mapping =
             {
-              :sql_analysis => :sql_analysis,
               :redfish => :redfish,
               :keycloak => :keycloak,
               :gwt => :gwt

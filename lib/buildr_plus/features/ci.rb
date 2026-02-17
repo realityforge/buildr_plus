@@ -66,8 +66,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
             Dbt.repository.load_configuration_data
 
             Dbt.database_keys.each do |database_key|
-              next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
-
               jdbc_url = Dbt.configuration_for_key(database_key).build_jdbc_url(:credentials_inline => true)
               catalog_name = Dbt.configuration_for_key(database_key).catalog_name
 
@@ -152,7 +150,6 @@ BuildrPlus::FeatureManager.feature(:ci) do |f|
             database = Dbt.database_for_key(database_key)
             next unless database.enable_rake_integration? || database.packaged? || database.managed?
             next if database.packaged? && ENV['SKIP_PACKAGED_DBS'] == 'true'
-            next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
 
             prefix = Dbt::Config.default_database?(database_key) ? '' : ":#{database_key}"
 

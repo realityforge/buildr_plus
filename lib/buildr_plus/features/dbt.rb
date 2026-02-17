@@ -12,18 +12,8 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:dbt => [:db]) do |f|
+BuildrPlus::FeatureManager.feature(:dbt) do |f|
   f.enhance(:Config) do
-    attr_writer :manual_testing_only_databases
-
-    def manual_testing_only_databases
-      @manual_testing_only_databases || []
-    end
-
-    def manual_testing_only_database?(database_key)
-      self.manual_testing_only_databases.any? { |d| d.to_s == database_key.to_s }
-    end
-
     # Any databases that are not able to be standalone databases should
     # register module_group to use instead during build process
     def non_standalone_database_module_groups

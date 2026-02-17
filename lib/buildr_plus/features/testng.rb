@@ -22,34 +22,29 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
         project.task(':config:emit_test_properties') do
 
           filename = project._('generated/buildr_plus/config/testng.properties')
+          if BuildrPlus::FeatureManager.activated?(:dbt)
+            BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
+            Dbt.repository.load_configuration_data
 
-          if BuildrPlus::FeatureManager.activated?(:db)
-            if BuildrPlus::FeatureManager.activated?(:dbt)
-              BuildrPlus::Config.load_application_config! if BuildrPlus::FeatureManager.activated?(:config)
-              Dbt.repository.load_configuration_data
+            FileUtils.mkdir_p File.dirname(filename)
 
-              FileUtils.mkdir_p File.dirname(filename)
+            trace("Generating testng properties in #{filename}")
+            File.open(filename, 'wb') do |file|
+              file.write "# DO NOT EDIT: File is auto-generated\n"
 
-              trace("Generating testng properties in #{filename}")
-              File.open(filename, 'wb') do |file|
-                file.write "# DO NOT EDIT: File is auto-generated\n"
+              Dbt.database_keys.each do |database_key|
+                database = Dbt.configuration_for_key(database_key, :test)
+                jdbc_url = database.build_jdbc_url(:credentials_inline => true)
 
-                Dbt.database_keys.each do |database_key|
-                  next if BuildrPlus::Dbt.manual_testing_only_database?(database_key)
-
-                  database = Dbt.configuration_for_key(database_key, :test)
-                  jdbc_url = database.build_jdbc_url(:credentials_inline => true)
-
-                  prefix = database_key
-                  if Dbt::Config.default_database?(database_key)
-                    file.write "test.db.url=#{jdbc_url}\n"
-                    file.write "test.db.name=#{database.catalog_name}\n"
-                    prefix = project.root_project.name.to_s
-                  end
-
-                  file.write "#{prefix}.test.db.url=#{jdbc_url}\n"
-                  file.write "#{prefix}.test.db.name=#{database.catalog_name}\n"
+                prefix = database_key
+                if Dbt::Config.default_database?(database_key)
+                  file.write "test.db.url=#{jdbc_url}\n"
+                  file.write "test.db.name=#{database.catalog_name}\n"
+                  prefix = project.root_project.name.to_s
                 end
+
+                file.write "#{prefix}.test.db.url=#{jdbc_url}\n"
+                file.write "#{prefix}.test.db.name=#{database.catalog_name}\n"
               end
             end
           end
