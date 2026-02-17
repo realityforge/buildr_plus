@@ -12,7 +12,7 @@
 # limitations under the License.
 #
 
-BuildrPlus::FeatureManager.feature(:gwt => [:sting]) do |f|
+BuildrPlus::FeatureManager.feature(:gwt) do |f|
   f.enhance(:Config) do
     def add_source_to_jar(project)
       project.package(:jar).tap do |jar|
