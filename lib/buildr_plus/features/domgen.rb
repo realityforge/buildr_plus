@@ -55,8 +55,7 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
           facet_mapping =
             {
               :redfish => :redfish,
-              :keycloak => :keycloak,
-              :gwt => :gwt
+              :keycloak => :keycloak
             }
 
           Domgen.repositories.each do |r|

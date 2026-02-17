@@ -225,11 +225,9 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
           populate_keycloak_remote_client_settings(environment, remote_client)
         end
       end
-      if BuildrPlus::FeatureManager.activated?(:gwt)
-        prefix = "#{Reality::Naming.uppercase_constantize(root_project.name)}_CODE_SERVER_"
-        environment.setting("#{prefix}HOST", 'localhost')
-        environment.setting("#{prefix}PORT", 8889)
-      end
+      prefix = "#{Reality::Naming.uppercase_constantize(root_project.name)}_CODE_SERVER_"
+      environment.setting("#{prefix}HOST", 'localhost')
+      environment.setting("#{prefix}PORT", 8889)
     end
 
     def populate_keycloak_remote_client_settings(environment, remote_client)
