@@ -36,15 +36,6 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       (@database_config_prefix_map ||= {})
     end
 
-    def features
-      if @features.nil?
-        @features = []
-        @features << :jms if BuildrPlus::FeatureManager.activated?(:jms)
-        @features << :jdbc if BuildrPlus::FeatureManager.activated?(:dbt)
-      end
-      @features
-    end
-
     def configure_system_settings(domain, environment)
       properties = build_property_set(domain, environment)
       domain.environment_vars.each_pair do |key, default_value|
@@ -86,7 +77,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
         end
       end
 
-      database_name_keys = domain.environment_vars.keys.select{|k| k =~ /_DATABASE_NAME$/}.collect{|k|k[0...-14]}
+      database_name_keys = domain.environment_vars.keys.select { |k| k =~ /_DATABASE_NAME$/ }.collect { |k| k[0...-14] }
 
       environment.databases.each do |database|
         prefixes = self.database_config_prefix_map[database.key.to_s] || [constant_prefix]
@@ -103,7 +94,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           database_name_keys.each do |database_name_key|
             if database_name_key =~ /^#{db_prefix}_/
               other_key = Reality::Naming.underscore(database_name_key[(db_prefix.length + 1)...10000000])
-              candidate = environment.databases.select{|d|d.key.to_s == other_key || (d.key.to_s == 'default' && other_key == domain.name.to_s)}.first
+              candidate = environment.databases.select { |d| d.key.to_s == other_key || (d.key.to_s == 'default' && other_key == domain.name.to_s) }.first
               properties["#{database_name_key}_DATABASE_NAME"] = candidate.database.to_s if candidate
             end
           end
@@ -134,14 +125,14 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       return name if ENV['CONFIG_ALLOW_HOSTNAME'] == 'true'
 
       # First collect all the entries from local resolve.conf
-      addresses = Resolv.getaddresses(name).select {|a| valid_v4?(a)}.collect {|a| a == '127.0.0.1' ? host_ip : a}
+      addresses = Resolv.getaddresses(name).select { |a| valid_v4?(a) }.collect { |a| a == '127.0.0.1' ? host_ip : a }
 
       # Then use configured DNS server if any
 
       if ENV['DOCKER_DNS']
         addresses += Resolv::DNS.new(:nameserver => [ENV['DOCKER_DNS']]).
           getaddresses(name).
-          collect {|a| a.address.unpack('CCCC').join('.')}
+          collect { |a| a.address.unpack('CCCC').join('.') }
       end
 
       return addresses[0] unless addresses.empty?
@@ -153,7 +144,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
       # Old versions of jruby do not support this method on Socket
       if Socket.respond_to?(:ip_address_list)
-        address_list = Socket.ip_address_list.select {|a| a.ipv4? && a.inspect_sockaddr != '127.0.0.1'}.collect {|a| a.inspect_sockaddr}
+        address_list = Socket.ip_address_list.select { |a| a.ipv4? && a.inspect_sockaddr != '127.0.0.1' }.collect { |a| a.inspect_sockaddr }
 
         return address_list[0] unless address_list.empty?
       end
@@ -163,7 +154,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
 
     def valid_v4?(addr)
       if /\A(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})\Z/ =~ addr
-        return $~.captures.all? {|i| i.to_i < 256}
+        return $~.captures.all? { |i| i.to_i < 256 }
       end
       return false
     end
@@ -207,7 +198,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           end
 
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
-            RedfishPlus.setup_for_local_development(domain, :features => [:jms, :jdbc])
+            RedfishPlus.setup_for_local_development(domain)
             if BuildrPlus::FeatureManager.activated?(:timers)
               domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
               BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)

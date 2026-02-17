@@ -60,7 +60,6 @@ BuildrPlus::FeatureManager.feature(:domgen => [:generate]) do |f|
               :sql_analysis => :sql_analysis,
               :redfish => :redfish,
               :keycloak => :keycloak,
-              :jms => :jms,
               :gwt => :gwt
             }
 
