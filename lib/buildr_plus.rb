@@ -58,7 +58,6 @@ require 'buildr_plus/features/sql_analysis'
 require 'buildr_plus/features/testng'
 require 'buildr_plus/features/timers'
 require 'buildr_plus/features/timeservice'
-require 'buildr_plus/features/xml'
 
 require 'buildr_plus/config/application'
 require 'buildr_plus/config/environment'
