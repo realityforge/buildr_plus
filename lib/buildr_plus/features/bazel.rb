@@ -24,6 +24,10 @@ end
 
 BuildrPlus::FeatureManager.feature(:bazel) do |f|
   f.enhance(:Config) do
+    def bazel_depgen
+      'org.realityforge.bazel.depgen:bazel-depgen:jar:all:0.19'
+    end
+
     attr_writer :tolerate_invalid_poms
 
     def tolerate_invalid_poms?
@@ -188,7 +192,7 @@ HEADER
       if content != actual_content
         IO.write(filename, content)
         puts 'Regenerated dependencies.yml'
-        bazel_depgen = ::Buildr.artifact(BuildrPlus::Libs.bazel_depgen)
+        bazel_depgen = ::Buildr.artifact(BuildrPlus::Bazel.bazel_depgen)
         bazel_depgen.invoke
 
         args = []

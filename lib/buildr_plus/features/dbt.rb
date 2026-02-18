@@ -60,7 +60,7 @@ BuildrPlus::FeatureManager.feature(:dbt) do |f|
       end
 
       if BuildrPlus::FeatureManager.activated?(:timers)
-        Dbt.add_artifact_based_database(:timers, BuildrPlus::Libs.glassfish_timers_db[0])
+        Dbt.add_artifact_based_database(:timers, 'org.realityforge.glassfish.timers:glassfish-timers-db:jar:0.8')
       end
 
       if Dbt.repository.database_for_key?(:default) && BuildrPlus::FeatureManager.activated?(:config)

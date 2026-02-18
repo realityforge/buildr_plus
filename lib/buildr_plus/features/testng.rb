@@ -51,12 +51,5 @@ BuildrPlus::FeatureManager.feature(:testng) do |f|
         end
       end
     end
-
-    Buildr.settings.build['testng'] = BuildrPlus::Libs.testng_version
-    before_define do |project|
-      project.test.using :testng
-      project.test.compile.dependencies.clear
-      project.test.with BuildrPlus::Libs.testng
-    end
   end
 end

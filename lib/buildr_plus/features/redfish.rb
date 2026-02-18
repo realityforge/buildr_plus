@@ -23,7 +23,7 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
     end
 
     def database_libraries
-      @database_libraries ||= [:mssql]
+      @database_libraries ||= []
     end
 
     def define_database_config_prefixes(database_key, *prefixes)
@@ -200,11 +200,11 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_local_development(domain)
             if BuildrPlus::FeatureManager.activated?(:timers)
-              domain.add_pre_artifacts(BuildrPlus::Libs.glassfish_timers_domain)
+              domain.add_pre_artifacts(%w(org.realityforge.glassfish.timers:glassfish-timers-domain:json:0.8))
               BuildrPlus::Redfish.define_database_config_prefixes(:timers, nil)
             end
             BuildrPlus::Redfish.database_libraries.each do |variant|
-              library = ::Buildr.artifact(BuildrPlus::Libs.jtds[0])
+              library = ::Buildr.artifact(variant)
               RedfishPlus.add_library_from_path(domain, 'jtds', library.to_s, true)
               buildr_project.task(":#{domain.task_prefix}:pre_build" => [library])
             end
