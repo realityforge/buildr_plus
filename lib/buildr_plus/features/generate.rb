@@ -120,7 +120,7 @@ BuildrPlus::FeatureManager.feature(:generate) do |f|
 
     desc 'Generate the source code and pre-compile artifacts required to build application'
     task 'generate:all' do
-      task('domgen:all').invoke if BuildrPlus::FeatureManager.activated?(:domgen)
+      task('domgen:all').invoke
     end
 
     desc 'Check generated source files are committed in source control'

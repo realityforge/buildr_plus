@@ -14,25 +14,16 @@
 
 BuildrPlus::FeatureManager.feature(:checks) do |f|
   f.enhance(:ProjectExtension) do
-    fixable_features = %w(bazel)
-    features = fixable_features + %w(braid generated_files)
-
     desc 'Perform basic checks on formats of local files'
     task 'checks:check' do
-      features.each do |feature|
-        if BuildrPlus::FeatureManager.activated?(feature.to_sym)
-          task("#{feature}:check").invoke
-        end
-      end
+      task('bazel:check').invoke
+      task('braid:check').invoke
+      task('generated_files:check').invoke
     end
 
     desc 'Apply basic fixes on formats of local files'
     task 'checks:fix' do
-      fixable_features.each do |feature|
-        if BuildrPlus::FeatureManager.activated?(feature.to_sym)
-          task("#{feature}:fix").invoke
-        end
-      end
+      task('bazel:fix').invoke
     end
   end
 end

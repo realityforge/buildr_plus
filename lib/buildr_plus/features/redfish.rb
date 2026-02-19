@@ -186,16 +186,14 @@ BuildrPlus::FeatureManager.feature(:redfish => [:config]) do |f|
       if buildr_project.ipr?
         begin
           # Setup application domain
-          if BuildrPlus::FeatureManager.activated?(:domgen)
-            domain = Redfish.domain_by_key(buildr_project.name)
-            base_path = buildr_project._('src')
+          domain = Redfish.domain_by_key(buildr_project.name)
+          base_path = buildr_project._('src')
 
-            file = buildr_project._("#{base_path}/main/etc/#{Reality::Naming.pascal_case(buildr_project.name)}.redfish.fragment.json")
-            domain.pre_artifacts << file
-            buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
-            buildr_project.file(file => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
-            domain.checkpoint_data!
-          end
+          file = buildr_project._("#{base_path}/main/etc/#{Reality::Naming.pascal_case(buildr_project.name)}.redfish.fragment.json")
+          domain.pre_artifacts << file
+          buildr_project.task(":#{domain.task_prefix}:pre_build" => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
+          buildr_project.file(file => ["#{buildr_project.name}:domgen:#{buildr_project.name}"])
+          domain.checkpoint_data!
 
           Redfish.domain('local', :extends => buildr_project.name) do |domain|
             RedfishPlus.setup_for_local_development(domain)

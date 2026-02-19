@@ -53,40 +53,6 @@ BuildrPlus::FeatureManager.feature(:dbt) do |f|
       require 'dbt'
 
       Dbt::Config.dynamic_property_provider = Proc.new {|key| ENV[key]}
-
-      if Dbt.repository.database_for_key?(:default)
-        database = Dbt.repository.database_for_key(:default)
-        database.search_dirs = %w(database) if !database.search_dirs? && !BuildrPlus::FeatureManager.activated?(:domgen)
-      end
-
-      if Dbt.repository.database_for_key?(:default) && BuildrPlus::FeatureManager.activated?(:config)
-        database = Dbt.repository.database_for_key(:default)
-
-        desc 'Show all owned databases'
-        task 'dbt:show_owned_databases' => ["#{database.task_prefix}:load_config"] do
-          sql = "SELECT name FROM sys.databases WHERE name LIKE '#{BuildrPlus::Config.user || 'NOBODY'}_%'"
-          puts 'Owned databases:'
-          puts '========================================'
-          Dbt.runtime.query_in_control_database(database, sql).each do |v|
-            puts v['name']
-          end
-          puts '========================================'
-        end
-
-        desc 'Remove all owned databases'
-        task 'dbt:remove_owned_databases' => ["#{database.task_prefix}:load_config"] do
-          sql = "SELECT name FROM sys.databases WHERE name LIKE '#{BuildrPlus::Config.user || 'NOBODY'}_%'"
-          Dbt.runtime.query_in_control_database(database, sql).each do |v|
-            name = v['name']
-            puts "Dropping database #{name}"
-            begin
-              Dbt.runtime.query_in_control_database(database, "DROP DATABASE #{name}")
-            rescue => e
-              puts e
-            end
-          end
-        end
-      end
     end
 
     after_define do |buildr_project|
@@ -103,7 +69,6 @@ BuildrPlus::FeatureManager.feature(:dbt) do |f|
               desc 'DB Archive'
               define 'db' do
                 project.no_iml
-                project.publish = true
                 pom.dependency_filter = Proc.new { |_| false }
                 Dbt.define_database_package(:default, :include_code => !BuildrPlus::Dbt.library?)
               end
