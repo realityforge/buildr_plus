@@ -59,10 +59,6 @@ BuildrPlus::FeatureManager.feature(:dbt) do |f|
         database.search_dirs = %w(database) if !database.search_dirs? && !BuildrPlus::FeatureManager.activated?(:domgen)
       end
 
-      if BuildrPlus::FeatureManager.activated?(:timers)
-        Dbt.add_artifact_based_database(:timers, 'org.realityforge.glassfish.timers:glassfish-timers-db:jar:0.8')
-      end
-
       if Dbt.repository.database_for_key?(:default) && BuildrPlus::FeatureManager.activated?(:config)
         database = Dbt.repository.database_for_key(:default)
 
