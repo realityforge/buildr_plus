@@ -27,7 +27,6 @@ require 'buildr_plus/extension_registry'
 require 'buildr_plus/feature_manager'
 require 'buildr_plus/util'
 
-require 'buildr_plus/features/bazel'
 require 'buildr_plus/features/config'
 require 'buildr_plus/features/generate'
 require 'buildr_plus/features/keycloak'
