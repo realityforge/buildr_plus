@@ -30,7 +30,6 @@ require 'buildr_plus/util'
 require 'buildr_plus/features/config'
 require 'buildr_plus/features/generate'
 require 'buildr_plus/features/keycloak'
-require 'buildr_plus/features/redfish'
 require 'buildr_plus/features/testng'
 
 require 'buildr_plus/config/application'

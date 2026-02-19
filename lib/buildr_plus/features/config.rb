@@ -162,28 +162,6 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
       end
     end
 
-    def emit_rails_configuration(domain)
-      properties = BuildrPlus::Redfish.build_property_set(domain, BuildrPlus::Config.environment_config)
-
-      base_directory = File.dirname(Buildr.application.buildfile.to_s)
-
-      FileUtils.mkdir_p "#{base_directory}/config"
-      File.open("#{base_directory}/config/config.properties", 'wb') do |file|
-        file.write "# DO NOT EDIT: File is auto-generated\n"
-        data = ''
-        domain.data['custom_resources'].each_pair do |key, resource_config|
-          value = resource_config['properties']['value']
-          data += "#{key.gsub('/', '.')}=#{value}\n"
-        end
-
-        properties.each_pair do |key, value|
-          data.gsub!("${#{key}}", value)
-        end
-        data = Redfish::Interpreter::Interpolater.interpolate_definition(domain, :data => data)[:data]
-        file.write data
-      end
-    end
-
     def populate_configuration(config)
       %w(development remote test).each do |environment_key|
         config.environment(environment_key) unless config.environment_by_key?(environment_key)
@@ -248,12 +226,10 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
 
     def populate_volume_configuration(environment)
       buildr_project = get_buildr_project.root_project
-      if BuildrPlus::FeatureManager.activated?(:redfish)
-        domain = Redfish.domain_by_key(buildr_project.name)
+      domain = Redfish.domain_by_key(buildr_project.name)
 
-        domain.volume_requirements.keys.each do |key|
-          environment.set_volume(key, "volumes/#{key}") unless environment.volume?(key)
-        end
+      domain.volume_requirements.keys.each do |key|
+        environment.set_volume(key, "volumes/#{key}") unless environment.volume?(key)
       end
       base_directory = File.dirname(::Buildr.application.buildfile.to_s)
       environment.volumes.each_pair do |key, local_path|
