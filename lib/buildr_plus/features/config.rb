@@ -151,16 +151,14 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def emit_database_yml(config)
-      if BuildrPlus::FeatureManager.activated?(:dbt)
-        ::Dbt.repository.configuration_data = config.to_database_yml
+      ::Dbt.repository.configuration_data = config.to_database_yml
 
-        # Also need to write file out for processes that pick up database.yml (like packaged
-        # database definitions run via java -jar)
-        FileUtils.mkdir_p File.dirname(::Dbt::Config.config_filename)
-        File.open(::Dbt::Config.config_filename, 'wb') do |file|
-          file.write "# DO NOT EDIT: File is auto-generated\n"
-          file.write config.to_database_yml(:jruby => true).to_yaml
-        end
+      # Also need to write file out for processes that pick up database.yml (like packaged
+      # database definitions run via java -jar)
+      FileUtils.mkdir_p File.dirname(::Dbt::Config.config_filename)
+      File.open(::Dbt::Config.config_filename, 'wb') do |file|
+        file.write "# DO NOT EDIT: File is auto-generated\n"
+        file.write config.to_database_yml(:jruby => true).to_yaml
       end
     end
 
@@ -264,65 +262,61 @@ BuildrPlus::FeatureManager.feature(:config) do |f|
     end
 
     def populate_database_configuration(environment, check_only)
-      if !BuildrPlus::FeatureManager.activated?(:dbt) && !environment.databases.empty?
-        raise "Databases defined in application configuration but BuildrPlus facet 'dbt' not enabled"
-      elsif BuildrPlus::FeatureManager.activated?(:dbt)
-        # Ensure all databases are registered in dbt
-        environment.databases.each do |database|
-          unless ::Dbt.database_for_key?(database.key)
-            raise "Database '#{database.key}' defined in application configuration but has not been defined as a dbt database"
-          end
+      # Ensure all databases are registered in dbt
+      environment.databases.each do |database|
+        unless ::Dbt.database_for_key?(database.key)
+          raise "Database '#{database.key}' defined in application configuration but has not been defined as a dbt database"
         end
-        # Create database configurations if in Dbt but configuration does not already exist
-        ::Dbt.repository.database_keys.each do |database_key|
-          environment.database(database_key) unless environment.database_by_key?(database_key)
-        end unless check_only
+      end
+      # Create database configurations if in Dbt but configuration does not already exist
+      ::Dbt.repository.database_keys.each do |database_key|
+        environment.database(database_key) unless environment.database_by_key?(database_key)
+      end unless check_only
 
-        buildr_project = get_buildr_project
+      buildr_project = get_buildr_project
 
-        environment.databases.each do |database|
-          dbt_database = ::Dbt.database_for_key(database.key)
-          dbt_imports =
-            !dbt_database.imports.empty? ||
-              (dbt_database.packaged? && dbt_database.extra_actions.any? { |a| a.to_s =~ /import/ })
+      environment.databases.each do |database|
+        dbt_database = ::Dbt.database_for_key(database.key)
+        dbt_imports =
+          !dbt_database.imports.empty? ||
+            (dbt_database.packaged? && dbt_database.extra_actions.any? { |a| a.to_s =~ /import/ })
 
-          environment.databases.select { |d| d != database }.each do |d|
-            ::Dbt.database_for_key(d.key).filters.each do |f|
-              if f.is_a?(Struct::DatabaseNameFilter) && f.database_key.to_s == database.key.to_s
-                dbt_imports = true
-              end
-            end
-          end unless dbt_imports
-
-          is_sql_server = database.is_a?(BuildrPlus::Config::MssqlDatabaseConfig)
-          short_name = Reality::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
-          database.database = "#{BuildrPlus::Config.db_scope}#{short_name}_#{self.env_code(environment.key)}" unless database.database
-          database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
-          type_prefix = is_sql_server ? 'MS' : 'PG'
-          database.host = environment_var("#{type_prefix}_DB_SERVER_HOST") unless database.host
-          unless database.port_set?
-            port = environment_var("#{type_prefix}_DB_SERVER_PORT", database.port)
-            database.port = port.to_i if port
-          end
-          database.admin_username = environment_var("#{type_prefix}_DB_SERVER_USERNAME") unless database.admin_username
-          database.admin_password = environment_var("#{type_prefix}_DB_SERVER_PASSWORD") unless database.admin_password
-
-          if is_sql_server
-            database.restore_name = short_name unless database.restore_name
-            database.backup_name = short_name unless database.backup_name
-            database.backup_location = environment_var("#{type_prefix}_DB_BACKUPS_LOCATION") unless database.backup_location
-            database.delete_backup_history = (environment_var("#{type_prefix}_DB_SERVER_DELETE_BACKUP_HISTORY", 'true') == 'true') unless database.delete_backup_history_set?
-            unless database.instance
-              instance = environment_var("#{type_prefix}_DB_SERVER_INSTANCE", '')
-              database.instance = instance unless instance == ''
+        environment.databases.select { |d| d != database }.each do |d|
+          ::Dbt.database_for_key(d.key).filters.each do |f|
+            if f.is_a?(Struct::DatabaseNameFilter) && f.database_key.to_s == database.key.to_s
+              dbt_imports = true
             end
           end
+        end unless dbt_imports
 
-          raise "Configuration for database key #{database.key} is missing host attribute and can not be derived from environment variable #{type_prefix}_DB_SERVER_HOST" unless database.host
-          raise "Configuration for database key #{database.key} is missing admin_username attribute and can not be derived from environment variable #{type_prefix}_DB_SERVER_USERNAME" unless database.admin_username
-          raise "Configuration for database key #{database.key} is missing admin_password attribute and can not be derived from environment variable #{type_prefix}_DB_SERVER_PASSWORD" unless database.admin_password
-          raise "Configuration for database key #{database.key} specifies import_from but dbt defines no import for database" if database.import_from && !dbt_imports
+        is_sql_server = database.is_a?(BuildrPlus::Config::MssqlDatabaseConfig)
+        short_name = Reality::Naming.uppercase_constantize(database.key.to_s == 'default' ? buildr_project.root_project.name : database.key.to_s)
+        database.database = "#{BuildrPlus::Config.db_scope}#{short_name}_#{self.env_code(environment.key)}" unless database.database
+        database.import_from = "PROD_CLONE_#{short_name}" unless database.import_from || !dbt_imports
+        type_prefix = is_sql_server ? 'MS' : 'PG'
+        database.host = environment_var("#{type_prefix}_DB_SERVER_HOST") unless database.host
+        unless database.port_set?
+          port = environment_var("#{type_prefix}_DB_SERVER_PORT", database.port)
+          database.port = port.to_i if port
         end
+        database.admin_username = environment_var("#{type_prefix}_DB_SERVER_USERNAME") unless database.admin_username
+        database.admin_password = environment_var("#{type_prefix}_DB_SERVER_PASSWORD") unless database.admin_password
+
+        if is_sql_server
+          database.restore_name = short_name unless database.restore_name
+          database.backup_name = short_name unless database.backup_name
+          database.backup_location = environment_var("#{type_prefix}_DB_BACKUPS_LOCATION") unless database.backup_location
+          database.delete_backup_history = (environment_var("#{type_prefix}_DB_SERVER_DELETE_BACKUP_HISTORY", 'true') == 'true') unless database.delete_backup_history_set?
+          unless database.instance
+            instance = environment_var("#{type_prefix}_DB_SERVER_INSTANCE", '')
+            database.instance = instance unless instance == ''
+          end
+        end
+
+        raise "Configuration for database key #{database.key} is missing host attribute and can not be derived from environment variable #{type_prefix}_DB_SERVER_HOST" unless database.host
+        raise "Configuration for database key #{database.key} is missing admin_username attribute and can not be derived from environment variable #{type_prefix}_DB_SERVER_USERNAME" unless database.admin_username
+        raise "Configuration for database key #{database.key} is missing admin_password attribute and can not be derived from environment variable #{type_prefix}_DB_SERVER_PASSWORD" unless database.admin_password
+        raise "Configuration for database key #{database.key} specifies import_from but dbt defines no import for database" if database.import_from && !dbt_imports
       end
     end
 
